@@ -1,6 +1,8 @@
 package edu.gbcg.runner;
 
 import edu.gbcg.configs.RawDataLocator;
+import edu.gbcg.dbcreator.RedditComments;
+import edu.gbcg.dbcreator.RedditSubmissions;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TimeFormatter;
 import edu.gbcg.utils.c;
@@ -30,6 +32,8 @@ public class Main {
         c.writeln("ltd: " + ltd);
         c.writeln("sql: " + sql);
         c.writeln("ltd from sql: " + TimeFormatter.SQLDateTimeToJavaDateTime(sql));
+
+        RedditSubmissions.createDB();
 
 
     }

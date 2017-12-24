@@ -1,7 +1,9 @@
 package edu.gbcg.dbcreator;
 
 import edu.gbcg.configs.DBLocator;
+import edu.gbcg.utils.DBUtils;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,6 +13,7 @@ public class RedditSubmissions {
 
 
     public static void createDB(){
+        Connection conn = DBUtils.get().connect(db);
 
 
     }
