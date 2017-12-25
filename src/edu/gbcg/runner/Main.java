@@ -33,7 +33,7 @@ public class Main {
         c.writeln("sql: " + sql);
         c.writeln("ltd from sql: " + TimeFormatter.SQLDateTimeToJavaDateTime(sql));
 
-        RedditSubmissions.createDB();
+        //RedditSubmissions.createDB();
 
 
     }

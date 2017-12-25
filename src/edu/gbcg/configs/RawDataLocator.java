@@ -19,7 +19,7 @@ public class RawDataLocator {
 
     private static String getRedditDataPath(){
         // Testing mode means we're running on my MBP with limited data
-        return StateVars.testing_mode ? DataPaths.local_data_path : DataPaths.data_path;
+        return StateVars.TESTING_MODE ? DataPaths.local_data_path : DataPaths.data_path;
     }
 
     private static List<String> getAllFilesWithPrefix(String prefix, String path){

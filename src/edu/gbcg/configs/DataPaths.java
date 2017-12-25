@@ -1,7 +1,7 @@
 package edu.gbcg.configs;
 
 public class DataPaths {
-    // File paths when running in 'testing_mode' (i.e. on my MBP with limited data)
+    // File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data)
     public static String local_data_path = "LocalData/raw/";
     public static String data_path = "NULL_FUCKER";
 

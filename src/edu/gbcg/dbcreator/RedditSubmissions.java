@@ -1,19 +1,32 @@
 package edu.gbcg.dbcreator;
 
 import edu.gbcg.configs.DBLocator;
+import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.DBUtils;
 
+import java.io.File;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RedditSubmissions {
-    private static final String db = DBLocator.redditSubmissionsDBAbsolutePath();
+    private static final String DB = DBLocator.redditSubmissionsDBAbsolutePath();
     private static final String TABLE_NAME = "submission_attrs";
 
 
     public static void createDB(){
-        Connection conn = DBUtils.get().connect(db);
+        // Check if the db exists
+        File db_file = new File(DB);
+        boolean db_exists = false;
+        if(db_file.exists() && db_file.isFile())
+            db_exists = true;
+
+        if(StateVars.START_FRESH)
+
+
+
+        //Connection conn = DBUtils.get().connect(DB);
 
 
     }
@@ -63,8 +76,27 @@ public class RedditSubmissions {
             ,"url"
     ));
 
+    public static List<String> getColumnsForDB(){
+        ArrayList<String> columns = new ArrayList<>();
+
+
+        return columns;
+    }
+
+    public static List<String> getColumnDataTypesForDB(){
+        List<String> data_types = new ArrayList<>(Arrays.asList(
+                ""
+                ,"this"
+
+        ));
+        return data_types;
+    }
+
     public static void readJsonIntoDB(){
 
     }
+
+
+
 
 }
