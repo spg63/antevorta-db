@@ -1,6 +1,8 @@
 package edu.gbcg.runner;
 
+import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.RawDataLocator;
+import edu.gbcg.configs.StateVars;
 import edu.gbcg.dbcreator.RedditComments;
 import edu.gbcg.dbcreator.RedditSubmissions;
 import edu.gbcg.utils.FileUtils;
@@ -8,11 +10,14 @@ import edu.gbcg.utils.TimeFormatter;
 import edu.gbcg.utils.c;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
+        StateVars.START_FRESH = true;
+
 
         List<String> files = RawDataLocator.redditJsonSubmissionAbsolutePaths();
         for(String s : files)
@@ -33,9 +38,8 @@ public class Main {
         c.writeln("sql: " + sql);
         c.writeln("ltd from sql: " + TimeFormatter.SQLDateTimeToJavaDateTime(sql));
 
-        //RedditSubmissions.createDB();
-
-
+        RedditSubmissions.createDBs();
+        //RedditSubmissions.readJsonIntoDB();
     }
 }
 
