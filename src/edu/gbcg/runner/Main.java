@@ -16,14 +16,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        StateVars.START_FRESH = true;
-
-
+        StateVars.START_FRESH = false;
+        RedditSubmissions.createDBs();
+        RedditSubmissions.pushJSONDataIntoDBs();
+/*
         List<String> files = RawDataLocator.redditJsonSubmissionAbsolutePaths();
-        for(String s : files)
-            c.writeln("s: " + s);
-
-        String tenline = files.get(2);
+        String tenline = files.get(1);
         List<String> jsonStrs= FileUtils.getInstance().readLineByLine(tenline);
 
         JSONObject jo = new JSONObject(jsonStrs.get(1));
@@ -37,9 +35,10 @@ public class Main {
         c.writeln("ltd: " + ltd);
         c.writeln("sql: " + sql);
         c.writeln("ltd from sql: " + TimeFormatter.SQLDateTimeToJavaDateTime(sql));
-
-        RedditSubmissions.createDBs();
-        //RedditSubmissions.readJsonIntoDB();
+*/
     }
 }
 
+// DB path
+// List of JSON objects
+//

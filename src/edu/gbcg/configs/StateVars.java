@@ -10,7 +10,7 @@ public class StateVars {
     public static final String DB_DRIVER = "org.sqlite.JDBC";
     public static final String DB_URL_PREFIX = "jdbc:sqlite:";
     public static final String DB_TYPE_EXT = ".sqlite3";
-    public static final int DB_BATCH_LIMIT = 1000;
+    public static final int DB_BATCH_LIMIT = 50;
     public static boolean START_FRESH = true;
     public static final int DB_SHARD_NUM = 8;
 }

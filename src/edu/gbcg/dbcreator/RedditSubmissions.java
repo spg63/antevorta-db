@@ -7,7 +7,11 @@ import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.c;
 import org.json.JSONObject;
 
+import javax.swing.plaf.nimbus.State;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,29 +174,143 @@ public class RedditSubmissions {
     }
 
     /**
-     * Will write the json data the the database shards
+     * Reads all JSON reddit submission data and pushes it into the various DBs
      */
-    public static void writeJsonToDBs(){
-        List<JSONObject> objects = getJsonObjects();
-        String key = "selftext";
-        for(JSONObject jo : objects)
-            c.writeln(key + ": " + jo.get(key).toString());
+    public static void pushJSONDataIntoDBs(){
+        // Get the absolute paths to the JSON submission data
+        List<String> json_paths = RawDataLocator.redditJsonSubmissionAbsolutePaths();
 
-    }
+        // The list of DBs should already be populated by the createDBs() function, but check again
+        if(DBs == null || DBs.isEmpty())
+            DBs = DBLocator.redditSubsAbsolutePaths();
 
-    /*
-        ** NO JAVADOC **
-        * Reads in the Json objects
-     */
-    private static List<JSONObject> getJsonObjects(){
-        List<String> data_paths = RawDataLocator.redditJsonSubmissionAbsolutePaths();
-        String tenline = data_paths.get(2);
-        List<String> jsonStrings = FileUtils.getInstance().readLineByLine(tenline);
+        // For each file, read it line by line, and while reading it line by line start
+        // processing the data. The files are often too large to read entirely into memory in one
+        // shot
+        for(int i = 0; i < json_paths.size(); ++i){
+            String file = json_paths.get(i);
+            File f = new File(file);
+            c.writeln("Reading " + f.getName());
 
-        List<JSONObject> objects = new ArrayList<>();
-        for(String line : jsonStrings)
-            objects.add(new JSONObject(line));
+            BufferedReader br = null;
+            // Once we've read this many lines we start the DB writers and push everything into
+            // the DB
+            int dump_to_db_limit = StateVars.DB_SHARD_NUM * StateVars.DB_BATCH_LIMIT;
+            int line_read_counter = 0;
+            int arr_ele_counter = 0;
+            int dump_counter = 1;
+            List<List<String>> lines_list = new ArrayList<>();
+            List<RedditSubmissionJsonToDBWorker> sub_workers = new ArrayList<>();
+            List<Thread> workers = new ArrayList<>();
+            for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j) {
+                lines_list.add(new ArrayList<>());
+                sub_workers.add(new RedditSubmissionJsonToDBWorker());
+            }
 
-        return objects;
+            try{
+                br = new BufferedReader(new FileReader(file));
+                String line = br.readLine();
+                while(line != null){
+                    ++line_read_counter;
+
+                    lines_list.get(arr_ele_counter).add(line);
+
+                    // Increment the array we're putting strings in. When we hit the limit reset
+                    // to the first array
+                    ++arr_ele_counter;
+                    if(arr_ele_counter >= StateVars.DB_SHARD_NUM)
+                        arr_ele_counter = 0;
+
+                    // We've reached the limit before dumping the data into the DB. Now start the
+                    // threads, push the data into the DB, wait on all threads to finish, reseat
+                    // the thread list objects and reset the counter
+                    if(line_read_counter >= dump_to_db_limit){
+                        c.writeln("Writing to DBs, dump #" + dump_counter);
+                        ++dump_counter;
+
+                        // Setup the worker threads with the proper data
+                        for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
+                            sub_workers.get(j).setDB(DBs.get(j));
+                            sub_workers.get(j).setJSON(lines_list.get(j));
+                            sub_workers.get(j).setColumns(getColumnsForDB());
+                            sub_workers.get(j).setKeys(keysOfInterest);
+                            sub_workers.get(j).setTableName(SUB_TABLE_NAME);
+                        }
+
+                        ArrayList<Thread> worker_threads = new ArrayList<>();
+
+                        // Workers have been set, launch all the workers
+                        for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
+                            worker_threads.add(new Thread(sub_workers.get(j)));
+                            worker_threads.get(j).start();
+                        }
+
+                        // Wait for all the threads to finish
+                        for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j) {
+                            try {
+                                worker_threads.get(j).join();
+                            }
+                            catch(InterruptedException exp){
+                                exp.printStackTrace();
+                            }
+                        }
+
+                        // Reset the trackers: line_read_counter back to zero, clear the workers
+                        // now that they've completed their work, clear the lines array list now
+                        // that the data has been put in the DB. Finally add new workers to the
+                        // workers array list for the next iterations and add new array lists to
+                        // the lines list to store new data from the file
+                        line_read_counter = 0;
+                        sub_workers.clear();
+                        lines_list.clear();
+                        for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
+                            sub_workers.add(new RedditSubmissionJsonToDBWorker());
+                            lines_list.add(new ArrayList<>());
+                        }
+                    }
+
+                    line = br.readLine();
+                }
+
+                // Push the data to get any and all of the leftover data from the previous list
+                // that hasn't already been pushed into the DB
+                c.writeln("Writing to DBs, dump #" + dump_counter);
+                ArrayList<Thread> worker_ts = new ArrayList<>();
+                for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
+                    sub_workers.get(j).setDB(DBs.get(j));
+                    sub_workers.get(j).setJSON((lines_list.get(j)));
+                    sub_workers.get(j).setColumns(getColumnsForDB());
+                    sub_workers.get(j).setKeys(keysOfInterest);
+                    sub_workers.get(j).setTableName(SUB_TABLE_NAME);
+                }
+
+                for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
+                    worker_ts.add(new Thread(sub_workers.get(j)));
+                    worker_ts.get(j).start();
+                }
+
+                for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
+                    try{
+                        worker_ts.get(j).join();
+                    }
+                    catch(InterruptedException exp){
+                        exp.printStackTrace();
+                    }
+                }
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
+            finally{
+                if(br != null){
+                    try{
+                        br.close();
+                    }
+                    catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }
