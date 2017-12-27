@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RedditSubmissionJsonToDBWorker implements Runnable{
     private String db_;
@@ -19,16 +20,18 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
     private ArrayList<ArrayList<String>> colValuesList = new ArrayList<>();
     private List<JSONObject> jsonObjects_ = new ArrayList<>();
     private int numObjects_;
+    private Map<String, Integer> kToIdx_ = null;
 
     public RedditSubmissionJsonToDBWorker(String dbPath, List<String> jsonLines,
                                           List<String> columnNames, List<String> jsonKeys,
-                                          String tableName){
+                                          String tableName, Map<String, Integer> kToIdx){
         this.db_ = dbPath;
         this.json_strings_ = jsonLines;
         this.columns_ = columnNames;
         this.keys_ = jsonKeys;
         this.table_name_ = tableName;
         this.numObjects_ = this.json_strings_.size();
+        this.kToIdx_ = kToIdx;
     }
 
     public RedditSubmissionJsonToDBWorker(){}
@@ -42,7 +45,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
 
         // Create the JSONObjects from the strings
         for(int i = 0; i < this.numObjects_; ++i)
-            this.jsonObjects_.add(new JSONObject(this.json_strings_.get(this.numObjects_)));
+            this.jsonObjects_.add(new JSONObject(this.json_strings_.get(i)));
 
         // Parse the JSON data into PreparedStatements and push to the DB
         parseAndPushDataToDB();
@@ -55,21 +58,13 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
     public void setDB(String db){ this.db_ = db; }
     public void setJSON(List<String> jsonLines){
         this.json_strings_ = jsonLines;
-        this.numObjects_ = this.jsonObjects_.size();
+        this.numObjects_ = this.json_strings_.size();
     }
     public void setColumns(List<String> columns){ this.columns_ = columns; }
     public void setKeys(List<String> keys){ this.keys_ = keys; }
     public void setTableName(String tableName){ this.table_name_ = tableName; }
+    public void setKeyToIdxMap(Map<String, Integer> m){ this.kToIdx_ = m; }
 
-/*
-    private void populateColValues(){
-        for(JSONObject jo : this.jsonObjects_){
-            ArrayList<String> vals = new ArrayList<>();
-            vals.add();
-
-        }
-    }
-*/
     private void parseAndPushDataToDB(){
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");
@@ -93,9 +88,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
         sb.append("?);");
 
         String sql = sb.toString();
-        c.writeln(sql);
         // The full SQL String
-        System.exit(0);
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -103,24 +96,37 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
             ps = conn.prepareStatement(sql);
             conn.setAutoCommit(false);
 
-            // Loop through all the columns, create the PreparedStatements, add them to the batch
-            // NOTE: Starting the loop at 1 to skip the initial ID autoincrement field. Also
-            // helps that PreparedStatements index starting at 1 instead of 0 like the rest of
-            // the programming world
-            for(int i = 0; i < this.columns_.size(); ++i){
+            // Loop through all of the jsonObjects
+            for(int i = 0; i < numObjects_; ++i) {
+
+                // Loop through all the columns, create the PreparedStatements, add them to the batch
+                // NOTE: Starting the loop at 1 to skip the initial ID autoincrement field. Also
+                // helps that PreparedStatements index starting at 1 instead of 0 like the rest of
+                // the programming world
+                for (int j = 1; j < this.columns_.size(); ++j) {
+                    // Get archived
+                    boolean archived_bool = this.jsonObjects_.get(i).getBoolean("archived");
+                           // this.keys_.get(kToIdx_.get("archived"))
+                    //);
+
+                    String arch = this.jsonObjects_.get(i).get(this.keys_.get(0)).toString();
+                    int archived = archived_bool ? 1 : 0;
+                    c.writeln("arch: " + arch);
+                    c.writeln("archived: " + archived);
+                    System.exit(0);
+                    ps.setInt(j, archived);
 
 
+                    // Add the statement to the batch
+                    ps.addBatch();
+                }
 
+                // Execute the batch update
+                ps.executeBatch();
 
-                // Add the statement to the batch
-                ps.addBatch();
+                // Commit
+                conn.commit();
             }
-
-            // Execute the batch update
-            ps.executeBatch();
-
-            // Commit
-            conn.commit();
         }
         catch(SQLException e){
             e.printStackTrace();

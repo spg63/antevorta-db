@@ -12,5 +12,5 @@ public class StateVars {
     public static final String DB_TYPE_EXT = ".sqlite3";
     public static final int DB_BATCH_LIMIT = 50;
     public static boolean START_FRESH = true;
-    public static final int DB_SHARD_NUM = 8;
+    public static final int DB_SHARD_NUM = 6;
 }

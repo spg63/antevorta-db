@@ -13,9 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class to interact with the reddit submission data. This class will allow for all required
@@ -80,8 +78,8 @@ public class RedditSubmissions {
         String sql = create.toString();
 
         // Create the table in each DB
-        for(String db : DBs)
-            DBCommon.insert(db, sql);
+        for(int i = 0; i < DBs.size(); ++i)
+            DBCommon.insert(DBs.get(i), sql);
     }
 
     /*
@@ -114,6 +112,14 @@ public class RedditSubmissions {
             "selftext",         "stickied",         "subreddit",
             "subreddit_id",     "subreddit_type",   "title",        "url"
     ));
+
+    private static Map<String, Integer> keyToIdx(){
+        Map<String, Integer> key_to_idx = new HashMap<>();
+        for(int i = 0; i < keysOfInterest.size(); ++i){
+            key_to_idx.put(keysOfInterest.get(i), i);
+        }
+        return key_to_idx;
+    }
 
     /*
         ** NO JAVADOC **
@@ -162,7 +168,7 @@ public class RedditSubmissions {
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " INTEGER,",                            " INTEGER DEFAULT 0,",  " TEXT,",
                 " INTEGER DEFAULT 0,",                  " DATETIME,",           " INTEGER,",
-                " TEXT",                                " INTEGER DEFAULT 0,",  " TEXT,",
+                " TEXT,",                               " INTEGER DEFAULT 0,",  " TEXT,",
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " TEXT,",                               " INTEGER,",            " INTEGER,",
                 " INTEGER,",                            " REAL,",               " REAL,",
@@ -235,6 +241,7 @@ public class RedditSubmissions {
                             sub_workers.get(j).setColumns(getColumnsForDB());
                             sub_workers.get(j).setKeys(keysOfInterest);
                             sub_workers.get(j).setTableName(SUB_TABLE_NAME);
+                            sub_workers.get(j).setKeyToIdxMap(keyToIdx());
                         }
 
                         ArrayList<Thread> worker_threads = new ArrayList<>();

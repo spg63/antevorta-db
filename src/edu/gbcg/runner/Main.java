@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        StateVars.START_FRESH = false;
+        StateVars.START_FRESH = true;
         RedditSubmissions.createDBs();
         RedditSubmissions.pushJSONDataIntoDBs();
 /*
