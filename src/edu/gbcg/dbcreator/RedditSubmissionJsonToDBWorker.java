@@ -1,5 +1,6 @@
 package edu.gbcg.dbcreator;
 
+import edu.gbcg.utils.TimeFormatter;
 import edu.gbcg.utils.c;
 import org.json.JSONObject;
 
@@ -20,18 +21,16 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
     private ArrayList<ArrayList<String>> colValuesList = new ArrayList<>();
     private List<JSONObject> jsonObjects_ = new ArrayList<>();
     private int numObjects_;
-    private Map<String, Integer> kToIdx_ = null;
 
     public RedditSubmissionJsonToDBWorker(String dbPath, List<String> jsonLines,
                                           List<String> columnNames, List<String> jsonKeys,
-                                          String tableName, Map<String, Integer> kToIdx){
+                                          String tableName){
         this.db_ = dbPath;
         this.json_strings_ = jsonLines;
         this.columns_ = columnNames;
         this.keys_ = jsonKeys;
         this.table_name_ = tableName;
         this.numObjects_ = this.json_strings_.size();
-        this.kToIdx_ = kToIdx;
     }
 
     public RedditSubmissionJsonToDBWorker(){}
@@ -63,7 +62,6 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
     public void setColumns(List<String> columns){ this.columns_ = columns; }
     public void setKeys(List<String> keys){ this.keys_ = keys; }
     public void setTableName(String tableName){ this.table_name_ = tableName; }
-    public void setKeyToIdxMap(Map<String, Integer> m){ this.kToIdx_ = m; }
 
     private void parseAndPushDataToDB(){
         StringBuilder sb = new StringBuilder();
@@ -96,13 +94,59 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
             ps = conn.prepareStatement(sql);
             conn.setAutoCommit(false);
 
-            // Loop through all of the jsonObjects
+            // Loop through all of the jsonObjects. For each key in the json key list, prepare an
+            // insertion and add it to the batch. At the end of the loop, after all json objects
+            // have been setup for insertion, execute the batch insertion
+            // *** NOTE THE USE OF opt json lookups. Many current fields didn't exist in the
+            // early data !!!!!
             for(int i = 0; i < numObjects_; ++i) {
+                // Key indexes the PreparedStatement object
+                int key = 1;
 
+                // column = archived
+                int archived = this.jsonObjects_.get(i).optBoolean("archived", false) ? 1 : 0;
+                ps.setInt(key, archived); ++key;
+                c.writeln("archived: " + archived);
+
+                // column = author
+                String author = this.jsonObjects_.get(i).optString("author", "null");
+                ps.setString(key, author); ++key;
+                c.writeln("author: " + author);
+
+                // column = brand_safe
+                int brand_safe = this.jsonObjects_.get(i).optBoolean("brand_safe", false) ? 1 : 0;
+                ps.setInt(key, brand_safe); ++key;
+                c.writeln("brand_safe: " + brand_safe);
+
+                // column = contest_mode
+                int contest_mode = this.jsonObjects_.get(i).optBoolean(
+                        "contest_mode", false) ? 1 : 0;
+                ps.setInt(key, contest_mode); ++key;
+                c.writeln("content_most: " + contest_mode);
+
+                // column = created_dt
+                Long created_utc = this.jsonObjects_.get(i).optLong("created_utc", 0);
+                String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
+                        TimeFormatter.utcToLDT(created_utc.toString())
+                );
+                ps.setString(key, created_dt); ++key;
+                c.writeln("time: " + created_dt);
+
+                // column = distinguished
+                String dis = this.jsonObjects_.get(i).optString("distinguished", "null");
+                c.writeln("dist: " + dis);
+                ps.setString(key, dis); ++key;
+
+                System.exit(0);
+
+
+
+                ps.addBatch();
                 // Loop through all the columns, create the PreparedStatements, add them to the batch
                 // NOTE: Starting the loop at 1 to skip the initial ID autoincrement field. Also
                 // helps that PreparedStatements index starting at 1 instead of 0 like the rest of
                 // the programming world
+                /*
                 for (int j = 1; j < this.columns_.size(); ++j) {
                     // Get archived
                     boolean archived_bool = this.jsonObjects_.get(i).getBoolean("archived");
@@ -111,22 +155,19 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
 
                     String arch = this.jsonObjects_.get(i).get(this.keys_.get(0)).toString();
                     int archived = archived_bool ? 1 : 0;
-                    c.writeln("arch: " + arch);
-                    c.writeln("archived: " + archived);
-                    System.exit(0);
                     ps.setInt(j, archived);
 
 
                     // Add the statement to the batch
                     ps.addBatch();
                 }
-
-                // Execute the batch update
-                ps.executeBatch();
-
-                // Commit
-                conn.commit();
+                */
             }
+            // Execute the batch update
+            ps.executeBatch();
+
+            // Commit
+            conn.commit();
         }
         catch(SQLException e){
             e.printStackTrace();

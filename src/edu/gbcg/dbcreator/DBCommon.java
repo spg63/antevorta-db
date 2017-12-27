@@ -5,6 +5,8 @@ import edu.gbcg.utils.DBUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 /**
@@ -19,7 +21,19 @@ public class DBCommon {
      * @return The connection to the db
      */
     public static Connection connect(String db){
-        return DBUtils.get().connect(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER);
+        Connection conn = DBUtils.get().connect(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER);
+        // Turn off synchronous mode for the reddit DB connections to increase performance
+        try {
+            Statement st = conn.createStatement();
+            String sql = "PRAGMA synchronous=OFF";
+            st.execute(sql);
+            st.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return conn;
     }
 
     /**

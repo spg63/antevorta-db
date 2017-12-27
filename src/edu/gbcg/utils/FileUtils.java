@@ -17,7 +17,7 @@ public class FileUtils{
     private FileUtils(){
     }
 
-    public static FileUtils getInstance(){
+    public static FileUtils get(){
         if(_instance == null){
             synchronized(FileUtils.class){
                 if(_instance == null){
@@ -35,6 +35,17 @@ public class FileUtils{
     public String getWorkingDir(){
         Path WD = Paths.get("");
         return WD.toAbsolutePath().toString();
+    }
+
+    /**
+     * Create a directory if it doesn't exist
+     * @param dirName Path to the directory
+     */
+    public void checkAndCreateDir(String dirName){
+        String path = getWorkingDir();
+        File tmp = new File(path + File.separator + dirName + File.separator);
+        if(!tmp.exists())
+            tmp.mkdirs();
     }
 
     /**

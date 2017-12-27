@@ -45,13 +45,13 @@ public class DBUtils {
         }
         catch(SQLException | ClassNotFoundException e){
             e.printStackTrace();
-            if(conn != null)
+            if(conn != null) {
                 try {
                     conn.close();
-                }
-                catch(SQLException ex){
+                } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }
         }
         return conn;
     }

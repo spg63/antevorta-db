@@ -5,9 +5,7 @@ import edu.gbcg.configs.RawDataLocator;
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.c;
-import org.json.JSONObject;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -51,8 +49,7 @@ public class RedditSubmissions {
 
         // The DBs don't exist, we need to create them
         if(!dbs_exist){
-            File f = new File(DBLocator.getSubDBPath());
-            f.mkdirs();
+            FileUtils.get().checkAndCreateDir(DBLocator.getSubDBPath());
             List<String> paths = DBLocator.buildSubDBPaths();
             for(String DB : paths) {
                 Connection conn = DBCommon.connect(DB);
@@ -241,7 +238,6 @@ public class RedditSubmissions {
                             sub_workers.get(j).setColumns(getColumnsForDB());
                             sub_workers.get(j).setKeys(keysOfInterest);
                             sub_workers.get(j).setTableName(SUB_TABLE_NAME);
-                            sub_workers.get(j).setKeyToIdxMap(keyToIdx());
                         }
 
                         ArrayList<Thread> worker_threads = new ArrayList<>();
