@@ -12,37 +12,38 @@ import edu.gbcg.utils.c;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        TSL.get().log("Program starting");
-        StateVars.START_FRESH = true;
-        RedditSubmissions.createDBs();
-        RedditSubmissions.pushJSONDataIntoDBs();
-/*
-        List<String> files = RawDataLocator.redditJsonSubmissionAbsolutePaths();
-        String tenline = files.get(1);
-        List<String> jsonStrs= FileUtils.get().readLineByLine(tenline);
 
-        JSONObject jo = new JSONObject(jsonStrs.get(1));
-        //c.writeln("author: " + jo.getJSONObject("media").getJSONObject("oembed").get
-        //        ("author_name"));
-        c.writeln("created_utc: " + jo.get("created_utc"));
-        String utc = jo.get("created_utc").toString();
-        LocalDateTime ltd = TimeFormatter.utcToLDT(utc);
-        String sql = TimeFormatter.javaDateTimeToSQLDateTime(ltd);
-        c.writeln("utc: " + utc);
-        c.writeln("ltd: " + ltd);
-        c.writeln("sql: " + sql);
-        c.writeln("ltd from sql: " + TimeFormatter.SQLDateTimeToJavaDateTime(sql));
-*/
+        TSL.get().log("Program starting");
+
+        // Log only the errors
+        TSL.LOG_NON_ERRORS = false;
+
+        // Kill the DBs and start over
+        StateVars.START_FRESH = true;
+
+        // Check and create them if they don't exist
+        RedditSubmissions.createDBs();
+
+        long start = System.currentTimeMillis();
+
+        // Read the json files into the DBs
+        RedditSubmissions.pushJSONDataIntoDBs();
+
+        long end = System.currentTimeMillis();
+
+        NumberFormat formatter = new DecimalFormat("#0.00000");
+        c.writeln_err("Json to DB took " + formatter.format((end - start) / 1000d) + " seconds");
+
+
+        // Tell the logger to close up the queue
         TSL.get().shutDown();
 
     }
 }
-
-// DB path
-// List of JSON objects
-//

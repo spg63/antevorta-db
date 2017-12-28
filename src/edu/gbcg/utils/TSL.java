@@ -17,6 +17,7 @@ import java.util.concurrent.BlockingQueue;
 @SuppressWarnings("unused")
 public class TSL extends Thread{
     private static volatile TSL _instance;
+    public static boolean LOG_NON_ERRORS = true;
 
     private String SHUTDOWN_REQ = null;
     private volatile boolean shuttingDown, loggerTerminated;
@@ -76,16 +77,10 @@ public class TSL extends Thread{
     }
 
     public void log(String str){
-        if(shuttingDown || loggerTerminated)
+        if(shuttingDown || loggerTerminated || !LOG_NON_ERRORS)
             return;
         try{
-            ldt = LocalDateTime.now();
-            int hour = ldt.getHour();
-            int min = ldt.getMinute();
-            int sec = ldt.getSecond();
-            int milli = (ldt.getNano())/(1000000);
-
-            itemsToLog.put("("+hour+":"+min+":"+sec+"."+milli+") > "+str);
+            itemsToLog.put(time_str() + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
@@ -93,9 +88,37 @@ public class TSL extends Thread{
         }
     }
 
-    public void shutDown() throws InterruptedException{
+    public void err(String str){
+        if(shuttingDown || loggerTerminated)
+            return;
+        try{
+            itemsToLog.put("*** " + time_str() + str);
+        }
+        catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("ThreadSafeLogger.log() -- Unexpected interruption");
+        }
+    }
+
+    public void shutDown() {
         shuttingDown = true;
-        itemsToLog.put(SHUTDOWN_REQ);
+        try {
+            itemsToLog.put(SHUTDOWN_REQ);
+        }
+        catch(InterruptedException e){
+            throw new RuntimeException("ThreadSafeLogger.shutDown() -- Unexpected interruption");
+        }
+    }
+
+    private String time_str(){
+        ldt = LocalDateTime.now();
+        int hour = ldt.getHour();
+        int min = ldt.getMinute();
+        int sec = ldt.getSecond();
+        int milli = (ldt.getNano())/(1000000);
+
+        String time_s = "("+hour+":"+min+":"+sec+"."+milli+") > ";
+        return time_s;
     }
 
 

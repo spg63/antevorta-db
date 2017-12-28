@@ -2,6 +2,7 @@ package edu.gbcg.dbcreator;
 
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.DBUtils;
+import edu.gbcg.utils.TSL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,6 +31,7 @@ public class DBCommon {
             st.close();
         }
         catch(SQLException e){
+            TSL.get().err("DBCommon.connect exception");
             e.printStackTrace();
         }
 

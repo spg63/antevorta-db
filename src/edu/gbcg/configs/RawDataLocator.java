@@ -33,7 +33,7 @@ public class RawDataLocator {
     /*
         ** NO JAVADOC **
         * Returns the relative path to the json files.
-     */
+    */
     private static String getRedditDataPath(){
         // Testing mode means we're running on my MBP with limited data
         return StateVars.TESTING_MODE ? DataPaths.LOCAL_DATA_PATH : DataPaths.DATA_PATH;

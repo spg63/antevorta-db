@@ -4,6 +4,7 @@ import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.RawDataLocator;
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.FileUtils;
+import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
 
 import java.io.BufferedReader;
@@ -43,8 +44,10 @@ public class RedditSubmissions {
         // The DBs exist but we want to start fresh, blow them up
         if(dbs_exist && StateVars.START_FRESH){
             String sql = "drop table if exists " + SUB_TABLE_NAME + ";";
-            for(String DB : DBs)
-                DBCommon.delete(DB, sql);
+            for(int i = 0; i < DBs.size(); ++i) {
+                DBCommon.delete(DBs.get(i), sql);
+                //DBCommon.delete(DBs.get(i), "vacuum");
+            }
         }
 
         // The DBs don't exist, we need to create them
@@ -302,7 +305,7 @@ public class RedditSubmissions {
                 }
             }
             catch(IOException e){
-                e.printStackTrace();
+                TSL.get().err("RedditSubmission.pushJsonDataIntoDBs IOException on BufferedReader");
             }
             finally{
                 if(br != null){
@@ -310,6 +313,8 @@ public class RedditSubmissions {
                         br.close();
                     }
                     catch(IOException e){
+                        TSL.get().err("RedditSubmission.pushJsonDataIntoDBs IOException on " +
+                                        "BufferedReader.close()");
                         e.printStackTrace();
                     }
                 }
@@ -317,68 +322,3 @@ public class RedditSubmissions {
         }
     }
 }
-
-/*
-    private static void batchInsertRecordsIntoTable() throws SQLException {
-
-        Connection dbConnection = null;
-        PreparedStatement preparedStatement = null;
-
-        String insertTableSQL = "INSERT INTO DBUSER"
-                + "(USER_ID, USERNAME, CREATED_BY, CREATED_DATE) VALUES"
-                + "(?,?,?,?)";
-
-        try {
-            dbConnection = getDBConnection();
-            preparedStatement = dbConnection.prepareStatement(insertTableSQL);
-
-            dbConnection.setAutoCommit(false);
-
-            preparedStatement.setInt(1, 101);
-            preparedStatement.setString(2, "mkyong101");
-            preparedStatement.setString(3, "system");
-            preparedStatement.setTimestamp(4, getCurrentTimeStamp());
-            preparedStatement.addBatch();
-
-            preparedStatement.setInt(1, 102);
-            preparedStatement.setString(2, "mkyong102");
-            preparedStatement.setString(3, "system");
-            preparedStatement.setTimestamp(4, getCurrentTimeStamp());
-            preparedStatement.addBatch();
-
-            preparedStatement.setInt(1, 103);
-            preparedStatement.setString(2, "mkyong103");
-            preparedStatement.setString(3, "system");
-            preparedStatement.setTimestamp(4, getCurrentTimeStamp());
-            preparedStatement.addBatch();
-
-            preparedStatement.executeBatch();
-
-            dbConnection.commit();
-
-            System.out.println("Record is inserted into DBUSER table!");
-
-        } catch (SQLException e) {
-
-            System.out.println(e.getMessage());
-            dbConnection.rollback();
-
-        } finally {
-
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
-
-        }
-
-    }
-*/
-
-
-
-
-
