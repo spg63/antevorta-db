@@ -18,7 +18,7 @@ public class StateVars {
     public static final String DB_URL_PREFIX = "jdbc:sqlite:";
     public static final String DB_TYPE_EXT = ".sqlite3";
     // Larger batch size performs better on research machine with individual HDDs for each DB shard
-    public static final int RESEARCH_BATCH_SIZE = 2500;
+    public static final int RESEARCH_BATCH_SIZE = 3000;
     // Performs better on single laptop SSD
     public static final int LAPTOP_BATCH_SIZE = 1000;
     public static final int DB_BATCH_LIMIT = TESTING_MODE ? LAPTOP_BATCH_SIZE : RESEARCH_BATCH_SIZE;
