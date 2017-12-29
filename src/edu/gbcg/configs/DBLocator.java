@@ -44,7 +44,7 @@ public class DBLocator {
      * @return List of file paths to submission DBs if they exist, otherwise null
      */
     public static List<String> redditSubsAbsolutePaths(){
-        return FileUtils.getAllFilePathsInDirWithPrefix("RS", getSubDBPath());
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath());
     }
 
     /**
@@ -52,7 +52,7 @@ public class DBLocator {
      * @return List of file paths to comment DBs if they exist, otherwise null
      */
     public static List<String> redditComsAbsolutePaths(){
-        return FileUtils.getAllFilePathsInDirWithPrefix("RC", getComDBPath());
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath());
     }
 
     /**

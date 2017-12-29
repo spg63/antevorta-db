@@ -22,6 +22,7 @@ public class Main {
     public static void main(String[] args) throws Exception{
 
         TSL.get().log("Program starting");
+/*
 
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
@@ -44,6 +45,7 @@ public class Main {
         NumberFormat formatter = new DecimalFormat("#0.00000");
         c.writeln_err("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
 
+*/
 
         // Tell the logger to close up the queue
         TSL.get().shutDown();

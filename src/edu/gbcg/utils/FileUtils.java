@@ -126,7 +126,7 @@ public class FileUtils{
      * @param path The path to the directory containing the files
      * @return The list of absolute paths, null if nothing matching in the directory
      */
-    public static List<String> getAllFilePathsInDirWithPrefix(String prefix, String path){
+    public List<String> getAllFilePathsInDirWithPrefix(String prefix, String path){
         List<String> filepaths = new ArrayList<>();
 
         File[] files = new File(path).listFiles();
@@ -145,7 +145,7 @@ public class FileUtils{
      * @param path The path to the directory
      * @return The list of absolute paths, null if no files in the directory
      */
-    public static List<String> getAllFilePathsInDir(String path){
+    public List<String> getAllFilePathsInDir(String path){
         List<String> filepaths = new ArrayList<>();
         File[] files = new File(path).listFiles();
         if(files == null)
@@ -162,7 +162,7 @@ public class FileUtils{
      * @param path Path to the directory
      * @return The list of File objects, null if no files in the directoryu
      */
-    public static List<File> getAllFileObjectsInDir(String path){
+    public List<File> getAllFileObjectsInDir(String path){
         List<File> files = new ArrayList<>();
         File[] fs = new File(path).listFiles();
         for(File f : fs)
