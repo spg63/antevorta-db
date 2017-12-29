@@ -15,49 +15,23 @@ import java.util.List;
  */
 public class DBLocator {
     /**
-     * Given a reddit submission database file name it will return the absolute path
-     * @param dbName Name of the submission database
-     * @return Absolute path to DB if possible, otherwise null
-     */
-    public static String redditSubmissionsDBAbsolutePath(String dbName){
-        List<String> theDBs = redditSubsAbsolutePaths();
-        for(int i = 0; i < theDBs.size(); ++i)
-            if(theDBs.get(i).contains(dbName))
-                return theDBs.get(i);
-        return null;
-    }
-
-    /**
-     * Given a reddit comments database file name it will return the absolute path
-     * @param dbName Name of the comments database
-     * @return Absolute path to DB if possible, otherwise null
-     */
-    public static String redditCommentsDBAbsolutePath(String dbName){
-        List<String> theDBs = redditComsAbsolutePaths();
-        for(int i = 0; i < theDBs.size(); ++i)
-            if(theDBs.get(i).contains(dbName))
-                return theDBs.get(i);
-        return null;
-    }
-
-    /**
      * Get a list of absolute file paths to all reddit submission DBs
      * @return List of file paths to submission DBs if they exist, otherwise null
      */
     public static List<String> redditSubsAbsolutePaths(){
         // They all live in one directory, one HDD on my laptop
         if(StateVars.TESTING_MODE)
-            return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath());
+            return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath().get(0));
 
         // They each live on their own drive on the research machine
         else{
             return Arrays.asList(
-                    "F:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "G:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "H:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "I:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "J:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "K:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "F:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "G:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "H:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "I:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "J:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "K:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
             );
         }
     }
@@ -68,36 +42,61 @@ public class DBLocator {
      */
     public static List<String> redditComsAbsolutePaths(){
         if(StateVars.TESTING_MODE)
-            return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath());
+            return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath().get(0));
         else{
             return Arrays.asList(
-                    "F:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "G:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "H:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "I:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "J:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "K:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "F:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "G:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "H:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "I:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "J:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "K:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3"
             );
         }
-
     }
 
     /**
      * Get the path to the directory that holds the submission DBs. This path changes depending on
      * which machine this code is running on.
-     * @return Absolute file path to the directory holding the submission databases
+     * @return Absolute file path to the directories holding the submission databases
      */
-    public static String getSubDBPath(){
-        return StateVars.TESTING_MODE ? DataPaths.LOCAL_SUB_DB_PATH : DataPaths.SUB_DB_PATH;
+    public static List<String> getSubDBPath(){
+        List<String> paths;
+        if(StateVars.TESTING_MODE)
+            paths = Arrays.asList(DataPaths.LOCAL_SUB_DB_PATH);
+        else{
+            paths = Arrays.asList(
+                "F:/DBs/Reddit/Submissions/",
+                "G:/DBs/Reddit/Submissions/",
+                "H:/DBs/Reddit/Submissions/",
+                "I:/DBs/Reddit/Submissions/",
+                "J:/DBs/Reddit/Submissions/",
+                "K:/DBs/Reddit/Submissions/"
+            );
+        }
+        return paths;
     }
 
     /**
      * Get the path to the directory that holds the comment DBs. This path changes depending on
      * which machine this code is running on.
-     * @return Absolute file path to the directory holding the submission databases
+     * @return Absolute file path to the directories holding the submission databases
      */
-    public static String getComDBPath(){
-        return StateVars.TESTING_MODE ? DataPaths.LOCAL_COM_DB_PATH : DataPaths.COM_DB_PATH;
+    public static List<String> getComDBPath(){
+        List<String> paths;
+        if(StateVars.TESTING_MODE)
+            paths = Arrays.asList(DataPaths.LOCAL_COM_DB_PATH);
+        else{
+            paths = Arrays.asList(
+                "F:/DBs/Reddit/Comments/",
+                "G:/DBs/Reddit/Comments/",
+                "H:/DBs/Reddit/Comments/",
+                "I:/DBs/Reddit/Comments/",
+                "J:/DBs/Reddit/Comments/",
+                "K:/DBs/Reddit/Comments/"
+            );
+        }
+        return paths;
     }
 
     /**
