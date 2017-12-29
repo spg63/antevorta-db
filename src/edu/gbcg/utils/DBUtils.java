@@ -166,7 +166,17 @@ public class DBUtils {
      * @return A ResultSet if the selection was successful
      */
     public ResultSet select(Connection conn, String SQLStatement){
-        return null;
+        Statement stmt;
+        ResultSet rs = null;
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(SQLStatement);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return rs;
     }
 
     /**
@@ -285,6 +295,4 @@ public class DBUtils {
             }
         }
     }
-
-
 }

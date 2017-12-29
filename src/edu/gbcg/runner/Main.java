@@ -1,5 +1,6 @@
 package edu.gbcg.runner;
 
+import edu.gbcg.DBSelector.RedditSubSelector;
 import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.RawDataLocator;
 import edu.gbcg.configs.StateVars;
@@ -26,7 +27,7 @@ public class Main {
         TSL.LOG_NON_ERRORS = false;
 
         // Kill the DBs and start over
-        StateVars.START_FRESH = true;
+        StateVars.START_FRESH = false;
 
         // Check and create them if they don't exist
         RedditSubmissions.createDBs();
@@ -34,12 +35,14 @@ public class Main {
         long start = System.currentTimeMillis();
 
         // Read the json files into the DBs
-        RedditSubmissions.pushJSONDataIntoDBs();
+        //RedditSubmissions.pushJSONDataIntoDBs();
+        String author = "----root";
+        RedditSubSelector.testItOut("select * from submission_attrs where author = '"+author+"';");
 
         long end = System.currentTimeMillis();
 
         NumberFormat formatter = new DecimalFormat("#0.00000");
-        c.writeln_err("Json to DB took " + formatter.format((end - start) / 1000d) + " seconds");
+        c.writeln_err("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
 
 
         // Tell the logger to close up the queue

@@ -22,7 +22,6 @@ import java.util.*;
  */
 public class RedditSubmissions {
     private static List<String> DBs = DBLocator.redditSubsAbsolutePaths();
-    private static final String SUB_TABLE_NAME = "submission_attrs";
 
     /**
      * Creates the reddit submission databases. The number of databases and their storage
@@ -43,7 +42,7 @@ public class RedditSubmissions {
 
         // The DBs exist but we want to start fresh, blow them up
         if(dbs_exist && StateVars.START_FRESH){
-            String sql = "drop table if exists " + SUB_TABLE_NAME + ";";
+            String sql = "drop table if exists " + StateVars.SUB_TABLE_NAME + ";";
             for(int i = 0; i < DBs.size(); ++i) {
                 DBCommon.delete(DBs.get(i), sql);
                 //DBCommon.delete(DBs.get(i), "vacuum");
@@ -69,7 +68,7 @@ public class RedditSubmissions {
 
         // Create the table schema
         StringBuilder create = new StringBuilder();
-        create.append("create table if not exists "+ SUB_TABLE_NAME + "(");
+        create.append("create table if not exists "+ StateVars.SUB_TABLE_NAME + "(");
         for(int i = 0; i < col_names.size(); ++i){
             create.append(col_names.get(i));
             create.append(data_types.get(i));
@@ -240,7 +239,7 @@ public class RedditSubmissions {
                             sub_workers.get(j).setJSON(lines_list.get(j));
                             sub_workers.get(j).setColumns(getColumnsForDB());
                             sub_workers.get(j).setKeys(keysOfInterest);
-                            sub_workers.get(j).setTableName(SUB_TABLE_NAME);
+                            sub_workers.get(j).setTableName(StateVars.SUB_TABLE_NAME);
                         }
 
                         ArrayList<Thread> worker_threads = new ArrayList<>();
@@ -287,7 +286,7 @@ public class RedditSubmissions {
                     sub_workers.get(j).setJSON((lines_list.get(j)));
                     sub_workers.get(j).setColumns(getColumnsForDB());
                     sub_workers.get(j).setKeys(keysOfInterest);
-                    sub_workers.get(j).setTableName(SUB_TABLE_NAME);
+                    sub_workers.get(j).setTableName(StateVars.SUB_TABLE_NAME);
                 }
 
                 for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
