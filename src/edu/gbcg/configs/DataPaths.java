@@ -10,7 +10,7 @@ public class DataPaths {
     // File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL)
     public static final String LOCAL_SUB_DATA_PATH = "LocalData/raw/submissions/";
     public static final String LOCAL_COM_DATA_PATH = "LocalData/raw/comments/";
-    public static final String SUB_DATA_PATH = "A:/Data/Uncompressed/Reddit/Submissions/testing/";
+    public static final String SUB_DATA_PATH = "A:/Data/Uncompressed/Reddit/Submissions/";
     public static final String COM_DATA_PATH = "A:/Data/Uncompressed/Reddit/Comments/";
 
     public static final String LOCAL_SUB_DB_PATH = "LocalDB/RedditSubs/";
