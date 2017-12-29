@@ -10,7 +10,7 @@ public class StateVars {
     // True when working locally on MBP, false when working on full dataset, changes data / db paths
     public static final boolean TESTING_MODE = isWindows() ? false : true;
     // Drops the DBs if they exist and reads in the data again
-    public static final boolean START_FRESH = false;
+    public static final boolean START_FRESH = true;
 
 
     /*-------------------- Database control --------------------*/
@@ -18,7 +18,7 @@ public class StateVars {
     public static final String DB_URL_PREFIX = "jdbc:sqlite:";
     public static final String DB_TYPE_EXT = ".sqlite3";
     // Larger batch size performs better on research machine with individual HDDs for each DB shard
-    public static final int RESEARCH_BATCH_SIZE = 2500;
+    public static final int RESEARCH_BATCH_SIZE = 3000;
     // Performs better on single laptop SSD
     public static final int LAPTOP_BATCH_SIZE = 1000;
     public static final int DB_BATCH_LIMIT = TESTING_MODE ? LAPTOP_BATCH_SIZE : RESEARCH_BATCH_SIZE;
