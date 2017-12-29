@@ -23,9 +23,18 @@ public class Main {
         // Final test commit from machine
         TSL.get().log("Program starting");
 
+        String path = "A:/Data/Uncompressed/Reddit/Submissions/testing/";
+
+        List<String> files = FileUtils.get().getAllFilePathsInDir(path);
+
+        for(String file : files)
+            c.writeln("file: " + file);
+
+/*
+
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
-/*
+
         // Kill the DBs and start over
         StateVars.START_FRESH = false;
 
@@ -43,6 +52,7 @@ public class Main {
 
         NumberFormat formatter = new DecimalFormat("#0.00000");
         c.writeln_err("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
+
 */
 
         // Tell the logger to close up the queue

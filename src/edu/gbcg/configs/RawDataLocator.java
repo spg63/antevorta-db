@@ -18,7 +18,7 @@ public class RawDataLocator {
      * @return List of all reddit submission files if available, otherwise null
      */
     public static List<String> redditJsonSubmissionAbsolutePaths(){
-        return FileUtils.getAllFilePathsInDirWithPrefix("RS", getRedditDataPath());
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getRedditDataPath());
     }
 
     /**
@@ -27,7 +27,7 @@ public class RawDataLocator {
      * @return List of all reddit comment files if available, otherwise null
      */
     public static List<String> redditJsonCommentAbsolutePaths(){
-        return FileUtils.getAllFilePathsInDirWithPrefix("RC", getRedditDataPath());
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getRedditDataPath());
     }
 
     /*
