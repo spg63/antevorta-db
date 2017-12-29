@@ -10,7 +10,7 @@ public class StateVars {
     // True when working locally on MBP, false when working on full dataset, changes data / db paths
     public static final boolean TESTING_MODE = isWindows() ? false : true;
     // Drops the DBs if they exist and reads in the data again
-    public static final boolean START_FRESH = true;
+    public static final boolean START_FRESH = false;
 
 
     /*-------------------- Database control --------------------*/

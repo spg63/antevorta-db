@@ -1,6 +1,6 @@
 package edu.gbcg.runner;
 
-import edu.gbcg.DBSelector.RedditSubSelector;
+import edu.gbcg.DBSelector.RedditSubmission.RedditSubSelector;
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.dbcreator.RedditSubmissions;
 import edu.gbcg.utils.TSL;
@@ -25,8 +25,10 @@ public class Main {
         // Read the json files into the DBs
         RedditSubmissions.pushJSONDataIntoDBs();
 
-        String author = "a4k04";
-        //RedditSubSelector.testItOut("select * from "+ StateVars.SUB_TABLE_NAME+" where author = '"+author+"';");
+        String author = "spot35";
+        String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
+        String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 5;";
+        RedditSubSelector.testItOut(select_aut);
 
         long end = System.currentTimeMillis();
 

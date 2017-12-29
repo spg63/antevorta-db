@@ -1,4 +1,4 @@
-package edu.gbcg.DBSelector;
+package edu.gbcg.DBSelector.RedditSubmission;
 
 
 import edu.gbcg.dbcreator.DBCommon;

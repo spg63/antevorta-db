@@ -1,4 +1,4 @@
-package edu.gbcg.DBSelector;
+package edu.gbcg.DBSelector.RedditSubmission;
 
 import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.StateVars;
@@ -32,10 +32,11 @@ public class RedditSubSelector {
             conns.add(DBCommon.connect(DBs.get(i)));
         }
         List<ResultSet> res = generalSelection(conns, SQLStatement);
+        String selector = "link_url";
         for(int i = 0; i < res.size(); ++i){
             try {
                 while (res.get(i).next()) {
-                    c.writeln("selftext: " + res.get(i).getString("selftext"));
+                    c.writeln(selector + ": " + res.get(i).getString(selector));
                 }
             }
             catch(SQLException e){
@@ -74,6 +75,9 @@ public class RedditSubSelector {
         catch(ExecutionException ex){
             TSL.get().err("RedditSubSelector.genericSelect ExecutionException");
         }
+
+        // Shutdown the executor threadpool
+        executor.shutdown();
 
         if(results.isEmpty())
             return null;
