@@ -45,13 +45,14 @@ public class RedditSubmissions {
             String sql = "drop table if exists " + StateVars.SUB_TABLE_NAME + ";";
             for(int i = 0; i < DBs.size(); ++i) {
                 DBCommon.delete(DBs.get(i), sql);
-                //DBCommon.delete(DBs.get(i), "vacuum");
             }
         }
 
         // The DBs don't exist, we need to create them
         if(!dbs_exist){
-            FileUtils.get().checkAndCreateDir(DBLocator.getSubDBPath());
+            List<String> dir_paths = DBLocator.getSubDBPath();
+            for(String dir_path : dir_paths)
+                FileUtils.get().checkAndCreateDir(dir_path);
             List<String> paths = DBLocator.buildSubDBPaths();
             for(String DB : paths) {
                 Connection conn = DBCommon.connect(DB);
@@ -182,6 +183,10 @@ public class RedditSubmissions {
      * Reads all JSON reddit submission data and pushes it into the various DBs
      */
     public static void pushJSONDataIntoDBs(){
+        // If we're not starting fresh then get the hell out of here
+        if(!StateVars.START_FRESH) return;
+        c.writeln_err("We skipped the return...");
+
         // Get the absolute paths to the JSON submission data
         List<String> json_paths = RawDataLocator.redditJsonSubmissionAbsolutePaths();
 

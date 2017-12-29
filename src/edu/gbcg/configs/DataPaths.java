@@ -15,8 +15,6 @@ public class DataPaths {
 
     public static final String LOCAL_SUB_DB_PATH = "LocalDB/RedditSubs/";
     public static final String LOCAL_COM_DB_PATH = "LocalDB/RedditComs/";
-    public static final String SUB_DB_PATH  = "NULL_FUCKER:";
-    public static final String COM_DB_PATH  = "NULL_FUCKER:";
 
     public static final String SUB_DB_PREFIX        = "RS_DB";
     public static final String COM_DB_PREFIX        = "RC_DB";

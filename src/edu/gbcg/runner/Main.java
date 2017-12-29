@@ -23,20 +23,16 @@ public class Main {
         // Final test commit from machine
         TSL.get().log("Program starting");
 
-        String path = "A:/Data/Uncompressed/Reddit/Submissions/testing/";
+        //String path = "A:/Data/Uncompressed/Reddit/Submissions/testing/";
 
-        List<String> files = FileUtils.get().getAllFilePathsInDir(path);
+        //List<String> files = FileUtils.get().getAllFilePathsInDir(path);
 
-        for(String file : files)
-            c.writeln("file: " + file);
+        //for(String file : files)
+        //    c.writeln("file: " + file);
 
-/*
 
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
-
-        // Kill the DBs and start over
-        StateVars.START_FRESH = false;
 
         // Check and create them if they don't exist
         RedditSubmissions.createDBs();
@@ -44,16 +40,16 @@ public class Main {
         long start = System.currentTimeMillis();
 
         // Read the json files into the DBs
-        //RedditSubmissions.pushJSONDataIntoDBs();
+        RedditSubmissions.pushJSONDataIntoDBs();
         String author = "----root";
-        RedditSubSelector.testItOut("select * from submission_attrs where author = '"+author+"';");
+        //RedditSubSelector.testItOut("select * from submission_attrs where author =
+        // '"+author+"';");
 
         long end = System.currentTimeMillis();
 
         NumberFormat formatter = new DecimalFormat("#0.00000");
         c.writeln_err("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
 
-*/
 
         // Tell the logger to close up the queue
         TSL.get().shutDown();

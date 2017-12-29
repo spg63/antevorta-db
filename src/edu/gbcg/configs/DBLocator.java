@@ -105,7 +105,18 @@ public class DBLocator {
      * @return List of absolute paths to DBs (that don't yet exist)
      */
     public static List<String> buildSubDBPaths(){
-        return buildDBPaths(getSubDBPath(), DataPaths.SUB_DB_PREFIX);
+        if(StateVars.TESTING_MODE)
+            return buildDBPaths(getSubDBPath().get(0), DataPaths.SUB_DB_PREFIX);
+        else{
+            return Arrays.asList(
+                    "F:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "G:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "H:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "I:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "J:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "K:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
+            );
+        }
     }
 
     /**
@@ -114,7 +125,18 @@ public class DBLocator {
      * @return List of absolute paths to the DBs (that don't yet exist)
      */
     public static List<String> buildComDBPaths(){
-        return buildDBPaths(getComDBPath(), DataPaths.COM_DB_PREFIX);
+        if(StateVars.TESTING_MODE)
+            return buildDBPaths(getComDBPath().get(0), DataPaths.COM_DB_PREFIX);
+        else{
+            return Arrays.asList(
+                    "F:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "G:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "H:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "I:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "J:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "K:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3"
+            );
+        }
     }
 
     /*

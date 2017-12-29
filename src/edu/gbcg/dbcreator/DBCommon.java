@@ -24,15 +24,16 @@ public class DBCommon {
     public static Connection connect(String db){
         Connection conn = DBUtils.get().connect(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER);
         // Turn off synchronous mode for the reddit DB connections to increase performance
-        try {
-            Statement st = conn.createStatement();
-            String sql = "PRAGMA synchronous=OFF";
-            st.execute(sql);
-            st.close();
-        }
-        catch(SQLException e){
-            TSL.get().err("DBCommon.connect exception");
-            e.printStackTrace();
+        if(StateVars.SYNC_MODE_OFF) {
+            try {
+                Statement st = conn.createStatement();
+                String sql = "PRAGMA synchronous=OFF";
+                st.execute(sql);
+                st.close();
+            } catch (SQLException e) {
+                TSL.get().err("DBCommon.connect exception");
+                e.printStackTrace();
+            }
         }
 
         return conn;
