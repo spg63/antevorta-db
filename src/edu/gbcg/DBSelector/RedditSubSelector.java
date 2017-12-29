@@ -75,6 +75,9 @@ public class RedditSubSelector {
             TSL.get().err("RedditSubSelector.genericSelect ExecutionException");
         }
 
+        // Shutdown the executor threadpool
+        executor.shutdown();
+
         if(results.isEmpty())
             return null;
         return results;

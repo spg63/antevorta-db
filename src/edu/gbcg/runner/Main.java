@@ -42,8 +42,7 @@ public class Main {
         // Read the json files into the DBs
         RedditSubmissions.pushJSONDataIntoDBs();
         String author = "----root";
-        //RedditSubSelector.testItOut("select * from submission_attrs where author =
-        // '"+author+"';");
+        RedditSubSelector.testItOut("select * from submission_attrs where author = '"+author+"';");
 
         long end = System.currentTimeMillis();
 
