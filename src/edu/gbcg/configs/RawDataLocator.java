@@ -36,6 +36,6 @@ public class RawDataLocator {
     */
     private static String getRedditDataPath(){
         // Testing mode means we're running on my MBP with limited data
-        return StateVars.TESTING_MODE ? DataPaths.LOCAL_DATA_PATH : DataPaths.DATA_PATH;
+        return StateVars.TESTING_MODE ? DataPaths.LOCAL_SUB_DATA_PATH : DataPaths.SUB_DATA_PATH;
     }
 }

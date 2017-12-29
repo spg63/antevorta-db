@@ -4,6 +4,7 @@ import edu.gbcg.utils.FileUtils;
 
 import javax.xml.crypto.Data;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,7 +45,21 @@ public class DBLocator {
      * @return List of file paths to submission DBs if they exist, otherwise null
      */
     public static List<String> redditSubsAbsolutePaths(){
-        return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath());
+        // They all live in one directory, one HDD on my laptop
+        if(StateVars.TESTING_MODE)
+            return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath());
+
+        // They each live on their own drive on the research machine
+        else{
+            return Arrays.asList(
+                    "F:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "G:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "H:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "I:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "J:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "K:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+            );
+        }
     }
 
     /**
@@ -52,7 +67,19 @@ public class DBLocator {
      * @return List of file paths to comment DBs if they exist, otherwise null
      */
     public static List<String> redditComsAbsolutePaths(){
-        return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath());
+        if(StateVars.TESTING_MODE)
+            return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath());
+        else{
+            return Arrays.asList(
+                    "F:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "G:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "H:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "I:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "J:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "K:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+            );
+        }
+
     }
 
     /**
@@ -95,6 +122,8 @@ public class DBLocator {
         ** NO JAVADOC **
         * Actually builds the paths to the DBs based on requested com/sub dir and their prefix
      */
+
+    ///// USE POSTFIX IN TESTING_MODE BUT NOT IN REGULAR MODE!!!!!!!!
     private static List<String> buildDBPaths(String db_dir, String db_prefix){
         List<StringBuilder> sbs = new ArrayList<>();
         for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
