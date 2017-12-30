@@ -32,7 +32,7 @@ public class StateVars {
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry bro.
-    private static boolean isWindows(){
+    public static boolean isWindows(){
         String osString = System.getProperty("os.name").toLowerCase();
         if(osString.contains("win"))
             return true;

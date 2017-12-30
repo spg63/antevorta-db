@@ -40,7 +40,7 @@ public class DBUtils {
             Class.forName(dbDriverClassName);
             SQLiteConfig config = new SQLiteConfig();
             // This is necessary to enforce foreign keys, has to happen on *every* connection
-            config.enforceForeignKeys(true);
+            //config.enforceForeignKeys(true);
             conn = DriverManager.getConnection(connString, config.toProperties());
         }
         catch(SQLException | ClassNotFoundException e){
@@ -170,6 +170,7 @@ public class DBUtils {
         ResultSet rs = null;
         try {
             stmt = conn.createStatement();
+            stmt.setFetchSize(1000);
             rs = stmt.executeQuery(SQLStatement);
         }
         catch(SQLException e){

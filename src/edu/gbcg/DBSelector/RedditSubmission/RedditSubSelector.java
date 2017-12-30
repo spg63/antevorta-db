@@ -32,11 +32,12 @@ public class RedditSubSelector {
             conns.add(DBCommon.connect(DBs.get(i)));
         }
         List<ResultSet> res = generalSelection(conns, SQLStatement);
-        String selector = "link_url";
+        String selector = "selftext";
         for(int i = 0; i < res.size(); ++i){
             try {
                 while (res.get(i).next()) {
                     c.writeln(selector + ": " + res.get(i).getString(selector));
+                    //c.writeln("sub_name: " + res.get(i).getString("subreddit_name"));
                 }
             }
             catch(SQLException e){

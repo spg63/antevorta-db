@@ -20,17 +20,19 @@ public class Main {
         TSL.LOG_NON_ERRORS = false;
 
         // Check and create them if they don't exist
+        if(StateVars.isWindows() && StateVars.START_FRESH)
+            System.exit(0);
         RedditSubmissions.createDBs();
 
         long start = System.currentTimeMillis();
 
         // Read the json files into the DBs
-        RedditSubmissions.pushJSONDataIntoDBs();
+        //RedditSubmissions.pushJSONDataIntoDBs();
 
-        //String author = "spot35";
-        //String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
-        //String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 5;";
-        //RedditSubSelector.testItOut(select_aut);
+        String author = "a4k04";
+        String select_aut = "select selftext from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
+        String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 5;";
+        RedditSubSelector.testItOut(select_aut);
 
         long end = System.currentTimeMillis();
 
