@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class DBUtils {
     private static volatile DBUtils _instance = null;
-    private static final int QUERY_TIMEOUT = 60;
+    private static final int QUERY_TIMEOUT = 240;
 
     private DBUtils(){}
     public static DBUtils get(){
@@ -72,6 +72,15 @@ public class DBUtils {
      * @param SQLStatement The SQLstatement, as a string
      */
     public void insert(Connection conn, String SQLStatement){
+        executeGenericUpdate(conn, SQLStatement);
+    }
+
+    /**
+     * Perform a DB operation not related to insert, delete, update
+     * @param conn
+     * @param SQLStatement
+     */
+    public void execute(Connection conn, String SQLStatement){
         executeGenericUpdate(conn, SQLStatement);
     }
 

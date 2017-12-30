@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Class to interact with the reddit submission data. This class will allow for all required
@@ -185,7 +187,6 @@ public class RedditSubmissions {
     public static void pushJSONDataIntoDBs(){
         // If we're not starting fresh then get the hell out of here
         if(!StateVars.START_FRESH) return;
-        c.writeln_err("We skipped the return...");
 
         // Get the absolute paths to the JSON submission data
         List<String> json_paths = RawDataLocator.redditJsonSubmissionAbsolutePaths();
@@ -324,5 +325,35 @@ public class RedditSubmissions {
                 }
             }
         }
+        // The DBs have been created, now create the usual indicies for quicker queries
+        createIndicies("author", "attrs_author");
+    }
+
+    public static void createIndicies(String column_name, String index_name){
+        List<Thread> idx_workers = new ArrayList<>();
+        List<Connection> conns = new ArrayList<>();
+        String index_string = DBCommon.getDBIndexSQLStatement(StateVars.SUB_TABLE_NAME, column_name, index_name);
+        if(DBs == null)
+            DBs = DBLocator.redditSubsAbsolutePaths();
+        for(String db : DBs)
+            conns.add(DBCommon.connect(db));
+
+        for(int i = 0; i < conns.size(); ++i) {
+            idx_workers.add(new Thread(new IndexWorker(conns.get(i), index_string)));
+            idx_workers.get(i).start();
+        }
+
+        try {
+            for (int i = 0; i < idx_workers.size(); ++i)
+                idx_workers.get(i).join();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        // Close the DB connections
+        for(Connection conn : conns)
+            DBCommon.disconnect(conn);
     }
 }
+

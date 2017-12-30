@@ -3,12 +3,15 @@ package edu.gbcg.dbcreator;
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.DBUtils;
 import edu.gbcg.utils.TSL;
+import edu.gbcg.utils.c;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
+import static edu.gbcg.utils.c.writeln_err;
 
 /**
  * Class to hold functionality shared among DB classes
@@ -30,8 +33,6 @@ public class DBCommon {
                 String sql = "PRAGMA synchronous=OFF";
                 st.execute(sql);
                 st.close();
-                // Turn off autocommit for now
-                conn.setAutoCommit(false);
             } catch (SQLException e) {
                 TSL.get().err("DBCommon.connect exception");
                 e.printStackTrace();
@@ -152,5 +153,26 @@ public class DBCommon {
      */
     public static List<ResultSet> selectAll(Connection conn, List<String> SQLStatements){
         return DBUtils.get().selectAll(conn, SQLStatements);
+    }
+
+    /**
+     * Perform a non insert, delete, update operation
+     * @param conn
+     * @param SQLStatement
+     */
+    public static void execute(Connection conn, String SQLStatement){
+        DBUtils.get().execute(conn, SQLStatement);
+    }
+
+    /**
+     * Get a SQL string for index creation
+     * @param table Table to create the index for
+     * @param columnToIndex Column name the index is being created on
+     * @param indexName What to call the index
+     * @return The SQL string
+     */
+    public static String getDBIndexSQLStatement(String table, String columnToIndex, String indexName){
+        String idx = "create index "+indexName+" on "+table+"("+columnToIndex+");";
+        return idx;
     }
 }

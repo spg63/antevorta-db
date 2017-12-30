@@ -2,6 +2,7 @@ package edu.gbcg.runner;
 
 import edu.gbcg.DBSelector.RedditSubmission.RedditSubSelector;
 import edu.gbcg.configs.StateVars;
+import edu.gbcg.dbcreator.RedditSubmissionJsonToDBWorker;
 import edu.gbcg.dbcreator.RedditSubmissions;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
@@ -25,10 +26,13 @@ public class Main {
             System.exit(0);
         RedditSubmissions.createDBs();
 
+
         long start = System.currentTimeMillis();
 
+        //RedditSubmissions.createIndicies("author", "attrs_author");
+
         // Read the json files into the DBs
-        //RedditSubmissions.pushJSONDataIntoDBs();
+        RedditSubmissions.pushJSONDataIntoDBs();
 
         String author = "a4k04";
         String select_aut = "select selftext from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
