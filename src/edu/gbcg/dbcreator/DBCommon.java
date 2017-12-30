@@ -30,6 +30,8 @@ public class DBCommon {
                 String sql = "PRAGMA synchronous=OFF";
                 st.execute(sql);
                 st.close();
+                // Turn off autocommit for now
+                conn.setAutoCommit(false);
             } catch (SQLException e) {
                 TSL.get().err("DBCommon.connect exception");
                 e.printStackTrace();

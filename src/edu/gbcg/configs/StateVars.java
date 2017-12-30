@@ -10,7 +10,7 @@ public class StateVars {
     // True when working locally on MBP, false when working on full dataset, changes data / db paths
     public static final boolean TESTING_MODE = isWindows() ? false : true;
     // Drops the DBs if they exist and reads in the data again
-    public static final boolean START_FRESH = true;
+    public static boolean START_FRESH = false;
 
 
     /*-------------------- Database control --------------------*/
@@ -32,7 +32,7 @@ public class StateVars {
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry bro.
-    private static boolean isWindows(){
+    public static boolean isWindows(){
         String osString = System.getProperty("os.name").toLowerCase();
         if(osString.contains("win"))
             return true;
