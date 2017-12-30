@@ -14,6 +14,8 @@ public class Main {
         // Final test commit from machine
         TSL.get().log("Program starting");
 
+        StateVars.START_FRESH = false;
+
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
 
