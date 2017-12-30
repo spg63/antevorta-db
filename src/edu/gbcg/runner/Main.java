@@ -26,7 +26,6 @@ public class Main {
             System.exit(0);
         RedditSubmissions.createDBs();
 
-
         long start = System.currentTimeMillis();
 
         //RedditSubmissions.createIndicies("author", "attrs_author");
@@ -34,15 +33,16 @@ public class Main {
         // Read the json files into the DBs
         RedditSubmissions.pushJSONDataIntoDBs();
 
-        String author = "a4k04";
-        String select_aut = "select selftext from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
+        //String author = "----root";
+        String author = "seangrimes590";
+        String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
         String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 5;";
         RedditSubSelector.testItOut(select_aut);
 
         long end = System.currentTimeMillis();
 
         NumberFormat formatter = new DecimalFormat("#0.00000");
-        c.writeln_err("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
+        c.writeln("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
         TSL.get().err("We're Done");
 
         // Tell the logger to close up the queue

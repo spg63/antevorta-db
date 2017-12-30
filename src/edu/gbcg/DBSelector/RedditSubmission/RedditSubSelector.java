@@ -32,11 +32,18 @@ public class RedditSubSelector {
             conns.add(DBCommon.connect(DBs.get(i)));
         }
         List<ResultSet> res = generalSelection(conns, SQLStatement);
-        String selector = "selftext";
+        String score = "score";
+        String sub_name = "subreddit_name";
+        String title = "post_title";
         for(int i = 0; i < res.size(); ++i){
             try {
                 while (res.get(i).next()) {
-                    c.writeln(selector + ": " + res.get(i).getString(selector));
+                    c.writeln(score + ": " + res.get(i).getString(score));
+                    c.writeln(sub_name + ": " + res.get(i).getString(sub_name));
+                    c.writeln(title + ": " + res.get(i).getString(title));
+                    c.writeln("");
+                    c.writeln("----------");
+                    c.writeln("");
                     //c.writeln("sub_name: " + res.get(i).getString("subreddit_name"));
                 }
             }
