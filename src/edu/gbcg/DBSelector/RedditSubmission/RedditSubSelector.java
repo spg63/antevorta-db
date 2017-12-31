@@ -31,7 +31,9 @@ public class RedditSubSelector {
         String title = "post_title";
         String sub_name = "subreddit_name";
         String score = "score";
+        String ID = "ID";
         for(int i = 0; i < res.size(); ++i){
+            c.writeln(ID + ": " + res.get(i).getString(ID));
             c.writeln(author + ": " + res.get(i).getString(author));
             c.writeln(title + ": " + res.get(i).getString(title));
             c.writeln(sub_name + ": " + res.get(i).getString(sub_name));

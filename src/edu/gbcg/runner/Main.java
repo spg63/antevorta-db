@@ -32,8 +32,8 @@ public class Main {
         //String author = "----root";
         String author = "seangrimes590";
         String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = " + "'"+author+"';";
-        String select_all = "select author from "+StateVars.SUB_TABLE_NAME+" where score = 2500;";
-        RedditSubSelector.testItOut(select_all);
+        String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 2500;";
+        RedditSubSelector.testItOut(select_aut);
 
         long end = System.currentTimeMillis();
 
