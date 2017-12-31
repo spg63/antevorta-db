@@ -28,6 +28,7 @@ public class StateVars {
     public static final int DB_SHARD_NUM = 6;
     // Table names
     public static final String SUB_TABLE_NAME = "submission_attrs";
+    public static final String COM_TABLE_NAME = "comment_attrs";
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a

@@ -2,7 +2,7 @@ package edu.gbcg.runner;
 
 import edu.gbcg.DBSelector.RedditSubmission.RedditSubSelector;
 import edu.gbcg.configs.StateVars;
-import edu.gbcg.dbcreator.RedditSubmissions;
+import edu.gbcg.dbcreator.Reddit.RedditSubmissions;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
 

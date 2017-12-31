@@ -3,14 +3,9 @@ package edu.gbcg.DBSelector.RedditSubmission;
 
 import edu.gbcg.DBSelector.RSMapper;
 import edu.gbcg.dbcreator.DBCommon;
-import edu.gbcg.dbcreator.RedditSubmissions;
-import edu.gbcg.utils.TSL;
-import edu.gbcg.utils.c;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

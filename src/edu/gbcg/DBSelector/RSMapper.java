@@ -1,11 +1,8 @@
 package edu.gbcg.DBSelector;
 
-import edu.gbcg.DBSelector.RedditSubmission.SubmissionSetMapper;
-import edu.gbcg.dbcreator.RedditSubmissions;
 import edu.gbcg.utils.TSL;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

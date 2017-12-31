@@ -1,8 +1,10 @@
-package edu.gbcg.dbcreator;
+package edu.gbcg.dbcreator.Reddit;
 
 import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.RawDataLocator;
 import edu.gbcg.configs.StateVars;
+import edu.gbcg.dbcreator.DBCommon;
+import edu.gbcg.dbcreator.IndexWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
@@ -113,14 +115,6 @@ public class RedditSubmissions {
             "subreddit_id",     "subreddit_type",   "title",        "url"
     ));
 
-    private static Map<String, Integer> keyToIdx(){
-        Map<String, Integer> key_to_idx = new HashMap<>();
-        for(int i = 0; i < keysOfInterest.size(); ++i){
-            key_to_idx.put(keysOfInterest.get(i), i);
-        }
-        return key_to_idx;
-    }
-
     /*
         ** NO JAVADOC **
         * The column names we care about. Based on the above key names. There are extra integer,
@@ -210,7 +204,6 @@ public class RedditSubmissions {
             int dump_counter = 1;
             List<List<String>> lines_list = new ArrayList<>();
             List<RedditSubmissionJsonToDBWorker> sub_workers = new ArrayList<>();
-            List<Thread> workers = new ArrayList<>();
             for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j) {
                 lines_list.add(new ArrayList<>());
                 sub_workers.add(new RedditSubmissionJsonToDBWorker());
@@ -324,13 +317,13 @@ public class RedditSubmissions {
             }
         }
         // The DBs have been created, now create the usual indicies for quicker queries
-        createDBIndex(StateVars.SUB_TABLE_NAME, "author", "attrs_author");
+        createDBIndex("author", "attrs_author");
     }
 
-    public static void createDBIndex(String tableName, String columnName, String indexName){
+    public static void createDBIndex(String columnName, String indexName){
         List<Thread> idx_workers = new ArrayList<>();
         List<Connection> conns = new ArrayList<>();
-        String index_string = DBCommon.getDBIndexSQLStatement(tableName, columnName, indexName);
+        String index_string = DBCommon.getDBIndexSQLStatement(StateVars.SUB_TABLE_NAME, columnName, indexName);
         if(DBs == null)
             DBs = DBLocator.redditSubsAbsolutePaths();
         for(String db : DBs)
