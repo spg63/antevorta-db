@@ -31,6 +31,7 @@ public class SubmissionSetMapper extends RSMapper {
                 return maps;
 
             // Find the index for each column to prevent a lot of string comparisons
+            //***** PROBLEM: If the col doesn't exist
             for (String col : colNames)
                 colIDs.put(col, rs.findColumn(col));
 
