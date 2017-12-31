@@ -27,15 +27,15 @@ public class RedditSubSelector {
             return;
         }
 
-        String score = "score";
-        String sub_name = "subreddit_name";
-        String title = "post_title";
         String author = "author";
+        String title = "post_title";
+        String sub_name = "subreddit_name";
+        String score = "score";
         for(int i = 0; i < res.size(); ++i){
-            c.writeln(score + ": " + res.get(i).getString(score));
-            c.writeln(sub_name + ": " + res.get(i).getString(sub_name));
-            c.writeln(title + ": " + res.get(i).getString(title));
             c.writeln(author + ": " + res.get(i).getString(author));
+            c.writeln(title + ": " + res.get(i).getString(title));
+            c.writeln(sub_name + ": " + res.get(i).getString(sub_name));
+            c.writeln(score + ": " + res.get(i).getString(score));
             c.writeln("");
             c.writeln("----------");
             c.writeln("");
