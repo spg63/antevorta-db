@@ -127,7 +127,7 @@ public class RedditSubmissions {
         * real, and text based columns built-in for future expansion without re-reading the data
         * in to create a new table.
      */
-    private static List<String> getColumnsForDB(){
+    public static List<String> getColumnsForDB(){
         ArrayList<String> columns = new ArrayList<>(Arrays.asList(
                 "ID",                   "archived",             "author",
                 "brand_safe",           "contest_mode",         "created_dt",
