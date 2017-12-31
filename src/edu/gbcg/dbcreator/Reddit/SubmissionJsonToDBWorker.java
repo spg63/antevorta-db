@@ -262,7 +262,6 @@ public class SubmissionJsonToDBWorker implements Runnable{
 
                 ps.addBatch();
             }
-            //System.exit(0);
             // Execute the batch update
             ps.executeBatch();
 

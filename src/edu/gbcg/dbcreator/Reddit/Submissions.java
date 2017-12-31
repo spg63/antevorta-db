@@ -280,7 +280,7 @@ public class Submissions {
                 ArrayList<Thread> worker_ts = new ArrayList<>();
                 for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                     sub_workers.get(j).setDB(DBs.get(j));
-                    sub_workers.get(j).setJSON((lines_list.get(j)));
+                    sub_workers.get(j).setJSON(lines_list.get(j));
                     sub_workers.get(j).setColumns(getColumnsForDB());
                     sub_workers.get(j).setKeys(keysOfInterest);
                     sub_workers.get(j).setTableName(StateVars.SUB_TABLE_NAME);
@@ -316,7 +316,7 @@ public class Submissions {
                 }
             }
         }
-        // The DBs have been created, now create the usual indicies for quicker queries
+        // The DBs have been created, now create the usual indices for quicker queries
         createDBIndex("author", "attrs_author");
     }
 
