@@ -2,7 +2,7 @@ package edu.gbcg.runner;
 
 import edu.gbcg.DBSelector.RedditSubmission.RedditSubSelector;
 import edu.gbcg.configs.StateVars;
-import edu.gbcg.dbcreator.Reddit.RedditSubmissions;
+import edu.gbcg.dbcreator.Reddit.Submissions;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
 
@@ -22,12 +22,12 @@ public class Main {
         // Check and create them if they don't exist
         if(StateVars.isWindows() && StateVars.START_FRESH)
             System.exit(0);
-        RedditSubmissions.createDBs();
+        Submissions.createDBs();
 
         long start = System.currentTimeMillis();
 
         // Read the json files into the DBs
-        RedditSubmissions.pushJSONDataIntoDBs();
+        Submissions.pushJSONDataIntoDBs();
 
         //String author = "----root";
         String author = "keen75";

@@ -22,7 +22,7 @@ import java.util.*;
  * This class will automatically determine the number of DB shards and their storage location for
  * the user. The sharding will allow for parallel reads and writes to multiple HDDs / compute nodes.
  */
-public class RedditSubmissions {
+public class Submissions {
     private static List<String> DBs = DBLocator.redditSubsAbsolutePaths();
 
     /**
@@ -203,10 +203,10 @@ public class RedditSubmissions {
             int arr_ele_counter = 0;
             int dump_counter = 1;
             List<List<String>> lines_list = new ArrayList<>();
-            List<RedditSubmissionJsonToDBWorker> sub_workers = new ArrayList<>();
+            List<SubmissionJsonToDBWorker> sub_workers = new ArrayList<>();
             for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j) {
                 lines_list.add(new ArrayList<>());
-                sub_workers.add(new RedditSubmissionJsonToDBWorker());
+                sub_workers.add(new SubmissionJsonToDBWorker());
             }
 
             try{
@@ -266,7 +266,7 @@ public class RedditSubmissions {
                         sub_workers.clear();
                         lines_list.clear();
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
-                            sub_workers.add(new RedditSubmissionJsonToDBWorker());
+                            sub_workers.add(new SubmissionJsonToDBWorker());
                             lines_list.add(new ArrayList<>());
                         }
                     }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RedditSubmissionJsonToDBWorker implements Runnable{
+public class SubmissionJsonToDBWorker implements Runnable{
     private String db_;
     private List<String> json_strings_;
     private List<String> columns_;
@@ -24,9 +24,9 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
     private List<JSONObject> jsonObjects_ = new ArrayList<>();
     private int numObjects_;
 
-    public RedditSubmissionJsonToDBWorker(String dbPath, List<String> jsonLines,
-                                          List<String> columnNames, List<String> jsonKeys,
-                                          String tableName){
+    public SubmissionJsonToDBWorker(String dbPath, List<String> jsonLines,
+                                    List<String> columnNames, List<String> jsonKeys,
+                                    String tableName){
         this.db_ = dbPath;
         this.json_strings_ = jsonLines;
         this.columns_ = columnNames;
@@ -35,7 +35,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
         this.numObjects_ = this.json_strings_.size();
     }
 
-    public RedditSubmissionJsonToDBWorker(){}
+    public SubmissionJsonToDBWorker(){}
 
     public void run(){
     /*
@@ -276,7 +276,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
                 conn.rollback();
             }
             catch(SQLException ex){
-                TSL.get().err("RedditSubmissionJsonToDBWorker.parseAndPushDataToDB SQLException " +
+                TSL.get().err("SubmissionJsonToDBWorker.parseAndPushDataToDB SQLException " +
                         "on conn.rollback()");
             }
         }
@@ -286,7 +286,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
                     conn.setAutoCommit(true);
             }
             catch(SQLException exp){
-                TSL.get().err("RedditSubmissionJsonToDBWorker.parseAndPushDataToDB SQLException " +
+                TSL.get().err("SubmissionJsonToDBWorker.parseAndPushDataToDB SQLException " +
                         "on conn.setAutoCommit(true)");
             }
             if(ps != null){
@@ -294,7 +294,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
                     ps.close();
                 }
                 catch(SQLException ex){
-                    TSL.get().err("RedditSubmissionJsonToDBWorker.parseAndPushDataToDB " +
+                    TSL.get().err("SubmissionJsonToDBWorker.parseAndPushDataToDB " +
                             "SQLException on PreparedStatement.close()");
                 }
             }
@@ -303,7 +303,7 @@ public class RedditSubmissionJsonToDBWorker implements Runnable{
                     conn.close();
                 }
                 catch(SQLException ex){
-                    TSL.get().err("RedditSubmissionJsonToDBWorker.parseAndPushDataToDB " +
+                    TSL.get().err("SubmissionJsonToDBWorker.parseAndPushDataToDB " +
                             "SQLException on Connection.close()");
                 }
             }

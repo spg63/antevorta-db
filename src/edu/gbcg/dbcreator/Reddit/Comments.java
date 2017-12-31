@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RedditComments {
+public class Comments {
     private static List<String> DBs = DBLocator.redditComsAbsolutePaths();
 
     public static void createDBs(){
@@ -91,7 +91,7 @@ public class RedditComments {
         return columns;
     }
 
-    public static List<String> getColumnDataTypesForDB(){
+    private static List<String> getColumnDataTypesForDB(){
         ArrayList<String> data_types = new ArrayList<>(Arrays.asList(
                 " INTEGER PRIMARY KEY AUTOINCREMENT,",  " TEXT,",               " TEXT,",
                 " TEXT,",                               " INTEGER DEFAULT 0,",  " INTEGER DEFAULT 0,",
