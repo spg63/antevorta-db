@@ -172,7 +172,20 @@ public class DBCommon {
      * @return The SQL string
      */
     public static String getDBIndexSQLStatement(String table, String columnToIndex, String indexName){
-        String idx = "create index "+indexName+" on "+table+"("+columnToIndex+");";
-        return idx;
+        return "create index "+indexName+" on "+table+"("+columnToIndex+");";
+    }
+
+    /**
+     * Close an open resultset, prevents try/catch all over the code
+     * @param rs
+     */
+    public static void closeResultSet(ResultSet rs){
+        try{
+            rs.close();
+        }
+        catch(SQLException e){
+            TSL.get().err("DBCommon.closeResultSet SQLException");
+            e.printStackTrace();
+        }
     }
 }

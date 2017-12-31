@@ -13,8 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Class to interact with the reddit submission data. This class will allow for all required
@@ -129,7 +127,7 @@ public class RedditSubmissions {
         * real, and text based columns built-in for future expansion without re-reading the data
         * in to create a new table.
      */
-    private static List<String> getColumnsForDB(){
+    public static List<String> getColumnsForDB(){
         ArrayList<String> columns = new ArrayList<>(Arrays.asList(
                 "ID",                   "archived",             "author",
                 "brand_safe",           "contest_mode",         "created_dt",
@@ -326,13 +324,13 @@ public class RedditSubmissions {
             }
         }
         // The DBs have been created, now create the usual indicies for quicker queries
-        createIndicies("author", "attrs_author");
+        createDBIndex(StateVars.SUB_TABLE_NAME, "author", "attrs_author");
     }
 
-    public static void createIndicies(String column_name, String index_name){
+    public static void createDBIndex(String tableName, String columnName, String indexName){
         List<Thread> idx_workers = new ArrayList<>();
         List<Connection> conns = new ArrayList<>();
-        String index_string = DBCommon.getDBIndexSQLStatement(StateVars.SUB_TABLE_NAME, column_name, index_name);
+        String index_string = DBCommon.getDBIndexSQLStatement(tableName, columnName, indexName);
         if(DBs == null)
             DBs = DBLocator.redditSubsAbsolutePaths();
         for(String db : DBs)
@@ -356,4 +354,3 @@ public class RedditSubmissions {
             DBCommon.disconnect(conn);
     }
 }
-
