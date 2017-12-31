@@ -212,7 +212,7 @@ public class Comments {
                     line = br.readLine();
                 }
 
-                c.writeln("Writing to DBs, dump #:" + dump_counter);
+                c.writeln("Writing to DBs, dump #" + dump_counter);
                 ArrayList<Thread> worker_ts = new ArrayList<>();
                 for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                     com_workers.get(j).setDB(DBs.get(j));
@@ -253,6 +253,13 @@ public class Comments {
         }
         // Create the indices
         createDBIndex("author", "attrs_author");
+        createDBIndex("can_gild", "attrs_gild");
+        createDBIndex("controversial_score", "attrs_cont_score");
+        createDBIndex("created_dt", "attrs_created");
+        createDBIndex("gilded", "attrs_gilded");
+        createDBIndex("score", "attrs_score");
+        createDBIndex("subreddit_name", "attrs_sub_name");
+        createDBIndex("subreddit_id", "attrs_sub_id");
     }
 
     public static void createDBIndex(String columnName, String indexName){
