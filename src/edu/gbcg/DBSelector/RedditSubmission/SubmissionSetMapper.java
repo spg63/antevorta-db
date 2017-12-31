@@ -31,15 +31,26 @@ public class SubmissionSetMapper extends RSMapper {
                 return maps;
 
             // Find the index for each column to prevent a lot of string comparisons
-            //***** PROBLEM: If the col doesn't exist
-            for (String col : colNames)
-                colIDs.put(col, rs.findColumn(col));
+            for (String col : colNames) {
+                int colIDX;
+                // Need to do this in a try-catch. When a non-* query is performed the ResultSet will NOT contain all
+                // columns from the DB and trying to find non-existant columns will throw an SQLException. In the
+                // future this should be optimized to skip trying all columns and only try those from the query
+                try{
+                    colIDX = rs.findColumn(col);
+                }
+                catch(SQLException e){
+                    continue;
+                }
+                colIDs.put(col, colIDX);
+            }
 
             // Loop through all results that were found
             while(rs.next()){
                 Map<String, String> map = new HashMap<>();
 
                 // For each column, check to see if we have a value and if so, add it to the map
+                // Note: using the keyset instead of colNames because columns are missing from non-* queries
                 for(String col : colIDs.keySet())
                     map.put(col, rs.getString(colIDs.get(col)));
 
