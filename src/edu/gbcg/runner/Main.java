@@ -8,7 +8,6 @@ import edu.gbcg.dbcreator.Reddit.Comments;
 import edu.gbcg.dbcreator.Reddit.Submissions;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
-import javafx.application.Preloader;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -18,7 +17,7 @@ public class Main {
         // Final test commit from machine
         TSL.get().log("Program starting");
 
-        //StateVars.START_FRESH = true;
+        StateVars.START_FRESH = false;
 
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
@@ -55,11 +54,12 @@ public class Main {
     }
 
     public static void doComs(){
-        Comments.createDBs();
-        Comments.pushJSSONDataIntoDBs();
+        //Comments.createDBs();
+        //Comments.pushJSSONDataIntoDBs();
 
-        String author = "adnam";
-        String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"';";
+        //String author = "a4k04";
+        String author = "----root";
+        String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"' and score > 100;";
         String select_all = "select * from "+StateVars.COM_TABLE_NAME+" where score > 100;";
         RedditComSelector.testItOut(select_aut);
     }
