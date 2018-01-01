@@ -84,29 +84,6 @@ public class Comments {
             "subreddit_id",     "subreddit_type"
     ));
 
-    /*
-    // column = brand_safe
-                int brand_safe = this.jsonObjects_.get(i).optBoolean("brand_safe", false) ? 1 : 0;
-                ps.setInt(key, brand_safe); ++key;
-
-                // column = contest_mode
-                int contest_mode = this.jsonObjects_.get(i).optBoolean(
-                        "contest_mode", false) ? 1 : 0;
-                ps.setInt(key, contest_mode); ++key;
-
-                // column = created_dt
-                Long created_utc = this.jsonObjects_.get(i).optLong("created_utc", 0);
-                String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcToLDT(created_utc.toString())
-                );
-                ps.setString(key, created_dt); ++key;
-
-                // column = distinguished
-                String dis = this.jsonObjects_.get(i).optString("distinguished", "null");
-                ps.setString(key, dis); ++key;
-
-     */
-
     public static List<String> getColumnsForDB(){
         ArrayList<String> columns = new ArrayList<>(Arrays.asList(
                 "ID",               "author",           "author_flair_text",
@@ -288,26 +265,3 @@ public class Comments {
             DBCommon.disconnect(conn);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
