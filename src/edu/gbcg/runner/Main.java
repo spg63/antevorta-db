@@ -19,7 +19,7 @@ public class Main {
         // Final test commit from machine
         TSL.get().log("Program starting");
 
-        StateVars.START_FRESH = true;
+        StateVars.START_FRESH = false;
 
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
@@ -60,8 +60,9 @@ public class Main {
         Comments.createDBs();
         Comments.pushJSSONDataIntoDBs();
 
-        String author = "adnam";
-        String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"';";
+        //String author = "a4k04";
+        String author = "----root";
+        String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"' and score > 100;";
         String select_all = "select * from "+StateVars.COM_TABLE_NAME+" where score > 100;";
         Selector selector = new RedditComSelector();
         selector.testItOut(select_aut);
