@@ -1,6 +1,5 @@
 package edu.gbcg.DBSelector.RedditSubmission;
 
-
 import edu.gbcg.DBSelector.RSMapper;
 import edu.gbcg.DBSelector.SelectionWorker;
 import edu.gbcg.dbcreator.DBCommon;

@@ -4,17 +4,10 @@ import edu.gbcg.DBSelector.RSMapper;
 import edu.gbcg.DBSelector.SelectionWorker;
 import edu.gbcg.DBSelector.Selector;
 import edu.gbcg.configs.DBLocator;
-import edu.gbcg.configs.StateVars;
-import edu.gbcg.dbcreator.DBCommon;
-import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
 
 public class RedditSubSelector extends Selector {
 

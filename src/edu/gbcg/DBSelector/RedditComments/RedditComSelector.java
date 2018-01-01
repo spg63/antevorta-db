@@ -4,17 +4,10 @@ import edu.gbcg.DBSelector.RSMapper;
 import edu.gbcg.DBSelector.SelectionWorker;
 import edu.gbcg.DBSelector.Selector;
 import edu.gbcg.configs.DBLocator;
-import edu.gbcg.configs.StateVars;
-import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class RedditComSelector extends Selector {
 
