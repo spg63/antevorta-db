@@ -1,5 +1,6 @@
 package edu.gbcg.DBSelector;
 
+import edu.gbcg.DBSelector.RedditComments.CommentSetMapper;
 import edu.gbcg.DBSelector.RedditSubmission.SubmissionSetMapper;
 import edu.gbcg.dbcreator.Reddit.Submissions;
 import edu.gbcg.utils.TSL;
@@ -11,6 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Builds the ResultSet mapper object. It will run through a list of column names and pull data from a ResultSet for
+ * storage in memory. If a column name does not appear in the ResultSet it will skip that column while reading the data
+ * NOTE: A 3rd utility mapper class is needed to prevent a switch over class type, BaseMapper. This class doesn't
+ * implement any functionality regarding pulling data from a ResultSet but is used to give data back to the user from
+ * buildMappers_impl.
+ */
 public abstract class RSMapper {
     protected Map<String, String> map = new HashMap<>();
 
@@ -149,7 +157,7 @@ public abstract class RSMapper {
                     map.put(col, rs.getString(colIDs.get(col)));
 
                 // Add it to the list
-                maps.add(new SubmissionSetMapper(map));
+                maps.add(new BaseMapper(map));
             }
 
         }catch(SQLException e){

@@ -40,7 +40,6 @@ public class RedditSubSelector extends Selector {
 
     /**
      * Return a list of RSMapper objects from the DB query
-     * @param dbs
      * @param SQLStatement
      * @return The list of RSMappers, null if query returned 0 results
      */
@@ -48,9 +47,11 @@ public class RedditSubSelector extends Selector {
         List<String> DBs = DBLocator.redditSubsAbsolutePaths();
         verifyDBsExist(DBs);
 
+        // I can give this the type of RSMapper in the c'tor and get rid of RedditSubSelectorWorker and implement it
+        // all in SelectionWorker!!!!!
         List<SelectionWorker> workers = new ArrayList<>();
         for(int i = 0; i < DBs.size(); ++i)
-            workers.add(new RedditSubSelectorWorker(DBs.get(i), SQLStatement));
+            workers.add(new SelectionWorker(DBs.get(i), SQLStatement, new SubmissionSetMapper()));
         return genericSelect(workers, SQLStatement);
     }
 }

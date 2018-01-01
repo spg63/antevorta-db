@@ -65,6 +65,6 @@ public class Main {
         String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"' and score > 100;";
         String select_all = "select * from "+StateVars.COM_TABLE_NAME+" where score > 100;";
         Selector selector = new RedditComSelector();
-        selector.testItOut(select_aut);
+        selector.testItOut(select_all);
     }
 }

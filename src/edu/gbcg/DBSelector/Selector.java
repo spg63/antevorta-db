@@ -10,10 +10,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+/**
+ * This class implements all shared functionality for DB selections. Based on the type of SelectionWorker passed to
+ * the genericSelect function it will query the proper DB files and use the proper RSMapper object
+ */
 public abstract class Selector {
     public abstract void testItOut(String SQLStatemetn);
     public abstract List<RSMapper> generalSelection(String SQLStatement);
 
+    /*
+        Perform a multi-threaded selection against the DB shards. Each shard is given a single thread
+     */
     protected List<RSMapper> genericSelect(List<SelectionWorker> workers, String SQLStatement){
         List<Future<List<RSMapper>>> future_results = new ArrayList<>();
         ExecutorService executor = Executors.newFixedThreadPool(StateVars.DB_SHARD_NUM);
@@ -38,7 +45,9 @@ public abstract class Selector {
             return null;
         return results;
     }
-
+    /*
+        Kill the program if the DBs don't exist or a shard is missing
+     */
     protected void verifyDBsExist(List<String> DBs){
         if(DBs == null){
             TSL.get().err("Selector.verifyDBsExist DBs was null");

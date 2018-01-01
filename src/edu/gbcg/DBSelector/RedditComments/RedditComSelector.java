@@ -46,7 +46,7 @@ public class RedditComSelector extends Selector {
 
         List<SelectionWorker> workers = new ArrayList<>();
         for(int i = 0; i < DBs.size(); ++i)
-            workers.add(new RedditComSelectorWorker(DBs.get(i), SQLStatement));
+            workers.add(new SelectionWorker(DBs.get(i), SQLStatement, new CommentSetMapper()));
         return genericSelect(workers, SQLStatement);
     }
 }
