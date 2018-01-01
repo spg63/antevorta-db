@@ -227,7 +227,6 @@ public class Submissions {
                     // threads, push the data into the DB, wait on all threads to finish, reseat
                     // the thread list objects and reset the counter
                     if(line_read_counter >= dump_to_db_limit){
-                        c.writeln("Writing to DBs, dump #" + dump_counter);
                         ++dump_counter;
 
                         // Setup the worker threads with the proper data
@@ -276,7 +275,6 @@ public class Submissions {
 
                 // Push the data to get any and all of the leftover data from the previous list
                 // that hasn't already been pushed into the DB
-                c.writeln("Writing to DBs, dump #" + dump_counter);
                 ArrayList<Thread> worker_ts = new ArrayList<>();
                 for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                     sub_workers.get(j).setDB(DBs.get(j));

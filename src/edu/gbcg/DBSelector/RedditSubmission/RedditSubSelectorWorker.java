@@ -1,20 +1,16 @@
 package edu.gbcg.DBSelector.RedditSubmission;
 
-
 import edu.gbcg.DBSelector.RSMapper;
+import edu.gbcg.DBSelector.SelectionWorker;
 import edu.gbcg.dbcreator.DBCommon;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
-public class RedditSubSelectorWorker implements Callable{
+public class RedditSubSelectorWorker implements SelectionWorker {
     String db;
     String SQLStatement;
-    Map<String, Integer> colIDs = new HashMap<>();
 
     public RedditSubSelectorWorker(String dbPath, String SQLQuery){
         this.db = dbPath;

@@ -9,7 +9,6 @@ import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -84,29 +83,6 @@ public class Comments {
             "subreddit_id",     "subreddit_type"
     ));
 
-    /*
-    // column = brand_safe
-                int brand_safe = this.jsonObjects_.get(i).optBoolean("brand_safe", false) ? 1 : 0;
-                ps.setInt(key, brand_safe); ++key;
-
-                // column = contest_mode
-                int contest_mode = this.jsonObjects_.get(i).optBoolean(
-                        "contest_mode", false) ? 1 : 0;
-                ps.setInt(key, contest_mode); ++key;
-
-                // column = created_dt
-                Long created_utc = this.jsonObjects_.get(i).optLong("created_utc", 0);
-                String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcToLDT(created_utc.toString())
-                );
-                ps.setString(key, created_dt); ++key;
-
-                // column = distinguished
-                String dis = this.jsonObjects_.get(i).optString("distinguished", "null");
-                ps.setString(key, dis); ++key;
-
-     */
-
     public static List<String> getColumnsForDB(){
         ArrayList<String> columns = new ArrayList<>(Arrays.asList(
                 "ID",               "author",           "author_flair_text",
@@ -176,7 +152,6 @@ public class Comments {
                         arr_ele_counter = 0;
 
                     if(line_read_counter >= dump_to_db_limit) {
-                        c.writeln("Writing to DBs, dump #" + dump_counter);
                         ++dump_counter;
 
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
@@ -212,7 +187,6 @@ public class Comments {
                     line = br.readLine();
                 }
 
-                c.writeln("Writing to DBs, dump #" + dump_counter);
                 ArrayList<Thread> worker_ts = new ArrayList<>();
                 for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                     com_workers.get(j).setDB(DBs.get(j));
@@ -288,26 +262,3 @@ public class Comments {
             DBCommon.disconnect(conn);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
