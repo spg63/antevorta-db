@@ -1,9 +1,8 @@
 package edu.gbcg.DBSelector.RedditSubmission;
 
 import edu.gbcg.DBSelector.RSMapper;
-import edu.gbcg.dbcreator.RedditSubmissions;
+import edu.gbcg.dbcreator.Reddit.Submissions;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.utils.c;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +22,7 @@ public class SubmissionSetMapper extends RSMapper {
         if(rs == null)
             return maps;
 
-        List<String> colNames = RedditSubmissions.getColumnsForDB();
+        List<String> colNames = Submissions.getColumnsForDB();
         Map<String, Integer> colIDs = new HashMap<>();
         try{
             // If there are no results for a search the resultset will appear closed
