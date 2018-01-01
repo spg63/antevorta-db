@@ -152,7 +152,6 @@ public class Comments {
                         arr_ele_counter = 0;
 
                     if(line_read_counter >= dump_to_db_limit) {
-                        c.writeln("Writing to DBs, dump #" + dump_counter);
                         ++dump_counter;
 
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
@@ -188,7 +187,6 @@ public class Comments {
                     line = br.readLine();
                 }
 
-                c.writeln("Writing to DBs, dump #" + dump_counter);
                 ArrayList<Thread> worker_ts = new ArrayList<>();
                 for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                     com_workers.get(j).setDB(DBs.get(j));

@@ -30,8 +30,8 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        doSubs();
-        //doComs();
+        //doSubs();
+        doComs();
 
         long end = System.currentTimeMillis();
 
