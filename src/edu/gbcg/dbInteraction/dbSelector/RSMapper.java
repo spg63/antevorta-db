@@ -1,8 +1,5 @@
-package edu.gbcg.DBSelector;
+package edu.gbcg.dbInteraction.dbSelector;
 
-import edu.gbcg.DBSelector.RedditComments.CommentSetMapper;
-import edu.gbcg.DBSelector.RedditSubmission.SubmissionSetMapper;
-import edu.gbcg.dbcreator.Reddit.Submissions;
 import edu.gbcg.utils.TSL;
 
 import java.sql.ResultSet;

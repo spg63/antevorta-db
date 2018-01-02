@@ -1,15 +1,14 @@
 package edu.gbcg.runner;
 
-import edu.gbcg.DBSelector.RedditComments.RedditComSelector;
-import edu.gbcg.DBSelector.RedditSubmission.RedditSubSelector;
-import edu.gbcg.DBSelector.RedditSubmission.SubmissionSetMapper;
-import edu.gbcg.DBSelector.Selector;
+import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector;
+import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector;
+import edu.gbcg.dbInteraction.dbSelector.Selector;
 import edu.gbcg.configs.StateVars;
-import edu.gbcg.dbcreator.Reddit.Comments;
-import edu.gbcg.dbcreator.Reddit.Submissions;
+import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator;
+import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator;
+import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
-import javafx.application.Preloader;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -30,7 +29,7 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        //doSubs();
+        doSubs();
         doComs();
 
         long end = System.currentTimeMillis();
@@ -45,8 +44,9 @@ public class Main {
     }
 
     public static void doSubs(){
-        Submissions.createDBs();
-        Submissions.pushJSONDataIntoDBs();
+        Facilitator pusher = new SubmissionsFacilitator();
+        pusher.createDBs();
+        pusher.pushJSONDataIntoDBs();
 
         //String author = "----root";
         String author = "keen75";
@@ -57,8 +57,9 @@ public class Main {
     }
 
     public static void doComs(){
-        Comments.createDBs();
-        Comments.pushJSSONDataIntoDBs();
+        Facilitator pusher = new CommentsFacilitator();
+        pusher.createDBs();
+        pusher.pushJSONDataIntoDBs();
 
         //String author = "a4k04";
         String author = "----root";

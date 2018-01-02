@@ -1,4 +1,4 @@
-package edu.gbcg.utils;
+package edu.gbcg.dbInteraction;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

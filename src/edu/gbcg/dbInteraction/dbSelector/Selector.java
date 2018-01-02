@@ -1,4 +1,4 @@
-package edu.gbcg.DBSelector;
+package edu.gbcg.dbInteraction.dbSelector;
 
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.TSL;

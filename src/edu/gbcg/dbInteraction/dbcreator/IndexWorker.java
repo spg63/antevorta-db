@@ -1,6 +1,6 @@
-package edu.gbcg.dbcreator;
+package edu.gbcg.dbInteraction.dbcreator;
 
-import edu.gbcg.utils.c;
+import edu.gbcg.dbInteraction.DBCommon;
 
 import java.sql.Connection;
 

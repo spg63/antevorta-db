@@ -1,6 +1,5 @@
 package edu.gbcg.utils;
 
-import edu.gbcg.configs.StateVars;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
@@ -187,6 +186,19 @@ public class DBUtils {
         }
 
         return rs;
+    }
+
+    /**
+     * Close a ResultSet object, handling the try / catch
+     * @param rs
+     */
+    public static void closeResultSet(ResultSet rs){
+        try{
+            rs.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     /**
