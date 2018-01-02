@@ -1,6 +1,7 @@
 package edu.gbcg.dbInteraction.dbSelector.reddit.submissions;
 
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator;
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator;
 
 import java.sql.ResultSet;
@@ -16,6 +17,7 @@ public class SubmissionSetMapper extends RSMapper {
     public SubmissionSetMapper(Map<String, String> map){ super(map); }
     public SubmissionSetMapper(){ super(); }
     public List<RSMapper> buildMappers(ResultSet rs){
-        return buildMappers_impl(rs, SubmissionsFacilitator.getColumnsForDB());
+        Facilitator subs = new SubmissionsFacilitator();
+        return buildMappers_impl(rs, subs.getColumnNames());
     }
 }

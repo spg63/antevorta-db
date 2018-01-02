@@ -16,23 +16,35 @@ import java.util.List;
 
 public abstract class Facilitator {
     protected List<String> DBAbsolutePaths;     // Path to the DBs once the exist
-    protected String tableName;                 // The name of the table in the DB
     protected List<String> DBDirectoryPaths;    // Path to the directory / directories that hold the DB shards
     protected List<String> columnNames;         // Names of the columns in the DB
     protected List<String> dataTypes;           // Type of data stored in the DB columns
     protected List<String> DBPaths;             // Paths to the DBs when they don't yet exist
     protected List<String> jsonAbsolutePaths;   // Paths to the json files
+    protected List<String> jsonKeysOfInterest;  // JSON keys we care about grabbing for the DB
+    protected String tableName;                 // The name of the table in the DB
 
-    public Facilitator(){}
+    public Facilitator(){
+        this.DBAbsolutePaths        = getDBAbsolutePaths();
+        this.DBDirectoryPaths       = getDBDirectoryPaths();
+        this.columnNames            = getColumnNames();
+        this.dataTypes              = getDataTypes();
+        this.DBPaths                = buildDBPaths();
+        this.jsonAbsolutePaths      = getJsonAbsolutePaths();
+        this.jsonKeysOfInterest     = getJsonKeysOfInterest();
+        this.tableName              = getTableName();
+    }
 
     // Used when the DBs don't exist, build the path to the DBs
-    abstract List<String> buildDBPaths();           // c'tor call
-    abstract List<String> getJsonAbsolutePaths();   // c'tor call
-    abstract List<String> getDBAbsolutePaths();     // c'tor call
-    abstract List<String> getDBDirectoryPaths();    // c'tor call
-    abstract List<String> getColumnNames();         // c'tor call
-    abstract List<String> getDateTypes();           // c'tor call
-    abstract List<JsonPusher> populateJsonWorkers();    // called in pushToJson -- need DB_SHARD_NUM amount
+    protected abstract List<String> buildDBPaths();
+    protected abstract List<String> getJsonAbsolutePaths();
+    protected abstract List<String> getDBAbsolutePaths();
+    protected abstract List<String> getDBDirectoryPaths();
+    public abstract List<String> getColumnNames();
+    protected abstract List<String> getDataTypes();
+    protected abstract List<JsonPusher> populateJsonWorkers();
+    protected abstract List<String> getJsonKeysOfInterest();
+    protected abstract String getTableName();
 
     public void createDBs(){
         // Check if the all the DBs exist. Note, this is 100% but it's good enough for my uses
@@ -104,9 +116,6 @@ public abstract class Facilitator {
             List<List<String>> linesList = new ArrayList<>();
             for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j)
                 linesList.add(new ArrayList<>());
-
-            // Get a new list of workers
-            List<JsonPusher> workers = populateJsonWorkers();
 
             try{
                 br = new BufferedReader(new FileReader(json));
