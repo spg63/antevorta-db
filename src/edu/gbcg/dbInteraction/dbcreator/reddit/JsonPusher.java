@@ -1,8 +1,6 @@
 package edu.gbcg.dbInteraction.dbcreator.reddit;
 
-import edu.gbcg.utils.c;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 

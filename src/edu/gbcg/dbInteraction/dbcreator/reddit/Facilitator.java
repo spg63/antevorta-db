@@ -2,6 +2,7 @@ package edu.gbcg.dbInteraction.dbcreator.reddit;
 
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.dbInteraction.DBCommon;
+import edu.gbcg.dbInteraction.dbcreator.IndexWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
@@ -45,6 +46,7 @@ public abstract class Facilitator {
     protected abstract List<JsonPusher> populateJsonWorkers();
     protected abstract List<String> getJsonKeysOfInterest();
     protected abstract String getTableName();
+    protected abstract void createIndices();
 
     public void createDBs(){
         // Check if the all the DBs exist. Note, this is 100% but it's good enough for my uses
@@ -163,6 +165,7 @@ public abstract class Facilitator {
                 }
             }
         }
+        createIndices();
     }
 
     private void letWorkersFly(List<List<String>> lines){
@@ -192,5 +195,31 @@ public abstract class Facilitator {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void createDBIndex(String columnName, String indexName){
+        List<Thread> workers = new ArrayList<>();
+        List<Connection> conns = new ArrayList<>();
+        String sql = DBCommon.getDBIndexSQLStatement(this.tableName, columnName, indexName);
+        if(this.DBAbsolutePaths == null)
+            this.DBAbsolutePaths = getDBAbsolutePaths();
+        for(String db : this.DBAbsolutePaths)
+            conns.add(DBCommon.connect(db));
+
+        for(int i = 0; i < conns.size(); ++i){
+            workers.add(new Thread(new IndexWorker(conns.get(i), sql)));
+            workers.get(i).start();
+        }
+
+        try{
+            for(int i = 0; i < workers.size(); ++i)
+                workers.get(i).join();
+        }
+        catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        for(Connection conn : conns)
+            DBCommon.disconnect(conn);
     }
 }

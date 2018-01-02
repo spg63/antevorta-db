@@ -18,7 +18,7 @@ public class Main {
         // Final test commit from machine
         TSL.get().log("Program starting");
 
-        StateVars.START_FRESH = true;
+        StateVars.START_FRESH = false;
 
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
@@ -30,7 +30,7 @@ public class Main {
         long start = System.currentTimeMillis();
 
         doSubs();
-        //doComs();
+        doComs();
 
         long end = System.currentTimeMillis();
 
@@ -57,8 +57,9 @@ public class Main {
     }
 
     public static void doComs(){
-        //CommentsFacilitator.createDBs();
-        //CommentsFacilitator.pushJSSONDataIntoDBs();
+        Facilitator pusher = new CommentsFacilitator();
+        pusher.createDBs();
+        pusher.pushJSONDataIntoDBs();
 
         //String author = "a4k04";
         String author = "----root";
