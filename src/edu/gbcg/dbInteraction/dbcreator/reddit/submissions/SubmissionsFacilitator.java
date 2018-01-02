@@ -1,10 +1,10 @@
-package edu.gbcg.dbcreator.Reddit;
+package edu.gbcg.dbInteraction.dbcreator.reddit.submissions;
 
 import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.RawDataLocator;
 import edu.gbcg.configs.StateVars;
-import edu.gbcg.dbcreator.DBCommon;
-import edu.gbcg.dbcreator.IndexWorker;
+import edu.gbcg.dbInteraction.DBCommon;
+import edu.gbcg.dbInteraction.dbcreator.IndexWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
@@ -22,8 +22,22 @@ import java.util.*;
  * This class will automatically determine the number of DB shards and their storage location for
  * the user. The sharding will allow for parallel reads and writes to multiple HDDs / compute nodes.
  */
-public class Submissions {
+public class SubmissionsFacilitator {
     private static List<String> DBs = DBLocator.redditSubsAbsolutePaths();
+    // absolute paths
+    // DBLocator.redditSubsAbsolutePaths();
+    // table name
+    // StateVars.SUB_TABLE_NAME
+    // dirPaths to the DB if they don't exist
+    // DBLocator.getSubDBPath
+    // build the DB paths
+    // DBLocator.buildSubDBPaths
+    // column names
+    // getColumnNames
+    // data types
+    // getDataTypesForColumns
+    // raw data location
+    // RawDataLocator.redditJsonSubmissionAbsolutePaths
 
     /**
      * Creates the reddit submission databases. The number of databases and their storage
@@ -201,12 +215,11 @@ public class Submissions {
             int dump_to_db_limit = StateVars.DB_SHARD_NUM * StateVars.DB_BATCH_LIMIT;
             int line_read_counter = 0;
             int arr_ele_counter = 0;
-            int dump_counter = 1;
             List<List<String>> lines_list = new ArrayList<>();
-            List<SubmissionJsonToDBWorker> sub_workers = new ArrayList<>();
+            List<SubmissionJsonPusher> sub_workers = new ArrayList<>();
             for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j) {
                 lines_list.add(new ArrayList<>());
-                sub_workers.add(new SubmissionJsonToDBWorker());
+                sub_workers.add(new SubmissionJsonPusher());
             }
 
             try{
@@ -227,14 +240,12 @@ public class Submissions {
                     // threads, push the data into the DB, wait on all threads to finish, reseat
                     // the thread list objects and reset the counter
                     if(line_read_counter >= dump_to_db_limit){
-                        ++dump_counter;
 
                         // Setup the worker threads with the proper data
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                             sub_workers.get(j).setDB(DBs.get(j));
                             sub_workers.get(j).setJSON(lines_list.get(j));
                             sub_workers.get(j).setColumns(getColumnsForDB());
-                            sub_workers.get(j).setKeys(keysOfInterest);
                             sub_workers.get(j).setTableName(StateVars.SUB_TABLE_NAME);
                         }
 
@@ -265,7 +276,7 @@ public class Submissions {
                         sub_workers.clear();
                         lines_list.clear();
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
-                            sub_workers.add(new SubmissionJsonToDBWorker());
+                            sub_workers.add(new SubmissionJsonPusher());
                             lines_list.add(new ArrayList<>());
                         }
                     }
@@ -280,7 +291,6 @@ public class Submissions {
                     sub_workers.get(j).setDB(DBs.get(j));
                     sub_workers.get(j).setJSON(lines_list.get(j));
                     sub_workers.get(j).setColumns(getColumnsForDB());
-                    sub_workers.get(j).setKeys(keysOfInterest);
                     sub_workers.get(j).setTableName(StateVars.SUB_TABLE_NAME);
                 }
 
@@ -299,7 +309,7 @@ public class Submissions {
                 }
             }
             catch(IOException e){
-                TSL.get().err("RedditSubmission.pushJsonDataIntoDBs IOException on BufferedReader");
+                TSL.get().err("submissions.pushJsonDataIntoDBs IOException on BufferedReader");
             }
             finally{
                 if(br != null){
@@ -307,7 +317,7 @@ public class Submissions {
                         br.close();
                     }
                     catch(IOException e){
-                        TSL.get().err("RedditSubmission.pushJsonDataIntoDBs IOException on " +
+                        TSL.get().err("submissions.pushJsonDataIntoDBs IOException on " +
                                         "BufferedReader.close()");
                         e.printStackTrace();
                     }

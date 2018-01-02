@@ -1,10 +1,10 @@
-package edu.gbcg.dbcreator.Reddit;
+package edu.gbcg.dbInteraction.dbcreator.reddit.comments;
 
 import edu.gbcg.configs.DBLocator;
 import edu.gbcg.configs.RawDataLocator;
 import edu.gbcg.configs.StateVars;
-import edu.gbcg.dbcreator.DBCommon;
-import edu.gbcg.dbcreator.IndexWorker;
+import edu.gbcg.dbInteraction.DBCommon;
+import edu.gbcg.dbInteraction.dbcreator.IndexWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 import edu.gbcg.utils.c;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Comments {
+public class CommentsFacilitator {
     private static List<String> DBs = DBLocator.redditComsAbsolutePaths();
 
     public static void createDBs(){
@@ -132,12 +132,11 @@ public class Comments {
             int dump_to_db_limit = StateVars.DB_SHARD_NUM * StateVars.DB_BATCH_LIMIT;
             int line_read_counter = 0;
             int arr_ele_counter = 0;
-            int dump_counter = 0;
             List<List<String>> lines_list = new ArrayList<>();
-            List<CommentsJsonToDBWorker> com_workers = new ArrayList<>();
+            List<CommentsJsonPusher> com_workers = new ArrayList<>();
             for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                 lines_list.add(new ArrayList<>());
-                com_workers.add(new CommentsJsonToDBWorker());
+                com_workers.add(new CommentsJsonPusher());
             }
 
             try{
@@ -152,7 +151,6 @@ public class Comments {
                         arr_ele_counter = 0;
 
                     if(line_read_counter >= dump_to_db_limit) {
-                        ++dump_counter;
 
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
                             com_workers.get(j).setDB(DBs.get(j));
@@ -180,7 +178,7 @@ public class Comments {
                         com_workers.clear();
                         lines_list.clear();
                         for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j){
-                            com_workers.add(new CommentsJsonToDBWorker());
+                            com_workers.add(new CommentsJsonPusher());
                             lines_list.add(new ArrayList<>());
                         }
                     }
@@ -211,7 +209,7 @@ public class Comments {
 
             }
             catch(IOException e){
-                TSL.get().err("Comments.pushJsonDataIntoDBs IOException on BufferedReader");
+                TSL.get().err("CommentsFacilitator.pushJsonDataIntoDBs IOException on BufferedReader");
             }
             finally{
                 if(br != null){
@@ -219,7 +217,7 @@ public class Comments {
                         br.close();
                     }
                     catch(IOException e){
-                        TSL.get().err("Comments.pushJsonDataIntoDBs IOException on BufferedReader.close()");
+                        TSL.get().err("CommentsFacilitator.pushJsonDataIntoDBs IOException on BufferedReader.close()");
                         e.printStackTrace();
                     }
                 }

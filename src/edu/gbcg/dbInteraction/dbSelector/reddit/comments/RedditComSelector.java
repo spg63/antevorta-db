@@ -1,8 +1,8 @@
-package edu.gbcg.DBSelector.RedditComments;
+package edu.gbcg.dbInteraction.dbSelector.reddit.comments;
 
-import edu.gbcg.DBSelector.RSMapper;
-import edu.gbcg.DBSelector.SelectionWorker;
-import edu.gbcg.DBSelector.Selector;
+import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+import edu.gbcg.dbInteraction.dbSelector.SelectionWorker;
+import edu.gbcg.dbInteraction.dbSelector.Selector;
 import edu.gbcg.configs.DBLocator;
 import edu.gbcg.utils.c;
 

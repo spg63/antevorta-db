@@ -1,4 +1,4 @@
-package edu.gbcg.DBSelector;
+package edu.gbcg.dbInteraction.dbSelector;
 
 import java.sql.ResultSet;
 import java.util.List;

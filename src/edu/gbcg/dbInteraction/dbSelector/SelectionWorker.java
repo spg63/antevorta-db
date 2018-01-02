@@ -1,6 +1,6 @@
-package edu.gbcg.DBSelector;
+package edu.gbcg.dbInteraction.dbSelector;
 
-import edu.gbcg.dbcreator.DBCommon;
+import edu.gbcg.dbInteraction.DBCommon;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

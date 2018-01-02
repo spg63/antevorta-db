@@ -26,12 +26,12 @@ public class DBLocator {
         // They each live on their own drive on the research machine
         else{
             return Arrays.asList(
-                "F:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                "G:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                "H:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                "I:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                "J:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                "K:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
+                "F:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "G:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "H:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "I:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "J:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                "K:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
             );
         }
     }
@@ -45,12 +45,12 @@ public class DBLocator {
             return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath().get(0));
         else{
             return Arrays.asList(
-                "F:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                "G:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                "H:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                "I:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                "J:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                "K:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3"
+                "F:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "G:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "H:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "I:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "J:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                "K:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3"
             );
         }
     }
@@ -66,12 +66,12 @@ public class DBLocator {
             paths = Arrays.asList(DataPaths.LOCAL_SUB_DB_PATH);
         else{
             paths = Arrays.asList(
-                "F:/DBs/Reddit/Submissions/",
-                "G:/DBs/Reddit/Submissions/",
-                "H:/DBs/Reddit/Submissions/",
-                "I:/DBs/Reddit/Submissions/",
-                "J:/DBs/Reddit/Submissions/",
-                "K:/DBs/Reddit/Submissions/"
+                "F:/DBs/reddit/SubmissionsFacilitator/",
+                "G:/DBs/reddit/SubmissionsFacilitator/",
+                "H:/DBs/reddit/SubmissionsFacilitator/",
+                "I:/DBs/reddit/SubmissionsFacilitator/",
+                "J:/DBs/reddit/SubmissionsFacilitator/",
+                "K:/DBs/reddit/SubmissionsFacilitator/"
             );
         }
         return paths;
@@ -88,12 +88,12 @@ public class DBLocator {
             paths = Arrays.asList(DataPaths.LOCAL_COM_DB_PATH);
         else{
             paths = Arrays.asList(
-                "F:/DBs/Reddit/Comments/",
-                "G:/DBs/Reddit/Comments/",
-                "H:/DBs/Reddit/Comments/",
-                "I:/DBs/Reddit/Comments/",
-                "J:/DBs/Reddit/Comments/",
-                "K:/DBs/Reddit/Comments/"
+                "F:/DBs/reddit/CommentsFacilitator/",
+                "G:/DBs/reddit/CommentsFacilitator/",
+                "H:/DBs/reddit/CommentsFacilitator/",
+                "I:/DBs/reddit/CommentsFacilitator/",
+                "J:/DBs/reddit/CommentsFacilitator/",
+                "K:/DBs/reddit/CommentsFacilitator/"
             );
         }
         return paths;
@@ -109,12 +109,12 @@ public class DBLocator {
             return buildDBPaths(getSubDBPath().get(0), DataPaths.SUB_DB_PREFIX);
         else{
             return Arrays.asList(
-                    "F:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "G:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "H:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "I:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "J:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
-                    "K:/DBs/Reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
+                    "F:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "G:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "H:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "I:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "J:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3",
+                    "K:/DBs/reddit/SubmissionsFacilitator/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
             );
         }
     }
@@ -129,12 +129,12 @@ public class DBLocator {
             return buildDBPaths(getComDBPath().get(0), DataPaths.COM_DB_PREFIX);
         else{
             return Arrays.asList(
-                    "F:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "G:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "H:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "I:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "J:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3",
-                    "K:/DBs/Reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3"
+                    "F:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "G:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "H:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "I:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "J:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3",
+                    "K:/DBs/reddit/CommentsFacilitator/"+DataPaths.COM_DB_PREFIX+".sqlite3"
             );
         }
     }

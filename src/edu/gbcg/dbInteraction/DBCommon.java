@@ -1,9 +1,8 @@
-package edu.gbcg.dbcreator;
+package edu.gbcg.dbInteraction;
 
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.DBUtils;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.utils.c;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,10 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import static edu.gbcg.utils.c.writeln_err;
-
 /**
- * Class to hold functionality shared among DB classes
+ * Class to hold functionality shared among DB classes and wrapping the generalized functions from DBUtils to handle
+ * things like data paths and db locations
  */
 public class DBCommon {
 
@@ -26,7 +24,6 @@ public class DBCommon {
      */
     public static Connection connect(String db){
         Connection conn = DBUtils.get().connect(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER);
-        // Turn off synchronous mode for the reddit DB connections to increase performance
         if(StateVars.SYNC_MODE_OFF) {
             try {
                 Statement st = conn.createStatement();
@@ -38,7 +35,6 @@ public class DBCommon {
                 e.printStackTrace();
             }
         }
-
         return conn;
     }
 
@@ -180,12 +176,6 @@ public class DBCommon {
      * @param rs
      */
     public static void closeResultSet(ResultSet rs){
-        try{
-            rs.close();
-        }
-        catch(SQLException e){
-            TSL.get().err("DBCommon.closeResultSet SQLException");
-            e.printStackTrace();
-        }
+        DBUtils.get().closeResultSet(rs);
     }
 }

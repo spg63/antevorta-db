@@ -1,7 +1,7 @@
-package edu.gbcg.DBSelector.RedditComments;
+package edu.gbcg.dbInteraction.dbSelector.reddit.comments;
 
-import edu.gbcg.DBSelector.RSMapper;
-import edu.gbcg.dbcreator.Reddit.Comments;
+import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -16,6 +16,6 @@ public class CommentSetMapper extends RSMapper {
     public CommentSetMapper(Map<String, String> map){ super(map); }
     public CommentSetMapper(){ super(); }
     public List<RSMapper> buildMappers(ResultSet rs){
-        return buildMappers_impl(rs, Comments.getColumnsForDB());
+        return buildMappers_impl(rs, CommentsFacilitator.getColumnsForDB());
     }
 }
