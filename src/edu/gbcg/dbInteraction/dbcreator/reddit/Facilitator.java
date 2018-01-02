@@ -41,12 +41,12 @@ public abstract class Facilitator {
     protected abstract List<String> getJsonAbsolutePaths();
     protected abstract List<String> getDBAbsolutePaths();
     protected abstract List<String> getDBDirectoryPaths();
-    public abstract List<String> getColumnNames();
     protected abstract List<String> getDataTypes();
     protected abstract List<JsonPusher> populateJsonWorkers();
     protected abstract List<String> getJsonKeysOfInterest();
     protected abstract String getTableName();
     protected abstract void createIndices();
+    protected abstract List<String> getColumnNames();
 
     public void createDBs(){
         // Check if the all the DBs exist. Note, this is 100% but it's good enough for my uses

@@ -107,8 +107,9 @@ public class SubmissionJsonPusher extends JsonPusher {
 
                 // Gather the inner object for the media related items
                 JSONObject media_object = json_objects.get(i).optJSONObject("media");
+                JSONObject med_embed = null;
                 if(media_object != null){
-                    JSONObject med_embed = media_object.optJSONObject("oembed");
+                    med_embed = media_object.optJSONObject("oembed");
                     if(med_embed != null){
                         // column = media_author_name
                         String med_author_name = med_embed.optString("author_name", "null");
@@ -128,7 +129,7 @@ public class SubmissionJsonPusher extends JsonPusher {
                     }
                 }
 
-                if(media_object == null || media_object == null){
+                if(media_object == null || med_embed == null){
                     ps.setString(key, ""); ++key;
                     ps.setString(key, ""); ++key;
                     ps.setString(key, ""); ++key;
