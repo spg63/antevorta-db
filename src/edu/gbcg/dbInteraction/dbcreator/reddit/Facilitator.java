@@ -3,7 +3,13 @@ package edu.gbcg.dbInteraction.dbcreator.reddit;
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.dbInteraction.DBCommon;
 import edu.gbcg.utils.FileUtils;
+import edu.gbcg.utils.TSL;
+import edu.gbcg.utils.c;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +23,8 @@ public abstract class Facilitator {
     protected List<String> DBPaths;             // Paths to the DBs when they don't yet exist
     protected List<String> jsonAbsolutePaths;   // Paths to the json files
 
+    public Facilitator(){}
+
     // Used when the DBs don't exist, build the path to the DBs
     abstract List<String> buildDBPaths();           // c'tor call
     abstract List<String> getJsonAbsolutePaths();   // c'tor call
@@ -24,6 +32,7 @@ public abstract class Facilitator {
     abstract List<String> getDBDirectoryPaths();    // c'tor call
     abstract List<String> getColumnNames();         // c'tor call
     abstract List<String> getDateTypes();           // c'tor call
+    abstract List<JsonPusher> populateJsonWorkers();    // called in pushToJson -- need DB_SHARD_NUM amount
 
     public void createDBs(){
         // Check if the all the DBs exist. Note, this is 100% but it's good enough for my uses
@@ -70,45 +79,109 @@ public abstract class Facilitator {
         for(String DB : DBAbsolutePaths)
             DBCommon.insert(DB, sql);
     }
+
+    public void pushJSONDataIntoDBs(){
+        // Early exit if we're not pushing data
+        if(!StateVars.START_FRESH) return;
+
+        if(DBAbsolutePaths == null || DBAbsolutePaths.isEmpty())
+            DBAbsolutePaths = getDBAbsolutePaths();
+        if(jsonAbsolutePaths == null || jsonAbsolutePaths.isEmpty())
+            jsonAbsolutePaths = getJsonAbsolutePaths();
+
+        // For each json file, read it line by line, while reading start processing the data
+        // Each iteration of the loop adds a line to a new worker thread to evenly shard the data across all DB shards
+        for(String json : jsonAbsolutePaths){
+            File f = new File(json);
+            c.writeln("Reading "+ f.getName());
+
+            BufferedReader br = null;
+            // How many lines to read before writing to a DB shard
+            int dbDumpLimit = StateVars.DB_SHARD_NUM * StateVars.DB_BATCH_LIMIT;
+            int lineReadCounter = 0;
+            int whichWorker = 0;
+
+            List<List<String>> linesList = new ArrayList<>();
+            for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j)
+                linesList.add(new ArrayList<>());
+
+            // Get a new list of workers
+            List<JsonPusher> workers = populateJsonWorkers();
+
+            try{
+                br = new BufferedReader(new FileReader(json));
+                String line = br.readLine();
+                while(line != null){
+                    ++lineReadCounter;
+                    linesList.get(whichWorker).add(line);
+
+                    // Increment the worker number so we're evenly distributing lines to the workers
+                    ++whichWorker;
+                    if(whichWorker >= StateVars.DB_SHARD_NUM)
+                        whichWorker = 0;
+
+                    // Limit before dumping data to the DB, start the threads and perform the dump
+                    if(lineReadCounter >= dbDumpLimit){
+                        letWorkersFly(linesList);
+
+                        // Reset the trackers and clear the lines list to recover the memory from 5000 lines of JSON
+                        lineReadCounter = 0;
+                        linesList.clear();
+
+                        // Give the linesList new ArrayLists to store the lines
+                        for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j)
+                            linesList.add(new ArrayList<>());
+                    }
+                    // Read a line
+                    line = br.readLine();
+                }
+
+                // There could be leftover json lines that don't get push due to not meeting the dbDumpLimit amount
+                // of lines, start up the workers again and push the remaining data
+                letWorkersFly(linesList);
+            }
+            catch(IOException e){
+                TSL.get().err("Facilitator.pushJSONDataIntoDBs IOException");
+            }
+            finally{
+                if(br != null){
+                    try{
+                        br.close();
+                    }
+                    catch(IOException e){
+                        TSL.get().err("Facilitator.pushJSONDataIntoDBs br.close IOException");
+                    }
+                }
+            }
+        }
+    }
+
+    private void letWorkersFly(List<List<String>> lines){
+        List<JsonPusher> workers = populateJsonWorkers();
+        // Give the workers the data they need
+        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+            workers.get(i).setDB(DBAbsolutePaths.get(i));
+            workers.get(i).setJSON(lines.get(i));
+            workers.get(i).setColumns(columnNames);
+            workers.get(i).setTableName(tableName);
+        }
+
+        // Start the threads
+        List<Thread> threads = new ArrayList<>();
+        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+            threads.add(new Thread(workers.get(i)));
+            threads.get(i).start();
+        }
+
+        // Wait for them all to finish
+        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+            try{
+                threads.get(i).join();
+            }
+            catch(InterruptedException e){
+                TSL.get().err("Facilitator.letWorkersFly InterruptedException");
+                e.printStackTrace();
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

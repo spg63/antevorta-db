@@ -3,7 +3,7 @@ package edu.gbcg.dbInteraction.dbcreator.reddit.submissions;
 import edu.gbcg.dbInteraction.DBCommon;
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.utils.TimeFormatter;
+import edu.gbcg.dbInteraction.TimeFormatter;
 import org.json.JSONObject;
 
 import java.sql.Connection;
