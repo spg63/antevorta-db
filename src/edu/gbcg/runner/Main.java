@@ -29,8 +29,8 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        doSubs();
-        //doComs();
+        //doSubs();
+        doComs();
 
         long end = System.currentTimeMillis();
 
@@ -63,9 +63,11 @@ public class Main {
 
         //String author = "a4k04";
         String author = "----root";
-        String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"' and score > 100;";
-        String select_all = "select * from "+StateVars.COM_TABLE_NAME+" where score > 100;";
+        String select_aut = "select * from "+StateVars.COM_TABLE_NAME+" where author = "+"'"+author+"' and score < -5;";
+        String select_all = "select * from "+StateVars.COM_TABLE_NAME+" where controversial_score > 0;";
+        String sub_search = "select * from "+StateVars.COM_TABLE_NAME+" where subreddit_name = 'The_Donald' and score > 1500 limit 10;";
+        String cont_search = "select * from "+StateVars.COM_TABLE_NAME+" where subreddit_name = 'The_Donald' and controversial_score > 0 limit 5;";
         Selector selector = new RedditComSelector();
-        selector.testItOut(select_aut);
+        selector.testItOut(cont_search);
     }
 }
