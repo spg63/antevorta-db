@@ -2,6 +2,7 @@ package edu.gbcg.dbInteraction.dbSelector;
 
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.TSL;
+import edu.gbcg.utils.c;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.concurrent.Future;
  */
 public abstract class Selector {
     protected String tableName;
-    public abstract void testItOut(String SQLStatemetn);
 
     public Selector(){}
 
@@ -35,16 +35,8 @@ public abstract class Selector {
 // genericSelect function below.
 //----------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * Given an author name, select all results from that author
-     * @param author
-     * @return List of RSMappers or null if no results
-     */
     public List<RSMapper> selectAllFromAuthor(String author){
-        DBSelector selector = new DBSelector()
-                .from(this.tableName)
-                .where("author = '"+author+"'");
-        return generalSelection(selector.sql());
+        return selectAllWhereColumnEquals("author", author);
     }
 
     public List<RSMapper> selectAllFromAuthorOrderBy(String author, String orderBy){
@@ -55,12 +47,42 @@ public abstract class Selector {
         return generalSelection(selector.sql());
     }
 
+    public List<RSMapper> selectAllWhereColumnEquals(String columnName, String equalsValue){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(columnName + " = '" + equalsValue + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnLessThan(String columnName, String lessThanValue){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(columnName + " < '" + lessThanValue + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnGreaterThan(String columnName, String greaterThanValue){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(columnName + " > '" + greaterThanValue + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnEqualsAndColumnAboveValue(String column, String equalsVal,
+                                                                        String filter, String val){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(column + " = '" + equalsVal + "'")
+                .and(filter + " > '" + val + "'");
+        return generalSelection(selector.sql());
+    }
 
 
 
-
-
-
+//---------- Generalized version for named functions
+    public List<RSMapper> selectAllFromColumn(String column){
+        return null;
+    }
 
 
 

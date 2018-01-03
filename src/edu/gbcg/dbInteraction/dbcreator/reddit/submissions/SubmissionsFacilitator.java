@@ -58,18 +58,18 @@ public class SubmissionsFacilitator extends Facilitator {
     }
 
     protected void createIndices(){
+        //***** all but author
         createDBIndex("author", "attrs_author");
         createDBIndex("created_dt", "attrs_created");
         createDBIndex("host_domain", "attrs_host");
         createDBIndex("gilded", "attrs_gilded");
+        createDBIndex("pid", "attrs_pid");                          //
         createDBIndex("num_comments", "attrs_comments");
+        createDBIndex("media_author_name", "attrs_med_author");     //
         createDBIndex("media_provider_name", "attrs_med_provider");
         createDBIndex("media_title", "attrs_media");
-        createDBIndex("over_18", "attrs_18");
         createDBIndex("score", "attrs_score");
-        createDBIndex("selftext", "attrs_self");
         createDBIndex("subreddit_name", "attrs_sub_name");
         createDBIndex("subreddit_id", "attrs_sub_id");
-        createDBIndex("post_title", "attrs_post_title");
     }
 }
