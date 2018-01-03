@@ -1,5 +1,7 @@
 package edu.gbcg.dbInteraction.dbSelector.reddit.submissions;
 
+import edu.gbcg.configs.StateVars;
+import edu.gbcg.dbInteraction.dbSelector.DBSelector;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
@@ -53,5 +55,12 @@ public class RedditSubSelector extends Selector {
         for(int i = 0; i < DBs.size(); ++i)
             workers.add(new SelectionWorker(DBs.get(i), SQLStatement, new SubmissionSetMapper()));
         return genericSelect(workers, SQLStatement);
+    }
+
+    public List<RSMapper> selectAllFromAuthor(String author_name){
+        DBSelector selector = new DBSelector()
+                .from(StateVars.SUB_TABLE_NAME)
+                .where("author = '"+author_name+"'");
+        return generalSelection(selector.sql());
     }
 }

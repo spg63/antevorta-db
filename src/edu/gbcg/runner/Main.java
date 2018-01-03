@@ -1,5 +1,6 @@
 package edu.gbcg.runner;
 
+import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector;
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
@@ -12,13 +13,14 @@ import edu.gbcg.utils.c;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
         // Final test commit from machine
         TSL.get().log("Program starting");
 
-        StateVars.START_FRESH = true;
+        StateVars.START_FRESH = false;
 
         // Log only the errors
         TSL.LOG_NON_ERRORS = false;
@@ -52,8 +54,28 @@ public class Main {
         String author = "keen75";
         String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = "+"'"+author+"';";
         String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 2500;";
-        Selector selector = new RedditSubSelector();
-        selector.testItOut(select_aut);
+        RedditSubSelector rss = new RedditSubSelector();
+        List<RSMapper> results = rss.selectAllFromAuthor("keen75");
+        for(RSMapper res : results){
+            String title = "post_title";
+            String sub_name = "subreddit_name";
+            String score = "score";
+            String ID = "ID";
+            String author_sel = "author";
+            c.writeln(author_sel + ": " + res.getString(author_sel));
+            c.writeln(title + ": " + res.getString(title));
+            c.writeln(sub_name + ": " + res.getString(sub_name));
+            c.writeln(score + ": " + res.getInt(score));
+            c.writeln(ID + ": " + res.getString(ID));
+            c.writeln("");
+            c.writeln("----------");
+            c.writeln("");
+        }
+
+        //Selector selector = new RedditSubSelector();
+        //selector.testItOut(select_aut);
+
+
     }
 
     public static void doComs(){
@@ -71,3 +93,29 @@ public class Main {
         selector.testItOut(select_all);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
