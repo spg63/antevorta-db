@@ -15,8 +15,41 @@ import java.util.concurrent.Future;
  * the genericSelect function it will query the proper DB files and use the proper RSMapper object
  */
 public abstract class Selector {
+    protected String tableName;
     public abstract void testItOut(String SQLStatemetn);
     public abstract List<RSMapper> generalSelection(String SQLStatement);
+
+    public Selector(){}
+
+    public List<RSMapper> selectAllFromAuthor(String author){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where("author = '"+author+"'");
+        return generalSelection(selector.sql());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
         Perform a multi-threaded selection against the DB shards. Each shard is given a single thread
@@ -48,12 +81,12 @@ public abstract class Selector {
     /*
         Kill the program if the DBs don't exist or a shard is missing
      */
-    protected void verifyDBsExist(List<String> DBs){
-        if(DBs == null){
+    protected void verifyDBsExist(List<String> DBs) {
+        if (DBs == null) {
             TSL.get().err("Selector.verifyDBsExist DBs was null");
             throw new RuntimeException("Selector.verifyDBsExist DBs was null");
         }
-        if(DBs.size() != StateVars.DB_SHARD_NUM){
+        if (DBs.size() != StateVars.DB_SHARD_NUM) {
             TSL.get().err("Selector.verifyDBsExist DBs.size() != StateVars.DB_SHARD_NUM");
             throw new RuntimeException("Selector.verifyDBsExist DBs.size() != StateVars.DB_SHARD_NUM");
         }

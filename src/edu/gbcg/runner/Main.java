@@ -54,7 +54,7 @@ public class Main {
         String author = "keen75";
         String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = "+"'"+author+"';";
         String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 2500;";
-        RedditSubSelector rss = new RedditSubSelector();
+        Selector rss = new RedditSubSelector();
         List<RSMapper> results = rss.selectAllFromAuthor("keen75");
         for(RSMapper res : results){
             String title = "post_title";
@@ -62,11 +62,13 @@ public class Main {
             String score = "score";
             String ID = "ID";
             String author_sel = "author";
+            String link = "permalink";
             c.writeln(author_sel + ": " + res.getString(author_sel));
             c.writeln(title + ": " + res.getString(title));
             c.writeln(sub_name + ": " + res.getString(sub_name));
             c.writeln(score + ": " + res.getInt(score));
             c.writeln(ID + ": " + res.getString(ID));
+            c.writeln(link + ": " + res.getString(link));
             c.writeln("");
             c.writeln("----------");
             c.writeln("");
