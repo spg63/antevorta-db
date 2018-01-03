@@ -54,8 +54,14 @@ public class Main {
         String author = "keen75";
         String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = "+"'"+author+"';";
         String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 2500;";
+
         Selector rss = new RedditSubSelector();
-        List<RSMapper> results = rss.selectAllFromAuthor("keen75");
+        //List<RSMapper> results = rss.selectAllFromAuthor(author);
+        List<RSMapper> results = rss.selectAllFromAuthorOrderBy(author, "post_title");
+        if(results == null) {
+            c.writeln("**----- NO RESULTS -----**");
+            return;
+        }
         for(RSMapper res : results){
             String title = "post_title";
             String sub_name = "subreddit_name";
@@ -73,11 +79,6 @@ public class Main {
             c.writeln("----------");
             c.writeln("");
         }
-
-        //Selector selector = new RedditSubSelector();
-        //selector.testItOut(select_aut);
-
-
     }
 
     public static void doComs(){
