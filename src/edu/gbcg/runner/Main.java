@@ -50,12 +50,12 @@ public class Main {
         pusher.createDBs();
         pusher.pushJSONDataIntoDBs();
 
-        //String author = "----root";
-        String author = "keen75";
+        String author = "----root";
+        //String author = "keen75";
         String select_aut = "select * from "+StateVars.SUB_TABLE_NAME+" where author = "+"'"+author+"';";
         String select_all = "select * from "+StateVars.SUB_TABLE_NAME+" where score = 2500;";
         RedditSubSelector rss = new RedditSubSelector();
-        List<RSMapper> results = rss.selectAllFromAuthor("keen75");
+        List<RSMapper> results = rss.selectAllFromAuthor(author);
         for(RSMapper res : results){
             String title = "post_title";
             String sub_name = "subreddit_name";
