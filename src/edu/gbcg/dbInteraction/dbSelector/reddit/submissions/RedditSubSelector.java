@@ -13,6 +13,10 @@ import java.util.List;
 
 public class RedditSubSelector extends Selector {
 
+    public RedditSubSelector(){
+        this.tableName = StateVars.SUB_TABLE_NAME;
+    }
+
     public void testItOut(String SQLStatement){
         List<RSMapper> res = generalSelection(SQLStatement);
         if(res == null) {

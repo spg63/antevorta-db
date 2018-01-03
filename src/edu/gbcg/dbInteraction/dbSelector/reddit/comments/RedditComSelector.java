@@ -1,15 +1,21 @@
 package edu.gbcg.dbInteraction.dbSelector.reddit.comments;
 
+import edu.gbcg.configs.StateVars;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
 import edu.gbcg.configs.DBLocator;
+import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector;
 import edu.gbcg.utils.c;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RedditComSelector extends Selector {
+
+    public RedditComSelector(){
+        this.tableName = StateVars.COM_TABLE_NAME;
+    }
 
     public void testItOut(String SQLStatement){
         List<RSMapper> res = generalSelection(SQLStatement);
