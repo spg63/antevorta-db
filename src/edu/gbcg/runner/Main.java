@@ -32,12 +32,7 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        Facilitator idx = new SubmissionsFacilitator();
-        idx.createDBIndex("media_author_name", "attrs_med_author");
-
-
-
-        //doSubs();
+        doSubs();
         //doComs();
 
         long end = System.currentTimeMillis();
