@@ -29,8 +29,8 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        //doSubs();
-        doComs();
+        doSubs();
+        //doComs();
 
         long end = System.currentTimeMillis();
 
@@ -52,7 +52,8 @@ public class Main {
         //List<RSMapper> results = rss.selectAllWhereColumnEquals("pid", "7a1shj");
         //List<RSMapper> results = rss.selectAllWhereColumnEqualsAndColumnAboveValue("subreddit_name", "cars",
         //        "score", "500");
-        List<RSMapper> results = rss.selectAllWhereColumnGreaterThan("gilded", "10");
+        //List<RSMapper> results = rss.selectAllWhereColumnGreaterThan("gilded", "50");
+        List<RSMapper> results = rss.selectAllWhereColumnLessThan("created_dt", "2007-11-10 22:22:22");
         RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
         //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
     }
@@ -69,29 +70,3 @@ public class Main {
         RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
