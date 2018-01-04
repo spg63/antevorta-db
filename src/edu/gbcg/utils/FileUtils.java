@@ -1,7 +1,6 @@
 package edu.gbcg.utils;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -176,5 +175,18 @@ public class FileUtils{
         if(files.isEmpty()) return null;
 
         return files;
+    }
+
+    public void writeNewFile(String fileName, String str){
+
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(fileName));
+            writer.write(str);
+            writer.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
