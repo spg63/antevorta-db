@@ -2,6 +2,7 @@ package edu.gbcg.dbInteraction.dbSelector;
 
 import edu.gbcg.configs.StateVars;
 import edu.gbcg.utils.TSL;
+import edu.gbcg.utils.c;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +17,71 @@ import java.util.concurrent.Future;
  */
 public abstract class Selector {
     protected String tableName;
-    public abstract void testItOut(String SQLStatemetn);
-    public abstract List<RSMapper> generalSelection(String SQLStatement);
 
     public Selector(){}
 
+//----------------------------------------------------------------------------------------------------------------------
+// NOTE: This can be used when one of the functions below doesn't satisfy your querying needs. I suggest just writing
+// the function below unless you're absolutely positive the query is a one-off so you don't need to keep writing the
+// same SQL string.
+//----------------------------------------------------------------------------------------------------------------------
+    public abstract List<RSMapper> generalSelection(String SQLStatement);
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// The following functions take the tableName variable (set the in the derived class default c'tors) and create an
+// sql query string using the DBSelector class. The query string is passed back down to a derived class through
+// generalSelection to ascertain which workers to use and which DB shards to search before calling the generalized
+// genericSelect function below.
+//----------------------------------------------------------------------------------------------------------------------
+
     public List<RSMapper> selectAllFromAuthor(String author){
+        return selectAllWhereColumnEquals("author", author);
+    }
+
+    public List<RSMapper> selectAllFromAuthorOrderBy(String author, String orderBy){
         DBSelector selector = new DBSelector()
                 .from(this.tableName)
-                .where("author = '"+author+"'");
+                .where("author = '"+author+"'")
+                .orderBy(orderBy);
         return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnEquals(String columnName, String equalsValue){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(columnName + " = '" + equalsValue + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnLessThan(String columnName, String lessThanValue){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(columnName + " < '" + lessThanValue + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnGreaterThan(String columnName, String greaterThanValue){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(columnName + " > '" + greaterThanValue + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllWhereColumnEqualsAndColumnAboveValue(String column, String equalsVal,
+                                                                        String filter, String val){
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(column + " = '" + equalsVal + "'")
+                .and(filter + " > '" + val + "'");
+        return generalSelection(selector.sql());
+    }
+
+
+
+//---------- Generalized version for named functions
+    public List<RSMapper> selectAllFromColumn(String column){
+        return null;
     }
 
 
@@ -40,16 +96,12 @@ public abstract class Selector {
 
 
 
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------------------------------------------------
+// The functions below implement the queries on the DB. verifyDBsExist simply checks that the requests DB shards are
+// in place on the disk where they're expected to be. If this fails the program dies...something is very wrong if
+// this failed. genericSelect is a generalized DB query function which gives a list of selection workers will search
+// the proper DB shards.
+//----------------------------------------------------------------------------------------------------------------------
 
     /*
         Perform a multi-threaded selection against the DB shards. Each shard is given a single thread

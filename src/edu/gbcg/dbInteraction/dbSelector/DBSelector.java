@@ -145,7 +145,7 @@ public class DBSelector {
         appendList(sql, groupBys, " group by ", ", ");
         appendList(sql, havings, " having ", " and ");
         appendList(sql, unions, " union ", " union ");
-        appendList(sql, orderBys, " order by", ", ");
+        appendList(sql, orderBys, " order by ", ", ");
 
         if(forUpdate){
             sql.append(" for update");

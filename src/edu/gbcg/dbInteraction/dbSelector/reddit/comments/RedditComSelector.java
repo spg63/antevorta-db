@@ -5,8 +5,6 @@ import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
 import edu.gbcg.configs.DBLocator;
-import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector;
-import edu.gbcg.utils.c;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,30 +13,6 @@ public class RedditComSelector extends Selector {
 
     public RedditComSelector(){
         this.tableName = StateVars.COM_TABLE_NAME;
-    }
-
-    public void testItOut(String SQLStatement){
-        List<RSMapper> res = generalSelection(SQLStatement);
-        if(res == null){
-            c.writeln("**----- NO RESULTS -----**");
-            return;
-        }
-
-        String author = "author";
-        String score = "score";
-        String sub_name = "subreddit_name";
-        String body = "body";
-        String c_score = "controversial_score";
-        for(int i = 0; i < res.size(); ++i){
-            c.writeln(author + ": " + res.get(i).getString(author));
-            c.writeln(score + ": " + res.get(i).getString(score));
-            c.writeln(sub_name + ": " + res.get(i).getString(sub_name));
-            c.writeln(body + ": " + res.get(i).getString(body));
-            c.writeln(c_score + ": " + res.get(i).getString(c_score));
-            c.writeln("");
-            c.writeln("----------");
-            c.writeln("");
-        }
     }
 
     /**
