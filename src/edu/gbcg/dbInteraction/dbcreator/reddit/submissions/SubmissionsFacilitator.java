@@ -58,14 +58,13 @@ public class SubmissionsFacilitator extends Facilitator {
     }
 
     protected void createIndices(){
-        //***** all but author
         createDBIndex("author", "attrs_author");
         createDBIndex("created_dt", "attrs_created");
         createDBIndex("host_domain", "attrs_host");
         createDBIndex("gilded", "attrs_gilded");
-        createDBIndex("pid", "attrs_pid");                          //
+        createDBIndex("pid", "attrs_pid");
         createDBIndex("num_comments", "attrs_comments");
-        createDBIndex("media_author_name", "attrs_med_author");     //
+        createDBIndex("media_author_name", "attrs_med_author");
         createDBIndex("media_provider_name", "attrs_med_provider");
         createDBIndex("media_title", "attrs_media");
         createDBIndex("score", "attrs_score");

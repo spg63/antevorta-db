@@ -2,8 +2,6 @@ package edu.gbcg.dbInteraction.dbSelector.reddit.submissions;
 
 import edu.gbcg.configs.columnsAndKeys.RedditSubmissions;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
-import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator;
-import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator;
 
 import java.sql.ResultSet;
 import java.util.List;

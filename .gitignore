@@ -5,3 +5,4 @@ out/
 LocalData/
 LocalDB/
 logs/
+*.csv
