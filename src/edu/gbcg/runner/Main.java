@@ -51,7 +51,9 @@ public class Main {
         //        "score", "500");
         //List<RSMapper> results = rss.selectAllWhereColumnGreaterThan("gilded", "50");
         //List<RSMapper> results = rss.selectAllWhereColumnLessThan("created_dt", "2007-11-10 22:22:22");
-        List<RSMapper> results = rss.selectAllBeforeDate(2017, 10, 31, 20, 10, 0);
+        //List<RSMapper> results = rss.selectAllBetweenDates(2017, 10, 31, 23, 23, 59, 2017, 11, 1, 0, 0, 0);
+        List<RSMapper> results = rss.selectAllAfterDate(2017, 11, 30, 10, 00, 00);
+        TSL.get().info(results.size() + " results returned");
         //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
         //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
     }

@@ -81,11 +81,19 @@ public abstract class Selector {
     //------ NEED MUCH MORE DATE FUNCTIONS
 
     public List<RSMapper> selectAllAfterDate(int year, int month, int day, int hour, int minute, int second){
-        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT,
-                TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
+        String sql_start = TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second);
+        LocalDateTime start = TimeFormatter.SQLDateTimeToJavaDateTime(sql_start);
+        LocalDateTime end = LocalDateTime.now();
+        TSL.get().err(start.toString());
+        TSL.get().err(end.toString());
+        return selectAllBetweenDates(start, end);
+
+        //return selectAllWhereColumnGreaterThan(Finals.CREATED_DT,
+        //        TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
     }
 
     public List<RSMapper> selectAllBeforeDate(int year, int month, int day, int hour, int minute, int second){
+
         return selectAllWhereColumnLessThan(Finals.CREATED_DT,
                 TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
     }
@@ -102,6 +110,7 @@ public abstract class Selector {
                 .from(this.tableName)
                 .where(Finals.CREATED_DT + " > '" + startDate + "'")
                 .and(Finals.CREATED_DT + " < '" + endDate + "'");
+        TSL.get().info(selector.sql());
         return generalSelection(selector.sql());
     }
 
