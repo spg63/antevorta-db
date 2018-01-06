@@ -1,8 +1,8 @@
 package edu.gbcg.dbInteraction.dbcreator.reddit.comments;
 
 import edu.gbcg.configs.DBLocator;
+import edu.gbcg.configs.Finals;
 import edu.gbcg.configs.RawDataLocator;
-import edu.gbcg.configs.StateVars;
 import edu.gbcg.configs.columnsAndKeys.RedditComments;
 import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator;
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher;
@@ -43,13 +43,13 @@ public class CommentsFacilitator extends Facilitator{
 
     protected List<JsonPusher> populateJsonWorkers(){
         List<JsonPusher> workers = new ArrayList<>();
-        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i)
+        for(int i = 0; i < Finals.DB_SHARD_NUM; ++i)
             workers.add(new CommentsJsonPusher());
         return workers;
     }
 
     protected String getTableName(){
-        return StateVars.COM_TABLE_NAME;
+        return Finals.COM_TABLE_NAME;
     }
 
     protected void createIndices(){

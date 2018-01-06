@@ -15,6 +15,10 @@ import java.util.Map;
  * NOTE: A 3rd utility mapper class is needed to prevent a switch over class type, BaseMapper. This class doesn't
  * implement any functionality regarding pulling data from a ResultSet but is used to give data back to the user from
  * buildMappers_impl.
+ *
+ * NOTE: Storing all elements as a String avoids the type casting when pulling data from the ResultSet which delays
+ * the type cast until the value is pull from the internal map stored here, if the value is pulled as something other
+ * than a string.
  */
 public abstract class RSMapper {
     protected Map<String, String> map = new HashMap<>();
@@ -24,7 +28,7 @@ public abstract class RSMapper {
      * @param map
      */
     public RSMapper(Map<String, String> map){ this.map = map; }
-    public RSMapper(){};
+    public RSMapper(){}
 
     /**
      * Get the value as a string
@@ -165,32 +169,3 @@ public abstract class RSMapper {
         return maps;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

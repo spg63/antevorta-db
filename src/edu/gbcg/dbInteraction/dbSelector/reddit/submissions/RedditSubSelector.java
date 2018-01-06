@@ -1,6 +1,6 @@
 package edu.gbcg.dbInteraction.dbSelector.reddit.submissions;
 
-import edu.gbcg.configs.StateVars;
+import edu.gbcg.configs.Finals;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
@@ -12,7 +12,7 @@ import java.util.List;
 public class RedditSubSelector extends Selector {
 
     public RedditSubSelector(){
-        this.tableName = StateVars.SUB_TABLE_NAME;
+        this.tableName = Finals.SUB_TABLE_NAME;
     }
 
     /**

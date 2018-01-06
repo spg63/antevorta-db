@@ -1,6 +1,6 @@
 package edu.gbcg.dbInteraction;
 
-import edu.gbcg.configs.StateVars;
+import edu.gbcg.configs.Finals;
 import edu.gbcg.utils.DBUtils;
 import edu.gbcg.utils.TSL;
 
@@ -12,19 +12,22 @@ import java.util.List;
 
 /**
  * Class to hold functionality shared among DB classes and wrapping the generalized functions from DBUtils to handle
- * things like data paths and db locations
+ * things like data paths, db locations, db type, and whether or not to enforce foreign keys. Basically just wraps up
+ * DBUtils with default values for this specific project to simplify function calls in higher level code
  */
 public class DBCommon {
-
+    private static boolean enforceForeignKeys = Finals.ENABLE_FOREIGN_KEYS;
+    private static String dbPrefix = Finals.DB_URL_PREFIX;
+    private static String dbDriver = Finals.DB_DRIVER;
     /**
      * Gets a DB Connection object based on db name, the URL to the DB and the type of DB driver in
-     * use. The URL prefix and DB Driver class are both found in StateVars
+     * use. The URL prefix and DB Driver class are both found in Finals
      * @param db Name of the database
      * @return The connection to the db
      */
     public static Connection connect(String db){
-        Connection conn = DBUtils.get().connect(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER);
-        if(StateVars.SYNC_MODE_OFF) {
+        Connection conn = DBUtils.get().connect(db, dbPrefix, dbDriver, enforceForeignKeys);
+        if(Finals.SYNC_MODE_OFF) {
             try {
                 Statement st = conn.createStatement();
                 String sql = "PRAGMA synchronous=OFF";
@@ -63,7 +66,7 @@ public class DBCommon {
      * @param SQLStatement The SQLstatement, as a string
      */
     public static void insert(String db, String SQLStatement){
-        DBUtils.get().insert(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER, SQLStatement);
+        DBUtils.get().insert(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys);
     }
 
     /**
@@ -83,7 +86,7 @@ public class DBCommon {
      * @param SQLStatement The SQL Statement, as a string
      */
     public static void delete(String db, String SQLStatement){
-        DBUtils.get().delete(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER, SQLStatement);
+        DBUtils.get().delete(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys);
     }
 
     /**
@@ -105,7 +108,7 @@ public class DBCommon {
      * @param SQLStatements A list of SQL statements
      */
     public static void insertAll(String db, List<String> SQLStatements){
-        DBUtils.get().insertAll(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER, SQLStatements);
+        DBUtils.get().insertAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys);
     }
 
     /**
@@ -126,7 +129,7 @@ public class DBCommon {
      * @param SQLStatements A list of SQL statements
      */
     public static void deleteAll(String db, List<String> SQLStatements){
-        DBUtils.get().deleteAll(db, StateVars.DB_URL_PREFIX, StateVars.DB_DRIVER, SQLStatements);
+        DBUtils.get().deleteAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys);
     }
 
     /**

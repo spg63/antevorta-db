@@ -7,6 +7,11 @@ import edu.gbcg.utils.c;
 import java.util.List;
 
 public class RSMapperOutput {
+    /**
+     * Print all column names and values from a DB list of RSMappers
+     * @param mappers The list of RSMapper objects
+     * @param columnNames The list of column names
+     */
     public static void printAllColumnsFromRSMappers(List<RSMapper> mappers, List<String> columnNames){
         if(mappers == null){
             c.writeln("**----- NO RESULTS -----**");
@@ -23,6 +28,12 @@ public class RSMapperOutput {
         c.writeln("Returned " + mappers.size() + " results.");
     }
 
+    /**
+     * Write all column names as headings and column values to a CSV file
+     * @param mappers The list of RSMapper objects
+     * @param columnNames The list of column names
+     * @param csvFilePath CSV file path + file name
+     */
     public static void RSMappersToCSV(List<RSMapper> mappers, List<String> columnNames, String csvFilePath){
         if(mappers == null){
             c.writeln("**----- NO RESULTS -----**");

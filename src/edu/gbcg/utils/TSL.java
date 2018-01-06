@@ -17,11 +17,12 @@ import java.util.concurrent.BlockingQueue;
 @SuppressWarnings("unused")
 public class TSL extends Thread{
     private static volatile TSL _instance;
-    public static boolean LOG_NON_ERRORS = true;
+    public static boolean LOG_INFO = true;
+    public static boolean LOG_WARN = true;
 
     private String SHUTDOWN_REQ = null;
     private volatile boolean shuttingDown, loggerTerminated;
-    private BlockingQueue<String> itemsToLog = new ArrayBlockingQueue<>(10000);
+    private BlockingQueue<Object> itemsToLog = new ArrayBlockingQueue<>(1000000);
     @SuppressWarnings("FieldCanBeLocal")
     private LocalDateTime ldt;
     private String dt;
@@ -54,18 +55,37 @@ public class TSL extends Thread{
 
     @Override
     public void run(){
+        PrintWriter pw = null;
         try{
             String item;
-            while(!(item = itemsToLog.take()).equals(SHUTDOWN_REQ)){
-                futils.checkAndCreateDir("logs");
-                try(PrintWriter out = new PrintWriter(
-                                        new BufferedWriter(
-                                          new FileWriter("logs/tslog_"+dt+".txt", true)))){
-                    out.println(item);
-                }
-                catch(IOException e){
-                    out.writeln_err("*** ThreadSafeLogger failed ***");
-                }
+            try{
+                pw = new PrintWriter(
+                        new BufferedWriter(
+                                new FileWriter("logs/tslogs_"+dt+".txt", true)));
+            }
+            catch(IOException e){
+                out.writeln_err("*** ThreadSafeLogger IOException");
+            }
+
+            futils.checkAndCreateDir("logs");
+            while(!(item = (String)itemsToLog.take()).equals(SHUTDOWN_REQ)){
+                String label;
+                if(item.startsWith("[INFO]"))
+                    label = "[INF] ";
+                else if(item.startsWith("[WARN]"))
+                    label = "[WAR] ";
+                else
+                    label = "[ERR] ";
+
+                // Split the init lable off the string
+                String[] splitItem = item.split(" ", 2);
+
+                StringBuilder sb = new StringBuilder();
+                sb.append(label);
+                sb.append(time_str());
+                sb.append(splitItem[1]);
+                pw.println(sb.toString());
+                pw.flush();
             }
         }
         catch(InterruptedException e){
@@ -73,14 +93,16 @@ public class TSL extends Thread{
         }
         finally{
             loggerTerminated = true;
+            if(pw != null)
+                pw.close();;
         }
     }
 
-    public void log(String str){
-        if(shuttingDown || loggerTerminated || !LOG_NON_ERRORS)
+    public void log(Object str){
+        if(!LOG_INFO || shuttingDown || loggerTerminated)
             return;
         try{
-            itemsToLog.put(time_str() + str);
+            itemsToLog.put("[INFO] " + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
@@ -88,15 +110,27 @@ public class TSL extends Thread{
         }
     }
 
-    public void err(String str){
+    public void warn(Object str){
+        if(!LOG_WARN || shuttingDown || loggerTerminated)
+            return;
+        try{
+            itemsToLog.put("[WARN] " + str);
+        }
+        catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("ThreadSafeLogger.warn() -- Unexpected interruption");
+        }
+    }
+
+    public void err(Object str){
         if(shuttingDown || loggerTerminated)
             return;
         try{
-            itemsToLog.put("*** " + time_str() + str);
+            itemsToLog.put("[ERROR] " + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException("ThreadSafeLogger.log() -- Unexpected interruption");
+            throw new RuntimeException("ThreadSafeLogger.err() -- Unexpected interruption");
         }
     }
 
@@ -104,6 +138,8 @@ public class TSL extends Thread{
         shuttingDown = true;
         try {
             itemsToLog.put(SHUTDOWN_REQ);
+            // Force a pause of the main thread to give the logger thread a change to write all data to the file system
+            Thread.sleep(250);
         }
         catch(InterruptedException e){
             throw new RuntimeException("ThreadSafeLogger.shutDown() -- Unexpected interruption");
@@ -120,20 +156,4 @@ public class TSL extends Thread{
         String time_s = "("+hour+":"+min+":"+sec+"."+milli+") > ";
         return time_s;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

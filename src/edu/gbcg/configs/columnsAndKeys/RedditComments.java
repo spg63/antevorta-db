@@ -1,5 +1,7 @@
 package edu.gbcg.configs.columnsAndKeys;
 
+import edu.gbcg.configs.Finals;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,12 +20,12 @@ public class RedditComments {
 
     public static List<String> columnNames(){
         return Arrays.asList(
-                "ID",               "author",           "author_flair_text",
-                "body",             "can_gild",         "controversial_score",
-                "created_dt",       "distinguished",    "been_edited",
-                "gilded",           "pid",              "is_submitter",
-                "link_id",          "parent_id",        "permalink",
-                "scraped_on",       "score",            "is_stickied",
+                "ID",               Finals.AUTHOR,      "author_flair_text",
+                Finals.BODY,        "can_gild",         "controversial_score",
+                Finals.CREATED_DT,  "distinguished",    "been_edited",
+                "gilded",           Finals.POST_ID,     "is_submitter",
+                "link_id",          "parent_id",        Finals.PERMALINK,
+                Finals.SCRAPED_DT,  Finals.SCORE,       "is_stickied",
                 "subreddit_name",   "subreddit_id",     "subreddit_type",
                 "intg_exp_1",       "real_exp_1",       "text_exp_1",
                 "text_exp_2",       "text_exp_3",       "text_exp_4"
@@ -32,12 +34,12 @@ public class RedditComments {
 
     public static List<String> columnsForPrinting(){
         return Arrays.asList(
-                "ID",               "author",           "author_flair_text",
-                "body",             "can_gild",         "controversial_score",
-                "created_dt",       "distinguished",    "been_edited",
-                "gilded",           "pid",              "is_submitter",
-                "link_id",          "parent_id",        "permalink",
-                "scraped_on",       "score",            "is_stickied",
+                "ID",               Finals.AUTHOR,      "author_flair_text",
+                Finals.BODY,        "can_gild",         "controversial_score",
+                Finals.CREATED_DT,  "distinguished",    "been_edited",
+                "gilded",           Finals.POST_ID,     "is_submitter",
+                "link_id",          "parent_id",        Finals.PERMALINK,
+                Finals.SCRAPED_DT,  Finals.SCORE,       "is_stickied",
                 "subreddit_name",   "subreddit_id",     "subreddit_type"
         );
     }

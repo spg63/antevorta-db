@@ -1,5 +1,7 @@
 package edu.gbcg.configs.columnsAndKeys;
 
+import edu.gbcg.configs.Finals;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,17 +35,17 @@ public class RedditSubmissions {
 
     public static List<String> columnNames(){
         return Arrays.asList(
-                "ID",                   "archived",             "author",
-                "brand_safe",           "contest_mode",         "created_dt",
+                "ID",                   "archived",             Finals.AUTHOR,
+                "brand_safe",           "contest_mode",         Finals.CREATED_DT,
                 "distinguished",        "host_domain",          "edited",
-                "gilded",               "hidden",               "pid",
+                "gilded",               "hidden",               Finals.POST_ID,
                 "is_self_post",         "is_video_post",        "link_flair_text",
                 "is_locked",            "num_comments",         "media_author_name",
                 "media_provider_name",  "media_title",          "media_type",
-                "num_crossposts",       "over_18",              "permalink",
-                "is_pinned",            "scraped_on",           "score",
+                "num_crossposts",       "over_18",              Finals.PERMALINK,
+                "is_pinned",            Finals.SCRAPED_DT,      Finals.SCORE,
                 "selftext",             "is_stickied",          "subreddit_name",
-                "subreddit_id",         "subreddit_type",       "post_title",
+                "subreddit_id",         "subreddit_type",       Finals.TITLE,
                 "link_url",             "intg_exp_1",           "intg_exp_2",
                 "intg_exp_3",           "real_exp_1",           "real_exp_2",
                 "text_exp_1",           "text_exp_2",           "text_exp_3",
@@ -54,17 +56,17 @@ public class RedditSubmissions {
 
     public static List<String> columnsForPrinting(){
         return Arrays.asList(
-                "ID",                   "archived",             "author",
-                "brand_safe",           "contest_mode",         "created_dt",
+                "ID",                   "archived",             Finals.AUTHOR,
+                "brand_safe",           "contest_mode",         Finals.CREATED_DT,
                 "distinguished",        "host_domain",          "edited",
-                "gilded",               "hidden",               "pid",
+                "gilded",               "hidden",               Finals.POST_ID,
                 "is_self_post",         "is_video_post",        "link_flair_text",
                 "is_locked",            "num_comments",         "media_author_name",
                 "media_provider_name",  "media_title",          "media_type",
                 "num_crossposts",       "over_18",              "permalink",
-                "is_pinned",            "scraped_on",           "score",
+                "is_pinned",            Finals.SCRAPED_DT,      Finals.SCORE,
                 "selftext",             "is_stickied",          "subreddit_name",
-                "subreddit_id",         "subreddit_type",       "post_title",
+                "subreddit_id",         "subreddit_type",       Finals.TITLE,
                 "link_url"
         );
     }

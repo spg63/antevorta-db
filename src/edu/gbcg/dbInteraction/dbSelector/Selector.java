@@ -1,8 +1,10 @@
 package edu.gbcg.dbInteraction.dbSelector;
 
-import edu.gbcg.configs.StateVars;
+import edu.gbcg.configs.Finals;
+import edu.gbcg.dbInteraction.TimeFormatter;
 import edu.gbcg.utils.TSL;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,13 +37,13 @@ public abstract class Selector {
 //----------------------------------------------------------------------------------------------------------------------
 
     public List<RSMapper> selectAllFromAuthor(String author){
-        return selectAllWhereColumnEquals("author", author);
+        return selectAllWhereColumnEquals(Finals.AUTHOR, author);
     }
 
     public List<RSMapper> selectAllFromAuthorOrderBy(String author, String orderBy){
         DBSelector selector = new DBSelector()
                 .from(this.tableName)
-                .where("author = '"+author+"'")
+                .where(Finals.AUTHOR + " = '"+author+"'")
                 .orderBy(orderBy);
         return generalSelection(selector.sql());
     }
@@ -76,6 +78,51 @@ public abstract class Selector {
         return generalSelection(selector.sql());
     }
 
+    //------ NEED MUCH MORE DATE FUNCTIONS
+
+    public List<RSMapper> selectAllAfterDate(int year, int month, int day, int hour, int minute, int second){
+        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT,
+                TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
+    }
+
+    public List<RSMapper> selectAllBeforeDate(int year, int month, int day, int hour, int minute, int second){
+        return selectAllWhereColumnLessThan(Finals.CREATED_DT,
+                TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
+    }
+
+    public List<RSMapper> selectAllBetweenDates(int start_year, int start_month, int start_day,
+                                                int start_hour, int start_minute, int start_second,
+                                                int end_year, int end_month, int end_day,
+                                                int end_hour, int end_minute, int end_second){
+        String startDate = TimeFormatter.
+                getDateStringFromValues(start_year, start_month, start_day, start_hour, start_minute, start_second);
+        String endDate = TimeFormatter.
+                getDateStringFromValues(end_year, end_month, end_day, end_hour, end_minute, end_second);
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(Finals.CREATED_DT + " > '" + startDate + "'")
+                .and(Finals.CREATED_DT + " < '" + endDate + "'");
+        return generalSelection(selector.sql());
+    }
+
+    public List<RSMapper> selectAllAfterDate(LocalDateTime dt){
+        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, TimeFormatter.javaDateTimeToSQLDateTime(dt));
+    }
+
+    public List<RSMapper> selectAllBeforeDate(LocalDateTime dt){
+        return selectAllWhereColumnLessThan(Finals.CREATED_DT, TimeFormatter.javaDateTimeToSQLDateTime(dt));
+    }
+
+    public List<RSMapper> selectAllBetweenDates(LocalDateTime start, LocalDateTime end){
+        String sql_start = TimeFormatter.javaDateTimeToSQLDateTime(start);
+        String sql_end = TimeFormatter.javaDateTimeToSQLDateTime(end);
+        DBSelector selector = new DBSelector()
+                .from(this.tableName)
+                .where(Finals.CREATED_DT + " > '" + sql_start + "'")
+                .and(Finals.CREATED_DT + " < '" + sql_end + "'");
+        return generalSelection(selector.sql());
+    }
+
 
 
 //---------- Generalized version for named functions
@@ -107,13 +154,13 @@ public abstract class Selector {
      */
     protected List<RSMapper> genericSelect(List<SelectionWorker> workers, String SQLStatement){
         List<Future<List<RSMapper>>> future_results = new ArrayList<>();
-        ExecutorService executor = Executors.newFixedThreadPool(StateVars.DB_SHARD_NUM);
+        ExecutorService executor = Executors.newFixedThreadPool(Finals.DB_SHARD_NUM);
         for(SelectionWorker worker : workers)
             future_results.add(executor.submit(worker));
 
         List<RSMapper> results = new ArrayList<>();
         try{
-            for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i)
+            for(int i = 0; i < Finals.DB_SHARD_NUM; ++i)
                 results.addAll(future_results.get(i).get());
         }
         catch(InterruptedException e){
@@ -137,9 +184,9 @@ public abstract class Selector {
             TSL.get().err("Selector.verifyDBsExist DBs was null");
             throw new RuntimeException("Selector.verifyDBsExist DBs was null");
         }
-        if (DBs.size() != StateVars.DB_SHARD_NUM) {
-            TSL.get().err("Selector.verifyDBsExist DBs.size() != StateVars.DB_SHARD_NUM");
-            throw new RuntimeException("Selector.verifyDBsExist DBs.size() != StateVars.DB_SHARD_NUM");
+        if (DBs.size() != Finals.DB_SHARD_NUM) {
+            TSL.get().err("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
+            throw new RuntimeException("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
         }
     }
 }

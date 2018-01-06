@@ -18,7 +18,7 @@ public class RawDataLocator {
      * @return List of all reddit submission files if available, otherwise null
      */
     public static List<String> redditJsonSubmissionAbsolutePaths(){
-        String path = StateVars.TESTING_MODE ? DataPaths.LOCAL_SUB_DATA_PATH : DataPaths.SUB_DATA_PATH;
+        String path = Finals.TESTING_MODE ? DataPaths.LOCAL_SUB_DATA_PATH : DataPaths.SUB_DATA_PATH;
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", path);
     }
 
@@ -28,7 +28,7 @@ public class RawDataLocator {
      * @return List of all reddit comment files if available, otherwise null
      */
     public static List<String> redditJsonCommentAbsolutePaths(){
-        String path = StateVars.TESTING_MODE ? DataPaths.LOCAL_COM_DATA_PATH : DataPaths.COM_DATA_PATH;
+        String path = Finals.TESTING_MODE ? DataPaths.LOCAL_COM_DATA_PATH : DataPaths.COM_DATA_PATH;
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path);
     }
 }

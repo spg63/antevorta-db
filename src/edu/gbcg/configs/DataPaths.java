@@ -16,6 +16,6 @@ public class DataPaths {
 
     public static final String SUB_DB_PREFIX        = "RS_DB";
     public static final String COM_DB_PREFIX        = "RC_DB";
-    public static final String DB_POSTFIX           = StateVars.DB_TYPE_EXT;
+    public static final String DB_POSTFIX           = Finals.DB_TYPE_EXT;
 
 }

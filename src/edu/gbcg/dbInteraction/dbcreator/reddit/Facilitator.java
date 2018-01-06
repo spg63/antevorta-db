@@ -1,6 +1,6 @@
 package edu.gbcg.dbInteraction.dbcreator.reddit;
 
-import edu.gbcg.configs.StateVars;
+import edu.gbcg.configs.Finals;
 import edu.gbcg.dbInteraction.DBCommon;
 import edu.gbcg.dbInteraction.dbcreator.IndexWorker;
 import edu.gbcg.utils.FileUtils;
@@ -52,14 +52,14 @@ public abstract class Facilitator {
         // Check if the all the DBs exist. Note, this is 100% but it's good enough for my uses
         if(this.DBAbsolutePaths == null)
             this.DBAbsolutePaths = new ArrayList<>();
-        boolean dbs_exist = this.DBAbsolutePaths.size() == StateVars.DB_SHARD_NUM;
+        boolean dbs_exist = this.DBAbsolutePaths.size() == Finals.DB_SHARD_NUM;
 
         // Early exist if the DBs exist and we don't want to start fresh
-        if(dbs_exist && !StateVars.START_FRESH)
+        if(dbs_exist && !Finals.START_FRESH)
             return;
 
         // The DBs exist but we want to start fresh, get rid of them
-        if(dbs_exist && StateVars.START_FRESH){
+        if(dbs_exist && Finals.START_FRESH){
             String sql = "drop table if exists " + this.tableName + ";";
             for(String dbPath : this.DBAbsolutePaths)
                 DBCommon.delete(dbPath, sql);
@@ -96,7 +96,7 @@ public abstract class Facilitator {
 
     public void pushJSONDataIntoDBs(){
         // Early exit if we're not pushing data
-        if(!StateVars.START_FRESH) return;
+        if(!Finals.START_FRESH) return;
 
         if(DBAbsolutePaths == null || DBAbsolutePaths.isEmpty())
             DBAbsolutePaths = getDBAbsolutePaths();
@@ -111,12 +111,12 @@ public abstract class Facilitator {
 
             BufferedReader br = null;
             // How many lines to read before writing to a DB shard
-            int dbDumpLimit = StateVars.DB_SHARD_NUM * StateVars.DB_BATCH_LIMIT;
+            int dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT;
             int lineReadCounter = 0;
             int whichWorker = 0;
 
             List<List<String>> linesList = new ArrayList<>();
-            for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j)
+            for(int j = 0; j < Finals.DB_SHARD_NUM; ++j)
                 linesList.add(new ArrayList<>());
 
             try{
@@ -128,7 +128,7 @@ public abstract class Facilitator {
 
                     // Increment the worker number so we're evenly distributing lines to the workers
                     ++whichWorker;
-                    if(whichWorker >= StateVars.DB_SHARD_NUM)
+                    if(whichWorker >= Finals.DB_SHARD_NUM)
                         whichWorker = 0;
 
                     // Limit before dumping data to the DB, start the threads and perform the dump
@@ -140,7 +140,7 @@ public abstract class Facilitator {
                         linesList.clear();
 
                         // Give the linesList new ArrayLists to store the lines
-                        for(int j = 0; j < StateVars.DB_SHARD_NUM; ++j)
+                        for(int j = 0; j < Finals.DB_SHARD_NUM; ++j)
                             linesList.add(new ArrayList<>());
                     }
                     // Read a line
@@ -171,7 +171,7 @@ public abstract class Facilitator {
     private void letWorkersFly(List<List<String>> lines){
         List<JsonPusher> workers = populateJsonWorkers();
         // Give the workers the data they need
-        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+        for(int i = 0; i < Finals.DB_SHARD_NUM; ++i){
             workers.get(i).setDB(DBAbsolutePaths.get(i));
             workers.get(i).setJSON(lines.get(i));
             workers.get(i).setColumns(columnNames);
@@ -180,13 +180,13 @@ public abstract class Facilitator {
 
         // Start the threads
         List<Thread> threads = new ArrayList<>();
-        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+        for(int i = 0; i < Finals.DB_SHARD_NUM; ++i){
             threads.add(new Thread(workers.get(i)));
             threads.get(i).start();
         }
 
         // Wait for them all to finish
-        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+        for(int i = 0; i < Finals.DB_SHARD_NUM; ++i){
             try{
                 threads.get(i).join();
             }

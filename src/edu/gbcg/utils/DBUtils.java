@@ -3,6 +3,7 @@ package edu.gbcg.utils;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,20 +27,23 @@ public class DBUtils {
 
     /**
      * Return a connection to the database string, if valid, using the DB driver and DB url
-     * prefix set in StateVars
+     * prefix set in Finals
      * @param db Path to your DB
      * @param dbURL The URL for the DB (e.g. jdbc:sqlite:)
      * @param dbDriverClassName The name of your DB driver (e.g. org.sqlite.JDBC)
+     * @param enforceForeignKeys Should be true if you want foreign keys enforced on your table(s), false otherwise
+     *                           to increase DB performance
      * @return The connection
      */
-    public Connection connect(String db, String dbURL, String dbDriverClassName){
+    public Connection connect(String db, String dbURL, String dbDriverClassName, boolean enforceForeignKeys){
         String connString = dbURL + db;
         Connection conn = null;
         try{
             Class.forName(dbDriverClassName);
             SQLiteConfig config = new SQLiteConfig();
             // This is necessary to enforce foreign keys, has to happen on *every* connection
-            //config.enforceForeignKeys(true);
+            if(enforceForeignKeys)
+                config.enforceForeignKeys(true);
             conn = DriverManager.getConnection(connString, config.toProperties());
         }
         catch(SQLException | ClassNotFoundException e){
@@ -91,8 +95,9 @@ public class DBUtils {
      * @param dbURL The URL for the db
      * @param dbDriverClassName The name of your DB driver class
      */
-    public void insert(String db, String dbURL, String dbDriverClassName, String SQLStatement) {
-        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement);
+    public void insert(String db, String dbURL, String dbDriverClassName,
+                       String SQLStatement, boolean enforceForeignKeys) {
+        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement, enforceForeignKeys);
     }
 
     /**
@@ -113,8 +118,9 @@ public class DBUtils {
      * @param dbURL The URL for the db
      * @param dbDriverClassName The name of your DB driver class
      */
-    public void delete(String db, String dbURL, String dbDriverClassName, String SQLStatement) {
-        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement);
+    public void delete(String db, String dbURL, String dbDriverClassName,
+                       String SQLStatement, boolean enforceForeignKeys) {
+        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement, enforceForeignKeys);
     }
 
     /**
@@ -138,8 +144,8 @@ public class DBUtils {
      * @param dbDriverClassName The name of your DB driver class
      */
     public void insertAll(String db, String dbURL, String dbDriverClassName,
-                          List<String> SQLStatements){
-        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements);
+                          List<String> SQLStatements, boolean enforceForeignKeys){
+        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements, enforceForeignKeys);
     }
 
     /**
@@ -162,8 +168,8 @@ public class DBUtils {
      * @param dbDriverClassName The name of your DB driver class
      */
     public void deleteAll(String db, String dbURL, String dbDriverClassName,
-                          List<String> SQLStatements){
-        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements);
+                          List<String> SQLStatements, boolean enforceForeignKeys){
+        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements, enforceForeignKeys);
     }
 
     /**
@@ -209,7 +215,11 @@ public class DBUtils {
      * @return A list of ResultSet objects if the selections were successful
      */
     public List<ResultSet> selectAll(Connection conn, List<String> SQLStatements){
-        return null;
+        TSL.get().err("DBUtils.selectAll called; unoptimized.");
+        List<ResultSet> results = new ArrayList<>();
+        for(String sql : SQLStatements)
+            results.add(select(conn, sql));
+        return results;
     }
 
     /*
@@ -217,8 +227,8 @@ public class DBUtils {
         * Executes a batch update for insert / delete. Manages the Connection object itself
      */
     private void executeBatchUpdate(String db, String dbURL, String dbDriverClassName,
-                                    List<String> SQLStatements){
-        Connection conn = connect(db, dbURL, dbDriverClassName);
+                                    List<String> SQLStatements, boolean enforceForeignKeys){
+        Connection conn = connect(db, dbURL, dbDriverClassName, enforceForeignKeys);
         executeBatchUpdate(conn, SQLStatements);
         try{
             conn.close();
@@ -281,8 +291,8 @@ public class DBUtils {
         * Executes a single insert / delete / update. Manages connection object.
      */
     private void executeGenericUpdate(String db, String dbURL, String dbDriverClassName,
-                                      String SQLStatement){
-        Connection conn = connect(db, dbURL, dbDriverClassName);
+                                      String SQLStatement, boolean enforeceForeignKeys){
+        Connection conn = connect(db, dbURL, dbDriverClassName, enforeceForeignKeys);
         executeGenericUpdate(conn, SQLStatement);
         try{
             conn.close();

@@ -34,11 +34,11 @@ public class TimeFormatter {
 
         StringBuilder SQLTime = new StringBuilder();
         SQLTime.append(year + "-");
-        SQLTime.append(month + "-");
-        SQLTime.append(day + " ");
-        SQLTime.append(hour + ":");
-        SQLTime.append(minute + ":");
-        SQLTime.append(second);
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(month) + "-");
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(day) + " ");
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(hour) + ":");
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(minute) + ":");
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(second));
         return SQLTime.toString();
     }
 
@@ -62,8 +62,42 @@ public class TimeFormatter {
         int minute = Integer.valueOf(hms[1]);
         int second = Integer.valueOf(hms[2]);
 
-        LocalDateTime time = LocalDateTime.of(year, month, day, hour, minute, second);
-        return time;
+        return LocalDateTime.of(year, month, day, hour, minute, second);
     }
 
+    /**
+     * Build an SQLite compatible date-time string based on numeric values
+     * @param year
+     * @param month
+     * @param day
+     * @param hour
+     * @param minute
+     * @param second
+     * @return The SQLite compatible date-time string
+     */
+    public static String getDateStringFromValues(int year, int month, int day,
+                                                 int hour, int minute, int second){
+        StringBuilder sb = new StringBuilder();
+        sb.append(year);
+        sb.append("-");
+        sb.append(getStringFromValueWithZeroWhereNecessary(month));
+        sb.append("-");
+        sb.append(getStringFromValueWithZeroWhereNecessary(day));
+        sb.append(" ");
+        sb.append(getStringFromValueWithZeroWhereNecessary(hour));
+        sb.append(":");
+        sb.append(getStringFromValueWithZeroWhereNecessary(minute));
+        sb.append(":");
+        sb.append(getStringFromValueWithZeroWhereNecessary(second));
+        return sb.toString();
+    }
+
+    private static String getStringFromValueWithZeroWhereNecessary(int value){
+        String val;
+        if(value < 10)
+            val = "0" + Integer.toString(value);
+        else
+            val = Integer.toString(value);
+        return val;
+    }
 }

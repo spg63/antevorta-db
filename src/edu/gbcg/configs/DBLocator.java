@@ -18,7 +18,7 @@ public class DBLocator {
      */
     public static List<String> redditSubsAbsolutePaths(){
         // They all live in one directory, one HDD on my laptop
-        if(StateVars.TESTING_MODE)
+        if(Finals.TESTING_MODE)
             return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath().get(0));
 
         // They each live on their own drive on the research machine
@@ -39,7 +39,7 @@ public class DBLocator {
      * @return List of file paths to comment DBs if they exist, otherwise null
      */
     public static List<String> redditComsAbsolutePaths(){
-        if(StateVars.TESTING_MODE)
+        if(Finals.TESTING_MODE)
             return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath().get(0));
         else{
             return Arrays.asList(
@@ -60,7 +60,7 @@ public class DBLocator {
      */
     public static List<String> getSubDBPath(){
         List<String> paths;
-        if(StateVars.TESTING_MODE)
+        if(Finals.TESTING_MODE)
             paths = Arrays.asList(DataPaths.LOCAL_SUB_DB_PATH);
         else{
             paths = Arrays.asList(
@@ -82,7 +82,7 @@ public class DBLocator {
      */
     public static List<String> getComDBPath(){
         List<String> paths;
-        if(StateVars.TESTING_MODE)
+        if(Finals.TESTING_MODE)
             paths = Arrays.asList(DataPaths.LOCAL_COM_DB_PATH);
         else{
             paths = Arrays.asList(
@@ -103,7 +103,7 @@ public class DBLocator {
      * @return List of absolute paths to DBs (that don't yet exist)
      */
     public static List<String> buildSubDBPaths(){
-        if(StateVars.TESTING_MODE)
+        if(Finals.TESTING_MODE)
             return buildDBPaths(getSubDBPath().get(0), DataPaths.SUB_DB_PREFIX);
         else{
             return Arrays.asList(
@@ -123,7 +123,7 @@ public class DBLocator {
      * @return List of absolute paths to the DBs (that don't yet exist)
      */
     public static List<String> buildComDBPaths(){
-        if(StateVars.TESTING_MODE)
+        if(Finals.TESTING_MODE)
             return buildDBPaths(getComDBPath().get(0), DataPaths.COM_DB_PREFIX);
         else{
             return Arrays.asList(
@@ -145,7 +145,7 @@ public class DBLocator {
     ///// USE POSTFIX IN TESTING_MODE BUT NOT IN REGULAR MODE!!!!!!!!
     private static List<String> buildDBPaths(String db_dir, String db_prefix){
         List<StringBuilder> sbs = new ArrayList<>();
-        for(int i = 0; i < StateVars.DB_SHARD_NUM; ++i){
+        for(int i = 0; i < Finals.DB_SHARD_NUM; ++i){
             StringBuilder sb = new StringBuilder();
             sb.append(db_dir);
             sb.append(db_prefix);
