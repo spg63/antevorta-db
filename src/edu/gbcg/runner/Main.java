@@ -23,7 +23,7 @@ public class Main {
         // Check and create them if they don't exist
         if(Finals.isWindows() && Finals.START_FRESH) {
             logger.warn("isWindows() was true while trying to start fresh");
-            System.exit(0);
+            logger.shutDownAndKill();
         }
 
         Stopwatch sw = Stopwatch.createStarted();

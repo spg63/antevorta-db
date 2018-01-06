@@ -43,6 +43,10 @@ public class TSL extends Thread{
         start();
     }
 
+    /**
+     * Get reference to the logger
+     * @return
+     */
     public static TSL get(){
         if(_instance == null){
             synchronized(TSL.class){
@@ -101,6 +105,10 @@ public class TSL extends Thread{
         }
     }
 
+    /**
+     * Log info
+     * @param str The log message
+     */
     public void info(Object str){
         if(!LOG_INFO || shuttingDown || loggerTerminated)
             return;
@@ -113,6 +121,10 @@ public class TSL extends Thread{
         }
     }
 
+    /**
+     * Log warnings
+     * @param str The log message
+     */
     public void warn(Object str){
         if(!LOG_WARN || shuttingDown || loggerTerminated)
             return;
@@ -125,6 +137,10 @@ public class TSL extends Thread{
         }
     }
 
+    /**
+     * Log errors
+     * @param str The log message
+     */
     public void err(Object str){
         if(shuttingDown || loggerTerminated)
             return;
@@ -137,6 +153,9 @@ public class TSL extends Thread{
         }
     }
 
+    /**
+     * Shutdown the logger, thread will sleep for 250ms to allow proper flushing
+     */
     public void shutDown() {
         shuttingDown = true;
         try {
@@ -146,6 +165,22 @@ public class TSL extends Thread{
         }
         catch(InterruptedException e){
             throw new RuntimeException("ThreadSafeLogger.shutDown() -- Unexpected interruption");
+        }
+    }
+
+    /**
+     * Shutdown the logger, sleep for half a second to allow the logger to finish flushing to disk then kill the program
+     * with exit code 6
+     */
+    public void shutDownAndKill(){
+        shuttingDown = true;
+        try{
+            itemsToLog.put(SHUTDOWN_REQ);
+            Thread.sleep(500);
+            System.exit(6);
+        }
+        catch(InterruptedException e){
+            System.exit(6);
         }
     }
 
