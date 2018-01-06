@@ -5,7 +5,6 @@ import edu.gbcg.dbInteraction.DBCommon;
 import edu.gbcg.dbInteraction.dbcreator.IndexWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.utils.c;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -107,7 +106,7 @@ public abstract class Facilitator {
         // Each iteration of the loop adds a line to a new worker thread to evenly shard the data across all DB shards
         for(String json : jsonAbsolutePaths){
             File f = new File(json);
-            c.writeln("Reading "+ f.getName());
+            TSL.get().info("Reading "+f.getName());
 
             BufferedReader br = null;
             // How many lines to read before writing to a DB shard

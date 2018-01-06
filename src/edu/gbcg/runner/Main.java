@@ -1,28 +1,24 @@
 package edu.gbcg.runner;
 
+import com.google.common.base.Stopwatch;
 import edu.gbcg.configs.columnsAndKeys.RedditComments;
 import edu.gbcg.configs.columnsAndKeys.RedditSubmissions;
 import edu.gbcg.dbInteraction.RSMapperOutput;
-import edu.gbcg.dbInteraction.TimeFormatter;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector;
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
 import edu.gbcg.configs.Finals;
+import edu.gbcg.utils.Out;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.utils.c;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        TSL logger = TSL.get();
-        // Final test commit from machine
-        TSL.get().log("Program starting");
 
+        TSL logger = TSL.get();
+        Out out = Out.get();
 
         // Check and create them if they don't exist
         if(Finals.isWindows() && Finals.START_FRESH) {
@@ -30,18 +26,17 @@ public class Main {
             System.exit(0);
         }
 
-        long start = System.currentTimeMillis();
+        Stopwatch sw = Stopwatch.createStarted();
 
-        //doSubs();
+        doSubs();
         //doComs();
 
-        long end = System.currentTimeMillis();
+        sw.stop();
 
-        NumberFormat formatter = new DecimalFormat("#0.00000");
-        c.writeln("Execution took " + formatter.format((end - start) / 1000d) + " seconds");
+        logger.info("Execution took " + out.timer(sw));
 
         // Tell the logger to close up the queue
-        TSL.get().shutDown();
+        logger.shutDown();
 
     }
 
@@ -56,12 +51,8 @@ public class Main {
         //        "score", "500");
         //List<RSMapper> results = rss.selectAllWhereColumnGreaterThan("gilded", "50");
         //List<RSMapper> results = rss.selectAllWhereColumnLessThan("created_dt", "2007-11-10 22:22:22");
-        LocalDateTime dt = TimeFormatter.SQLDateTimeToJavaDateTime(TimeFormatter.getDateStringFromValues(2017, 10,
-                13, 20, 1, 0));
-        c.writeln_err(dt.toString());
-        c.writeln_err(TimeFormatter.javaDateTimeToSQLDateTime(dt));
         List<RSMapper> results = rss.selectAllBeforeDate(2017, 10, 31, 20, 10, 0);
-        RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
+        //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
         //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
     }
 
@@ -70,7 +61,7 @@ public class Main {
         String author = "a4k04";
         //String author = "----root";
         String select_aut = "select * from "+ Finals.COM_TABLE_NAME+" where author = "+"'"+author+"' and score < -5;";
-        List<RSMapper> results = rcs.selectAllFromAuthor
+        //List<RSMapper> results = rcs.selectAllFromAuthor
         String select_all = "select * from "+ Finals.COM_TABLE_NAME+" where score > 100;";
         String sub_search = "select * from "+ Finals.COM_TABLE_NAME+" where subreddit_name = 'The_Donald' and score > 1500 limit 10;";
         String cont_search = "select * from "+ Finals.COM_TABLE_NAME+" where subreddit_name = 'The_Donald' and controversial_score > 0 limit 5;";

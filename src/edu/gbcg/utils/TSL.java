@@ -19,6 +19,7 @@ public class TSL extends Thread{
     private static volatile TSL _instance;
     public static boolean LOG_INFO = true;
     public static boolean LOG_WARN = true;
+    public static boolean LOG_TO_CONSOLE = true;
 
     private String SHUTDOWN_REQ = null;
     private volatile boolean shuttingDown, loggerTerminated;
@@ -86,6 +87,8 @@ public class TSL extends Thread{
                 sb.append(splitItem[1]);
                 pw.println(sb.toString());
                 pw.flush();
+                if(LOG_TO_CONSOLE)
+                    Out.get().writeln(sb.toString());
             }
         }
         catch(InterruptedException e){
@@ -98,7 +101,7 @@ public class TSL extends Thread{
         }
     }
 
-    public void log(Object str){
+    public void info(Object str){
         if(!LOG_INFO || shuttingDown || loggerTerminated)
             return;
         try{
@@ -106,7 +109,7 @@ public class TSL extends Thread{
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException("ThreadSafeLogger.log() -- Unexpected interruption");
+            throw new RuntimeException("ThreadSafeLogger.info() -- Unexpected interruption");
         }
     }
 

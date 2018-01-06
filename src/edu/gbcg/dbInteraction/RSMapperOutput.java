@@ -2,11 +2,12 @@ package edu.gbcg.dbInteraction;
 
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.utils.FileUtils;
-import edu.gbcg.utils.c;
+import edu.gbcg.utils.Out;
 
 import java.util.List;
 
 public class RSMapperOutput {
+    private static Out out = Out.get();
     /**
      * Print all column names and values from a DB list of RSMappers
      * @param mappers The list of RSMapper objects
@@ -14,18 +15,19 @@ public class RSMapperOutput {
      */
     public static void printAllColumnsFromRSMappers(List<RSMapper> mappers, List<String> columnNames){
         if(mappers == null){
-            c.writeln("**----- NO RESULTS -----**");
+            out.writeln("**----- NO RESULTS -----**");
             return;
         }
 
         for(RSMapper mapper : mappers){
             for(String col : columnNames){
-                String out = mapper.getString(col);
-                c.writef("%-20s: %s\n", col, out);
+                String outmap = mapper.getString(col);
+                out.writef("%-20s: %s\n", col, outmap);
             }
-            c.write("\n----------------------------------------------------------------------------------------------------\n\n");
+            out.write
+                    ("\n----------------------------------------------------------------------------------------------------\n\n");
         }
-        c.writeln("Returned " + mappers.size() + " results.");
+        out.writeln("Returned " + mappers.size() + " results.");
     }
 
     /**
@@ -36,10 +38,10 @@ public class RSMapperOutput {
      */
     public static void RSMappersToCSV(List<RSMapper> mappers, List<String> columnNames, String csvFilePath){
         if(mappers == null){
-            c.writeln("**----- NO RESULTS -----**");
+            out.writeln("**----- NO RESULTS -----**");
             return;
         }
-        c.writeln("Returned " + mappers.size() + " results.");
+        out.writeln("Returned " + mappers.size() + " results.");
 
         StringBuilder sb = new StringBuilder();
 

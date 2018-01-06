@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class FileUtils{
     private static volatile FileUtils _instance;
+    private Out out = Out.get();
 
     private FileUtils(){
     }
@@ -68,10 +69,10 @@ public class FileUtils{
             all = sb.toString();
         }
         catch(FileNotFoundException e){
-            c.writeln_err(filepath + " not found.");
+            out.writeln_err(filepath + " not found.");
         }
         catch(IOException e){
-            c.writeln_err("IOException in FileUtils.readFullFile");
+            out.writeln_err("IOException in FileUtils.readFullFile");
         }
         finally{
             if(br != null){
@@ -79,7 +80,7 @@ public class FileUtils{
                     br.close();
                 }
                 catch(IOException e){
-                    c.writeln_err("Couldn't close the br | FileUtils.readFullFile");
+                    out.writeln_err("Couldn't close the br | FileUtils.readFullFile");
                 }
             }
         }
@@ -104,7 +105,7 @@ public class FileUtils{
         }
         catch(Exception e){
             e.printStackTrace();
-            c.writeln_err("Problem with readLineByLine");
+            out.writeln_err("Problem with readLineByLine");
         }
         finally{
             if(br != null){
@@ -112,7 +113,7 @@ public class FileUtils{
                     br.close();
                 }
                 catch(IOException e){
-                    c.writeln_err("Couldn't close the br | FileUtils.readLineByLine");
+                    out.writeln_err("Couldn't close the br | FileUtils.readLineByLine");
                 }
             }
         }

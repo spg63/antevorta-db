@@ -52,7 +52,7 @@ public abstract class RSMapper {
             val = Integer.parseInt(key);
         }
         catch(NumberFormatException e){
-            TSL.get().log("NFE RSMapper.getInt");
+            TSL.get().info("NFE RSMapper.getInt");
             return 0;
         }
         return val;
@@ -71,7 +71,7 @@ public abstract class RSMapper {
             val = Double.parseDouble(stringVal);
         }
         catch(NumberFormatException e){
-            TSL.get().log("NFE RSMapper.getDouble");
+            TSL.get().info("NFE RSMapper.getDouble");
             return 0.0d;
         }
         return val;

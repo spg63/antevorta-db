@@ -1,5 +1,9 @@
 package edu.gbcg.utils;
 
+import com.google.common.base.Stopwatch;
+
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author Sean Grimes, spg63@cs.drexel.edu
  * @since 6/1/15
@@ -7,6 +11,7 @@ package edu.gbcg.utils;
 public class Out implements java.io.Serializable{
     private static final long serialVersionUID = 80085L;
     private static volatile Out _instance;
+
 
     private Out(){
     }
@@ -36,6 +41,9 @@ public class Out implements java.io.Serializable{
     }
     public void write_err(Object msg){
         System.err.print(msg);
+    }
+    public String timer(Stopwatch sw){
+        return sw.elapsed(TimeUnit.MILLISECONDS) + "ms";
     }
 
 
