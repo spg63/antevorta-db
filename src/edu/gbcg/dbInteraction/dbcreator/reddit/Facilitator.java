@@ -155,7 +155,7 @@ public abstract class Facilitator {
                         lineReadCounter = 0;
                         linesList.clear();
 
-                        if(write_total_lines_read % 50 == 0)
+                        if(write_total_lines_read % 10 == 0)
                             logger.info("We've read " + total_lines_read + " lines from " + f.getName());
                         ++write_total_lines_read;
 
@@ -170,6 +170,8 @@ public abstract class Facilitator {
                 // There could be leftover json lines that don't get push due to not meeting the dbDumpLimit amount
                 // of lines, start up the workers again and push the remaining data
                 logger.info("Launching final JSON push for " + f.getName());
+                total_lines_read += lineReadCounter;
+                logger.info("Total lines read " + total_lines_read + " for " + f.getName());
                 letWorkersFly(linesList);
             }
             catch(IOException e){

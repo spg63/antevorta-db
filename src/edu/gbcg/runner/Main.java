@@ -32,11 +32,13 @@ public class Main {
 
         Finals.START_FRESH = true;
 
+        /*
         // Check and create them if they don't exist
         if(Finals.isWindows() && Finals.START_FRESH) {
             logger.err("isWindows() was true while trying to start fresh");
             logger.shutDownAndKill();
         }
+        */
 
         Stopwatch sw = Stopwatch.createStarted();
 
@@ -55,8 +57,10 @@ public class Main {
     }
 
     public static void doSubs(){
-        if(Finals.START_FRESH)
+        if(Finals.START_FRESH) {
             buildDBShards(new SubmissionsFacilitator());
+            return;
+        }
 
         Selector rss = new RedditSubSelector();
         //List<RSMapper> results = rss.selectAllFromAuthor("a4k04");
@@ -80,8 +84,10 @@ public class Main {
     }
 
     public static void doComs(){
-        if(Finals.START_FRESH)
+        if(Finals.START_FRESH) {
             buildDBShards(new CommentsFacilitator());
+            return;
+        }
 
         Selector rcs = new RedditComSelector();
         String author = "a4k04";
