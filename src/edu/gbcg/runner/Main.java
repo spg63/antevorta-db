@@ -26,25 +26,6 @@ public class Main {
 
         Finals.START_FRESH = true;
 
-        // Convert from LDT (system default) to Epoch seconds
-        LocalDateTime ldt = LocalDateTime.now();
-        ZonedDateTime zdt = ldt.atZone(ZoneId.systemDefault());
-        logger.info("epoch orig: " + zdt.toEpochSecond());
-
-        // Get UTC seconds from LDT
-        long epoch = TimeFormatter.LDTtoUTCSeconds(ldt);
-        logger.info("epoch call: " + epoch);
-
-        // Get LDT from UTC seconds
-        LocalDateTime l = TimeFormatter.utcSecondsToLDT(1509494400l);
-        logger.info("LDT FROM: " + l);
-
-        long back = TimeFormatter.LDTtoUTCSeconds(LocalDateTime.of(2017, 10, 31, 20, 00, 00));
-        logger.info("back: " + back);
-
-        logger.shutDownAndKill();
-        System.exit(0);
-
         // Check and create them if they don't exist
         if(Finals.isWindows() && Finals.START_FRESH) {
             logger.err("isWindows() was true while trying to start fresh");
@@ -69,6 +50,8 @@ public class Main {
         Facilitator fac = new SubmissionsFacilitator();
         fac.createDBs();
         fac.pushJSONDataIntoDBs();
+        TSL.get().info("Finished creating the DB shards");
+        TSL.get().shutDownAndKill();
 
         Selector rss = new RedditSubSelector();
         //List<RSMapper> results = rss.selectAllFromAuthor(author);

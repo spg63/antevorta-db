@@ -23,6 +23,7 @@ public abstract class Facilitator {
     protected List<String> jsonAbsolutePaths;   // Paths to the json files
     protected List<String> jsonKeysOfInterest;  // JSON keys we care about grabbing for the DB
     protected String tableName;                 // The name of the table in the DB
+    protected TSL logger = TSL.get();
 
     public Facilitator(){
         this.DBAbsolutePaths        = getDBAbsolutePaths();
@@ -59,6 +60,8 @@ public abstract class Facilitator {
 
         // The DBs exist but we want to start fresh, get rid of them
         if(dbs_exist && Finals.START_FRESH){
+            logger.warn("DB shards exist && starting fresh");
+            logger.warn("Dropping table in DB shards");
             String sql = "drop table if exists " + this.tableName + ";";
             for(String dbPath : this.DBAbsolutePaths)
                 DBCommon.delete(dbPath, sql);
@@ -66,6 +69,7 @@ public abstract class Facilitator {
 
         // The DBs don't exist, create them
         if(!dbs_exist){
+            logger.info("Creating DB shard paths and initializing DB files");
             // Create the directories that hold the DBs
             for(String path : DBDirectoryPaths)
                 FileUtils.get().checkAndCreateDir(path);
@@ -88,9 +92,11 @@ public abstract class Facilitator {
         sb.append(");");
         String sql = sb.toString();
 
+        logger.info("Writing table to DB shards");
         // Create the table in the DB shards
         for(String DB : DBAbsolutePaths)
             DBCommon.insert(DB, sql);
+        logger.info("DBs have been created");
     }
 
     public void pushJSONDataIntoDBs(){
@@ -106,12 +112,13 @@ public abstract class Facilitator {
         // Each iteration of the loop adds a line to a new worker thread to evenly shard the data across all DB shards
         for(String json : jsonAbsolutePaths){
             File f = new File(json);
-            TSL.get().info("Reading "+f.getName());
+            logger.info("Reading " + f.getName());
 
             BufferedReader br = null;
             // How many lines to read before writing to a DB shard
             int dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT;
             int lineReadCounter = 0;
+            long total_lines_read = 0;
             int whichWorker = 0;
 
             List<List<String>> linesList = new ArrayList<>();
@@ -135,8 +142,11 @@ public abstract class Facilitator {
                         letWorkersFly(linesList);
 
                         // Reset the trackers and clear the lines list to recover the memory from 5000 lines of JSON
+                        total_lines_read += lineReadCounter;
                         lineReadCounter = 0;
                         linesList.clear();
+
+                        logger.info("We've read :" + total_lines_read + " from " + f.getName());
 
                         // Give the linesList new ArrayLists to store the lines
                         for(int j = 0; j < Finals.DB_SHARD_NUM; ++j)
@@ -148,10 +158,11 @@ public abstract class Facilitator {
 
                 // There could be leftover json lines that don't get push due to not meeting the dbDumpLimit amount
                 // of lines, start up the workers again and push the remaining data
+                logger.info("Launching final JSON push for " + f.getName());
                 letWorkersFly(linesList);
             }
             catch(IOException e){
-                TSL.get().err("Facilitator.pushJSONDataIntoDBs IOException");
+                logger.err("Facilitator.pushJSONDataIntoDBs IOException");
             }
             finally{
                 if(br != null){
@@ -159,7 +170,7 @@ public abstract class Facilitator {
                         br.close();
                     }
                     catch(IOException e){
-                        TSL.get().err("Facilitator.pushJSONDataIntoDBs br.close IOException");
+                        logger.err("Facilitator.pushJSONDataIntoDBs br.close IOException");
                     }
                 }
             }
@@ -190,13 +201,14 @@ public abstract class Facilitator {
                 threads.get(i).join();
             }
             catch(InterruptedException e){
-                TSL.get().err("Facilitator.letWorkersFly InterruptedException");
+                logger.err("Facilitator.letWorkersFly InterruptedException");
                 e.printStackTrace();
             }
         }
     }
 
     public void createDBIndex(String columnName, String indexName){
+        logger.info("Creating " + indexName + " on column " + columnName);
         List<Thread> workers = new ArrayList<>();
         List<Connection> conns = new ArrayList<>();
         String sql = DBCommon.getDBIndexSQLStatement(this.tableName, columnName, indexName);

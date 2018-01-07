@@ -24,6 +24,7 @@ import java.util.Map;
  */
 public abstract class RSMapper {
     protected Map<String, String> map = new HashMap<>();
+    protected TSL logger = TSL.get();
 
     /**
      * Given a map of column names to column data, create an RSMapper
@@ -54,7 +55,7 @@ public abstract class RSMapper {
             val = Integer.parseInt(key);
         }
         catch(NumberFormatException e){
-            TSL.get().warn("NFE RSMapper.getInt");
+            logger.warn("NFE RSMapper.getInt");
             return 0;
         }
         return val;
@@ -73,7 +74,7 @@ public abstract class RSMapper {
             val = Long.parseLong(key);
         }
         catch(NumberFormatException e){
-            TSL.get().warn("NFE RSMapper.getLong");
+            logger.warn("NFE RSMapper.getLong");
             return 0;
         }
         return val;
@@ -88,7 +89,7 @@ public abstract class RSMapper {
     public LocalDateTime getLTDFromColumnHoldingUTCSeconds(String key){
         long time = getLong(key);
         if(time == 0) {
-            TSL.get().warn("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object");
+            logger.warn("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object");
             return null;
         }
         return TimeFormatter.utcSecondsToLDT(time);
@@ -107,7 +108,7 @@ public abstract class RSMapper {
             val = Double.parseDouble(stringVal);
         }
         catch(NumberFormatException e){
-            TSL.get().warn("NFE RSMapper.getDouble");
+            logger.warn("NFE RSMapper.getDouble");
             return 0.0d;
         }
         return val;
@@ -198,10 +199,9 @@ public abstract class RSMapper {
             }
 
         }catch(SQLException e){
-            TSL.get().err("RSMapper.buildMappers SQLException");
+            logger.err("RSMapper.buildMappers SQLException");
             e.printStackTrace();
         }
-
         return maps;
     }
 }
