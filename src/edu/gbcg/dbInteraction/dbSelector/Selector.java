@@ -1,7 +1,12 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction.dbSelector;
 
 import edu.gbcg.configs.Finals;
-import edu.gbcg.dbInteraction.TimeFormatter;
+import edu.gbcg.dbInteraction.TimeUtils;
 import edu.gbcg.utils.TSL;
 
 import java.time.LocalDateTime;
@@ -82,37 +87,35 @@ public abstract class Selector {
     //------ NEED MUCH MORE DATE FUNCTIONS
 
     public List<RSMapper> selectAllAfterDate(int year, int month, int day, int hour, int minute, int second) {
-        long utc = TimeFormatter.utcSecondsFromValues(year, month, day, hour, minute, second);
+        long utc = TimeUtils.utcSecondsFromValues_SEL(year, month, day, hour, minute, second);
         return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, Long.toString(utc));
     }
 
     public List<RSMapper> selectAllAfterDate(LocalDateTime dt){
-        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, Long.toString(TimeFormatter.utcSecondsFromLDT(dt)));
+        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, Long.toString(TimeUtils.utcSecondsFromLDT_SEL(dt)));
     }
 
     public List<RSMapper> selectAllBeforeDate(int year, int month, int day, int hour, int minute, int second){
-        long utc = TimeFormatter.utcSecondsFromValues(year, month, day, hour, minute, second);
+        long utc = TimeUtils.utcSecondsFromValues_SEL(year, month, day, hour, minute, second);
         return selectAllWhereColumnLessThan(Finals.CREATED_DT, Long.toString(utc));
     }
 
     public List<RSMapper> selectAllBeforeDate(LocalDateTime dt){
-        return selectAllWhereColumnLessThan(Finals.CREATED_DT, Long.toString(TimeFormatter.utcSecondsFromLDT(dt)));
+        return selectAllWhereColumnLessThan(Finals.CREATED_DT, Long.toString(TimeUtils.utcSecondsFromLDT_SEL(dt)));
     }
 
     public List<RSMapper> selectAllBetweenDates(int start_year, int start_month, int start_day,
                                                 int start_hour, int start_minute, int start_second,
                                                 int end_year, int end_month, int end_day,
                                                 int end_hour, int end_minute, int end_second){
-        LocalDateTime start = TimeFormatter.getLDTfromValues(start_year, start_month, start_day,
-                                                             start_hour, start_minute, start_second);
-        LocalDateTime end = TimeFormatter.getLDTfromValues(end_year, end_month, end_day,
-                                                            end_hour, end_minute, end_second);
+        LocalDateTime start = LocalDateTime.of(start_year,start_month,start_day,start_hour,start_minute,start_second);
+        LocalDateTime end = LocalDateTime.of(end_year, end_month, end_day, end_hour, end_minute, end_second);
         return selectAllBetweenDates(start, end);
     }
 
     public List<RSMapper> selectAllBetweenDates(LocalDateTime start, LocalDateTime end){
-        long startDate = TimeFormatter.utcSecondsFromLDT(start);
-        long endDate = TimeFormatter.utcSecondsFromLDT(end);
+        long startDate = TimeUtils.utcSecondsFromLDT_SEL(start);
+        long endDate = TimeUtils.utcSecondsFromLDT_SEL(end);
         DBSelector selector = new DBSelector()
                 .from(this.tableName)
                 .where(Finals.CREATED_DT + " > '" + startDate + "'")

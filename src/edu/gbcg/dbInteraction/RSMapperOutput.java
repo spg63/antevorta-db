@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction;
 
 import edu.gbcg.configs.Finals;
@@ -25,7 +30,7 @@ public class RSMapperOutput {
                 String outmap = mapper.getString(col);
                 // Special case for printing time, don't print UTC, print a LocalDateTime object
                 if(Finals.CREATED_DT.equals(col))
-                    outmap = TimeFormatter.utcSecondsToZDT(outmap);
+                    outmap = TimeUtils.utcSecondsToZDT(outmap);
                 out.writef("%-20s: %s\n", col, outmap);
             }
             out.write

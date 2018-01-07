@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction.dbcreator.reddit;
 
 import edu.gbcg.configs.Finals;
@@ -132,7 +137,6 @@ public abstract class Facilitator {
                 // This function will return a reader capable of reading compressed BZ2 data without decompressing
                 // the entire file, pretty swell.
                 br = FileUtils.get().getBufferedReaderForBZ2FileType(json);
-                logger.warn("json: " + json);
                 String line = br.readLine();
                 while(line != null){
                     ++lineReadCounter;
@@ -153,7 +157,7 @@ public abstract class Facilitator {
                         linesList.clear();
 
                         if(write_total_lines_read % 50 == 0)
-                            logger.info("We've read: " + total_lines_read + " lines from " + f.getName());
+                            logger.info("We've read " + total_lines_read + " lines from " + f.getName());
                         ++write_total_lines_read;
 
                         // Give the linesList new ArrayLists to store the lines

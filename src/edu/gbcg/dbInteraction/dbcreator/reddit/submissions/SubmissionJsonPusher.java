@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction.dbcreator.reddit.submissions;
 
 import edu.gbcg.dbInteraction.DBCommon;
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.dbInteraction.TimeFormatter;
 import org.json.JSONObject;
 
 import java.sql.Connection;
@@ -57,8 +61,8 @@ public class SubmissionJsonPusher extends JsonPusher {
                 // column = created_dt
                 Long created_utc = this.json_objects.get(i).optLong("created_utc", 0);
                 /*
-                String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcToLDT(created_utc.toString())
+                String created_dt = TimeUtils.javaDateTimeToSQLDateTime(
+                        TimeUtils.utcToLDT(created_utc.toString())
                 );
                 */
                 ps.setLong(key, created_utc); ++key;
@@ -158,8 +162,8 @@ public class SubmissionJsonPusher extends JsonPusher {
                 // column = scraped_on
                 Long scraped_utc = this.json_objects.get(i).optLong("retrieved_on", 0);
                 /*
-                String scraped_on = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcSecondsToLDT(scraped_utc.toString())
+                String scraped_on = TimeUtils.javaDateTimeToSQLDateTime(
+                        TimeUtils.utcSecondsToLDT(scraped_utc.toString())
                 );
                 */
                 ps.setLong(key, scraped_utc); ++key;

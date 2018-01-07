@@ -1,6 +1,11 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction.dbSelector;
 
-import edu.gbcg.dbInteraction.TimeFormatter;
+import edu.gbcg.dbInteraction.TimeUtils;
 import edu.gbcg.utils.TSL;
 
 import java.sql.ResultSet;
@@ -92,7 +97,7 @@ public abstract class RSMapper {
             logger.warn("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object");
             return null;
         }
-        return TimeFormatter.utcSecondsToLDT(time);
+        return TimeUtils.utcSecondsToLDT(time);
     }
 
     /**

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.runner;
 
 import com.google.common.base.Stopwatch;
@@ -16,6 +21,7 @@ import edu.gbcg.utils.Out;
 import edu.gbcg.utils.TSL;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Main {
@@ -34,8 +40,8 @@ public class Main {
 
         Stopwatch sw = Stopwatch.createStarted();
 
-        doSubs();
-        //doComs();
+        //doSubs();
+        doComs();
 
         sw.stop();
 
@@ -48,11 +54,12 @@ public class Main {
     }
 
     public static void doSubs(){
+    /*
         Facilitator fac = new SubmissionsFacilitator();
         fac.createDBs();
         fac.pushJSONDataIntoDBs();
+    */
 
-/*
         Selector rss = new RedditSubSelector();
         //List<RSMapper> results = rss.selectAllFromAuthor("a4k04");
         //List<RSMapper> results = rss.selectAllWhereColumnEquals("subreddit_name", "apple");
@@ -72,16 +79,14 @@ public class Main {
 
         RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
         //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
- */
     }
 
     public static void doComs(){
-        /*
         Facilitator fac = new CommentsFacilitator();
         fac.createDBs();
         fac.pushJSONDataIntoDBs();
-        */
 
+/*
         Selector rcs = new RedditComSelector();
         String author = "a4k04";
         //String author = "----root";
@@ -93,5 +98,6 @@ public class Main {
         //List<RSMapper> results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", author, "score", "0");
         List<RSMapper> results = rcs.selectAllAfterDate(2017, 11, 30, 23, 59, 00);
         //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting());
+*/
     }
 }

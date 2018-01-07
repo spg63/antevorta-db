@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.configs;
 
 /**
@@ -6,16 +11,11 @@ package edu.gbcg.configs;
  */
 public class DataPaths {
     // File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL)
-    //public static final String LOCAL_SUB_DATA_PATH = "LocalData/raw/submissions/";
-    //public static final String LOCAL_COM_DATA_PATH = "LocalData/raw/comments/";
     public static final String LOCAL_SUB_DATA_PATH = "LocalData/compressed/submissions/";
     public static final String LOCAL_COM_DATA_PATH = "LocalData/compressed/comments/";
 
-    //public static final String SUB_DATA_PATH = "A:/Data/Uncompressed/Reddit/Submissions/";
-    //public static final String COM_DATA_PATH = "A:/Data/Uncompressed/Reddit/Comments/";
     public static final String SUB_DATA_PATH = "A:/Data/Compressed/Reddit/Submissions/";
     public static final String COM_DATA_PATH = "A:/Data/Compressed/Reddit/Comments/";
-
 
     public static final String LOCAL_SUB_DB_PATH = "LocalDB/RedditSubs/";
     public static final String LOCAL_COM_DB_PATH = "LocalDB/RedditComs/";

@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction.dbcreator.reddit.comments;
 
 import edu.gbcg.dbInteraction.DBCommon;
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher;
 import edu.gbcg.utils.TSL;
-import edu.gbcg.dbInteraction.TimeFormatter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,8 +55,8 @@ public class CommentsJsonPusher extends JsonPusher{
                 // column = created_dt
                 Long created_utc = this.json_objects.get(i).optLong("created_utc", 0);
                 /*
-                String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcSecondsToLDT(created_utc.toString())
+                String created_dt = TimeUtils.javaDateTimeToSQLDateTime(
+                        TimeUtils.utcSecondsToLDT(created_utc.toString())
                 );
                 */
                 ps.setLong(key, created_utc); ++key;
@@ -92,8 +96,8 @@ public class CommentsJsonPusher extends JsonPusher{
                 // column = scraped_on
                 Long retrieved_on = this.json_objects.get(i).optLong("retrieved_on", 0);
                 /*
-                String scraped_on = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcSecondsToLDT(retrieved_on.toString())
+                String scraped_on = TimeUtils.javaDateTimeToSQLDateTime(
+                        TimeUtils.utcSecondsToLDT(retrieved_on.toString())
                 );
                 */
                 ps.setLong(key, retrieved_on); ++key;

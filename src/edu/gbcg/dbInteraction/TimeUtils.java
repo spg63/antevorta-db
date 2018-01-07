@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018 Sean Grimes. All rights reserved.
+ * License: MIT License
+ */
+
 package edu.gbcg.dbInteraction;
 
 import java.time.*;
@@ -7,14 +12,19 @@ import java.util.TimeZone;
  * Class to convert to and from seconds from epoch UTC, Java LocalDateTime and SQLite datetime
  * objects
  */
-public class TimeFormatter {
+public class TimeUtils {
+
     /**
-     * Convert a seconds from epoch UTC string to a LocalDateTime object
-     * @param utcSeconds The seconds from epoch string
-     * @return The LocalDateTime object
+     * Return the utc seconds since epoch from LocalDateTime
+     * NOTE: This function intentionally returns uncorrected UTC seconds. It assumes that the LocalDateTime object is
+     * created with the intention of being zoned in 'UTC'. This is only intended to be used for selection queries so
+     * users don't need to worry about their time zone vs that of UTC
+     * @param ldt The LocalDateTime object
+     * @return The intentionally uncorrected, utc zoned, seconds since epoch.
      */
-    public static LocalDateTime utcSecondsToLDT(String utcSeconds){
-        return utcSecondsToLDT(Long.parseLong(utcSeconds));
+    public static long utcSecondsFromLDT_SEL(LocalDateTime ldt){
+        return utcSecondsFromValues_SEL(ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(),
+                ldt.getHour(), ldt.getMinute(), ldt.getSecond());
     }
 
     /**
@@ -23,17 +33,17 @@ public class TimeFormatter {
      * calculating the time offset.
      * NOTE: If you need to get the correct UTC value, including offset from system defaul, use the LDTtoUTCSeconds
      * function found below this one
-     * @param year
-     * @param month
-     * @param day
-     * @param hour
-     * @param minute
-     * @param second
+     * @param year The year
+     * @param month The month
+     * @param day The day
+     * @param hour The hour
+     * @param minute The minute
+     * @param second The second
      * @return An intentionally uncorrected utc value from the system local time
      */
-    public static long utcSecondsFromValues(int year, int month, int day,
-                                            int hour, int minute, int second){
-        LocalDateTime ldt = getLDTfromValues(year, month, day, hour, minute, second);
+    public static long utcSecondsFromValues_SEL(int year, int month, int day,
+                                                int hour, int minute, int second){
+        LocalDateTime ldt = LocalDateTime.of(year, month, day, hour, minute, second);
         ZonedDateTime zdt = ldt.atZone(ZoneId.of("UTC"));
         return zdt.toEpochSecond();
     }
@@ -58,6 +68,15 @@ public class TimeFormatter {
         long utc = Long.parseLong(utcSeconds);
         Instant i = Instant.ofEpochSecond(utc);
         return ZonedDateTime.ofInstant(i, ZoneId.of("UTC")).toString();
+    }
+
+    /**
+     * Convert a seconds from epoch UTC string to a LocalDateTime object
+     * @param utcSeconds The seconds from epoch string
+     * @return The LocalDateTime object
+     */
+    public static LocalDateTime utcSecondsToLDT(String utcSeconds){
+        return utcSecondsToLDT(Long.parseLong(utcSeconds));
     }
 
     /**
@@ -126,25 +145,7 @@ public class TimeFormatter {
         return LocalDateTime.of(year, month, day, hour, minute, second);
     }
 
-    /**
-     * Build a LDT object compatible date-time string based on numeric values
-     * @param year
-     * @param month
-     * @param day
-     * @param hour
-     * @param minute
-     * @param second
-     * @return The LDT compatible date-time object
-     */
-    public static LocalDateTime getLDTfromValues(int year, int month, int day,
-                                                 int hour, int minute, int second){
-        return LocalDateTime.of(year, month, day, hour, minute, second);
-    }
 
-    public static long utcSecondsFromLDT(LocalDateTime ldt){
-        return utcSecondsFromValues(ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(),
-                                    ldt.getHour(), ldt.getMinute(), ldt.getSecond());
-    }
 
     private static String getStringFromValueWithZeroWhereNecessary(int value){
         String val;
