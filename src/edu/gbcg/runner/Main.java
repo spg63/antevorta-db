@@ -4,14 +4,18 @@ import com.google.common.base.Stopwatch;
 import edu.gbcg.configs.columnsAndKeys.RedditComments;
 import edu.gbcg.configs.columnsAndKeys.RedditSubmissions;
 import edu.gbcg.dbInteraction.RSMapperOutput;
+import edu.gbcg.dbInteraction.TimeFormatter;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector;
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector;
 import edu.gbcg.dbInteraction.dbSelector.Selector;
 import edu.gbcg.configs.Finals;
+import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator;
+import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator;
 import edu.gbcg.utils.Out;
 import edu.gbcg.utils.TSL;
 
+import java.time.*;
 import java.util.List;
 
 public class Main {
@@ -20,9 +24,30 @@ public class Main {
         TSL logger = TSL.get();
         Out out = Out.get();
 
+        Finals.START_FRESH = true;
+
+        // Convert from LDT (system default) to Epoch seconds
+        LocalDateTime ldt = LocalDateTime.now();
+        ZonedDateTime zdt = ldt.atZone(ZoneId.systemDefault());
+        logger.info("epoch orig: " + zdt.toEpochSecond());
+
+        // Get UTC seconds from LDT
+        long epoch = TimeFormatter.LDTtoUTCSeconds(ldt);
+        logger.info("epoch call: " + epoch);
+
+        // Get LDT from UTC seconds
+        LocalDateTime l = TimeFormatter.utcSecondsToLDT(1509494400l);
+        logger.info("LDT FROM: " + l);
+
+        long back = TimeFormatter.LDTtoUTCSeconds(LocalDateTime.of(2017, 10, 31, 20, 00, 00));
+        logger.info("back: " + back);
+
+        logger.shutDownAndKill();
+        System.exit(0);
+
         // Check and create them if they don't exist
         if(Finals.isWindows() && Finals.START_FRESH) {
-            logger.warn("isWindows() was true while trying to start fresh");
+            logger.err("isWindows() was true while trying to start fresh");
             logger.shutDownAndKill();
         }
 
@@ -41,6 +66,10 @@ public class Main {
     }
 
     public static void doSubs(){
+        Facilitator fac = new SubmissionsFacilitator();
+        fac.createDBs();
+        fac.pushJSONDataIntoDBs();
+
         Selector rss = new RedditSubSelector();
         //List<RSMapper> results = rss.selectAllFromAuthor(author);
         //List<RSMapper> results = rss.selectAllWhereColumnEquals("subreddit_name", "apple");
@@ -51,11 +80,10 @@ public class Main {
         //        "score", "500");
         //List<RSMapper> results = rss.selectAllWhereColumnGreaterThan("gilded", "50");
         //List<RSMapper> results = rss.selectAllWhereColumnLessThan("created_dt", "2007-11-10 22:22:22");
-        //List<RSMapper> results = rss.selectAllBetweenDates(2017, 10, 31, 23, 23, 59, 2017, 11, 1, 0, 0, 0);
-        List<RSMapper> results = rss.selectAllAfterDate(2017, 11, 30, 10, 00, 00);
-        TSL.get().info(results.size() + " results returned");
+        List<RSMapper> results = rss.selectAllBetweenDates(2017, 11, 30, 19, 0, 0, 2017, 11, 30, 23, 59, 59);
+        //List<RSMapper> results = rss.selectAllAfterDate(2017, 11, 30, 10, 00, 00);
         //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
-        //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
+        RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
     }
 
     public static void doComs(){

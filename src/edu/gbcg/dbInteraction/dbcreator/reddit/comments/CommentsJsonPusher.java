@@ -50,10 +50,12 @@ public class CommentsJsonPusher extends JsonPusher{
 
                 // column = created_dt
                 Long created_utc = this.json_objects.get(i).optLong("created_utc", 0);
+                /*
                 String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcToLDT(created_utc.toString())
+                        TimeFormatter.utcSecondsToLDT(created_utc.toString())
                 );
-                ps.setString(key, created_dt); ++key;
+                */
+                ps.setLong(key, created_utc); ++key;
 
                 // column = distinguished
                 String dist = this.json_objects.get(i).optString("distinguished", "null");
@@ -89,10 +91,12 @@ public class CommentsJsonPusher extends JsonPusher{
 
                 // column = scraped_on
                 Long retrieved_on = this.json_objects.get(i).optLong("retrieved_on", 0);
+                /*
                 String scraped_on = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcToLDT(retrieved_on.toString())
+                        TimeFormatter.utcSecondsToLDT(retrieved_on.toString())
                 );
-                ps.setString(key, scraped_on); ++key;
+                */
+                ps.setLong(key, retrieved_on); ++key;
 
                 // column = score
                 int score = this.json_objects.get(i).optInt("score", 0);

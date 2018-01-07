@@ -1,9 +1,11 @@
 package edu.gbcg.dbInteraction.dbSelector;
 
+import edu.gbcg.dbInteraction.TimeFormatter;
 import edu.gbcg.utils.TSL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,10 +54,44 @@ public abstract class RSMapper {
             val = Integer.parseInt(key);
         }
         catch(NumberFormatException e){
-            TSL.get().info("NFE RSMapper.getInt");
+            TSL.get().warn("NFE RSMapper.getInt");
             return 0;
         }
         return val;
+    }
+
+    /**
+     * Get the value as a long
+     * @param key Column name
+     * @return The value or 0 if the value can't be returned as a long
+     */
+    public long getLong(String key){
+        String stringVal = getItem(key);
+        if(stringVal == null || stringVal == "") return 0;
+        long val;
+        try{
+            val = Long.parseLong(key);
+        }
+        catch(NumberFormatException e){
+            TSL.get().warn("NFE RSMapper.getLong");
+            return 0;
+        }
+        return val;
+    }
+
+    /**
+     * Get the value as an LocalDateTime object. One assumes this is only called for columns that contain time stored
+     * in UTC seconds
+     * @param key
+     * @return The LocalDateTime object if possible, else null
+     */
+    public LocalDateTime getLTDFromColumnHoldingUTCSeconds(String key){
+        long time = getLong(key);
+        if(time == 0) {
+            TSL.get().warn("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object");
+            return null;
+        }
+        return TimeFormatter.utcSecondsToLDT(time);
     }
 
     /**
@@ -71,7 +107,7 @@ public abstract class RSMapper {
             val = Double.parseDouble(stringVal);
         }
         catch(NumberFormatException e){
-            TSL.get().info("NFE RSMapper.getDouble");
+            TSL.get().warn("NFE RSMapper.getDouble");
             return 0.0d;
         }
         return val;

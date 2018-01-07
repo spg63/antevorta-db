@@ -48,10 +48,10 @@ public class RedditComments {
         return Arrays.asList(
                 " INTEGER PRIMARY KEY AUTOINCREMENT,",  " TEXT,",               " TEXT,",
                 " TEXT,",                               " INTEGER DEFAULT 0,",  " INTEGER DEFAULT 0,",
-                " DATETIME,",                           " TEXT,",               " INTEGER DEFAULT 0,",
+                " INTEGER,",                            " TEXT,",               " INTEGER DEFAULT 0,",
                 " INTEGER DEFAULT 0,",                  " TEXT,",               " INTEGER DEFAULT 0,",
                 " TEXT,",                               " TEXT,",               " TEXT,",
-                " DATETIME,",                           " INTEGER DEFAULT 0,",  " INTEGER DEFAULT 0,",
+                " INTEGER,",                            " INTEGER DEFAULT 0,",  " INTEGER DEFAULT 0,",
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " INTEGER,",                            " REAL,",               " TEXT,",
                 " TEXT,",                               " TEXT,",               " TEXT"

@@ -110,7 +110,6 @@ public abstract class Selector {
                 .from(this.tableName)
                 .where(Finals.CREATED_DT + " > '" + startDate + "'")
                 .and(Finals.CREATED_DT + " < '" + endDate + "'");
-        TSL.get().info(selector.sql());
         return generalSelection(selector.sql());
     }
 
@@ -181,8 +180,11 @@ public abstract class Selector {
 
         executor.shutdown();
 
-        if(results.isEmpty())
+        if(results.isEmpty()) {
+            TSL.get().info(SQLStatement + " --- 0 results.");
             return null;
+        }
+        TSL.get().info(SQLStatement + " --- " + results.size() + " results.");
         return results;
     }
     /*

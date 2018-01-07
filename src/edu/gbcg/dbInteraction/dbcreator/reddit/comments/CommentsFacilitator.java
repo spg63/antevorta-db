@@ -53,14 +53,14 @@ public class CommentsFacilitator extends Facilitator{
     }
 
     protected void createIndices(){
-        createDBIndex("author", "attrs_author");
+        createDBIndex(Finals.AUTHOR, "attrs_author");
         createDBIndex("controversial_score", "attrs_cont_score");
-        createDBIndex("created_dt", "attrs_created");
+        createDBIndex(Finals.CREATED_DT, "attrs_created");
         createDBIndex("gilded", "attrs_gilded");
-        createDBIndex("pid", "attrs_pid");                          //*****
-        createDBIndex("link_id", "attrs_linkid");                   //*****
-        createDBIndex("parent_id", "attrs_parentid");               //*****
-        createDBIndex("score", "attrs_score");
+        createDBIndex(Finals.POST_ID, "attrs_pid");
+        createDBIndex("link_id", "attrs_linkid");
+        createDBIndex("parent_id", "attrs_parentid");
+        createDBIndex(Finals.SCORE, "attrs_score");
         createDBIndex("subreddit_name", "attrs_sub_name");
         createDBIndex("subreddit_id", "attrs_sub_id");
     }

@@ -56,10 +56,12 @@ public class SubmissionJsonPusher extends JsonPusher {
 
                 // column = created_dt
                 Long created_utc = this.json_objects.get(i).optLong("created_utc", 0);
+                /*
                 String created_dt = TimeFormatter.javaDateTimeToSQLDateTime(
                         TimeFormatter.utcToLDT(created_utc.toString())
                 );
-                ps.setString(key, created_dt); ++key;
+                */
+                ps.setLong(key, created_utc); ++key;
 
                 // column = distinguished
                 String dis = this.json_objects.get(i).optString("distinguished", "null");
@@ -155,10 +157,12 @@ public class SubmissionJsonPusher extends JsonPusher {
 
                 // column = scraped_on
                 Long scraped_utc = this.json_objects.get(i).optLong("retrieved_on", 0);
+                /*
                 String scraped_on = TimeFormatter.javaDateTimeToSQLDateTime(
-                        TimeFormatter.utcToLDT(scraped_utc.toString())
+                        TimeFormatter.utcSecondsToLDT(scraped_utc.toString())
                 );
-                ps.setString(key, scraped_on); ++key;
+                */
+                ps.setLong(key, scraped_utc); ++key;
 
                 // column = score
                 int score = this.json_objects.get(i).optInt("score", 0);

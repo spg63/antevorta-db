@@ -1,7 +1,8 @@
 package edu.gbcg.dbInteraction;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import edu.gbcg.utils.TSL;
+
+import java.time.*;
 import java.util.TimeZone;
 
 /**
@@ -11,13 +12,43 @@ import java.util.TimeZone;
 public class TimeFormatter {
     /**
      * Convert a seconds from epoch UTC string to a LocalDateTime object
-     * @param utc The seconds from epoch string
+     * @param utcSeconds The seconds from epoch string
      * @return The LocalDateTime object
      */
-    public static LocalDateTime utcToLDT(String utc){
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(utc)),
-                TimeZone.getDefault().toZoneId());
+    public static LocalDateTime utcSecondsToLDT(String utcSeconds){
+        return utcSecondsToLDT(Long.parseLong(utcSeconds));
     }
+
+    /**
+     * Convert a utc timestamp to a LocalDateTime object using the default system timezone
+     * @param utcSeconds
+     * @return The LocalDateTime object
+     */
+    public static LocalDateTime utcSecondsToLDT(Long utcSeconds){
+        Instant i = Instant.ofEpochSecond(utcSeconds);
+        ZonedDateTime z = ZonedDateTime.ofInstant(i, TimeZone.getDefault().toZoneId());
+        return z.toLocalDateTime();
+    }
+
+    /**
+     * Convert a LocalDateTime object to UTC seconds
+     * @param ldt The local date time object
+     * @return the UTC time as a long
+     */
+    public static long LDTtoUTCSeconds(LocalDateTime ldt){
+        ZonedDateTime zdt = ldt.atZone(ZoneId.systemDefault());
+        return zdt.withZoneSameInstant(ZoneId.of("UTC")).toEpochSecond();
+    }
+
+    /**
+     * Convert an SQLite compatible time string to UTC seconds
+     * @param sqlTime The SQLite compatible time string
+     * @return utc time as a long
+     */
+    public static long sqlTimeToUTC(String sqlTime){
+        return SQLDateTimeToJavaDateTime(sqlTime).atZone(ZoneId.systemDefault()).toEpochSecond();
+    }
+
 
     /**
      * Convert a java LocalDateTime object to an SQLite DateTime compatible object

@@ -71,17 +71,18 @@ public class RedditSubmissions {
         );
     }
 
+    // Problem with datetime
     public static List<String> dataTypes(){
         return Arrays.asList(
                 " INTEGER PRIMARY KEY AUTOINCREMENT,",  " INTEGER DEFAULT 0,",  " TEXT,",
-                " INTEGER DEFAULT 0,",                  " INTEGER DEFAULT 0,",  " DATETIME,",
+                " INTEGER DEFAULT 0,",                  " INTEGER DEFAULT 0,",  " INTEGER,",
                 " TEXT,",                               " TEXT,",               " INTEGER DEFAULT 0,",
                 " INTEGER,",                            " INTEGER DEFAULT 0,",  " TEXT,",
                 " INTEGER DEFAULT 0,",                  " INTEGER DEFAULT 0,",  " TEXT,",
                 " INTEGER DEFAULT 0,",                  " INTEGER,",            " TEXT,",
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " INTEGER,",                            " INTEGER DEFAULT 0,",  " TEXT,",
-                " INTEGER DEFAULT 0,",                  " DATETIME,",           " INTEGER,",
+                " INTEGER DEFAULT 0,",                  " INTEGER,",            " INTEGER,",
                 " TEXT,",                               " INTEGER DEFAULT 0,",  " TEXT,",
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " TEXT,",                               " INTEGER,",            " INTEGER,",
