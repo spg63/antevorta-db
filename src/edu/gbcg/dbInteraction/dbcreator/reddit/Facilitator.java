@@ -13,6 +13,7 @@ import edu.gbcg.utils.TSL;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public abstract class Facilitator {
             int dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT;
             int lineReadCounter = 0;
             long total_lines_read = 0;
-            int write_total_lines_read = 0;
+            int write_total_lines_read = 1;
             int whichWorker = 0;
 
             List<List<String>> linesList = new ArrayList<>();
@@ -132,10 +133,13 @@ public abstract class Facilitator {
 
             try{
                 // Use the commented reader when reading uncompressed data
-                //br = new BufferedReader(new FileReader(json));
+                br = new BufferedReader(new FileReader(json));
+            /*
                 // This function will return a reader capable of reading compressed BZ2 data without decompressing
                 // the entire file, pretty swell.
-                br = FileUtils.get().getBufferedReaderForBZ2File(json);
+                // NOTE: Using the compressed reader will take roughly 3x as long as reading the uncompressed data
+                //br = FileUtils.get().getBufferedReaderForBZ2File(json);
+            */
                 String line = br.readLine();
                 while(line != null){
                     ++lineReadCounter;
