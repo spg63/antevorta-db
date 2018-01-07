@@ -27,6 +27,10 @@ public class FileUtils{
     private FileUtils(){
     }
 
+    /**
+     * Get an instance
+     * @return FileUtils object
+     */
     public static FileUtils get(){
         if(_instance == null){
             synchronized(FileUtils.class){
@@ -187,6 +191,11 @@ public class FileUtils{
         return files;
     }
 
+    /**
+     * Write a new file to disk. Will overwrite existing file
+     * @param fileName Path to the file
+     * @param str The string to write to the file
+     */
     public void writeNewFile(String fileName, String str){
 
         BufferedWriter writer;
@@ -200,7 +209,25 @@ public class FileUtils{
         }
     }
 
-    public BufferedReader getBufferedReaderForBZ2FileType(String filePath){
+    /**
+     * Get a BufferedReader capable of reading a BZ2 compressed file line by line
+     * @param filePath Path to file
+     * @return The BR, null if exception
+     */
+    public BufferedReader getBufferedReaderForBZ2File(String filePath){
+        return getBufferedReaderForCompressedFile(filePath);
+    }
+
+    /**
+     * Get a BufferedReader capable of reading a GZIP compressed file line by line
+     * @param filePath Path to file
+     * @return The BR, null if exception
+     */
+    public BufferedReader getBufferedReaderForGZIPFile(String filePath){
+        return getBufferedReaderForCompressedFile(filePath);
+    }
+
+    private BufferedReader getBufferedReaderForCompressedFile(String filePath){
         BufferedReader br = null;
         try{
             FileInputStream fin = new FileInputStream(filePath);
@@ -214,5 +241,9 @@ public class FileUtils{
             return null;
         }
         return br;
+    }
+
+    public BufferedReader getBufferedReaderForZipFile(String filePath){
+        throw new RuntimeException("Currently no support for archiving formats, only compressors");
     }
 }

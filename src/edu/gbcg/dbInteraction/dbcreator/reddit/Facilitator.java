@@ -13,7 +13,6 @@ import edu.gbcg.utils.TSL;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -136,7 +135,7 @@ public abstract class Facilitator {
                 //br = new BufferedReader(new FileReader(json));
                 // This function will return a reader capable of reading compressed BZ2 data without decompressing
                 // the entire file, pretty swell.
-                br = FileUtils.get().getBufferedReaderForBZ2FileType(json);
+                br = FileUtils.get().getBufferedReaderForBZ2File(json);
                 String line = br.readLine();
                 while(line != null){
                     ++lineReadCounter;

@@ -40,11 +40,12 @@ public class Main {
 
         Stopwatch sw = Stopwatch.createStarted();
 
-        //doSubs();
-        doComs();
+        doSubs();
+        //doComs();
 
         sw.stop();
 
+        logger.info("Execution took " + out.timer_millis(sw));
         logger.info("Execution took " + out.timer_sec(sw));
         logger.info("Execution took " + out.timer_mins(sw));
 
@@ -54,11 +55,8 @@ public class Main {
     }
 
     public static void doSubs(){
-    /*
-        Facilitator fac = new SubmissionsFacilitator();
-        fac.createDBs();
-        fac.pushJSONDataIntoDBs();
-    */
+        if(Finals.START_FRESH)
+            buildDBShards(new SubmissionsFacilitator());
 
         Selector rss = new RedditSubSelector();
         //List<RSMapper> results = rss.selectAllFromAuthor("a4k04");
@@ -82,11 +80,9 @@ public class Main {
     }
 
     public static void doComs(){
-        Facilitator fac = new CommentsFacilitator();
-        fac.createDBs();
-        fac.pushJSONDataIntoDBs();
+        if(Finals.START_FRESH)
+            buildDBShards(new CommentsFacilitator());
 
-/*
         Selector rcs = new RedditComSelector();
         String author = "a4k04";
         //String author = "----root";
@@ -94,10 +90,15 @@ public class Main {
         //String select_all = "select * from "+ Finals.COM_TABLE_NAME+" where score > 100;";
         //String sub_search = "select * from "+ Finals.COM_TABLE_NAME+" where subreddit_name = 'The_Donald' and score > 1500 limit 10;";
         //String cont_search = "select * from "+ Finals.COM_TABLE_NAME+" where subreddit_name = 'The_Donald' and controversial_score > 0 limit 5;";
-        //List<RSMapper> results = rcs.selectAllFromAuthor(author);
+        List<RSMapper> results = rcs.selectAllFromAuthor(author);
         //List<RSMapper> results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", author, "score", "0");
-        List<RSMapper> results = rcs.selectAllAfterDate(2017, 11, 30, 23, 59, 00);
-        //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting());
-*/
+        //List<RSMapper> results = rcs.selectAllAfterDate(2017, 11, 30, 23, 59, 00);
+        RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting());
     }
+
+    public static void buildDBShards(Facilitator fac){
+        fac.createDBs();
+        fac.pushJSONDataIntoDBs();
+    }
+
 }
