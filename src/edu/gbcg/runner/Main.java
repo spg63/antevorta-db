@@ -33,8 +33,8 @@ public class Main {
 
         Stopwatch sw = Stopwatch.createStarted();
 
-        //doSubs();
-        doComs();
+        doSubs();
+        //doComs();
 
         sw.stop();
 
