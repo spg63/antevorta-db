@@ -1,5 +1,6 @@
 package edu.gbcg.dbInteraction;
 
+import edu.gbcg.configs.Finals;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.Out;
@@ -22,12 +23,14 @@ public class RSMapperOutput {
         for(RSMapper mapper : mappers){
             for(String col : columnNames){
                 String outmap = mapper.getString(col);
+                // Special case for printing time, don't print UTC, print a LocalDateTime object
+                if(Finals.CREATED_DT.equals(col))
+                    outmap = TimeFormatter.utcSecondsToZDT(outmap);
                 out.writef("%-20s: %s\n", col, outmap);
             }
             out.write
                     ("\n----------------------------------------------------------------------------------------------------\n\n");
         }
-        out.writeln("Returned " + mappers.size() + " results.");
     }
 
     /**
@@ -41,7 +44,6 @@ public class RSMapperOutput {
             out.writeln("**----- NO RESULTS -----**");
             return;
         }
-        out.writeln("Returned " + mappers.size() + " results.");
 
         StringBuilder sb = new StringBuilder();
 

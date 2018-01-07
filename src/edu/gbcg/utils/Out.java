@@ -42,8 +42,16 @@ public class Out implements java.io.Serializable{
     public void write_err(Object msg){
         System.err.print(msg);
     }
-    public String timer(Stopwatch sw){
-        return sw.elapsed(TimeUnit.MILLISECONDS) + "ms";
+    public String timer_millis(Stopwatch sw){
+        return sw.elapsed(TimeUnit.MILLISECONDS) + " milliseconds";
+    }
+
+    public String timer_sec(Stopwatch sw){
+        return sw.elapsed(TimeUnit.SECONDS) + " seconds";
+    }
+
+    public String timer_mins(Stopwatch sw){
+        return sw.elapsed(TimeUnit.MINUTES) + " minutes";
     }
 
 

@@ -119,6 +119,7 @@ public abstract class Facilitator {
             int dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT;
             int lineReadCounter = 0;
             long total_lines_read = 0;
+            int write_total_lines_read = 0;
             int whichWorker = 0;
 
             List<List<String>> linesList = new ArrayList<>();
@@ -146,7 +147,9 @@ public abstract class Facilitator {
                         lineReadCounter = 0;
                         linesList.clear();
 
-                        logger.info("We've read :" + total_lines_read + " from " + f.getName());
+                        if(write_total_lines_read % 50 == 0)
+                            logger.info("We've read: " + total_lines_read + " lines from " + f.getName());
+                        ++write_total_lines_read;
 
                         // Give the linesList new ArrayLists to store the lines
                         for(int j = 0; j < Finals.DB_SHARD_NUM; ++j)

@@ -1,7 +1,5 @@
 package edu.gbcg.dbInteraction;
 
-import edu.gbcg.utils.TSL;
-
 import java.time.*;
 import java.util.TimeZone;
 
@@ -20,6 +18,27 @@ public class TimeFormatter {
     }
 
     /**
+     * Used *ONLY* for Selector Time selection. It *intentionally* returns an incorrectly zoned UTC value so a selection
+     * statement can be used using local time of midnight and select values from UTC midnight instead of the user
+     * calculating the time offset.
+     * NOTE: If you need to get the correct UTC value, including offset from system defaul, use the LDTtoUTCSeconds
+     * function found below this one
+     * @param year
+     * @param month
+     * @param day
+     * @param hour
+     * @param minute
+     * @param second
+     * @return An intentionally uncorrected utc value from the system local time
+     */
+    public static long utcSecondsFromValues(int year, int month, int day,
+                                            int hour, int minute, int second){
+        LocalDateTime ldt = getLDTfromValues(year, month, day, hour, minute, second);
+        ZonedDateTime zdt = ldt.atZone(ZoneId.of("UTC"));
+        return zdt.toEpochSecond();
+    }
+
+    /**
      * Convert a utc timestamp to a LocalDateTime object using the default system timezone
      * @param utcSeconds
      * @return The LocalDateTime object
@@ -28,6 +47,17 @@ public class TimeFormatter {
         Instant i = Instant.ofEpochSecond(utcSeconds);
         ZonedDateTime z = ZonedDateTime.ofInstant(i, TimeZone.getDefault().toZoneId());
         return z.toLocalDateTime();
+    }
+
+    /**
+     * Used only for printing values
+     * @param utcSeconds
+     * @return
+     */
+    public static String utcSecondsToZDT(String utcSeconds){
+        long utc = Long.parseLong(utcSeconds);
+        Instant i = Instant.ofEpochSecond(utc);
+        return ZonedDateTime.ofInstant(i, ZoneId.of("UTC")).toString();
     }
 
     /**
@@ -97,30 +127,23 @@ public class TimeFormatter {
     }
 
     /**
-     * Build an SQLite compatible date-time string based on numeric values
+     * Build a LDT object compatible date-time string based on numeric values
      * @param year
      * @param month
      * @param day
      * @param hour
      * @param minute
      * @param second
-     * @return The SQLite compatible date-time string
+     * @return The LDT compatible date-time object
      */
-    public static String getDateStringFromValues(int year, int month, int day,
+    public static LocalDateTime getLDTfromValues(int year, int month, int day,
                                                  int hour, int minute, int second){
-        StringBuilder sb = new StringBuilder();
-        sb.append(year);
-        sb.append("-");
-        sb.append(getStringFromValueWithZeroWhereNecessary(month));
-        sb.append("-");
-        sb.append(getStringFromValueWithZeroWhereNecessary(day));
-        sb.append(" ");
-        sb.append(getStringFromValueWithZeroWhereNecessary(hour));
-        sb.append(":");
-        sb.append(getStringFromValueWithZeroWhereNecessary(minute));
-        sb.append(":");
-        sb.append(getStringFromValueWithZeroWhereNecessary(second));
-        return sb.toString();
+        return LocalDateTime.of(year, month, day, hour, minute, second);
+    }
+
+    public static long utcSecondsFromLDT(LocalDateTime ldt){
+        return utcSecondsFromValues(ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(),
+                                    ldt.getHour(), ldt.getMinute(), ldt.getSecond());
     }
 
     private static String getStringFromValueWithZeroWhereNecessary(int value){

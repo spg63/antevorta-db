@@ -18,6 +18,7 @@ import java.util.concurrent.Future;
  */
 public abstract class Selector {
     protected String tableName;
+    protected TSL logger = TSL.get();
 
     public Selector(){}
 
@@ -80,37 +81,25 @@ public abstract class Selector {
 
     //------ NEED MUCH MORE DATE FUNCTIONS
 
-    public List<RSMapper> selectAllAfterDate(int year, int month, int day, int hour, int minute, int second){
-        String sql_start = TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second);
-        LocalDateTime start = TimeFormatter.SQLDateTimeToJavaDateTime(sql_start);
-        LocalDateTime end = LocalDateTime.now();
-        TSL.get().err(start.toString());
-        TSL.get().err(end.toString());
-        return selectAllBetweenDates(start, end);
-
-        //return selectAllWhereColumnGreaterThan(Finals.CREATED_DT,
-        //        TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
+    public List<RSMapper> selectAllAfterDate(int year, int month, int day, int hour, int minute, int second) {
+        long utc = TimeFormatter.utcSecondsFromValues(year, month, day, hour, minute, second);
+        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, Long.toString(utc));
     }
 
     public List<RSMapper> selectAllBeforeDate(int year, int month, int day, int hour, int minute, int second){
-
-        return selectAllWhereColumnLessThan(Finals.CREATED_DT,
-                TimeFormatter.getDateStringFromValues(year, month, day, hour, minute, second));
+        long utc = TimeFormatter.utcSecondsFromValues(year, month, day, hour, minute, second);
+        return selectAllWhereColumnLessThan(Finals.CREATED_DT, Long.toString(utc));
     }
 
     public List<RSMapper> selectAllBetweenDates(int start_year, int start_month, int start_day,
                                                 int start_hour, int start_minute, int start_second,
                                                 int end_year, int end_month, int end_day,
                                                 int end_hour, int end_minute, int end_second){
-        String startDate = TimeFormatter.
-                getDateStringFromValues(start_year, start_month, start_day, start_hour, start_minute, start_second);
-        String endDate = TimeFormatter.
-                getDateStringFromValues(end_year, end_month, end_day, end_hour, end_minute, end_second);
-        DBSelector selector = new DBSelector()
-                .from(this.tableName)
-                .where(Finals.CREATED_DT + " > '" + startDate + "'")
-                .and(Finals.CREATED_DT + " < '" + endDate + "'");
-        return generalSelection(selector.sql());
+        LocalDateTime start = TimeFormatter.getLDTfromValues(start_year, start_month, start_day,
+                                                             start_hour, start_minute, start_second);
+        LocalDateTime end = TimeFormatter.getLDTfromValues(end_year, end_month, end_day,
+                                                            end_hour, end_minute, end_second);
+        return selectAllBetweenDates(start, end);
     }
 
     public List<RSMapper> selectAllAfterDate(LocalDateTime dt){
@@ -122,12 +111,12 @@ public abstract class Selector {
     }
 
     public List<RSMapper> selectAllBetweenDates(LocalDateTime start, LocalDateTime end){
-        String sql_start = TimeFormatter.javaDateTimeToSQLDateTime(start);
-        String sql_end = TimeFormatter.javaDateTimeToSQLDateTime(end);
+        long startDate = TimeFormatter.utcSecondsFromLDT(start);
+        long endDate = TimeFormatter.utcSecondsFromLDT(end);
         DBSelector selector = new DBSelector()
                 .from(this.tableName)
-                .where(Finals.CREATED_DT + " > '" + sql_start + "'")
-                .and(Finals.CREATED_DT + " < '" + sql_end + "'");
+                .where(Finals.CREATED_DT + " > '" + startDate + "'")
+                .and(Finals.CREATED_DT + " < '" + endDate + "'");
         return generalSelection(selector.sql());
     }
 
@@ -172,19 +161,19 @@ public abstract class Selector {
                 results.addAll(future_results.get(i).get());
         }
         catch(InterruptedException e){
-            TSL.get().err("Selector.genericSelect InterrupredException");
+            logger.err("Selector.genericSelect InterruptedException");
         }
         catch(ExecutionException ee){
-            TSL.get().err("Selector.genericSelect ExecutionException");
+            logger.err("Selector.genericSelect ExecutionException");
         }
 
         executor.shutdown();
 
         if(results.isEmpty()) {
-            TSL.get().info(SQLStatement + " --- 0 results.");
+            logger.info(SQLStatement + " --- 0 results.");
             return null;
         }
-        TSL.get().info(SQLStatement + " --- " + results.size() + " results.");
+        logger.info(SQLStatement + " --- " + results.size() + " results.");
         return results;
     }
     /*
@@ -192,11 +181,11 @@ public abstract class Selector {
      */
     protected void verifyDBsExist(List<String> DBs) {
         if (DBs == null) {
-            TSL.get().err("Selector.verifyDBsExist DBs was null");
+            logger.err("Selector.verifyDBsExist DBs was null");
             throw new RuntimeException("Selector.verifyDBsExist DBs was null");
         }
         if (DBs.size() != Finals.DB_SHARD_NUM) {
-            TSL.get().err("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
+            logger.err("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
             throw new RuntimeException("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
         }
     }
