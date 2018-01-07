@@ -127,7 +127,12 @@ public abstract class Facilitator {
                 linesList.add(new ArrayList<>());
 
             try{
-                br = new BufferedReader(new FileReader(json));
+                // Use the commented reader when reading uncompressed data
+                //br = new BufferedReader(new FileReader(json));
+                // This function will return a reader capable of reading compressed BZ2 data without decompressing
+                // the entire file, pretty swell.
+                br = FileUtils.get().getBufferedReaderForBZ2FileType(json);
+                logger.warn("json: " + json);
                 String line = br.readLine();
                 while(line != null){
                     ++lineReadCounter;

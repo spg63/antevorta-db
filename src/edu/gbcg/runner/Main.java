@@ -15,6 +15,7 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitato
 import edu.gbcg.utils.Out;
 import edu.gbcg.utils.TSL;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Main {
@@ -23,7 +24,7 @@ public class Main {
         TSL logger = TSL.get();
         Out out = Out.get();
 
-        Finals.START_FRESH = false;
+        Finals.START_FRESH = true;
 
         // Check and create them if they don't exist
         if(Finals.isWindows() && Finals.START_FRESH) {
@@ -38,7 +39,8 @@ public class Main {
 
         sw.stop();
 
-        logger.info("Execution took " + out.timer_millis(sw));
+        logger.info("Execution took " + out.timer_sec(sw));
+        logger.info("Execution took " + out.timer_mins(sw));
 
         // Tell the logger to close up the queue
         logger.shutDown();
@@ -46,12 +48,11 @@ public class Main {
     }
 
     public static void doSubs(){
-        /*
         Facilitator fac = new SubmissionsFacilitator();
         fac.createDBs();
         fac.pushJSONDataIntoDBs();
-        */
 
+/*
         Selector rss = new RedditSubSelector();
         //List<RSMapper> results = rss.selectAllFromAuthor("a4k04");
         //List<RSMapper> results = rss.selectAllWhereColumnEquals("subreddit_name", "apple");
@@ -65,10 +66,13 @@ public class Main {
 
         //List<RSMapper> results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58);
         //List<RSMapper> results = rss.selectAllBeforeDate(2017, 11, 01, 00, 00, 1);
-        List<RSMapper> results = rss.selectAllBetweenDates(2017, 11, 30, 23, 59, 55, 2017, 12, 1, 0, 0, 0);
+        LocalDateTime startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 55);
+        LocalDateTime endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0);
+        List<RSMapper> results = rss.selectAllBetweenDates(startDate, endDate);
 
         RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting());
         //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "output.csv");
+ */
     }
 
     public static void doComs(){

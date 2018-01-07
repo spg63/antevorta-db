@@ -1,5 +1,9 @@
 package edu.gbcg.utils;
 
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
+
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -189,5 +193,21 @@ public class FileUtils{
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public BufferedReader getBufferedReaderForBZ2FileType(String filePath){
+        BufferedReader br = null;
+        try{
+            FileInputStream fin = new FileInputStream(filePath);
+            BufferedInputStream bis = new BufferedInputStream(fin);
+            CompressorInputStream cis = new CompressorStreamFactory().createCompressorInputStream(bis);
+            br = new BufferedReader(new InputStreamReader(cis));
+
+        }
+        catch(IOException | CompressorException e){
+            e.printStackTrace();
+            return null;
+        }
+        return br;
     }
 }

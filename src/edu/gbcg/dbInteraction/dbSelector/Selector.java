@@ -86,9 +86,17 @@ public abstract class Selector {
         return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, Long.toString(utc));
     }
 
+    public List<RSMapper> selectAllAfterDate(LocalDateTime dt){
+        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, Long.toString(TimeFormatter.utcSecondsFromLDT(dt)));
+    }
+
     public List<RSMapper> selectAllBeforeDate(int year, int month, int day, int hour, int minute, int second){
         long utc = TimeFormatter.utcSecondsFromValues(year, month, day, hour, minute, second);
         return selectAllWhereColumnLessThan(Finals.CREATED_DT, Long.toString(utc));
+    }
+
+    public List<RSMapper> selectAllBeforeDate(LocalDateTime dt){
+        return selectAllWhereColumnLessThan(Finals.CREATED_DT, Long.toString(TimeFormatter.utcSecondsFromLDT(dt)));
     }
 
     public List<RSMapper> selectAllBetweenDates(int start_year, int start_month, int start_day,
@@ -100,14 +108,6 @@ public abstract class Selector {
         LocalDateTime end = TimeFormatter.getLDTfromValues(end_year, end_month, end_day,
                                                             end_hour, end_minute, end_second);
         return selectAllBetweenDates(start, end);
-    }
-
-    public List<RSMapper> selectAllAfterDate(LocalDateTime dt){
-        return selectAllWhereColumnGreaterThan(Finals.CREATED_DT, TimeFormatter.javaDateTimeToSQLDateTime(dt));
-    }
-
-    public List<RSMapper> selectAllBeforeDate(LocalDateTime dt){
-        return selectAllWhereColumnLessThan(Finals.CREATED_DT, TimeFormatter.javaDateTimeToSQLDateTime(dt));
     }
 
     public List<RSMapper> selectAllBetweenDates(LocalDateTime start, LocalDateTime end){
@@ -126,12 +126,6 @@ public abstract class Selector {
     public List<RSMapper> selectAllFromColumn(String column){
         return null;
     }
-
-
-
-
-
-
 
 
 
