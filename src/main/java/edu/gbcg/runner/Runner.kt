@@ -23,12 +23,13 @@ fun main(args : Array<String>){
     val logger = TSL.get()
     val out = Out.get()
 
-    Finals.START_FRESH = false
-
+    Finals.START_FRESH = true
+/*
     if(Finals.isWindows() && Finals.START_FRESH){
         logger.err("isWindows() was true while trying to start fresh")
         logger.shutDownAndKill()
     }
+*/
 
     val sw = Stopwatch.createStarted()
 
