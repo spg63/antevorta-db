@@ -50,19 +50,10 @@ public class Out implements java.io.Serializable{
     public String timer_millis(Stopwatch sw){
         return sw.elapsed(TimeUnit.MILLISECONDS) + " milliseconds";
     }
-
     public String timer_secs(Stopwatch sw){
         return sw.elapsed(TimeUnit.SECONDS) + " seconds";
     }
-
     public String timer_mins(Stopwatch sw){
         return sw.elapsed(TimeUnit.MINUTES) + " minutes";
     }
-
-
-
-
-
-
-
 }

@@ -23,7 +23,7 @@ fun main(args : Array<String>){
     val logger = TSL.get()
     val out = Out.get()
 
-    Finals.START_FRESH = true
+    Finals.START_FRESH = false
 
     if(Finals.isWindows() && Finals.START_FRESH){
         logger.err("isWindows() was true while trying to start fresh")
