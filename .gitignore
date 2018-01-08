@@ -6,3 +6,4 @@ LocalData/
 LocalDB/
 logs/
 *.csv
+.DS_STORE
