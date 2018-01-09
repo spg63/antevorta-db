@@ -33,8 +33,8 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doSubs()
-    //doComs()
+    //doSubs()
+    doComs()
 
     sw.stop()
 
@@ -60,8 +60,8 @@ fun doSubs(){
     //val results = rss.selectAllWhereColumnEquals("subreddit_name", "4chan")
 
 
-    //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting())
-    RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "out.csv")
+    RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting())
+    //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "out.csv")
 }
 
 fun doComs(){
@@ -71,10 +71,10 @@ fun doComs(){
     }
     val rcs = RedditComSelector()
 
-    //val results = rcs.selectAllFromAuthor("a4k04")
-    val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
-    val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
-    val results = rcs.selectAllBetweenDates(startDate, endDate)
+    val results = rcs.selectAllFromAuthor("a4k04")
+    //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
+    //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
+    //val results = rcs.selectAllBetweenDates(startDate, endDate)
 
     RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting())
 }
