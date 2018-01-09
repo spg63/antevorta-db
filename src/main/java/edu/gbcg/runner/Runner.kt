@@ -23,13 +23,13 @@ fun main(args : Array<String>){
     val logger = TSL.get()
     val out = Out.get()
 
-    Finals.START_FRESH = true
-/*
+    Finals.START_FRESH = false
+
     if(Finals.isWindows() && Finals.START_FRESH){
         logger.err("isWindows() was true while trying to start fresh")
         logger.shutDownAndKill()
     }
-*/
+
 
     val sw = Stopwatch.createStarted()
 
@@ -56,9 +56,11 @@ fun doSubs(){
     //val results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58)
     val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
-    val results = rss.selectAllBetweenDates(startDate, endDate)
+    //val results = rss.selectAllBetweenDates(startDate, endDate)
+    val results = rss.selectAllWhereColumnEquals("subreddit_name", "4chan")
 
-    RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting())
+
+    //RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting())
 }
 
 fun doComs(){

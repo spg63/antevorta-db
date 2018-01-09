@@ -8,9 +8,6 @@ package edu.gbcg.dbInteraction.dbcreator
 import edu.gbcg.dbInteraction.DBCommon
 import java.sql.Connection
 
-class IndexWorker(conn: Connection, SQLStatement: String): Runnable{
-    private val conn = conn
-    private val SQLStatement = SQLStatement
-
+class DBWorker(private val conn: Connection, private val SQLStatement: String): Runnable{
     override fun run(){ DBCommon.execute(conn, SQLStatement) }
 }
