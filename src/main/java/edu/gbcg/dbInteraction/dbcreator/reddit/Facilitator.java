@@ -7,7 +7,7 @@ package edu.gbcg.dbInteraction.dbcreator.reddit;
 
 import edu.gbcg.configs.Finals;
 import edu.gbcg.dbInteraction.DBCommon;
-import edu.gbcg.dbInteraction.dbcreator.IndexWorker;
+import edu.gbcg.dbInteraction.dbcreator.DBWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 
@@ -239,7 +239,7 @@ public abstract class Facilitator {
             conns.add(DBCommon.connect(db));
 
         for(int i = 0; i < conns.size(); ++i){
-            workers.add(new Thread(new IndexWorker(conns.get(i), sql)));
+            workers.add(new Thread(new DBWorker(conns.get(i), sql)));
             workers.get(i).start();
         }
 

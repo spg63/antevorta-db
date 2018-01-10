@@ -125,6 +125,7 @@ public abstract class Selector {
 
 
 
+
 //---------- Generalized version for named functions
     public List<RSMapper> selectAllFromColumn(String column){
         return null;
@@ -147,7 +148,7 @@ public abstract class Selector {
         Perform a multi-threaded selection against the DB shards. Each shard is given a single thread
      */
     protected List<RSMapper> genericSelect(List<SelectionWorker> workers, String SQLStatement){
-        List<Future<List<RSMapper>>> future_results = new ArrayList<>();
+        List<Future<?>> future_results = new ArrayList<>();
         ExecutorService executor = Executors.newFixedThreadPool(Finals.DB_SHARD_NUM);
         for(SelectionWorker worker : workers)
             future_results.add(executor.submit(worker));
@@ -155,7 +156,7 @@ public abstract class Selector {
         List<RSMapper> results = new ArrayList<>();
         try{
             for(int i = 0; i < Finals.DB_SHARD_NUM; ++i)
-                results.addAll(future_results.get(i).get());
+                results.addAll((List<RSMapper>)future_results.get(i).get());
         }
         catch(InterruptedException e){
             logger.err("Selector.genericSelect InterruptedException");
