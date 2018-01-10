@@ -7,7 +7,7 @@ package edu.gbcg.dbInteraction.dbcreator.reddit;
 
 import edu.gbcg.configs.Finals;
 import edu.gbcg.dbInteraction.DBCommon;
-import edu.gbcg.dbInteraction.dbcreator.DBWorker;
+import edu.gbcg.dbInteraction.DBWorker;
 import edu.gbcg.utils.FileUtils;
 import edu.gbcg.utils.TSL;
 
