@@ -9,6 +9,7 @@ import edu.gbcg.configs.Finals
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.utils.FileUtils
 import edu.gbcg.utils.Out
+import kotlin.text.StringBuilder
 
 object RSMapperOutput{
     private val out = Out.get()
@@ -36,26 +37,26 @@ object RSMapperOutput{
             return
         }
 
-        var output = ""
+        var sb = StringBuilder()
 
         for(i in 0 until columnNames.size - 1){
-            output += columnNames[i]
-            output += ","
+            sb.append(columnNames[i])
+            sb.append(",")
         }
-        output += columnNames[columnNames.size - 1]
-        output += "\n"
+        sb.append(columnNames[columnNames.size - 1])
+        sb.append("\n")
 
         for(mapper in mappers){
             for(i in 0 until columnNames.size - 1){
                 var result = mapper.getString(columnNames[i])
                 if(result != null)
                     result = result.replace(',', '\'')
-                output += result
-                output += ","
+                sb.append(result)
+                sb.append(",")
             }
-            output += mapper.getString(columnNames[columnNames.size - 1]).replace(',','\'')
-            output += "\n"
+            sb.append(mapper.getString(columnNames[columnNames.size - 1]).replace(',','\''))
+            sb.append("\n")
         }
-        FileUtils.get().writeNewFile(csvFilePath, output)
+        FileUtils.get().writeNewFile(csvFilePath, sb.toString())
     }
 }

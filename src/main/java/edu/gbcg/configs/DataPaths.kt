@@ -11,7 +11,7 @@ package edu.gbcg.configs
  */
 object DataPaths{
     // File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL)
-    const val LOCAL_SUB_DATA_PATH   = "LocalData/raw/submission/"
+    const val LOCAL_SUB_DATA_PATH   = "LocalData/raw/submissions/"
     const val LOCAL_COM_DATA_PATH   = "LocalData/raw/comments/"
 
     // File paths when running on the research machine

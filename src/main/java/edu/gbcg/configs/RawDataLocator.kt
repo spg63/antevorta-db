@@ -1,13 +1,11 @@
 /*
- * Copyright (c) 2018 Sean Grimes. All rights reserved.
- * License: MIT License
+ * Copyright (c) 2018 Sean Grimes. All Rights Reserved.
+ * License: MIT
  */
 
-package edu.gbcg.configs;
+package edu.gbcg.configs
 
-import edu.gbcg.utils.FileUtils;
-
-import java.util.List;
+import edu.gbcg.utils.FileUtils
 
 /**
  * Intended to locate the json files for database builds. The location of these files can and
@@ -16,15 +14,16 @@ import java.util.List;
  * proper path based on which machine the code is running on and whether or not testing mode has
  * been enabled.
  */
-public class RawDataLocator {
+object RawDataLocator{
+
     /**
      * Get a list of all raw json files for reddit submission data. This path changes depending
      * on which machine the code is running on.
      * @return List of all reddit submission files if available, otherwise null
      */
-    public static List<String> redditJsonSubmissionAbsolutePaths(){
-        String path = Finals.TESTING_MODE ? DataPaths.LOCAL_SUB_DATA_PATH : DataPaths.SUB_DATA_PATH;
-        return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", path);
+    @JvmStatic fun redditJsonSubmissionAbsolutePaths(): List<String> {
+        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_SUB_DATA_PATH else DataPaths.SUB_DATA_PATH
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", path)
     }
 
     /**
@@ -32,8 +31,8 @@ public class RawDataLocator {
      * which machine the code is running on.
      * @return List of all reddit comment files if available, otherwise null
      */
-    public static List<String> redditJsonCommentAbsolutePaths(){
-        String path = Finals.TESTING_MODE ? DataPaths.LOCAL_COM_DATA_PATH : DataPaths.COM_DATA_PATH;
-        return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path);
+    @JvmStatic fun redditJsonCommentAbsolutePaths(): List<String> {
+        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_COM_DATA_PATH else DataPaths.COM_DATA_PATH
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path)
     }
 }

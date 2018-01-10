@@ -13,7 +13,7 @@ package edu.gbcg.configs
 object Finals{
     /*-------------------- Program control --------------------*/
     // True when working locally on MBP, false when working on full dataset -- changes data & db paths
-    @JvmField val TESTING_MODE = isTestingMode()
+    @JvmField val TESTING_MODE = !isWindows()
     // Drops the DBs if they exist and reads in the data again
     @JvmField var START_FRESH = false
 
@@ -27,7 +27,7 @@ object Finals{
     const private val RESEARCH_BATCH_SIZE = 7500
     // Performs better on single laptop SSD
     const private val LAPTOP_BATCH_SIZE = 1000
-    @JvmField val DB_BATCH_LIMIT = determineBatchSize()
+    @JvmField val DB_BATCH_LIMIT = if(isWindows()) RESEARCH_BATCH_SIZE else LAPTOP_BATCH_SIZE
     // Turns off sqlite synchronous mode, faster batch insertions
     const val SYNC_MODE_OFF = true
     // There are 6 available HDDs for data storage on research machine, use all of them
@@ -42,20 +42,9 @@ object Finals{
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry bro.
     /*-------------------- Database column names --------------------*/
     @JvmStatic fun isWindows(): Boolean {
-        val osString = System.getProperty("os.name").toLowerCase()
-        if(osString.contains("win"))
+        if(System.getProperty("os.name").toLowerCase().contains("win"))
             return true
         return false
-    }
-
-    private fun isTestingMode(): Boolean {
-        return !isWindows()
-    }
-
-    private fun determineBatchSize(): Int {
-        if(isTestingMode())
-            return LAPTOP_BATCH_SIZE
-        return RESEARCH_BATCH_SIZE
     }
 
     // NOTE: These columns are common to all DB types and are named here for consistency across insertions and
