@@ -117,13 +117,14 @@ object TimeUtils{
         val minute = ldt.minute
         val second = ldt.second
 
-        var SQLTime = year.toString() + "-"
-        SQLTime += getStringFromValueWithZeroWhereNecessary(month) + "-"
-        SQLTime += getStringFromValueWithZeroWhereNecessary(day) + " "
-        SQLTime += getStringFromValueWithZeroWhereNecessary(hour) + ":"
-        SQLTime += getStringFromValueWithZeroWhereNecessary(minute) + ":"
-        SQLTime += getStringFromValueWithZeroWhereNecessary(second)
-        return SQLTime
+        var SQLTime = StringBuilder()
+        SQLTime.append(year.toString() + "-")
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(month)).append("-")
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(day)).append(" ")
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(hour)).append(":")
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(minute)).append(":")
+        SQLTime.append(getStringFromValueWithZeroWhereNecessary(second))
+        return SQLTime.toString()
     }
 
     /**
