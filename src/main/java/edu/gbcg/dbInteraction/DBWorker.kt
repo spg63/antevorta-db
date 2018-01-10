@@ -3,11 +3,14 @@
  * License: MIT
  */
 
-package edu.gbcg.dbInteraction.dbcreator
+package edu.gbcg.dbInteraction
 
-import edu.gbcg.dbInteraction.DBCommon
 import java.sql.Connection
 
+/**
+ * Execute a statement against a DB connection in a thread.
+ * Currently used for creating DB indices
+ */
 class DBWorker(private val conn: Connection, private val SQLStatement: String): Runnable{
     override fun run(){ DBCommon.execute(conn, SQLStatement) }
 }
