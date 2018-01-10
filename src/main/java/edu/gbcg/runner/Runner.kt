@@ -6,9 +6,7 @@
 package edu.gbcg.runner
 
 import com.google.common.base.Stopwatch
-import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
-import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditComments
 import edu.gbcg.configs.columnsAndKeys.RedditSubmissions
 import edu.gbcg.dbInteraction.RSMapperOutput
