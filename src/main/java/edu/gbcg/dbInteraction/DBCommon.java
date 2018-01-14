@@ -39,8 +39,7 @@ public class DBCommon {
                 st.execute(sql);
                 st.close();
             } catch (SQLException e) {
-                TSL.get().err("DBCommon.connect exception");
-                e.printStackTrace();
+                TSL.get().shutDownAndKill(e);
             }
         }
         return conn;

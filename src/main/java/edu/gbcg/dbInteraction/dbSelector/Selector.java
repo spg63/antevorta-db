@@ -159,10 +159,10 @@ public abstract class Selector {
                 results.addAll((List<RSMapper>)future_results.get(i).get());
         }
         catch(InterruptedException e){
-            logger.err("Selector.genericSelect InterruptedException");
+            logger.exception(e);
         }
         catch(ExecutionException ee){
-            logger.err("Selector.genericSelect ExecutionException");
+            logger.exception(ee);
         }
 
         executor.shutdown();
@@ -179,12 +179,10 @@ public abstract class Selector {
      */
     protected void verifyDBsExist(List<String> DBs) {
         if (DBs == null) {
-            logger.err("Selector.verifyDBsExist DBs was null");
-            throw new RuntimeException("Selector.verifyDBsExist DBs was null");
+            logger.shutDownAndKill("Selector.verifyDBsExist DBs was null");
         }
         if (DBs.size() != Finals.DB_SHARD_NUM) {
-            logger.err("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
-            throw new RuntimeException("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
+            logger.shutDownAndKill("Selector.verifyDBsExist DBs.size() != Finals.DB_SHARD_NUM");
         }
     }
 }

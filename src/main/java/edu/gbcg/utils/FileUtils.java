@@ -13,6 +13,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -150,7 +151,7 @@ public class FileUtils{
             if(f.isFile() && f.getName().startsWith(prefix))
                 filepaths.add(f.getAbsolutePath());
         }
-        if(filepaths.isEmpty()) return null;
+        if(filepaths.isEmpty()) Arrays.asList("");
         Comparator<String> comparator = Comparator.comparing((String x) -> x);
         filepaths.sort(comparator);
         return filepaths;

@@ -24,6 +24,8 @@ fun main(args : Array<String>){
     val logger = TSL.get()
     val out = Out.get()
 
+    Finals.START_FRESH = false
+
     if(Finals.isWindows() && Finals.START_FRESH){
         logger.err("isWindows() was true while trying to start fresh")
         logger.shutDownAndKill()
@@ -50,13 +52,13 @@ fun doSubs(){
     }
     val rss = RedditSubSelector()
 
-    //val results = rss.selectAllFromAuthor("a4k04")
+    val results = rss.selectAllFromAuthor("a4k04")
     //val results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58)
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rss.selectAllBetweenDates(startDate, endDate)
     //val results = rss.selectAllWhereColumnEquals("subreddit_name", "4chan")
-    val results = rss.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
+    //val results = rss.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
 
 
     RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting())
@@ -70,11 +72,11 @@ fun doComs(){
     }
     val rcs = RedditComSelector()
 
-    //val results = rcs.selectAllFromAuthor("a4k04")
+    val results = rcs.selectAllFromAuthor("a4k04")
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rcs.selectAllBetweenDates(startDate, endDate)
-    val results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
+    //val results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
 
     RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting())
 }

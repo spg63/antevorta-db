@@ -60,7 +60,7 @@ public abstract class RSMapper {
             val = Integer.parseInt(key);
         }
         catch(NumberFormatException e){
-            logger.warn("NFE RSMapper.getInt");
+            logger.exception(e);
             return 0;
         }
         return val;
@@ -79,7 +79,7 @@ public abstract class RSMapper {
             val = Long.parseLong(key);
         }
         catch(NumberFormatException e){
-            logger.warn("NFE RSMapper.getLong");
+            logger.exception(e);
             return 0;
         }
         return val;
@@ -113,7 +113,7 @@ public abstract class RSMapper {
             val = Double.parseDouble(stringVal);
         }
         catch(NumberFormatException e){
-            logger.warn("NFE RSMapper.getDouble");
+            logger.exception(e);
             return 0.0d;
         }
         return val;
@@ -204,8 +204,7 @@ public abstract class RSMapper {
             }
 
         }catch(SQLException e){
-            logger.err("RSMapper.buildMappers SQLException");
-            e.printStackTrace();
+            logger.exception(e);
         }
         return maps;
     }

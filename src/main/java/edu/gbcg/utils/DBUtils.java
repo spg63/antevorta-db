@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * Database utility functions. Nonspecific to this project.
+ * NOTE: All failures in this class will throw an unchecked runtime exception. For my uses a DB failure means the
+ * program can't continue, this certainly isn't true for other systems
  */
 public class DBUtils {
     private static volatile DBUtils _instance = null;
@@ -58,8 +60,12 @@ public class DBUtils {
                     conn.close();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
+                    // Die unchecked
+                    throw new RuntimeException("DBUtils.connect failure");
                 }
             }
+            // Die unchecked
+            throw new RuntimeException("DBUtils.connect failute");
         }
         return conn;
     }
@@ -70,6 +76,8 @@ public class DBUtils {
         }
         catch(SQLException e){
             e.printStackTrace();
+            // Die unchecked
+            throw new RuntimeException("DBUtils.disconnect failure");
         }
     }
 
@@ -194,6 +202,8 @@ public class DBUtils {
         }
         catch(SQLException e){
             e.printStackTrace();
+            // Die unchecked
+            throw new RuntimeException("DBUtils.select failure");
         }
 
         return rs;
@@ -209,6 +219,8 @@ public class DBUtils {
         }
         catch(SQLException e){
             e.printStackTrace();
+            // Die unchecked
+            throw new RuntimeException("DBUtils.closeResultSet failure");
         }
     }
 
@@ -240,6 +252,8 @@ public class DBUtils {
         }
         catch(SQLException e){
             e.printStackTrace();
+            // Die unchecked
+            throw new RuntimeException("DBUtils.executeBatchUpdate failure");
         }
     }
 
@@ -269,7 +283,9 @@ public class DBUtils {
             }
             catch(SQLException ex){
                 ex.printStackTrace();
+                throw new RuntimeException("DBUtils.executeBatchUpdate failure");
             }
+            throw new RuntimeException("DBUtils.executeBatchUpdate failure");
         }
         finally{
             // stmt should have been closed in stmtExecuteBatch
@@ -279,6 +295,7 @@ public class DBUtils {
                 }
                 catch(SQLException e){
                     e.printStackTrace();
+                    throw new RuntimeException("DBUtils.executeBatchUpdate failure");
                 }
             }
             try {
@@ -287,6 +304,7 @@ public class DBUtils {
             }
             catch(SQLException ex){
                 ex.printStackTrace();
+                throw new RuntimeException("DBUtils.executeBatchUpdate failure");
             }
         }
     }
@@ -304,6 +322,7 @@ public class DBUtils {
         }
         catch(SQLException e){
             e.printStackTrace();
+            throw new RuntimeException("DBUtils.executeGenericUpdate failure");
         }
     }
 
@@ -319,7 +338,8 @@ public class DBUtils {
             stmt.executeUpdate(SQLStatement);
         }
         catch(SQLException e){
-            e.printStackTrace();;
+            e.printStackTrace();
+            throw new RuntimeException("DBUtils.executeGenericUpdate failure");
         }
         finally{
             if(stmt != null) {
@@ -328,6 +348,7 @@ public class DBUtils {
                 }
                 catch(SQLException e){
                     e.printStackTrace();
+                    throw new RuntimeException("DBUtils.executeGenericUpdate failure");
                 }
             }
         }

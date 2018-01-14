@@ -13,7 +13,6 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
 class SubmissionsFacilitator: Facilitator {
-
     constructor(): super()
 
     override fun buildDBPaths(): List<String> {
@@ -47,7 +46,7 @@ class SubmissionsFacilitator: Facilitator {
     override fun populateJsonWorkers(): List<JsonPusher> {
         var workers = ArrayList<JsonPusher>()
         for(i in 0 until Finals.DB_SHARD_NUM)
-            workers.add(SubmissionJsonPusher())
+            workers.add(SubmissionsJsonPusher())
         return workers
     }
 
