@@ -144,7 +144,7 @@ abstract class RSMapper {
      * @param rs
      * @return The list of RSMappers
      */
-    abstract fun buildMappers(rs: ResultSet): MutableList<RSMapper>
+    abstract fun buildMappers(rs: ResultSet): MutableList<RSMapper>?
 
     /*
         Return item or ""

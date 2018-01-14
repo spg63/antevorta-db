@@ -8,7 +8,7 @@ package edu.gbcg.dbInteraction.dbcreator.reddit.comments
 import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
-import edu.gbcg.configs.columnsAndKeys.RedditComments
+import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
@@ -32,15 +32,15 @@ class CommentsFacilitator: Facilitator {
     }
 
     override fun getJsonKeysOfInterest(): List<String> {
-        return RedditComments.JSONKeys()
+        return RedditComs.JSONKeys()
     }
 
     override fun getColumnNames(): List<String> {
-        return RedditComments.columnNames()
+        return RedditComs.columnNames()
     }
 
     override fun getDataTypes(): List<String> {
-        return RedditComments.dataTypes()
+        return RedditComs.dataTypes()
     }
 
     override fun populateJsonWorkers(): List<JsonPusher> {

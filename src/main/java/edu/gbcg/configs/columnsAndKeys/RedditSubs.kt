@@ -7,7 +7,7 @@ package edu.gbcg.configs.columnsAndKeys
 
 import edu.gbcg.configs.Finals
 
-object RedditSubmissions {
+object RedditSubs {
     @JvmStatic fun JSONKeys(): List<String> {
         return listOf(
                 "archived",         "author",           "brand_safe",
@@ -70,6 +70,23 @@ object RedditSubmissions {
                 "selftext",             "is_stickied",          "subreddit_name",
                 "subreddit_id",         "subreddit_type",       Finals.TITLE,
                 "link_url"
+        )
+    }
+
+    @JvmStatic fun dataTypesForPrinting(): List<String> {
+        return listOf(
+                "INT",  "BOOL", "TEXT",
+                "BOOL", "BOOL", "INT",
+                "TEXT", "TEXT", "BOOL",
+                "INT",  "BOOL", "TEXT",
+                "BOOL", "BOOL", "TEXT",
+                "BOOL", "INT",  "TEXT",
+                "TEXT", "TEXT", "TEXT",
+                "INT",  "BOOL", "TEXT",
+                "BOOL", "INT",  "INT",
+                "TEXT", "BOOL", "TEXT",
+                "TEXT", "TEXT", "TEXT",
+                "TEXT"
         )
     }
 

@@ -8,7 +8,7 @@ package edu.gbcg.dbInteraction.dbcreator.reddit.submissions
 import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
-import edu.gbcg.configs.columnsAndKeys.RedditSubmissions
+import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
@@ -32,15 +32,15 @@ class SubmissionsFacilitator: Facilitator {
     }
 
     override fun getJsonKeysOfInterest(): List<String> {
-        return RedditSubmissions.JSONKeys()
+        return RedditSubs.JSONKeys()
     }
 
     override fun getColumnNames(): List<String> {
-        return RedditSubmissions.columnNames()
+        return RedditSubs.columnNames()
     }
 
     override fun getDataTypes(): List<String> {
-        return RedditSubmissions.dataTypes()
+        return RedditSubs.dataTypes()
     }
 
     override fun populateJsonWorkers(): List<JsonPusher> {
