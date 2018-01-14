@@ -213,7 +213,7 @@ public class DBUtils {
      * Close a ResultSet object, handling the try / catch
      * @param rs
      */
-    public static void closeResultSet(ResultSet rs){
+    public void closeResultSet(ResultSet rs){
         try{
             rs.close();
         }
