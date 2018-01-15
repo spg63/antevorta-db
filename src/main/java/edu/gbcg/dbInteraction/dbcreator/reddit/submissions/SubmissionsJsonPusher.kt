@@ -190,7 +190,7 @@ class SubmissionsJsonPusher : JsonPusher {
                 conn.rollback()
             }
             catch(exp: SQLException){
-                TSL.get().shutDownAndKill(exp)
+                TSL.get().logAndKill(exp)
             }
         }
         finally{
@@ -199,7 +199,7 @@ class SubmissionsJsonPusher : JsonPusher {
                     conn.autoCommit = true
             }
             catch(exp: SQLException){
-                TSL.get().shutDownAndKill(exp)
+                TSL.get().logAndKill(exp)
             }
             if(ps != null){
                 try{
@@ -213,7 +213,7 @@ class SubmissionsJsonPusher : JsonPusher {
                 conn.close()
             }
             catch(ex: SQLException){
-                TSL.get().shutDownAndKill(ex)
+                TSL.get().logAndKill(ex)
             }
         }
     }

@@ -40,7 +40,7 @@ object DBCommon{
                 st.close()
             }
             catch(e: SQLException){
-                TSL.get().shutDownAndKill(e)
+                TSL.get().logAndKill(e)
             }
         }
         return conn

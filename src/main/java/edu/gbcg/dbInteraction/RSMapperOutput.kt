@@ -14,22 +14,20 @@ import kotlin.text.StringBuilder
 object RSMapperOutput{
     private val out = Out.get()
 
-    @JvmStatic fun printAllColumnsFromRSMappers(mappers: List<RSMapper>?, columnNames: List<String>,
+    @JvmStatic fun printAllColumnsFromRSMappers(mappers: List<RSMapper>, columnNames: List<String>,
                                                 dataTypes: List<String>) {
-        if(mappers == null){
+        if(mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
             return
         }
 
         for(mapper in mappers){
             for(i in 0 until columnNames.size){
-                var outmap = ""
-                if(dataTypes[i] == "BOOL")
-                    outmap = mapper.getBoolean(columnNames[i]).toString()
-                else if(dataTypes[i] == "INT")
-                    outmap = mapper.getLong(columnNames[i]).toString()
-                else
-                    outmap = mapper.getString(columnNames[i])
+                var outmap = when {
+                    dataTypes[i] == "BOOL" -> mapper.getBoolean(columnNames[i]).toString()
+                    dataTypes[i] == "INT" -> mapper.getLong(columnNames[i]).toString()
+                    else -> mapper.getString(columnNames[i])
+                }
                 if(Finals.CREATED_DT == columnNames[i] || Finals.SCRAPED_DT == columnNames[i])
                     outmap = TimeUtils.utcSecondsToZDT(outmap)
                 out.writef("%-20s: %s\n", columnNames[i], outmap)

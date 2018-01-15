@@ -26,7 +26,7 @@ fun main(args : Array<String>){
 
     if(Finals.isWindows() && Finals.START_FRESH){
         logger.err("isWindows() was true while trying to start fresh")
-        logger.shutDownAndKill()
+        logger.logAndKill()
     }
 
     val sw = Stopwatch.createStarted()

@@ -201,7 +201,7 @@ public class TSL extends Thread{
      * Shutdown the logger, sleep for half a second to allow the logger to finish flushing to disk then kill the program
      * with exit code 6
      */
-    public void shutDownAndKill(){
+    public void logAndKill(){
         shuttingDown = true;
         try{
             itemsToLog.put(SHUTDOWN_REQ);
@@ -217,14 +217,14 @@ public class TSL extends Thread{
      * Shutdown the logger, adding a final log message onto the queue before killing the program
      * @param log_message
      */
-    public void shutDownAndKill(String log_message){
+    public void logAndKill(String log_message){
         err(log_message);
-        shutDownAndKill();
+        logAndKill();
     }
 
-    public void shutDownAndKill(Exception e){
+    public void logAndKill(Exception e){
         exception(e);
-        shutDownAndKill();
+        logAndKill();
     }
 
     private String time_str(){
