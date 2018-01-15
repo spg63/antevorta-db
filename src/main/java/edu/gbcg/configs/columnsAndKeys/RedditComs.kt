@@ -50,7 +50,7 @@ object RedditComs {
         return listOf(
                 "INT",  "TEXT", "TEXT",
                 "TEXT", "BOOL", "INT",
-                "INT",  "BOOL", "BOOL",
+                "INT",  "TEXT", "BOOL",
                 "INT",  "TEXT", "BOOL",
                 "TEXT", "TEXT", "TEXT",
                 "INT",  "INT",  "BOOL",

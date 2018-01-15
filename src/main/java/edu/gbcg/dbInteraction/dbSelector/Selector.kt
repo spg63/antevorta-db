@@ -50,7 +50,7 @@ abstract class Selector{
     fun selectAllWhereColumnEquals(columnName: String, equalsValue: String): List<RSMapper> {
         val sel = DBSelector()
                 .from(this.tableName)
-                .where("$columnName < '$equalsValue'")
+                .where("$columnName = '$equalsValue'")
         return generalSelection(sel.sql())
     }
 
@@ -132,8 +132,9 @@ abstract class Selector{
             futureResults.add(executor.submit(worker) as Future<ArrayList<RSMapper>>)
         var results = ArrayList<RSMapper>()
         try{
-            for(i in 0 until Finals.DB_SHARD_NUM)
+            for(i in 0 until Finals.DB_SHARD_NUM) {
                 results.addAll(futureResults[i].get())
+            }
         }
         catch(e: InterruptedException){
             logger_.exception(e)
@@ -141,7 +142,6 @@ abstract class Selector{
         catch(e: ExecutionException){
             logger_.exception(e)
         }
-
         executor.shutdown()
 
         logger_.info("$SQLStatement --- ${results.size} results.")

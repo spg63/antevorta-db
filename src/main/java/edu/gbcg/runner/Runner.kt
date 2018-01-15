@@ -31,8 +31,8 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doSubs()
-    //doComs()
+    //doSubs()
+    doComs()
 
     sw.stop()
 

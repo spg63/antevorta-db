@@ -33,7 +33,6 @@ object RSMapperOutput{
                 out.writef("%-20s: %s\n", columnNames[i], outmap)
             }
             println("\n----------------------------------------------------------------------------------------------------\n")
-            println("\n---------- NEED DATATYPES FOR PRINTING ----------")
         }
     }
 
