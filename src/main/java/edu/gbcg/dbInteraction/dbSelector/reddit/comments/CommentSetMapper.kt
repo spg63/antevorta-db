@@ -13,6 +13,6 @@ class CommentSetMapper: RSMapper {
     constructor(map: Map<String, String>): super(map)
     constructor(): super()
     override fun buildMappers(rs: ResultSet): MutableList<RSMapper>? {
-        return buildMappers_impl(rs, RedditComs.columnNames())
+        return buildMappersImpl(rs, RedditComs.columnNames())
     }
 }
