@@ -190,7 +190,7 @@ abstract class RSMapper {
                 // For each column, check to see if we have a value and if so, add it to the map
                 // NOTE: using the keyset instead of colNames because columns are missing from non-* queries
                 for(col in colIDs.keys)
-                    map[col] = rs.getString(colIDs[col]!!)   // Null safety...sick
+                    map.put(col, rs.getString(colIDs[col]!!))   // Null safety...sick
 
                 // Add it to the list
                 maps.add(BaseMapper(map))
