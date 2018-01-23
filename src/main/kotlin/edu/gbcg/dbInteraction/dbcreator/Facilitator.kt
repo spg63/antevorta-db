@@ -3,11 +3,12 @@
  * License: MIT
  */
 
-package edu.gbcg.dbInteraction.dbcreator.reddit
+package edu.gbcg.dbInteraction.dbcreator
 
 import edu.gbcg.configs.Finals
 import edu.gbcg.dbInteraction.DBCommon
 import edu.gbcg.dbInteraction.DBWorker
+import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 import edu.gbcg.utils.FileUtils
 import edu.gbcg.utils.TSL
 import java.io.*
@@ -228,6 +229,4 @@ abstract class Facilitator {
             }
         }
     }
-
 }
-

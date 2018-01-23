@@ -12,7 +12,7 @@ import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dbInteraction.RSMapperOutput
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
-import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator
+import edu.gbcg.dbInteraction.dbcreator.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.gbcg.utils.Out
@@ -22,10 +22,8 @@ fun main(args : Array<String>){
     val logger = TSL.get()
     val out = Out.get()
 
-    if(Finals.isWindows() && Finals.START_FRESH){
-        logger.err("isWindows() was true while trying to start fresh")
-        logger.logAndKill()
-    }
+    if(Finals.isWindows() && Finals.START_FRESH)
+        logger.logAndKill("isWindows() was true while trying to start fresh")
 
     val sw = Stopwatch.createStarted()
 

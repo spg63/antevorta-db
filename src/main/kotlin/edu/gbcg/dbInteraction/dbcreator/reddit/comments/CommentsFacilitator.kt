@@ -9,7 +9,7 @@ import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditComs
-import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator
+import edu.gbcg.dbInteraction.dbcreator.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
 class CommentsFacilitator: Facilitator {
