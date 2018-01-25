@@ -9,6 +9,7 @@ import com.google.common.base.Stopwatch
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
+import edu.gbcg.dataAssociator.reddit.RedditComOrganizer
 import edu.gbcg.dbInteraction.RSMapperOutput
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
@@ -27,8 +28,8 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    //doSubs()
-    doComs()
+    doSubs()
+    //doComs()
 
     sw.stop()
 
@@ -47,6 +48,13 @@ fun doSubs(){
     val rss = RedditSubSelector()
 
     val res = rss.selectAllFromAuthor("a4k04")
+
+    val comGetter = RedditComOrganizer(res[1])
+
+    val coms = comGetter.getAllCommentsFromSubmission()
+    RSMapperOutput.printAllColumnsFromRSMappers(coms, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
+
+    return
     //val results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58)
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
