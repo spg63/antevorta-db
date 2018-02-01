@@ -5,10 +5,7 @@
 
 package edu.gbcg.utils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -85,8 +82,10 @@ public class TSL extends Thread{
                     label = "[INF] ";
                 else if(item.startsWith("[WARN]"))
                     label = "[WAR] ";
-                else
+                else if(item.startsWith("[ERROR]"))
                     label = "[ERR] ";
+                else
+                    label = "[EXP]";
 
                 // Split the init lable off the string
                 String[] splitItem = item.split(" ", 2);
@@ -159,6 +158,30 @@ public class TSL extends Thread{
         }
     }
 
+    private void exception(Object str){
+        if(shuttingDown || loggerTerminated)
+            return;
+        try{
+            itemsToLog.put("[EXCEPTION] " + str);
+        }
+        catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(("ThreadSafeLogger.exception() -- Unexpected interruption"));
+        }
+    }
+
+    /**
+     * Log an exception
+     * @param e
+     */
+    public void exception(Exception e){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String trace = sw.toString();
+        exception("\n" + trace);
+    }
+
     /**
      * Shutdown the logger, thread will sleep for 250ms to allow proper flushing
      */
@@ -178,7 +201,7 @@ public class TSL extends Thread{
      * Shutdown the logger, sleep for half a second to allow the logger to finish flushing to disk then kill the program
      * with exit code 6
      */
-    public void shutDownAndKill(){
+    public void logAndKill(){
         shuttingDown = true;
         try{
             itemsToLog.put(SHUTDOWN_REQ);
@@ -190,6 +213,20 @@ public class TSL extends Thread{
         }
     }
 
+    /**
+     * Shutdown the logger, adding a final log message onto the queue before killing the program
+     * @param log_message
+     */
+    public void logAndKill(String log_message){
+        err(log_message);
+        logAndKill();
+    }
+
+    public void logAndKill(Exception e){
+        exception(e);
+        logAndKill();
+    }
+
     private String time_str(){
         ldt = LocalDateTime.now();
         int hour = ldt.getHour();
@@ -197,7 +234,18 @@ public class TSL extends Thread{
         int sec = ldt.getSecond();
         int milli = (ldt.getNano())/(1000000);
 
-        String time_s = "("+hour+":"+min+":"+sec+"."+milli+") > ";
+        String hour_s = hour < 10 ? ("0" + hour) : Integer.toString(hour);
+        String min_s = min < 10 ? ("0" + min) : Integer.toString(min);
+        String sec_s = sec < 10 ? ("0" + sec) : Integer.toString(sec);
+        String mil_s;
+        if(milli > 10 && milli < 100)
+            mil_s = "0" + milli;
+        else if(milli < 10)
+            mil_s = "00" + milli;
+        else
+            mil_s = Integer.toString(milli);
+
+        String time_s = "("+hour_s+":"+min_s+":"+sec_s+"."+mil_s+") > ";
         return time_s;
     }
 }

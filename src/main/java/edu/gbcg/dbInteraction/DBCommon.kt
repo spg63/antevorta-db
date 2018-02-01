@@ -1,57 +1,57 @@
 /*
- * Copyright (c) 2018 Sean Grimes. All rights reserved.
- * License: MIT License
+ * Copyright (c) 2018 Sean Grimes. All Rights Reserved.
+ * License: MIT
  */
 
-package edu.gbcg.dbInteraction;
+package edu.gbcg.dbInteraction
 
-import edu.gbcg.configs.Finals;
-import edu.gbcg.utils.DBUtils;
-import edu.gbcg.utils.TSL;
+import edu.gbcg.configs.Finals
+import edu.gbcg.utils.DBUtils
+import edu.gbcg.utils.TSL
+import java.sql.Connection
+import java.sql.ResultSet
+import java.sql.SQLException
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
 
 /**
  * Class to hold functionality shared among DB classes and wrapping the generalized functions from DBUtils to handle
  * things like data paths, db locations, db type, and whether or not to enforce foreign keys. Basically just wraps up
  * DBUtils with default values for this specific project to simplify function calls in higher level code
  */
-public class DBCommon {
-    private static boolean enforceForeignKeys = Finals.ENABLE_FOREIGN_KEYS;
-    private static String dbPrefix = Finals.DB_URL_PREFIX;
-    private static String dbDriver = Finals.DB_DRIVER;
+
+object DBCommon{
+    @JvmField val enforceForeignKeys = Finals.ENABLE_FOREIGN_KEYS
+    @JvmField val dbPrefix = Finals.DB_URL_PREFIX
+    @JvmField val dbDriver = Finals.DB_DRIVER
+
     /**
      * Gets a DB Connection object based on db name, the URL to the DB and the type of DB driver in
      * use. The URL prefix and DB Driver class are both found in Finals
      * @param db Name of the database
      * @return The connection to the db
      */
-    public static Connection connect(String db){
-        Connection conn = DBUtils.get().connect(db, dbPrefix, dbDriver, enforceForeignKeys);
-        if(Finals.SYNC_MODE_OFF) {
-            try {
-                Statement st = conn.createStatement();
-                String sql = "PRAGMA synchronous=OFF";
-                st.execute(sql);
-                st.close();
-            } catch (SQLException e) {
-                TSL.get().err("DBCommon.connect exception");
-                e.printStackTrace();
+    @JvmStatic fun connect(db: String): Connection {
+        val conn = DBUtils.get().connect(db, dbPrefix, dbDriver, enforceForeignKeys)
+        if(Finals.SYNC_MODE_OFF){
+            try{
+                val st = conn.createStatement()
+                val sql = "PRAGMA synchronous=OFF"
+                st.execute(sql)
+                st.close()
+            }
+            catch(e: SQLException){
+                TSL.get().logAndKill(e)
             }
         }
-        return conn;
+        return conn
     }
 
     /**
      * Close database connection
      * @param conn The DB connection
      */
-    public static void disconnect(Connection conn){
-        DBUtils.get().disconnect(conn);
+    @JvmStatic fun disconnect(conn: Connection) {
+        DBUtils.get().disconnect(conn)
     }
 
     /**
@@ -60,8 +60,8 @@ public class DBCommon {
      * @param conn The connection to the DB
      * @param SQLStatement The SQLstatement, as a string
      */
-    public static void insert(Connection conn, String SQLStatement){
-        DBUtils.get().insert(conn, SQLStatement);
+    @JvmStatic fun insert(conn: Connection, SQLStatement: String) {
+        DBUtils.get().insert(conn, SQLStatement)
     }
 
     /**
@@ -70,8 +70,8 @@ public class DBCommon {
      * @param db The path to the DB
      * @param SQLStatement The SQLstatement, as a string
      */
-    public static void insert(String db, String SQLStatement){
-        DBUtils.get().insert(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys);
+    @JvmStatic fun insert(db: String, SQLStatement: String) {
+        DBUtils.get().insert(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys)
     }
 
     /**
@@ -80,8 +80,8 @@ public class DBCommon {
      * @param conn The connection to the DB
      * @param SQLStatement The SQLStatement, as a string
      */
-    public static void delete(Connection conn, String SQLStatement){
-        DBUtils.get().delete(conn, SQLStatement);
+    @JvmStatic fun delete(conn: Connection, SQLStatement: String) {
+        DBUtils.get().delete(conn, SQLStatement)
     }
 
     /**
@@ -90,8 +90,8 @@ public class DBCommon {
      * @param db The path to the DB
      * @param SQLStatement The SQL Statement, as a string
      */
-    public static void delete(String db, String SQLStatement){
-        DBUtils.get().delete(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys);
+    @JvmStatic fun delete(db: String, SQLStatement: String) {
+        DBUtils.get().delete(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys)
     }
 
     /**
@@ -101,8 +101,8 @@ public class DBCommon {
      * @param conn The DB Connection
      * @param SQLStatements A list of SQL statements
      */
-    public static void insertAll(Connection conn, List<String> SQLStatements){
-        DBUtils.get().insertAll(conn, SQLStatements);
+    @JvmStatic fun insertAll(conn: Connection, SQLStatements: List<String>) {
+        DBUtils.get().insertAll(conn, SQLStatements)
     }
 
     /**
@@ -112,8 +112,8 @@ public class DBCommon {
      * @param db The path to the DB
      * @param SQLStatements A list of SQL statements
      */
-    public static void insertAll(String db, List<String> SQLStatements){
-        DBUtils.get().insertAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys);
+    @JvmStatic fun insertAll(db: String, SQLStatements: List<String>) {
+        DBUtils.get().insertAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys)
     }
 
     /**
@@ -123,8 +123,8 @@ public class DBCommon {
      * @param conn The DB connection
      * @param SQLStatements A list of SQL statements
      */
-    public static void deleteAll(Connection conn, List<String> SQLStatements){
-        DBUtils.get().deleteAll(conn, SQLStatements);
+    @JvmStatic fun deleteAll(conn: Connection, SQLStatements: List<String>) {
+        DBUtils.get().deleteAll(conn, SQLStatements)
     }
 
     /**
@@ -133,8 +133,8 @@ public class DBCommon {
      * @param db The path ot the DB
      * @param SQLStatements A list of SQL statements
      */
-    public static void deleteAll(String db, List<String> SQLStatements){
-        DBUtils.get().deleteAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys);
+    @JvmStatic fun deleteAll(db: String, SQLStatements: List<String>) {
+        DBUtils.get().deleteAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys)
     }
 
     /**
@@ -144,8 +144,8 @@ public class DBCommon {
      * @param SQLStatement SQL select statement
      * @return A ResultSet if the selection was successful
      */
-    public static ResultSet select(Connection conn, String SQLStatement){
-        return DBUtils.get().select(conn, SQLStatement);
+    @JvmStatic fun select(conn: Connection, SQLStatement: String): ResultSet {
+        return DBUtils.get().select(conn, SQLStatement)
     }
 
     /**
@@ -155,8 +155,8 @@ public class DBCommon {
      * @param SQLStatements SQL select statements
      * @return A list of ResultSet objects if the selections were successful
      */
-    public static List<ResultSet> selectAll(Connection conn, List<String> SQLStatements){
-        return DBUtils.get().selectAll(conn, SQLStatements);
+    @JvmStatic fun selectAll(conn: Connection, SQLStatements: List<String>): List<ResultSet> {
+        return DBUtils.get().selectAll(conn, SQLStatements)
     }
 
     /**
@@ -164,8 +164,8 @@ public class DBCommon {
      * @param conn
      * @param SQLStatement
      */
-    public static void execute(Connection conn, String SQLStatement){
-        DBUtils.get().execute(conn, SQLStatement);
+    @JvmStatic fun execute(conn: Connection, SQLStatement: String) {
+        DBUtils.get().execute(conn, SQLStatement)
     }
 
     /**
@@ -175,15 +175,15 @@ public class DBCommon {
      * @param indexName What to call the index
      * @return The SQL string
      */
-    public static String getDBIndexSQLStatement(String table, String columnToIndex, String indexName){
-        return "create index "+indexName+" on "+table+"("+columnToIndex+");";
+    @JvmStatic fun getDBIndexSQLStatement(table: String, columnToIndex: String, indexName: String): String {
+        return "create index $indexName on $table ($columnToIndex);"
     }
 
     /**
      * Close an open resultset, prevents try/catch all over the code
      * @param rs
      */
-    public static void closeResultSet(ResultSet rs){
-        DBUtils.get().closeResultSet(rs);
+    @JvmStatic fun closeResultSet(rs: ResultSet) {
+        DBUtils.get().closeResultSet(rs)
     }
 }

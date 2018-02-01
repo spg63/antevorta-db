@@ -6,11 +6,9 @@
 package edu.gbcg.runner
 
 import com.google.common.base.Stopwatch
-import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
-import edu.gbcg.configs.RawDataLocator
-import edu.gbcg.configs.columnsAndKeys.RedditComments
-import edu.gbcg.configs.columnsAndKeys.RedditSubmissions
+import edu.gbcg.configs.columnsAndKeys.RedditComs
+import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dbInteraction.RSMapperOutput
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
@@ -19,16 +17,16 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
-import java.time.LocalDateTime
-import java.util.*
 
 fun main(args : Array<String>){
     val logger = TSL.get()
     val out = Out.get()
 
+    Finals.START_FRESH = false
+
     if(Finals.isWindows() && Finals.START_FRESH){
         logger.err("isWindows() was true while trying to start fresh")
-        logger.shutDownAndKill()
+        logger.logAndKill()
     }
 
     val sw = Stopwatch.createStarted()
@@ -52,17 +50,17 @@ fun doSubs(){
     }
     val rss = RedditSubSelector()
 
-    val results = rss.selectAllFromAuthor("a4k04")
+    val res = rss.selectAllFromAuthor("a4k04")
     //val results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58)
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rss.selectAllBetweenDates(startDate, endDate)
-    //val results = rss.selectAllWhereColumnGreaterThan("score", "250000")
+    //val results = rss.selectAllWhereColumnEquals("subreddit_name", "4chan")
     //val results = rss.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
 
 
-    RSMapperOutput.printAllColumnsFromRSMappers(results, RedditSubmissions.columnsForPrinting())
-    //RSMapperOutput.RSMappersToCSV(results, RedditSubmissions.columnsForPrinting(), "out.csv")
+    RSMapperOutput.printAllColumnsFromRSMappers(res, RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
+    //RSMapperOutput.RSMappersToCSV(results, RedditSubs.columnsForPrinting(), "out.csv")
 }
 
 fun doComs(){
@@ -72,15 +70,13 @@ fun doComs(){
     }
     val rcs = RedditComSelector()
 
-    //val results = rcs.selectAllFromAuthor("a4k04")
+    val res = rcs.selectAllFromAuthor("a4k04")
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rcs.selectAllBetweenDates(startDate, endDate)
     //val results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
-    //val results = rcs.selectAllWhereColumnGreaterThan("score", "1000000")
-    val results = rcs.selectAllWhereColumnGreaterThan("score", "75000")
 
-    RSMapperOutput.printAllColumnsFromRSMappers(results, RedditComments.columnsForPrinting())
+    RSMapperOutput.printAllColumnsFromRSMappers(res, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
 }
 
 fun buildDBShards(fac: Facilitator){

@@ -27,7 +27,7 @@ class SelectionWorker
      * A thread running on a single DB shard
      * @return A list of populated RSMapper objects
      */
-    override fun call(): List<RSMapper> {
+    override fun call(): MutableList<RSMapper>? {
         // Connect to the DB
         val conn = DBCommon.connect(this.dbPath)
 

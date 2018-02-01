@@ -1,18 +1,15 @@
 /*
- * Copyright (c) 2018 Sean Grimes. All rights reserved.
- * License: MIT License
+ * Copyright (c) 2018 Sean Grimes. All Rights Reserved.
+ * License: MIT
  */
 
-package edu.gbcg.configs.columnsAndKeys;
+package edu.gbcg.configs.columnsAndKeys
 
-import edu.gbcg.configs.Finals;
+import edu.gbcg.configs.Finals
 
-import java.util.Arrays;
-import java.util.List;
-
-public class RedditSubmissions {
-    public static List<String> JSONKeys(){
-        return Arrays.asList(
+object RedditSubs {
+    @JvmStatic fun JSONKeys(): List<String> {
+        return listOf(
                 "archived",         "author",           "brand_safe",
                 "contest_mode",     "created_utc",      "distinguished",
                 "domain",           "edited",           "gilded",
@@ -35,11 +32,11 @@ public class RedditSubmissions {
                 "pinned",           "retrieved_on",     "score",
                 "selftext",         "stickied",         "subreddit",
                 "subreddit_id",     "subreddit_type",   "title",        "url"
-        );
+        )
     }
 
-    public static List<String> columnNames(){
-        return Arrays.asList(
+    @JvmStatic fun columnNames(): List<String> {
+        return listOf(
                 "ID",                   "archived",             Finals.AUTHOR,
                 "brand_safe",           "contest_mode",         Finals.CREATED_DT,
                 "distinguished",        "host_domain",          "edited",
@@ -56,11 +53,11 @@ public class RedditSubmissions {
                 "text_exp_1",           "text_exp_2",           "text_exp_3",
                 "text_exp_4",           "text_exp_5",           "text_exp_6",
                 "text_exp_7",           "text_exp_8",           "text_exp_9"
-        );
+        )
     }
 
-    public static List<String> columnsForPrinting(){
-        return Arrays.asList(
+    @JvmStatic fun columnsForPrinting(): List<String> {
+        return listOf(
                 "ID",                   "archived",             Finals.AUTHOR,
                 "brand_safe",           "contest_mode",         Finals.CREATED_DT,
                 "distinguished",        "host_domain",          "edited",
@@ -73,12 +70,28 @@ public class RedditSubmissions {
                 "selftext",             "is_stickied",          "subreddit_name",
                 "subreddit_id",         "subreddit_type",       Finals.TITLE,
                 "link_url"
-        );
+        )
     }
 
-    // Problem with datetime
-    public static List<String> dataTypes(){
-        return Arrays.asList(
+    @JvmStatic fun dataTypesForPrinting(): List<String> {
+        return listOf(
+                "INT",  "BOOL", "TEXT",
+                "BOOL", "BOOL", "INT",
+                "TEXT", "TEXT", "BOOL",
+                "INT",  "BOOL", "TEXT",
+                "BOOL", "BOOL", "TEXT",
+                "BOOL", "INT",  "TEXT",
+                "TEXT", "TEXT", "TEXT",
+                "INT",  "BOOL", "TEXT",
+                "BOOL", "INT",  "INT",
+                "TEXT", "BOOL", "TEXT",
+                "TEXT", "TEXT", "TEXT",
+                "TEXT"
+        )
+    }
+
+    @JvmStatic fun dataTypes(): List<String> {
+        return listOf(
                 " INTEGER PRIMARY KEY AUTOINCREMENT,",  " INTEGER DEFAULT 0,",  " TEXT,",
                 " INTEGER DEFAULT 0,",                  " INTEGER DEFAULT 0,",  " INTEGER,",
                 " TEXT,",                               " TEXT,",               " INTEGER DEFAULT 0,",
@@ -95,6 +108,6 @@ public class RedditSubmissions {
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " TEXT,",                               " TEXT,",               " TEXT,",
                 " TEXT,",                               " TEXT,",               " TEXT"
-        );
+        )
     }
 }
