@@ -65,7 +65,7 @@ abstract class Facilitator {
         if(dbs_exist && Finals.START_FRESH){
             logger_.warn("DB shards exist && starting fresh")
             logger_.info("Dropping table in DB shards")
-            val sql = "drop table if exists " + this.tableName_ + ";"
+            val sql = "drop table if exists ${this.tableName_};"
             // For each db in the list, drop the table
             this.DBAbsolutePaths_.forEach{ DBCommon.delete(it, sql) }
         }
@@ -86,7 +86,7 @@ abstract class Facilitator {
 
         // Create the table schema
         val sb = StringBuilder()
-        sb.append("create table if not exists "+this.tableName_+"(")
+        sb.append("create table if not exists ${this.tableName_}(")
         for(i in 0 until this.columnNames_.size){
             sb.append(this.columnNames_[i])
             sb.append(this.dataTypes_[i])
@@ -100,7 +100,7 @@ abstract class Facilitator {
     }
 
     fun pushJSONDataIntoDBs() {
-        // Early exit if we're not push data
+        // Early exit if we're not pushing data
         if(!Finals.START_FRESH) return
 
         if(this.DBAbsolutePaths_.isEmpty())
@@ -112,7 +112,7 @@ abstract class Facilitator {
         // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards
         for(json in this.jsonAbsolutePaths_){
             val f = File(json)
-            logger_.info("Reading " + f.name)
+            logger_.info("Reading ${f.name}")
 
             var br: BufferedReader? = null
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
@@ -145,7 +145,7 @@ abstract class Facilitator {
                         linesList.clear()
 
                         if(write_total_lines_read % 40 == 0)
-                            logger_.info(numberFormat_.format(total_lines_read) + " lines read from " + f.name)
+                            logger_.info("${numberFormat_.format(total_lines_read)} lines read from ${f.name}")
                         ++write_total_lines_read
 
                         // Give the linesList new ArrayLists to store next set of lines
@@ -157,9 +157,9 @@ abstract class Facilitator {
 
                 // There could be leftover json lines that don't get pushed due to not meeting the dbDumpLimit amount
                 // of lines. Start up the workers again and push the remaining lines
-                logger_.info("Launching final JSON push for " + f.name)
+                logger_.info("Launching final JSON push for ${f.name}")
                 total_lines_read += lineReadCounter
-                logger_.info("Total lines read " + numberFormat_.format(total_lines_read) + " for " + f.name)
+                logger_.info("Total lines read ${numberFormat_.format(total_lines_read)} for ${f.name}")
                 letWorkersFly(linesList)
             }
             catch(e: IOException){
