@@ -5,6 +5,8 @@
 
 package edu.gbcg.utils;
 
+import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;

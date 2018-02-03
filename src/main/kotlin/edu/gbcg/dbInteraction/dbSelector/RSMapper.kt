@@ -54,7 +54,8 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger_.exception(e)
-            return 0
+            logger_.err("RSMapper.getInt conversion failed")
+            throw e
         }
         return value
     }
@@ -73,7 +74,8 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger_.exception(e)
-            return 0
+            logger_.err("RSMapper.getLong conversion failed")
+            throw e
         }
         return value
     }
@@ -88,7 +90,7 @@ abstract class RSMapper {
         val time = getLong(key)
         if(time == 0L){
             logger_.err("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
-            return null
+            throw IllegalArgumentException("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
         }
         return TimeUtils.utcSecondsToLDT(time)
     }
@@ -107,7 +109,8 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger_.exception(e)
-            return 0.0
+            logger_.err("RSMapper.getDouble conversion failed")
+            throw e
         }
         return value
     }
@@ -150,7 +153,12 @@ abstract class RSMapper {
         Return item or ""
      */
     protected fun getItem(key: String): String {
-        return this.map.getOrDefault(key, "")
+        val res = this.map[key]
+        if(res == null) {
+            logger_.err("RSMapper.getItem() No value for $key")
+            throw IllegalArgumentException("RSMapper.getItem() No value for $key")
+        }
+        return res
     }
 
     /*

@@ -3,18 +3,20 @@
  * License: MIT
  */
 
-package client
+package edu.gbcg.client
 
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
+import java.net.InetAddress
 import java.net.Socket
 
 fun main(args: Array<String>){
     var sentence: String
     var modSentence: String
     var br = BufferedReader(InputStreamReader(System.`in`))
-    var sock = Socket("localhost", 3383)
+    //var sock = Socket(10.0.1.250, 3383)
+    var sock = Socket("seanpgrimes.com", 3383)
     var out = DataOutputStream(sock.getOutputStream())
     var fromServ = BufferedReader(InputStreamReader(sock.getInputStream()))
 
