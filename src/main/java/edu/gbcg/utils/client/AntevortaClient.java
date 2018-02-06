@@ -107,7 +107,7 @@ public class AntevortaClient {
 
     public static void main(String[] args){
         AntevortaClient av = new AntevortaClient("ignore_me_for_now");
-        JSONArray res = av.queryServer("RedditComs", "function", "select * from comment_attrs where author='a4k04'");
+        JSONArray res = av.queryServer("RedditComs", "generalSelect", "select * from comment_attrs where author='----root'");
 
         // NOTE: The below is only if you want to convert back to RSMapper object for each JSON object. Definitely
         // not a necessity
