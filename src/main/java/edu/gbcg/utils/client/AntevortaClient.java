@@ -5,12 +5,13 @@
 
 package edu.gbcg.utils.client;
 
-import edu.gbcg.configs.columnsAndKeys.RedditComs;
-import edu.gbcg.dbInteraction.RSMapperOutput;
-import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
+//import edu.gbcg.configs.columnsAndKeys.RedditComs;
+//import edu.gbcg.configs.columnsAndKeys.RedditSubs;
+//import edu.gbcg.dbInteraction.RSMapperOutput;
+//import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
+//import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+//import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import edu.gbcg.dbInteraction.dbSelector.DBSelector;
-import edu.gbcg.dbInteraction.dbSelector.RSMapper;
-import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -120,7 +121,7 @@ public class AntevortaClient {
 
         // Column name for author
         final String authorColName = "author";
-        final String author = "a4k04";
+        final String author = "----root";
 
         // Create a new client, in the future the c'tor will need to take a config file path that holds host and
         // ipaddr as well as authentication information
@@ -129,7 +130,7 @@ public class AntevortaClient {
         // Create a DBSelector to create an SQL query string. This thing is more helpful for more complex string, but
         // here's a basic example selecting all comments or submissions from an author
         DBSelector dbsql = new DBSelector()
-                .from(redditComTable)
+                .from(redditSubTable)
                 .where(authorColName + "='"+ author + "'");
 
         // Get the sql string from DBSelector
@@ -148,18 +149,19 @@ public class AntevortaClient {
             resultObjects.add(res.getJSONObject(i));
 
         // Print the JSONObjects
-        //for(JSONObject obj : resultObjects)
-        //    System.out.println(obj);
+        for(JSONObject obj : resultObjects)
+            System.out.println(obj);
 
 
         // NOTE: The below is only if you want to convert back to RSMapper object for each JSON object. Definitely
         // not a necessity
-        List<RSMapper> mappers = new ArrayList<>();
-        for(JSONObject obj : resultObjects)
-            mappers.add(new BaseMapper(obj));
+        //List<RSMapper> mappers = new ArrayList<>();
+        //for(JSONObject obj : resultObjects)
+        //    mappers.add(new BaseMapper(obj));
 
         // Print the RSMapper objects
-        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting());
+        //RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComsk
+        //        .dataTypesForPrinting());
     }
 
 }
