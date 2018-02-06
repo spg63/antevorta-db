@@ -140,7 +140,7 @@ class Dolius(private val socket: Socket): Runnable {
         val selector = Selector.getSelectorOnType(sqlQuery)
 
         // Make the selection, get the RSMappers
-        return selector.generalSelection(args[0])
+        return selector.generalSelection(sqlQuery)
     }
 
     /**
