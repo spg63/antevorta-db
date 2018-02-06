@@ -5,12 +5,11 @@
 
 package edu.gbcg.utils.client;
 
-import edu.gbcg.configs.columnsAndKeys.RedditComs;
-import edu.gbcg.dbInteraction.RSMapperOutput;
-import edu.gbcg.dbInteraction.dbSelector.RSMapper;
-import edu.gbcg.dbInteraction.dbSelector.Selector;
-import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
-import edu.gbcg.utils.TSL;
+//import edu.gbcg.configs.columnsAndKeys.RedditComs;
+//import edu.gbcg.dbInteraction.RSMapperOutput;
+//import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
+//import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+//import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,7 +26,6 @@ public class AntevortaClient {
     private String configPath;
     private List<String> methodNames;
     private Class selectorClass;
-    private TSL logger_ = TSL.get();
     private final String DB_KEY = "dataBase";
     private final String METHOD_KEY = "methodName";
     private final String NOOP_FLAG = "=*=";
@@ -36,7 +34,6 @@ public class AntevortaClient {
         this.configPath = configFilePath;
         verifyGitIgnore();
         parseConfigFile();
-        selectorClass = Selector.class;
         populateMethods();
     }
 
@@ -120,19 +117,28 @@ public class AntevortaClient {
         JSONArray res = av.queryServer("RedditComs", "generalSelect", "select * from comment_attrs where " +
                 "author='----root'");
 
-        if(res == null) {
-            System.out.println("No results");
-            System.exit(0);
-        }
+        if(res == null)
+            return;
 
+        // Get the objects out of the JSONArray
+        List<JSONObject> resultObjects = new ArrayList<>();
+        for(int i = 0; i < res.length(); ++i)
+            resultObjects.add(res.getJSONObject(i));
+
+        // Print the JSONObjects
+        for(JSONObject obj : resultObjects)
+            System.out.println(obj);
+
+
+    /*
         // NOTE: The below is only if you want to convert back to RSMapper object for each JSON object. Definitely
         // not a necessity
         List<RSMapper> mappers = new ArrayList<>();
-        for(int i = 0; i < res.length(); ++i){
-            JSONObject obj = res.getJSONObject(i);
-            mappers.add(new CommentSetMapper(obj));
-        }
+        for(JSONObject obj : resultObjects)
+            mappers.add(new BaseMapper(obj));
+
         RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting());
+    */
     }
 
 }

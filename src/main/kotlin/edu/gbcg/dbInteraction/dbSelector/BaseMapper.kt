@@ -5,6 +5,7 @@
 
 package edu.gbcg.dbInteraction.dbSelector
 
+import org.json.JSONObject
 import java.sql.ResultSet
 
 /**
@@ -15,6 +16,7 @@ import java.sql.ResultSet
 class BaseMapper: RSMapper {
     constructor(): super()
     constructor(map: Map<String, String>): super(map)
+    constructor(jsonObject: JSONObject): super(jsonObject)
     override fun buildMappers(rs: ResultSet): MutableList<RSMapper>? {
         return null
     }
