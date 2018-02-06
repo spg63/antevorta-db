@@ -34,7 +34,10 @@ class Dolius(private val socket: Socket): Runnable {
     private val MAX_SLEEP = 5
     private val logger_ = TSL.get()
     private var SERVER_BUSY = false
-    private val BUSY_STR = "Server was busy, please try again later."
+    private var SANITIZE_FAIL = false
+    private val NOOP_FLAG = "=*="
+    private val BUSY_STR = "${NOOP_FLAG}Server was busy, unable to process request. Please try again later."
+    private val REJT_STR = "${NOOP_FLAG}Server will not perform that kind of work."
     private val sleepTimeMS: Long = 2000
     private val DB_KEY = "dataBase"
     private val METHOD_KEY = "methodName"
@@ -68,9 +71,17 @@ class Dolius(private val socket: Socket): Runnable {
         val inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
         val input = inputReader.readLine()
 
-        if(SERVER_BUSY) {
-            handleBusy(input)
+        sanitize(input)
+        if(SANITIZE_FAIL){
+            handleRejection(input)
             destroy()
+            return
+        }
+
+        if(SERVER_BUSY) {
+            handleBusy()
+            destroy()
+            return
         }
 
         logger_.info("Dolius processing: $input")
@@ -93,6 +104,20 @@ class Dolius(private val socket: Socket): Runnable {
 
 
 // ---------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Sanitize the input string
+     */
+    private fun sanitize(inputLine: String){
+        // Get the banned words from a config file in future
+        val banned = listOf("drop", "create", "insert", "index", "rename", "pragma", "schema", "update", "dump")
+        val lowerInput = inputLine.toLowerCase()
+        for(word in banned)
+            if(word in lowerInput) {
+                SANITIZE_FAIL = true
+                return
+            }
+    }
 
     /**
      * Determines which function to call and queries the DB after some basic validation
@@ -135,8 +160,18 @@ class Dolius(private val socket: Socket): Runnable {
         clientWriter.close()
     }
 
-    private fun handleBusy(inputString: String){
+    private fun handleBusy(){
+        logger_.warn("Dolius: handleBusy")
+        val clientWriter = DataOutputStream(socket.getOutputStream())
+        clientWriter.writeBytes(BUSY_STR)
+        clientWriter.close()
+    }
 
+    private fun handleRejection(inpurString: String){
+        logger_.warn("Dolius: handleRejection -- $inpurString")
+        val clientWriter = DataOutputStream(socket.getOutputStream())
+        clientWriter.writeBytes(REJT_STR)
+        clientWriter.close()
     }
 
     private fun destroy(){

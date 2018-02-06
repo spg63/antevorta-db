@@ -30,6 +30,7 @@ public class AntevortaClient {
     private TSL logger_ = TSL.get();
     private final String DB_KEY = "dataBase";
     private final String METHOD_KEY = "methodName";
+    private final String NOOP_FLAG = "=*=";
 
     AntevortaClient(String configFilePath){
         this.configPath = configFilePath;
@@ -58,6 +59,15 @@ public class AntevortaClient {
             serverWriter.writeBytes(jsonString + "\n");
             serverWriter.flush();
             String jsonArrayString = serverReader.readLine();
+
+            // Response starts with NOOP_FLAG if the server didn't perform the request
+            if(jsonArrayString.startsWith(NOOP_FLAG)){
+                System.out.println("Server failed to return results: " + jsonArrayString.substring(NOOP_FLAG.length()));
+                return null;
+            }
+
+            // NOTE: A query returning no results will return [], a valid (empty) JSONArray. RSMappersOutput knows
+            // how to handle empty results
             results = new JSONArray(jsonArrayString);
         }
         catch(IOException e){
@@ -107,7 +117,13 @@ public class AntevortaClient {
 
     public static void main(String[] args){
         AntevortaClient av = new AntevortaClient("ignore_me_for_now");
-        JSONArray res = av.queryServer("RedditComs", "generalSelect", "select * from comment_attrs where author='----root'");
+        JSONArray res = av.queryServer("RedditComs", "generalSelect", "select * from comment_attrs where " +
+                "author='----root'");
+
+        if(res == null) {
+            System.out.println("No results");
+            System.exit(0);
+        }
 
         // NOTE: The below is only if you want to convert back to RSMapper object for each JSON object. Definitely
         // not a necessity
