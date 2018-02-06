@@ -130,8 +130,11 @@ abstract class Selector{
     protected fun genericSelect(workers: List<SelectionWorker>, SQLStatement: String): List<RSMapper> {
         var futureResults: ArrayList<Future<ArrayList<RSMapper>>> = ArrayList()
         val executor = Executors.newFixedThreadPool(Finals.DB_SHARD_NUM)
-        for(worker in workers)
-            futureResults.add(executor.submit(worker) as Future<ArrayList<RSMapper>>)
+
+        // For each worker in workers, submit to executor and put result in futureResults
+        workers.mapTo(futureResults) { executor.submit(it) as Future<ArrayList<RSMapper>> }
+
+        // Get all results from the worker threads and place the RSMappers in the results ArrayList
         var results = ArrayList<RSMapper>()
         try{
             for(i in 0 until Finals.DB_SHARD_NUM) {
@@ -161,16 +164,15 @@ abstract class Selector{
     }
 
     /*
-        Get selector type based on fuzzy string matching...stupid idea, will revisit another time
+        Get selector type based on string matching...stupid idea, will revisit another time
+        NOTE: The companion object is kotlin specific, to
      */
     companion object {
         fun getSelectorOnType(matchingString: String): Selector{
-            if(matchingString.toLowerCase().contains("com"))
-                return RedditComSelector()
-            else if(matchingString.toLowerCase().contains("sub"))
-                return RedditSubSelector()
-            else{
-                throw IllegalArgumentException("Selector.getSelectorOnType is a stupid idea")
+            return when {
+                matchingString.toLowerCase().contains(Finals.COM_TABLE_NAME) -> RedditComSelector()
+                matchingString.toLowerCase().contains(Finals.SUB_TABLE_NAME) -> RedditSubSelector()
+                else -> throw IllegalArgumentException("Selector.getSelectorOnType is a stupid idea Sean")
             }
         }
     }

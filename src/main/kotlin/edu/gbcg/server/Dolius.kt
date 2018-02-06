@@ -35,13 +35,15 @@ class Dolius(private val socket: Socket): Runnable {
     private val logger_ = TSL.get()
     private var SERVER_BUSY = false
     private var SANITIZE_FAIL = false
+    private var AUTH_FAIL = false
     private val NOOP_FLAG = "=*="
     private val BUSY_STR = "${NOOP_FLAG}Server was busy, unable to process request. Please try again later."
     private val REJT_STR = "${NOOP_FLAG}Server will not perform that kind of work."
+    private val AUTH_STR = "${NOOP_FLAG}Server could not authenticate user, please check credentials."
     private val sleepTimeMS: Long = 2000
-    private val DB_KEY = "dataBase"
-    private val METHOD_KEY = "methodName"
-    private val ARG_KEY = "argument_"
+    private val USER = "USER"
+    private val PASS = "PASS"
+    private val QUERY = "QUERY"
 
     // Log separately connections so I can easily track them
 
@@ -71,13 +73,37 @@ class Dolius(private val socket: Socket): Runnable {
         val inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
         val input = inputReader.readLine()
 
-        sanitize(input)
+        // Create the jsonObject from the client data
+        val jsonObject = getJsonObject(input)
+
+        // Get username and userpass from the json object
+        val user = jsonObject.getString(USER)
+        val pass = jsonObject.getString(PASS)
+
+        // Authenticate the user
+        authenticateUser(user, pass)
+
+        // If auth fails, let client know and quit
+        if(AUTH_FAIL){
+            handleAuthFailure()
+            destroy()
+            return
+        }
+
+        // The actual query
+        val query = jsonObject.getString(QUERY)
+
+        // Basic string sanitization for query
+        sanitize(query)
+
+        // If sanitization fails, let client know and quit
         if(SANITIZE_FAIL){
             handleRejection(input)
             destroy()
             return
         }
 
+        // If the server has reached max threads and max sleep, tell client the server is busy and quit
         if(SERVER_BUSY) {
             handleBusy()
             destroy()
@@ -86,10 +112,10 @@ class Dolius(private val socket: Socket): Runnable {
 
         logger_.info("Dolius processing: $input")
 
-        // Query the DB
-        val mappers = process(input)
+        // Query the DB and get the RSMappers in return
+        val mappers = process(query)
 
-        // Turn the mappers into a list of JSON objects
+        // Turn the list of RSMappers into a list of JSONObjects
         val jsonArray = JSONArray()
         for(mapper in mappers)
             jsonArray.put(mapper.getAsJSONObject())
@@ -104,6 +130,76 @@ class Dolius(private val socket: Socket): Runnable {
 
 
 // ---------------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * Determines which function to call and queries the DB after some basic validation
+     */
+    private fun process(sqlQuery: String): List<RSMapper> {
+        // Get a Selector object. Will auto detect which DB based on the table name. This is not ideal.
+        val selector = Selector.getSelectorOnType(sqlQuery)
+
+        // Make the selection, get the RSMappers
+        return selector.generalSelection(args[0])
+    }
+
+    /**
+     * Get a json object from the input string
+     */
+    private fun getJsonObject(jsonString: String): JSONObject{
+        return JSONObject(jsonString)
+    }
+
+    /**
+     * Authenticate a user
+     * NOTE: This is not designed to be some super secure system, it's just a basic attempt to prevent DOS attacks
+     * from people who may have found host / port in github commits
+     */
+    private fun authenticateUser(username: String, userpass: String){
+        AUTH_FAIL = false
+        if(AUTH_FAIL)
+            logger_.warn("Dolius: AUTH_FAIL for $username | $userpass")
+    }
+
+
+    /**
+     * Write non-json objects back to the client
+     */
+    private fun writeMessageToClient(message: String){
+        val clientWriter = DataOutputStream(socket.getOutputStream())
+        clientWriter.writeBytes(message)
+        clientWriter.close()
+    }
+
+    /**
+     * Let the user know authentication has failed
+     */
+    private fun handleAuthFailure(){
+        writeMessageToClient(AUTH_STR)
+    }
+
+    /**
+     * Takes the List of JSONObjects and send it back to the client
+     */
+    private fun returnToClient(jsonArray: JSONArray){
+        writeMessageToClient(jsonArray.toString())
+    }
+
+    /**
+     * Tells the client the server is busy and try again later
+     */
+    private fun handleBusy(){
+        logger_.warn("Dolius: handleBusy")
+        writeMessageToClient(BUSY_STR)
+    }
+
+    /**
+     * Tells the client the server didn't want to perform work, for any reason other than being busy
+     */
+    private fun handleRejection(inpurString: String){
+        logger_.warn("Dolius: handleRejection -- $inpurString")
+        writeMessageToClient(REJT_STR)
+    }
 
     /**
      * Sanitize the input string
@@ -120,60 +216,8 @@ class Dolius(private val socket: Socket): Runnable {
     }
 
     /**
-     * Determines which function to call and queries the DB after some basic validation
+     * Close the sock and decrement the number of active threads
      */
-    private fun process(inputLine: String): List<RSMapper> {
-        // Convert the string from client to JSONObject
-        val jsonObject = JSONObject(inputLine)
-
-        // Get all key names
-        val keys = JSONObject.getNames(jsonObject)
-
-        // Get the DB name
-        val dbName = jsonObject.getString(DB_KEY)
-
-        // Get the methodName
-        val methodName = jsonObject.getString(METHOD_KEY)
-
-        // Get the arguments for the function call
-        var args = ArrayList<String>()
-        // If a key starts with ARG_KEY, select the associated value from the json object
-        keys
-                .filter { it.startsWith(ARG_KEY) }
-                .mapTo(args) { jsonObject.getString(it) }
-
-        // Get a Selector object
-        val selector = Selector.getSelectorOnType(dbName)
-
-        //----- NOTE: ONLY GENERAL SELECTION WORKING RIGHT NOW ---------------------------------------------------------
-
-        // Make the selection, get the RSMappers
-        return selector.generalSelection(args[0])
-    }
-
-    /**
-     * Takes the List of JSONObjects and
-     */
-    private fun returnToClient(jsonArray: JSONArray){
-        val clientWriter = DataOutputStream(socket.getOutputStream())
-        clientWriter.writeBytes(jsonArray.toString())
-        clientWriter.close()
-    }
-
-    private fun handleBusy(){
-        logger_.warn("Dolius: handleBusy")
-        val clientWriter = DataOutputStream(socket.getOutputStream())
-        clientWriter.writeBytes(BUSY_STR)
-        clientWriter.close()
-    }
-
-    private fun handleRejection(inpurString: String){
-        logger_.warn("Dolius: handleRejection -- $inpurString")
-        val clientWriter = DataOutputStream(socket.getOutputStream())
-        clientWriter.writeBytes(REJT_STR)
-        clientWriter.close()
-    }
-
     private fun destroy(){
         socket.close()
         currentThreads--
