@@ -7,6 +7,8 @@ package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.configs.Finals
 import edu.gbcg.dbInteraction.TimeUtils
+import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
+import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.gbcg.utils.TSL
 import java.time.LocalDateTime
 import java.util.concurrent.ExecutionException
@@ -157,4 +159,20 @@ abstract class Selector{
         if(DBs.size != Finals.DB_SHARD_NUM)
             logger_.logAndKill("Selector.verifyDBsExist DBs.size != Finals.DB_SHARD_NUM")
     }
+
+    /*
+        Get selector type based on fuzzy string matching...stupid idea, will revisit another time
+     */
+    companion object {
+        fun getSelectorOnType(matchingString: String): Selector{
+            if(matchingString.toLowerCase().contains("com"))
+                return RedditComSelector()
+            else if(matchingString.toLowerCase().contains("sub"))
+                return RedditSubSelector()
+            else{
+                throw IllegalArgumentException("Selector.getSelectorOnType is a stupid idea")
+            }
+        }
+    }
+
 }

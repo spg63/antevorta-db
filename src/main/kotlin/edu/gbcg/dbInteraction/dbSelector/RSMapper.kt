@@ -7,6 +7,8 @@ package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.utils.TSL
+import org.json.JSONArray
+import org.json.JSONObject
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.time.LocalDateTime
@@ -29,6 +31,13 @@ abstract class RSMapper {
     constructor()
     constructor(map: Map<String, String>) {
         this.map = map
+    }
+
+    constructor(jsonObject: JSONObject){
+        var tmpMap = HashMap<String, String>()
+        for(key in jsonObject.keys())
+            tmpMap[key] = jsonObject.getString(key)
+        this.map = tmpMap
     }
 
     /**
@@ -140,6 +149,14 @@ abstract class RSMapper {
      */
     fun getMapAsStrings(): Map<String, String> {
         return this.map
+    }
+
+    /**
+     * Get the underlying HashMap as a JSONObject
+     * @return The key / value pairs for a single RSMapper as a JSONObject
+     */
+    fun getAsJSONObject(): JSONObject{
+        return JSONObject(this.map)
     }
 
     /**

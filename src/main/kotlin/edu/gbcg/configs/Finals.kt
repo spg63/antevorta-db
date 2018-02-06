@@ -47,6 +47,9 @@ object Finals{
         return false
     }
 
+    /*-------------------- Server control ---------------------------*/
+    const val SERVER_SOCKET = 3383
+
     // NOTE: These columns are common to all DB types and are named here for consistency across insertions and
     // selection from various data sources. It will allow for further generalization in higher levels of code
 
