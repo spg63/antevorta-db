@@ -62,9 +62,7 @@ public class AntevortaClient {
             JSONObject queryObject = buildJSONObject(SQLQuery);
 
             // Server reads line by line; need to ensure the string ends with a newline char or server will hang
-            if(!SQLQuery.endsWith("\n"))
-                SQLQuery += "\n";
-            serverWriter.writeBytes(queryObject.toString());
+            serverWriter.writeBytes(queryObject.toString() + "\n");
             serverWriter.flush();
 
             // Sit here and wait for the server to respond. JSONArray will be returned in one line for easy parsing
@@ -106,8 +104,8 @@ public class AntevortaClient {
 
     private JSONObject buildJSONObject(String SQLQuery){
         JSONObject json = new JSONObject();
-        json.put(USER, user);
-        json.put(PASS, pass);
+        json.put(USER, "tmp_user");
+        json.put(PASS, "tmp_pass");
         json.put(QUERY, SQLQuery);
 
         return json;
