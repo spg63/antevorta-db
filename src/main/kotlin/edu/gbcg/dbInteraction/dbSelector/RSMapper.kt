@@ -16,7 +16,7 @@ import java.time.LocalDateTime
  * storage in memory. If a column name does not appear in the ResultSet it will skip that column while reading the data
  * NOTE: A 3rd utility mapper class is needed to prevent a switch over class type, BaseMapper. This class doesn't
  * implement any functionality regarding pulling data from a ResultSet but is used to give data back to the user from
- * buildMappers_impl.
+ * buildMappersImpl.
  *
  * NOTE: Storing all elements as a String avoids the type casting when pulling data from the ResultSet which delays
  * the type cast until the value is pull from the internal map stored here, if the value is pulled as something other
@@ -156,7 +156,7 @@ abstract class RSMapper {
     /*
         The implementation of buildMappers
      */
-    protected fun buildMappers_impl(rs: ResultSet, colNames: List<String>): MutableList<RSMapper> {
+    protected fun buildMappersImpl(rs: ResultSet, colNames: List<String>): MutableList<RSMapper> {
         var maps = ArrayList<RSMapper>()
 
         if(rs == null)
@@ -180,7 +180,7 @@ abstract class RSMapper {
                 catch(ex: SQLException){
                     continue
                 }
-                colIDs.put(col, colIDX)
+                colIDs[col] = colIDX
             }
 
             // Loop through all results that were found

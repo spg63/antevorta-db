@@ -15,7 +15,7 @@ object Finals{
     // True when working locally on MBP, false when working on full dataset -- changes data & db paths
     @JvmField val TESTING_MODE = !isWindows()
     // Drops the DBs if they exist and reads in the data again
-    @JvmField var START_FRESH = false
+    @JvmField val START_FRESH = false
 
 
     /*-------------------- Database control --------------------*/

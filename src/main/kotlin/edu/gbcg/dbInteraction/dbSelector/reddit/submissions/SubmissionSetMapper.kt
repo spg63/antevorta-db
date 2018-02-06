@@ -3,16 +3,16 @@
  * License: MIT
  */
 
-package edu.gbcg.dbInteraction.dbSelector.reddit.comments
+package edu.gbcg.dbInteraction.dbSelector.reddit.submissions
 
-import edu.gbcg.configs.columnsAndKeys.RedditComs
+import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import java.sql.ResultSet
 
-class CommentSetMapper: RSMapper {
+class SubmissionSetMapper: RSMapper {
     constructor(map: Map<String, String>): super(map)
     constructor(): super()
     override fun buildMappers(rs: ResultSet): MutableList<RSMapper>? {
-        return buildMappers_impl(rs, RedditComs.columnNames())
+        return buildMappersImpl(rs, RedditSubs.columnNames())
     }
 }

@@ -1,2 +1,4 @@
 rootProject.name = 'Antevorta'
+include 'dataDistributor'
+include 'antevorta-db'
 

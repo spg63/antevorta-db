@@ -9,49 +9,26 @@ import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
-import edu.gbcg.dbInteraction.dbcreator.reddit.Facilitator
+import edu.gbcg.dbInteraction.dbcreator.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
 class SubmissionsFacilitator: Facilitator {
     constructor(): super()
 
-    override fun buildDBPaths(): List<String> {
-        return DBLocator.buildSubDBPaths()
-    }
-
-    override fun getJsonAbsolutePaths(): List<String> {
-        return RawDataLocator.redditJsonSubmissionAbsolutePaths()
-    }
-
-    override fun getDBAbsolutePaths(): List<String> {
-        return DBLocator.redditSubsAbsolutePaths()
-    }
-
-    override fun getDBDirectoryPaths(): List<String> {
-        return DBLocator.getSubDBPath()
-    }
-
-    override fun getJsonKeysOfInterest(): List<String> {
-        return RedditSubs.JSONKeys()
-    }
-
-    override fun getColumnNames(): List<String> {
-        return RedditSubs.columnNames()
-    }
-
-    override fun getDataTypes(): List<String> {
-        return RedditSubs.dataTypes()
-    }
+    override fun buildDBPaths()             = DBLocator.buildSubDBPaths()
+    override fun getJsonAbsolutePaths()     = RawDataLocator.redditJsonSubmissionAbsolutePaths()
+    override fun getDBAbsolutePaths()       = DBLocator.redditSubsAbsolutePaths()
+    override fun getDBDirectoryPaths()      = DBLocator.getSubDBPath()
+    override fun getJsonKeysOfInterest()    = RedditSubs.JSONKeys()
+    override fun getColumnNames()           = RedditSubs.columnNames()
+    override fun getDataTypes()             = RedditSubs.dataTypes()
+    override fun getTableName()             = Finals.SUB_TABLE_NAME
 
     override fun populateJsonWorkers(): List<JsonPusher> {
         var workers = ArrayList<JsonPusher>()
         for(i in 0 until Finals.DB_SHARD_NUM)
             workers.add(SubmissionsJsonPusher())
         return workers
-    }
-
-    override fun getTableName(): String {
-        return Finals.SUB_TABLE_NAME
     }
 
     override fun createIndices() {
