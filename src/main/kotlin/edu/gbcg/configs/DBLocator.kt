@@ -14,8 +14,8 @@ import edu.gbcg.utils.FileUtils
  */
 object DBLocator {
     private val drives = arrayOf("F", "G", "H", "I", "J", "K")
-    private val subpath = ":/DBs/reddit/Submissions/"+DataPaths.SUB_DB_PREFIX+".sqlite3"
-    private val compath = ":/DBs/reddit/Comments/"+DataPaths.COM_DB_PREFIX+".sqlite3"
+    private val subpath = ":/DBs/reddit/Submissions/${DataPaths.SUB_DB_PREFIX}.sqlite3"
+    private val compath = ":/DBs/reddit/Comments/${DataPaths.COM_DB_PREFIX}.sqlite3"
     private val SubDBPath = ":/DBs/reddit/Submissions/"
     private val ComDBPath = ":/DBs/reddit/Comments/"
 
@@ -51,8 +51,7 @@ object DBLocator {
             true -> listOf(DataPaths.LOCAL_SUB_DB_PATH)
             false -> {
                 val paths = ArrayList<String>()
-                for(drive in drives)
-                    paths.add(drive + SubDBPath)
+                drives.mapTo(paths) { it + SubDBPath }
                 paths
             }
         }
@@ -68,8 +67,7 @@ object DBLocator {
             true -> listOf(DataPaths.LOCAL_COM_DB_PATH)
             false -> {
                 val paths = ArrayList<String>()
-                for(drive in drives)
-                    paths.add(drive + ComDBPath)
+                drives.mapTo(paths) { it + ComDBPath }
                 paths
             }
         }
@@ -114,7 +112,7 @@ object DBLocator {
             sbs.add(sb)
         }
 
-        var paths = ArrayList<String>()
+        val paths = ArrayList<String>()
         sbs.mapTo(paths) { it.toString() }
         return paths
     }

@@ -65,7 +65,7 @@ public class DBUtils {
                 }
             }
             // Die unchecked
-            throw new RuntimeException("DBUtils.connect failute");
+            throw new RuntimeException("DBUtils.connect failure");
         }
         return conn;
     }

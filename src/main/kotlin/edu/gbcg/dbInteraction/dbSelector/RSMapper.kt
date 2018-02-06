@@ -7,6 +7,8 @@ package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.utils.TSL
+import org.json.JSONArray
+import org.json.JSONObject
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.time.LocalDateTime
@@ -29,6 +31,13 @@ abstract class RSMapper {
     constructor()
     constructor(map: Map<String, String>) {
         this.map = map
+    }
+
+    constructor(jsonObject: JSONObject){
+        var tmpMap = HashMap<String, String>()
+        for(key in jsonObject.keys())
+            tmpMap[key] = jsonObject.getString(key)
+        this.map = tmpMap
     }
 
     /**
@@ -54,7 +63,8 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger_.exception(e)
-            return 0
+            logger_.err("RSMapper.getInt conversion failed")
+            throw e
         }
         return value
     }
@@ -73,7 +83,8 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger_.exception(e)
-            return 0
+            logger_.err("RSMapper.getLong conversion failed")
+            throw e
         }
         return value
     }
@@ -88,7 +99,7 @@ abstract class RSMapper {
         val time = getLong(key)
         if(time == 0L){
             logger_.err("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
-            return null
+            throw IllegalArgumentException("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
         }
         return TimeUtils.utcSecondsToLDT(time)
     }
@@ -107,7 +118,8 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger_.exception(e)
-            return 0.0
+            logger_.err("RSMapper.getDouble conversion failed")
+            throw e
         }
         return value
     }
@@ -140,6 +152,14 @@ abstract class RSMapper {
     }
 
     /**
+     * Get the underlying HashMap as a JSONObject
+     * @return The key / value pairs for a single RSMapper as a JSONObject
+     */
+    fun getAsJSONObject(): JSONObject{
+        return JSONObject(this.map)
+    }
+
+    /**
      * Build a list of RSmappers from a ResultSet object
      * @param rs
      * @return The list of RSMappers
@@ -150,7 +170,12 @@ abstract class RSMapper {
         Return item or ""
      */
     protected fun getItem(key: String): String {
-        return this.map.getOrDefault(key, "")
+        val res = this.map[key]
+        if(res == null) {
+            logger_.err("RSMapper.getItem() No value for $key")
+            throw IllegalArgumentException("RSMapper.getItem() No value for $key")
+        }
+        return res
     }
 
     /*
