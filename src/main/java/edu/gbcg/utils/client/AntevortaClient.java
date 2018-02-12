@@ -154,10 +154,6 @@ public class AntevortaClient {
         this.hostport = json.getInt(HOST_PORT);
         this.user = json.getString(USER);
         this.pass = json.getString(PASS);
-        System.out.println("hostname: " + this.hostname);
-        System.out.println("hostport: " + this.hostport);
-        System.out.println("user: " + this.user);
-        System.out.println("pass: " + this.pass);
     }
 
     private JSONObject buildJSONObject(String SQLQuery){
