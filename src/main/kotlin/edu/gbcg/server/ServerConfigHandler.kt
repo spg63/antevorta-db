@@ -8,6 +8,7 @@ package edu.gbcg.server
 import edu.gbcg.configs.DataPaths
 import edu.gbcg.configs.Finals
 import edu.gbcg.utils.FileUtils
+import edu.gbcg.utils.TSL
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -97,11 +98,11 @@ class ServerConfigHandler {
             if(usersArrayCheck.getJSONObject(i).getString(USER) == username)
                 return false
 
-
         // New user JSONObject
         val userObj = JSONObject()
         userObj.put(USER, username)
         userObj.put(PASS, userpasss)
+        TSL.get().info("PASS: $userpasss")
 
         // Add the new user to the users array in the main json object
         this.jsonObject.getJSONArray(USER_ARR).put(userObj)
@@ -193,4 +194,13 @@ fun main(args: Array<String>){
     var sc = ServerConfigHandler()
     sc.createConfigFile()
     sc.addUserPassToConfigFile("andrew", "soXXnT+]Z7B8PJEYmAeLJmfq&w3J7CDwL\$PW")
+    sc.addBannedSQLWords("drop")
+    sc.addBannedSQLWords("create")
+    sc.addBannedSQLWords("insert")
+    sc.addBannedSQLWords("index")
+    sc.addBannedSQLWords("rename")
+    sc.addBannedSQLWords("pragma")
+    sc.addBannedSQLWords("schema")
+    sc.addBannedSQLWords("update")
+    sc.addBannedSQLWords("dump")
 }
