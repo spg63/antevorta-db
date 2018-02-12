@@ -84,7 +84,7 @@ public class AntevortaClient {
         JSONArray results = null;
         try {
             // Open the socket to the
-            Socket sock = new Socket("seanpgrimes.com", 3383);
+            Socket sock = new Socket(hostname, hostport);
             DataOutputStream serverWriter = new DataOutputStream(sock.getOutputStream());
             BufferedReader serverReader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 
@@ -94,7 +94,6 @@ public class AntevortaClient {
             // Server reads line by line; need to ensure the string ends with a newline char or server will hang
             serverWriter.writeBytes(queryObject.toString() + "\n");
             serverWriter.flush();
-            serverWriter.close();
 
             // Sit here and wait for the server to respond. JSONArray will be returned in one line for easy parsing
             // by the client. This seems to work fine for large results running over TCP, if problems arise this can
@@ -163,8 +162,8 @@ public class AntevortaClient {
 
     private JSONObject buildJSONObject(String SQLQuery){
         JSONObject json = new JSONObject();
-        json.put(USER, "tmp_user");
-        json.put(PASS, "tmp_pass");
+        json.put(USER, this.user);
+        json.put(PASS, this.pass);
         json.put(QUERY, SQLQuery);
 
         return json;
@@ -183,8 +182,6 @@ public class AntevortaClient {
         // Column name for author
         final String authorColName = "author";
         final String author = "a4k04";
-
-        //AntevortaClient.writeConfigFile(configPathAndName, HOST, PORT, USER, PASS);
 
         // Create a new client, in the future the c'tor will need to take a config file path that holds host and
         // ipaddr as well as authentication information

@@ -192,16 +192,5 @@ class ServerConfigHandler {
 fun main(args: Array<String>){
     var sc = ServerConfigHandler()
     sc.createConfigFile()
-    sc.addUserPassToConfigFile("sean", "password")
-    sc.addUserPassToConfigFile("bob", "dole")
-    println("false: ${sc.isUserAuthorized("sean", "poop")}")
-    println("true: ${sc.isUserAuthorized("sean", "password")}")
-    println("true: ${sc.isUserAuthorized("bob", "dole")}")
-    sc.removeUserPassFromConfigFile("bob")
-    println("false: ${sc.isUserAuthorized("bob", "dole")}")
-    sc.addBannedSQLWords("poop")
-    sc.addBannedSQLWords("balls")
-    val words = sc.getBannedSQLWords()
-    for(word in words)
-        println(word)
+    sc.addUserPassToConfigFile("andrew", "soXXnT+]Z7B8PJEYmAeLJmfq&w3J7CDwL\$PW")
 }
