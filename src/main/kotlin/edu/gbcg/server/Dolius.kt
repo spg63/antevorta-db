@@ -13,11 +13,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.ServerSocket
 import java.net.Socket
-import java.util.concurrent.Callable
 
 /**
  * Note: This server is intentionally capped at 5 threads. Access to the DB (and data processing) is already threaded
@@ -44,10 +42,9 @@ class Dolius(private val socket: Socket): Runnable {
     private val USER = "USER"
     private val PASS = "PASS"
     private val QUERY = "QUERY"
+    private val configHandler = ServerConfigHandler()
 
     // Log separately connections so I can easily track them
-
-
     init{
         while(currentThreads >= MAX_THREADS) {
             logger_.info("Dolius: Sleeping for $sleepTimeMS")
@@ -59,7 +56,6 @@ class Dolius(private val socket: Socket): Runnable {
                 break
             }
             logger_.warn("Dolius: currentThreads >= MAX_THREADS")
-
         }
         currentThreads++
     }
@@ -70,11 +66,23 @@ class Dolius(private val socket: Socket): Runnable {
      */
     override fun run() {
         // Get the data from the socket
+        // If the server has reached max threads and max sleep, tell client the server is busy and quit
+        if(SERVER_BUSY) {
+            handleBusy()
+            destroy()
+            return
+        }
+
         val inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
         val input = inputReader.readLine()
 
         // Create the jsonObject from the client data
         val jsonObject = getJsonObject(input)
+        if(jsonObject == null){
+            handleRejection("Invalid JSON passed to server")
+            destroy()
+            return
+        }
 
         // Get username and userpass from the json object
         val user = jsonObject.getString(USER)
@@ -99,13 +107,6 @@ class Dolius(private val socket: Socket): Runnable {
         // If sanitization fails, let client know and quit
         if(SANITIZE_FAIL){
             handleRejection(input)
-            destroy()
-            return
-        }
-
-        // If the server has reached max threads and max sleep, tell client the server is busy and quit
-        if(SERVER_BUSY) {
-            handleBusy()
             destroy()
             return
         }
@@ -146,8 +147,15 @@ class Dolius(private val socket: Socket): Runnable {
     /**
      * Get a json object from the input string
      */
-    private fun getJsonObject(jsonString: String): JSONObject{
-        return JSONObject(jsonString)
+    private fun getJsonObject(jsonString: String): JSONObject?{
+        var obj: JSONObject
+        try {
+            obj = JSONObject(jsonString)
+        }
+        catch(e: Exception){
+            return null
+        }
+        return obj
     }
 
     /**

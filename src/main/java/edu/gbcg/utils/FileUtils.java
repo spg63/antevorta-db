@@ -199,8 +199,7 @@ public class FileUtils{
      * @param fileName Path to the file
      * @param str The string to write to the file
      */
-    public void writeNewFile(String fileName, String str){
-
+    public boolean writeNewFile(String fileName, String str){
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(fileName));
@@ -209,7 +208,38 @@ public class FileUtils{
         }
         catch(IOException e){
             e.printStackTrace();
+            return false;
         }
+        return true;
+    }
+
+    /**
+     * Append data to an existing file
+     * @param filename Path to the file
+     * @param str The string to write to the new file
+     */
+    public boolean appendToFile(String filename, String str){
+        BufferedWriter writer;
+        try{
+            writer = new BufferedWriter(new FileWriter(filename, true));
+            writer.write(str);
+            writer.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Split a string on a character
+     * @param str The string to split
+     * @param splitChar The character to split over
+     * @return Both sides of the string
+     */
+    public String[] splitOnChar(String str, char splitChar){
+        return str.split(Character.toString(splitChar));
     }
 
     /**

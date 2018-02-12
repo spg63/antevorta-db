@@ -22,6 +22,8 @@ object DataPaths{
     const val LOCAL_SUB_DB_PATH     = "LocalDB/RedditSubs/"
     const val LOCAL_COM_DB_PATH     = "LocalDB/RedditComs/"
 
+    const val DB_CONFIG_PATH        = "dbConfigs/"
+
     const val SUB_DB_PREFIX         = "RS_DB"
     const val COM_DB_PREFIX         = "RC_DB"
     const val DB_POSTFIX            = Finals.DB_TYPE_EXT

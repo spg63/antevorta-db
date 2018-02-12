@@ -7,3 +7,5 @@ LocalDB/
 logs/
 *.csv
 .DS_STORE
+dbConfigs/
+serverConfigFileDir/

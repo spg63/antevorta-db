@@ -15,24 +15,54 @@ import edu.gbcg.dbInteraction.dbSelector.DBSelector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AntevortaClient {
+    private static final String USER = "USER";
+    private static final String PASS = "PASS";
+    private static final String QUERY = "QUERY";
+    private static final String HOST_NAME = "HOSTNAME";
+    private static final String HOST_PORT = "HOSTPORT";
+    private static final String NOOP_FLAG = "=*=";
+
+    /**
+     * Write a config file with the required information
+     * @param configFile Path where you want to write the config file, and the config file name
+     * @param hostname The host
+     * @param hostport The port
+     * @param user Your username
+     * @param pass Your password -- NOTE: THIS IS NOT SECURE, DON'T USE A PASSWORD YOU CURRENTLY OR WILL USE ELSEWHERE!!
+     */
+    public static void writeConfigFile(String configFile, String hostname, Integer hostport, String user, String pass){
+        JSONObject json = new JSONObject();
+        json.put(HOST_NAME, hostname);
+        json.put(HOST_PORT, hostport);
+        json.put(USER, user);
+        json.put(PASS, pass);
+
+        // Make the directory if it doesn't exist yet
+        File f = new File(configFile);
+        f.getParentFile().mkdirs();
+
+        // Write JSON string to file
+        try(FileWriter fw = new FileWriter(configFile)){
+            fw.write(json.toString());
+        }
+        catch(IOException e){
+            System.err.println("Failed to write " + configFile);
+        }
+
+    }
+
     private String configPath;
     private String hostname;
     private int hostport;
     private String user;
     private String pass;
-    private final String USER = "USER";
-    private final String PASS = "PASS";
-    private final String QUERY = "QUERY";
-    private final String NOOP_FLAG = "=*=";
+
 
     // The config file will need to include the server hostname, the server port, the client username and the client
     // password. The idea here really isn't for some secure login system, it's just a very basic attempt to stop
@@ -40,7 +70,6 @@ public class AntevortaClient {
     // NOTE: Realistically I have no way to enforce usage of a config file, but not using it means you're a dick.
     AntevortaClient(String configFilePath){
         this.configPath = configFilePath;
-        verifyGitIgnore();
         parseConfigFile();
     }
 
@@ -65,6 +94,7 @@ public class AntevortaClient {
             // Server reads line by line; need to ensure the string ends with a newline char or server will hang
             serverWriter.writeBytes(queryObject.toString() + "\n");
             serverWriter.flush();
+            serverWriter.close();
 
             // Sit here and wait for the server to respond. JSONArray will be returned in one line for easy parsing
             // by the client. This seems to work fine for large results running over TCP, if problems arise this can
@@ -75,13 +105,14 @@ public class AntevortaClient {
             // readLine() call
             if(jsonArrayString == null) jsonArrayString = emptyArray;
 
-            // Response starts with NOOP_FLAG if the server didn't perform the request
+            // Response starts with NOOP_FLAG if the server didn't perform the request, a reason for the failure will
+            // come after the flag
             if(jsonArrayString.startsWith(NOOP_FLAG)){
                 System.out.println("Server failed to return results: " + jsonArrayString.substring(NOOP_FLAG.length()));
                 return new JSONArray(emptyArray);
             }
 
-            // NOTE: A query returning no results will return [], a valid (empty) JSONArray. RSMappersOutput knows
+            // NOTE: A query returning no results will return [], a valid (but empty) JSONArray. RSMappersOutput knows
             // how to handle empty results
             results = new JSONArray(jsonArrayString);
         }
@@ -95,12 +126,39 @@ public class AntevortaClient {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-    private void verifyGitIgnore(){
-        //TODO: Check that config file is in .gitignore and auth info isn't being pushed to github
-    }
-
     private void parseConfigFile(){
         //TODO: Read the config file, get hostname, port, and auth information for user
+        String fullString = null;
+        try(BufferedReader br = new BufferedReader(new FileReader(this.configPath))){
+            // Read in the JSON file
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while(line != null){
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            fullString = sb.toString();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+            throw new RuntimeException("Unable to parse config file");
+        }
+
+        if(fullString == null){
+            throw new RuntimeException("Unable to parse config file");
+        }
+
+        // Create a new JSONObject and get the stored values
+        JSONObject json = new JSONObject(fullString);
+        this.hostname = json.getString(HOST_NAME);
+        this.hostport = json.getInt(HOST_PORT);
+        this.user = json.getString(USER);
+        this.pass = json.getString(PASS);
+        System.out.println("hostname: " + this.hostname);
+        System.out.println("hostport: " + this.hostport);
+        System.out.println("user: " + this.user);
+        System.out.println("pass: " + this.pass);
     }
 
     private JSONObject buildJSONObject(String SQLQuery){
@@ -118,14 +176,19 @@ public class AntevortaClient {
         // Table names for the 2 DBs
         final String redditComTable = "comment_attrs";
         final String redditSubTable = "submission_attrs";
+        final String configFileDir = "serverConfigFileDir";
+        final String configFileName = "clientConfig.json";
+        final String configPathAndName = configFileDir + File.separator + configFileName;
 
         // Column name for author
         final String authorColName = "author";
-        final String author = "----root";
+        final String author = "a4k04";
+
+        //AntevortaClient.writeConfigFile(configPathAndName, HOST, PORT, USER, PASS);
 
         // Create a new client, in the future the c'tor will need to take a config file path that holds host and
         // ipaddr as well as authentication information
-        AntevortaClient av = new AntevortaClient("ignore_me_for_now");
+        AntevortaClient av = new AntevortaClient(configPathAndName);
 
         // Create a DBSelector to create an SQL query string. This thing is more helpful for more complex string, but
         // here's a basic example selecting all comments or submissions from an author
