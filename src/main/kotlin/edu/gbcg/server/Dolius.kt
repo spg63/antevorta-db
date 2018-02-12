@@ -10,6 +10,7 @@ import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.Selector
 import edu.gbcg.utils.TSL
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -78,6 +79,7 @@ class Dolius(private val socket: Socket): Runnable {
 
         // Create the jsonObject from the client data
         val jsonObject = getJsonObject(input)
+
         if(jsonObject == null){
             handleRejection("Invalid JSON passed to server")
             destroy()
@@ -152,7 +154,8 @@ class Dolius(private val socket: Socket): Runnable {
         try {
             obj = JSONObject(jsonString)
         }
-        catch(e: Exception){
+        catch(e: JSONException){
+            logger_.exception(e)
             return null
         }
         return obj
