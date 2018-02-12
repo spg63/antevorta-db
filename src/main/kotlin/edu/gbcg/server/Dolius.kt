@@ -167,7 +167,7 @@ class Dolius(private val socket: Socket): Runnable {
      * from people who may have found host / port in github commits
      */
     private fun authenticateUser(username: String, userpass: String){
-        AUTH_FAIL = false
+        AUTH_FAIL = this.configHandler.isUserAuthorized(username, userpass)
         if(AUTH_FAIL)
             logger_.warn("Dolius: AUTH_FAIL for $username | $userpass")
     }
