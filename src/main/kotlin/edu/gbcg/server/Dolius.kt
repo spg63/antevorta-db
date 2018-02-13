@@ -14,6 +14,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.ServerSocket
 import java.net.Socket
@@ -74,8 +75,19 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        val inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
-        val input = inputReader.readLine()
+        // Read client JSON request. Should contain user, pass, query
+        var inputReader: BufferedReader
+        var input: String
+        try{
+            inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
+            input = inputReader.readLine()
+        }
+        catch(e: IOException){
+            logger_.exception(e)
+            handleRejection("Server failed to read client input")
+            destroy()
+            return
+        }
 
         // Create the jsonObject from the client data
         val jsonObject = getJsonObject(input)
@@ -86,12 +98,20 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        // Get username and userpass from the json object
-        val user = jsonObject.getString(USER)
-        val pass = jsonObject.getString(PASS)
-
-        // Authenticate the user
-        authenticateUser(user, pass)
+        // Get username and userpass from the json object, try authentication if user and pass exist
+        val user: String
+        val pass: String
+        if(jsonObject.has(USER) && jsonObject.has(PASS)) {
+            user = jsonObject.getString(USER)
+            pass = jsonObject.getString(PASS)
+            authenticateUser(user, pass)
+        }
+        else{
+            logger_.err("jsonObject missing USER or PASS key")
+            handleRejection("JSON from client missing authentication information")
+            destroy()
+            return
+        }
 
         // If auth fails, let client know and quit
         if(AUTH_FAIL){
@@ -100,8 +120,16 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        // The actual query
-        val query = jsonObject.getString(QUERY)
+        // Try getting the query
+        val query: String
+        if(jsonObject.has(QUERY))
+            query = jsonObject.getString(QUERY)
+        else{
+            logger_.err("jsonObject missing QUERY key")
+            handleRejection("JSON from client missing query information")
+            destroy()
+            return
+        }
 
         // Basic string sanitization for query
         sanitize(query)
@@ -113,12 +141,12 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        logger_.info("Dolius processing: $input")
+        logger_.info("Dolius processing $query from $user")
 
         // Query the DB and get the RSMappers in return
         val mappers = process(query)
 
-        // Turn the list of RSMappers into a list of JSONObjects
+        // Turn the list of RSMappers into a JSONArray of JSONObjects
         val jsonArray = JSONArray()
         for(mapper in mappers)
             jsonArray.put(mapper.getAsJSONObject())
@@ -217,7 +245,7 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun sanitize(inputLine: String){
         // Get the banned words from a config file in future
-        val banned = listOf("drop", "create", "insert", "index", "rename", "pragma", "schema", "update", "dump")
+        val banned = this.configHandler.getBannedSQLWords()
         val lowerInput = inputLine.toLowerCase()
         for(word in banned)
             if(word in lowerInput) {
