@@ -193,7 +193,7 @@ class ServerConfigHandler {
 fun main(args: Array<String>){
     var sc = ServerConfigHandler()
     sc.createConfigFile()
-    sc.addUserPassToConfigFile("USER", "PASS")
+    sc.addUserPassToConfigFile("sean", "PASS")
     sc.addUserPassToConfigFile("USER", "PASS")
     sc.addBannedSQLWords("drop")
     sc.addBannedSQLWords("create")

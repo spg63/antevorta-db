@@ -186,7 +186,7 @@ public class AntevortaClient {
         // Create a DBSelector to create an SQL query string. This thing is more helpful for more complex string, but
         // here's a basic example selecting all comments or submissions from an author
         DBSelector dbsql = new DBSelector()
-                .from(redditSubTable)
+                .from(redditComTable)
                 .where(authorColName + "='"+ author + "'");
 
         // Get the sql string from DBSelector
@@ -216,7 +216,7 @@ public class AntevortaClient {
         //    mappers.add(new BaseMapper(obj));
 
         // Print the RSMapper objects
-        //RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComsk
+        //RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs
         //        .dataTypesForPrinting());
     }
 

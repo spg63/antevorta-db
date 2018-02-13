@@ -233,9 +233,7 @@ class Dolius(private val socket: Socket): Runnable {
         socket.close()
         currentThreads--
     }
-
 }
-
 
 fun main(args: Array<String>){
     var sock = ServerSocket(Finals.SERVER_SOCKET)
