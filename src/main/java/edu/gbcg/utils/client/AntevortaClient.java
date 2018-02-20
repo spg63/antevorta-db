@@ -5,12 +5,12 @@
 
 package edu.gbcg.utils.client;
 
-//import edu.gbcg.configs.columnsAndKeys.RedditComs;
-//import edu.gbcg.configs.columnsAndKeys.RedditSubs;
-//import edu.gbcg.dbInteraction.RSMapperOutput;
-//import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
-//import edu.gbcg.dbInteraction.dbSelector.RSMapper;
-//import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
+import edu.gbcg.configs.columnsAndKeys.RedditComs;
+import edu.gbcg.configs.columnsAndKeys.RedditSubs;
+import edu.gbcg.dbInteraction.RSMapperOutput;
+import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
+import edu.gbcg.dbInteraction.dbSelector.RSMapper;
+import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import edu.gbcg.dbInteraction.dbSelector.DBSelector;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -68,7 +68,7 @@ public class AntevortaClient {
     // password. The idea here really isn't for some secure login system, it's just a very basic attempt to stop
     // people from scraping github and hitting my server with a bunch of requests.
     // NOTE: Realistically I have no way to enforce usage of a config file, but not using it means you're a dick.
-    AntevortaClient(String configFilePath){
+    public AntevortaClient(String configFilePath){
         this.configPath = configFilePath;
         parseConfigFile();
     }
@@ -179,14 +179,13 @@ public class AntevortaClient {
         final String authorColName = "author";
         final String author = "a4k04";
 
-        // Create a new client, in the future the c'tor will need to take a config file path that holds host and
-        // ipaddr as well as authentication information
+        // Create a new client
         AntevortaClient av = new AntevortaClient(configPathAndName);
 
         // Create a DBSelector to create an SQL query string. This thing is more helpful for more complex string, but
         // here's a basic example selecting all comments or submissions from an author
         DBSelector dbsql = new DBSelector()
-                .from(redditComTable)
+                .from(redditSubTable)
                 .where(authorColName + "='"+ author + "'");
 
         // Get the sql string from DBSelector
@@ -205,19 +204,19 @@ public class AntevortaClient {
             resultObjects.add(res.getJSONObject(i));
 
         // Print the JSONObjects
-        for(JSONObject obj : resultObjects)
-            System.out.println(obj);
+        //for(JSONObject obj : resultObjects)
+        //    System.out.println(obj);
 
 
         // NOTE: The below is only if you want to convert back to RSMapper object for each JSON object. Definitely
         // not a necessity
-        //List<RSMapper> mappers = new ArrayList<>();
-        //for(JSONObject obj : resultObjects)
-        //    mappers.add(new BaseMapper(obj));
+        List<RSMapper> mappers = new ArrayList<>();
+        for(JSONObject obj : resultObjects)
+            mappers.add(new BaseMapper(obj));
 
         // Print the RSMapper objects
-        //RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs
-        //        .dataTypesForPrinting());
+        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(), RedditSubs
+                .dataTypesForPrinting());
     }
 
 }

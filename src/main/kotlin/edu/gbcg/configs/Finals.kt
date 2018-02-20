@@ -5,6 +5,8 @@
 
 package edu.gbcg.configs
 
+import java.io.File
+
 /**
  * Finals is a class to hold variables related to program state. Items like the database
  * driver being used, if testing mode is enabled, database batch size limits, number of database
@@ -50,6 +52,7 @@ object Finals{
     /*-------------------- Server control ---------------------------*/
     const val SERVER_SOCKET = 3383
     const val SERVER_CONFIG_FILE_NAME = "doliusServerConfigsAndUsers.json"
+    var CLIENT_CONFIG = "serverConfigFileDir${File.separator}clientConfig.json"
 
     // NOTE: These columns are common to all DB types and are named here for consistency across insertions and
     // selection from various data sources. It will allow for further generalization in higher levels of code

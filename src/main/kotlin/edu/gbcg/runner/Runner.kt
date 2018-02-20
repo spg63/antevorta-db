@@ -11,6 +11,10 @@ import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dataAssociator.reddit.RedditComOrganizer
 import edu.gbcg.dbInteraction.RSMapperOutput
+import edu.gbcg.dbInteraction.TimeUtils
+import edu.gbcg.dbInteraction.dbSelector.BaseMapper
+import edu.gbcg.dbInteraction.dbSelector.DBSelector
+import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.gbcg.dbInteraction.dbcreator.Facilitator
@@ -18,6 +22,9 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
+import edu.gbcg.utils.client.AntevortaClient
+import org.json.JSONObject
+import java.io.File
 
 fun main(args : Array<String>){
     val logger = TSL.get()
@@ -28,7 +35,8 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doSubs()
+    doServerComs()
+    //doSubs()
     //doComs()
 
     sw.stop()
@@ -38,6 +46,30 @@ fun main(args : Array<String>){
     logger.info("Execution took " + out.timer_mins(sw))
 
     logger.shutDown()
+}
+
+fun doServerComs(){
+    val client = AntevortaClient(Finals.CLIENT_CONFIG)
+    val author = "a4k04"
+
+    val dbsql = DBSelector()
+            .from(Finals.COM_TABLE_NAME)
+            .where("author = '$author'")
+
+    // If results are null, return
+    val jsonResults = client.queryServer(dbsql.sql()) ?: return
+
+    // Get all objects from the JSONArray
+    val objects = ArrayList<JSONObject>()
+    for(i in 0 until jsonResults.length())
+        objects.add(jsonResults.getJSONObject(i))
+
+    val mappers = ArrayList<RSMapper>()
+    for(jsonobj in objects)
+        mappers.add(BaseMapper(jsonobj))
+
+    RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
+
 }
 
 fun doSubs(){
