@@ -5,6 +5,8 @@
 
 package edu.gbcg.configs
 
+import java.io.File
+
 /**
  * The different paths to the DB, Json, and CSV data depending on which machine is running the
  * code and whether or not testing_mode has been enabled
@@ -22,7 +24,7 @@ object DataPaths{
     const val LOCAL_SUB_DB_PATH     = "LocalDB/RedditSubs/"
     const val LOCAL_COM_DB_PATH     = "LocalDB/RedditComs/"
 
-    const val DB_CONFIG_PATH        = "dbConfigs/"
+    var DB_CONFIG_PATH        = "dbConfigs${File.separator}"
 
     const val SUB_DB_PREFIX         = "RS_DB"
     const val COM_DB_PREFIX         = "RC_DB"
