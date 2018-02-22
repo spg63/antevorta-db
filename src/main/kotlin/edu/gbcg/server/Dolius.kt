@@ -183,6 +183,7 @@ class Dolius(private val socket: Socket): Runnable {
             obj = JSONObject(jsonString)
         }
         catch(e: JSONException){
+            logger_.err("Failed JSON Input: $jsonString")
             logger_.exception(e)
             return null
         }
