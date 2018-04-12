@@ -31,6 +31,8 @@ class SubmissionsFacilitator: Facilitator {
         return workers
     }
 
+
+
     override fun createIndices() {
         createDBIndex(Finals.AUTHOR, "attrs_author")
         createDBIndex(Finals.CREATED_DT, "attrs_created")
@@ -44,5 +46,13 @@ class SubmissionsFacilitator: Facilitator {
         createDBIndex(Finals.SCORE, "attrs_score")
         createDBIndex("subreddit_name", "attrs_sub_name")
         createDBIndex("subreddit_id", "attrs_sub_id")
+    }
+
+    // The default values above for raw data location need to be reset to only account for the new data that's
+    // getting added to the system.
+    // TODO: The only thing that should need to happen here is setting a new path for the location of raw data. We
+    // TODO: should be able to simply skip the createDBs function in base Facilitator.
+    override fun addNewData() {
+        return
     }
 }

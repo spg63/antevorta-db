@@ -43,4 +43,37 @@ class CommentsFacilitator: Facilitator {
         createDBIndex("subreddit_name", "attrs_sub_name")
         createDBIndex("subreddit_id", "attrs_sub_id")
     }
+
+    // The default values above for raw data location need to be reset to only account for the new data that's
+    // getting added to the system.
+    // NOTE: This means replacing "this.jsonAbsolutePaths_" list with a list of new json files (or just a single file)
+    override fun addNewData(){
+        // Clear the existing list. Note: clear can't be called on a "List" so jst replace it with a new one
+        // TODO: Is this step even necessary?
+        this.jsonAbsolutePaths_ = ArrayList()
+
+        // Get the path(s) to the new json file(s)
+        this.jsonAbsolutePaths_ = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
+
+        // Now that the paths have been reset the new data can be pushed into the DB shards
+        this.pushJSONDataIntoDBs()
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

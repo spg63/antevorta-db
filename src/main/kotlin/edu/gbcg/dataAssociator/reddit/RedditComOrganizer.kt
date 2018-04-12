@@ -8,20 +8,20 @@ package edu.gbcg.dataAssociator.reddit
 import edu.gbcg.dbInteraction.dbSelector.BaseMapper
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
+import edu.gbcg.utils.TSL
 
 class RedditComOrganizer {
-    private val _submission: RSMapper
+    private val submission: RSMapper
+    private val _logger = TSL.get()
 
     constructor(submission: RSMapper){
-        _submission = submission
+        this.submission = submission
     }
 
-    fun getAllCommentsFromSubmission(submission: RSMapper = BaseMapper()): List<RSMapper> {
-        // If it's a BaseMapper then we use the RSMapper from the c'tor
-        val sub = if(submission is BaseMapper) _submission else submission
-
+    @Deprecated("Aren't all returned mappers from a query basemappers? WTF SEAN!?")
+    fun getAllCommentsFromSubmission(): List<RSMapper> {
         // Determine what the link id is for this submission
-        val linkIDPartial = sub.getString("pid")
+        val linkIDPartial = this.submission.getString("pid")
 
         // Prepend the comment pid tag
         val linkID = "t3_" + linkIDPartial

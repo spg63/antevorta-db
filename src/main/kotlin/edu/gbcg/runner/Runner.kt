@@ -23,6 +23,7 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitato
 import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
 import edu.gbcg.utils.client.AntevortaClient
+import org.jfree.xml.generator.model.Comments
 import org.json.JSONObject
 import java.io.File
 
@@ -35,9 +36,10 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doServerComs()
+    //doServerComs()
     //doSubs()
     //doComs()
+    pushNewComs()
 
     sw.stop()
 
@@ -119,3 +121,21 @@ fun buildDBShards(fac: Facilitator){
     fac.createDBs()
     fac.pushJSONDataIntoDBs()
 }
+
+fun pushNewComs(){
+    val comsFac = CommentsFacilitator()
+    comsFac.addNewData()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -21,7 +21,7 @@ abstract class Facilitator {
     protected val columnNames_: List<String>            // Names of the columns in the DB
     protected val dataTypes_: List<String>              // Type of data stored in the DB columns
     protected val DBPaths_: List<String>                // Paths to the DBs when they don't yet exist
-    protected var jsonAbsolutePaths_: List<String>      // Paths to the json files
+    protected var jsonAbsolutePaths_: List<String> // Paths to the json files
     protected val jsonKeysOfInterest_: List<String>     // JSON keys we care about grabbing for the DB
     protected val tableName_: String                    // The name of the table in the DB
     protected val logger_ = TSL.get()                   // Instance of the logger
@@ -50,6 +50,8 @@ abstract class Facilitator {
     protected abstract fun getColumnNames(): List<String>
     protected abstract fun getTableName(): String
     protected abstract fun createIndices()
+
+    abstract fun addNewData()
 
     fun createDBs() {
         // Check if the DBs exist.
@@ -176,7 +178,11 @@ abstract class Facilitator {
                 }
             }
         }
-        createIndices()
+
+        // Only call create indices if the database is being created fresh. Adding new data to the DB will
+        // automatically recalculate the indices
+        if(Finals.START_FRESH)
+            createIndices()
     }
 
     fun createDBIndex(columnName: String, indexName: String) {
