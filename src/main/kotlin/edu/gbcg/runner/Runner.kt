@@ -39,6 +39,7 @@ fun main(args : Array<String>){
     //doServerComs()
     //doSubs()
     //doComs()
+    //pushNewSubs()
     pushNewComs()
 
     sw.stop()
@@ -83,12 +84,13 @@ fun doSubs(){
 
     val res = rss.selectAllFromAuthor("a4k04")
 
-    val comGetter = RedditComOrganizer(res[1])
+    //val comGetter = RedditComOrganizer(res[1])
 
-    val coms = comGetter.getAllCommentsFromSubmission()
-    RSMapperOutput.printAllColumnsFromRSMappers(coms, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
+    //val coms = comGetter.getAllCommentsFromSubmission()
+    //RSMapperOutput.printAllColumnsFromRSMappers(coms, RedditComs.columnsForPrinting(), RedditComs
+    //        .dataTypesForPrinting())
 
-    return
+    //return
     //val results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58)
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
@@ -123,8 +125,11 @@ fun buildDBShards(fac: Facilitator){
 }
 
 fun pushNewComs(){
-    val comsFac = CommentsFacilitator()
-    comsFac.addNewData()
+    CommentsFacilitator().addNewData()
+}
+
+fun pushNewSubs(){
+    SubmissionsFacilitator().addNewData()
 }
 
 

@@ -11,6 +11,7 @@ import edu.gbcg.dbInteraction.DBWorker
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 import edu.gbcg.utils.FileUtils
 import edu.gbcg.utils.TSL
+import org.json.JSONString
 import java.io.*
 import java.sql.Connection
 import java.text.NumberFormat
@@ -103,12 +104,22 @@ abstract class Facilitator {
 
     fun pushJSONDataIntoDBs() {
         // Early exit if we're not pushing data
-        if(!Finals.START_FRESH) return
+        if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return
 
-        if(this.DBAbsolutePaths_.isEmpty())
-            this.DBAbsolutePaths_ = getDBAbsolutePaths()
-        if(this.jsonAbsolutePaths_.isEmpty())
+        // Skip this check if the DBs already exist, there's no need.
+        if(!Finals.ADD_NEW_DATA) {
+            if (this.DBAbsolutePaths_.isEmpty())
+                this.DBAbsolutePaths_ = getDBAbsolutePaths()
+        }
+
+        if (this.jsonAbsolutePaths_.isEmpty())
             this.jsonAbsolutePaths_ = getJsonAbsolutePaths()
+
+        // Just for some logging when adding new data to the DB shards
+        if(Finals.ADD_NEW_DATA){
+            for(path in this.jsonAbsolutePaths_)
+                logger_.info("Pulling new data from $path")
+        }
 
         // For each json file, read it line by line, while reading start processing the data
         // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards
@@ -186,6 +197,12 @@ abstract class Facilitator {
     }
 
     fun createDBIndex(columnName: String, indexName: String) {
+        // This should *NEVER* be true, but just incase, no need to blow up 250GB worth of prior indexing work
+        if(Finals.ADD_NEW_DATA){
+            logger_.err("Trying to build indices on new data!!!")
+            return
+        }
+
         logger_.info("Creating $indexName on column $columnName")
         var workers = ArrayList<Thread>()
         val conns = ArrayList<Connection>()
@@ -219,7 +236,6 @@ abstract class Facilitator {
             workers[i].columns = columnNames_
             workers[i].tableName = tableName_
         }
-
         val threads: MutableList<Thread> = ArrayList()
         for(i in 0 until Finals.DB_SHARD_NUM){
             threads.add(Thread(workers[i]))

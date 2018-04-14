@@ -56,7 +56,3 @@ object RawDataLocator{
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path)
     }
 }
-
-
-
-

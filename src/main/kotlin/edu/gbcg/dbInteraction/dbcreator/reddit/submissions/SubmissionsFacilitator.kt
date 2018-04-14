@@ -50,9 +50,15 @@ class SubmissionsFacilitator: Facilitator {
 
     // The default values above for raw data location need to be reset to only account for the new data that's
     // getting added to the system.
-    // TODO: The only thing that should need to happen here is setting a new path for the location of raw data. We
-    // TODO: should be able to simply skip the createDBs function in base Facilitator.
     override fun addNewData() {
-        return
+        // Clear the existing list. NOTE: clear can't be called on a "List" so just replace it with a new one
+        // TODO: Is this step even necessary?
+        this.jsonAbsolutePaths_ = ArrayList()
+
+        // Get the path(s) to the new json file(s)
+        this.jsonAbsolutePaths_ = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
+
+        // Now that the paths have been reset the new data can be pushed into the DB shards
+        this.pushJSONDataIntoDBs()
     }
 }
