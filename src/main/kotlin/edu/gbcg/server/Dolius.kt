@@ -80,6 +80,8 @@ class Dolius(private val socket: Socket): Runnable {
         var input: String
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
+            //logger_.info("Incoming IP: ${socket.remoteSocketAddress.toString()}")
+            //logger_.info("Incoming Inet: ${socket.inetAddress.toString()}")
             input = inputReader.readLine()
         }
         catch(e: IOException){
@@ -141,7 +143,7 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        logger_.info("Dolius processing $query from $user")
+        logger_.info("Dolius processing \"$query\" from $user")
 
         // Query the DB and get the RSMappers in return
         val mappers = process(query)
