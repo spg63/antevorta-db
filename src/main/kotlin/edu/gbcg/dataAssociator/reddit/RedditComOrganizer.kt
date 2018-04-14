@@ -5,11 +5,11 @@
 
 package edu.gbcg.dataAssociator.reddit
 
-import edu.gbcg.dbInteraction.dbSelector.BaseMapper
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.utils.TSL
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class RedditComOrganizer {
     private val submission: RSMapper
     private val _logger = TSL.get()
@@ -24,7 +24,7 @@ class RedditComOrganizer {
         val linkIDPartial = this.submission.getString("pid")
 
         // Prepend the comment pid tag
-        val linkID = "t3_" + linkIDPartial
+        val linkID = "t3_$linkIDPartial"
 
         // Get a comment selector
         val comSelector = RedditComSelector()

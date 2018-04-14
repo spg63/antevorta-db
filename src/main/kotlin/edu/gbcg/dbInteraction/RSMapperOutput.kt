@@ -3,6 +3,8 @@
  * License: MIT
  */
 
+@file:Suppress("unused")
+
 package edu.gbcg.dbInteraction
 
 import edu.gbcg.configs.Finals
@@ -36,13 +38,14 @@ object RSMapperOutput{
         }
     }
 
+    @Suppress("SENSELESS_COMPARISON")
     @JvmStatic fun RSMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String) {
         if(mappers == null){
             println("**----- NO RESULTS -----**")
             return
         }
 
-        var sb = StringBuilder()
+        val sb = StringBuilder()
 
         for(i in 0 until columnNames.size - 1){
             sb.append(columnNames[i])

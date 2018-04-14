@@ -3,15 +3,15 @@
  * License: MIT
  */
 
+@file:Suppress("unused")
+
 package edu.gbcg.runner
 
 import com.google.common.base.Stopwatch
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
-import edu.gbcg.dataAssociator.reddit.RedditComOrganizer
 import edu.gbcg.dbInteraction.RSMapperOutput
-import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.dbInteraction.dbSelector.BaseMapper
 import edu.gbcg.dbInteraction.dbSelector.DBSelector
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
@@ -23,9 +23,7 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitato
 import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
 import edu.gbcg.utils.client.AntevortaClient
-import org.jfree.xml.generator.model.Comments
 import org.json.JSONObject
-import java.io.File
 
 fun main(args : Array<String>){
     val logger = TSL.get()
@@ -125,22 +123,9 @@ fun buildDBShards(fac: Facilitator){
 }
 
 fun pushNewComs(){
-    CommentsFacilitator().addNewData()
+    CommentsFacilitator().pushNewData()
 }
 
 fun pushNewSubs(){
-    SubmissionsFacilitator().addNewData()
+    SubmissionsFacilitator().pushNewData()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

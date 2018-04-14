@@ -11,21 +11,21 @@ import edu.gbcg.dbInteraction.DBWorker
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 import edu.gbcg.utils.FileUtils
 import edu.gbcg.utils.TSL
-import org.json.JSONString
 import java.io.*
 import java.sql.Connection
 import java.text.NumberFormat
 
+@Suppress("LeakingThis", "ConvertSecondaryConstructorToPrimary")
 abstract class Facilitator {
     protected var DBAbsolutePaths_: List<String>        // Path to the DBs once they exist
     protected val DBDirectoryPaths_: List<String>       // Path to the directory / directories that hold the DB shards
     protected val columnNames_: List<String>            // Names of the columns in the DB
     protected val dataTypes_: List<String>              // Type of data stored in the DB columns
     protected val DBPaths_: List<String>                // Paths to the DBs when they don't yet exist
-    protected var jsonAbsolutePaths_: List<String> // Paths to the json files
+    protected var jsonAbsolutePaths_: List<String>      // Paths to the json files
     protected val jsonKeysOfInterest_: List<String>     // JSON keys we care about grabbing for the DB
     protected val tableName_: String                    // The name of the table in the DB
-    protected val logger_ = TSL.get()                   // Instance of the logger
+    protected val logger_: TSL = TSL.get()              // Instance of the logger
     protected val numberFormat_: NumberFormat           // Format number output for easier viewing
 
     constructor(){
@@ -51,12 +51,12 @@ abstract class Facilitator {
     protected abstract fun getColumnNames(): List<String>
     protected abstract fun getTableName(): String
     protected abstract fun createIndices()
-
-    abstract fun addNewData()
+    protected abstract fun dropIndices()
+    protected abstract fun getJsonAbsolutePathsForNewData(): List<String>
 
     fun createDBs() {
         // Check if the DBs exist.
-        if(this.DBAbsolutePaths_ == null)
+        if(this.DBAbsolutePaths_.isEmpty())
             this.DBAbsolutePaths_ = ArrayList()
         val dbs_exist = this.DBAbsolutePaths_.size == Finals.DB_SHARD_NUM
 
@@ -106,14 +106,16 @@ abstract class Facilitator {
         // Early exit if we're not pushing data
         if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return
 
-        // Skip this check if the DBs already exist, there's no need.
-        if(!Finals.ADD_NEW_DATA) {
-            if (this.DBAbsolutePaths_.isEmpty())
-                this.DBAbsolutePaths_ = getDBAbsolutePaths()
-        }
+        if (this.DBAbsolutePaths_.isEmpty())
+            this.DBAbsolutePaths_ = getDBAbsolutePaths()
 
-        if (this.jsonAbsolutePaths_.isEmpty())
-            this.jsonAbsolutePaths_ = getJsonAbsolutePaths()
+        if (this.jsonAbsolutePaths_.isEmpty()) {
+            when {
+                Finals.START_FRESH -> this.jsonAbsolutePaths_ = getJsonAbsolutePaths()
+                Finals.ADD_NEW_DATA -> this.jsonAbsolutePaths_ = getJsonAbsolutePathsForNewData()
+                else -> logger_.logAndKill("Facilitator.pushJSONDataIntoDBs -- Not START_FRESH or ADD_NEW_DATA")
+            }
+        }
 
         // Just for some logging when adding new data to the DB shards
         if(Finals.ADD_NEW_DATA){
@@ -125,7 +127,11 @@ abstract class Facilitator {
         // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards
         for(json in this.jsonAbsolutePaths_){
             val f = File(json)
+            logger_.info("Counting number of lines in ${f.name}")
+            val total_lines = FileUtils.get().lineCount(json)
+            val total_lines_in_file = total_lines.toDouble()
             logger_.info("Reading ${f.name}")
+            logger_.info("${f.name} has ${numberFormat_.format(total_lines_in_file)} lines")
 
             var br: BufferedReader? = null
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
@@ -133,7 +139,7 @@ abstract class Facilitator {
             var total_lines_read: Long = 0
             var write_total_lines_read = 1
             var whichWorker = 0
-            var linesList: ArrayList<ArrayList<String>> = ArrayList()
+            val linesList: ArrayList<ArrayList<String>> = ArrayList()
             for(i in 0 until Finals.DB_SHARD_NUM)
                 linesList.add(ArrayList())
 
@@ -157,8 +163,13 @@ abstract class Facilitator {
                         lineReadCounter = 0
                         linesList.clear()
 
-                        if(write_total_lines_read % 40 == 0)
-                            logger_.info("${numberFormat_.format(total_lines_read)} lines read from ${f.name}")
+                        if(write_total_lines_read % 25 == 0) {
+                            val readLines = total_lines_read.toDouble()
+                            val currentComplete = readLines / total_lines_in_file
+                            val percentComplete = (currentComplete * 100).toInt()
+                            logger_.info("$percentComplete% done ${f.name}")
+                            //    logger_.info("${numberFormat_.format(total_lines_read)} lines read from ${f.name}")
+                        }
                         ++write_total_lines_read
 
                         // Give the linesList new ArrayLists to store next set of lines
@@ -190,24 +201,16 @@ abstract class Facilitator {
             }
         }
 
-        // Only call create indices if the database is being created fresh. Adding new data to the DB will
-        // automatically recalculate the indices
-        if(Finals.START_FRESH)
-            createIndices()
+        // Create the indices on all shards. This happens on table creation and after batch inserts for new data
+        createIndices()
     }
 
     fun createDBIndex(columnName: String, indexName: String) {
-        // This should *NEVER* be true, but just incase, no need to blow up 250GB worth of prior indexing work
-        if(Finals.ADD_NEW_DATA){
-            logger_.err("Trying to build indices on new data!!!")
-            return
-        }
-
         logger_.info("Creating $indexName on column $columnName")
-        var workers = ArrayList<Thread>()
+        val workers = ArrayList<Thread>()
         val conns = ArrayList<Connection>()
         val sql = DBCommon.getDBIndexSQLStatement(this.tableName_, columnName, indexName)
-        if(this.DBAbsolutePaths_ == null)
+        if(this.DBAbsolutePaths_.isEmpty())
             this.DBAbsolutePaths_ = getDBAbsolutePaths()
 
         // For each db in DBAbsolutePaths_ create a connection and put it in conns
@@ -225,6 +228,37 @@ abstract class Facilitator {
             logger_.exception(e)
         }
 
+        conns.forEach{ DBCommon.disconnect(it) }
+    }
+
+    fun dropDBIndices(indexName: String){
+        logger_.info("Dropping $indexName from ${this.tableName_}")
+        // Get a connection to each DB shard
+        val conns = ArrayList<Connection>()
+
+        // The DB workers, run it in parallel
+        val workers = ArrayList<Thread>()
+
+        // Get a connection to each DB and put the connections in conns list
+        this.DBAbsolutePaths_.mapTo(conns){DBCommon.connect(it)}
+
+        // Get the SQL statement
+        val sql = DBCommon.getDropDBIndexSQLStatement(indexName)
+
+        // Launch the workers
+        for(i in 0 until conns.size){
+            workers.add(Thread(DBWorker(conns[i], sql)))
+            workers[i].start()
+        }
+        try{
+            for(i in 0 until workers.size)
+                workers[i].join()
+        }
+        catch(e: InterruptedException){
+            logger_.exception(e)
+        }
+
+        // Close all the connections
         conns.forEach{ DBCommon.disconnect(it) }
     }
 
@@ -250,5 +284,20 @@ abstract class Facilitator {
                 logger_.exception(e)
             }
         }
+    }
+
+    // Push new data into the DB shards
+    fun pushNewData(){
+        // Batch inserting large data on tables with a lot of indices is slow. Drop them and re-create at the end
+        dropIndices()
+
+        // Clear the existing list. Note: clear can't be called on a "List" so just replace it with a new one
+        this.jsonAbsolutePaths_ = ArrayList()
+
+        // Get the path(s) to the new json file(s)
+        this.jsonAbsolutePaths_ = getJsonAbsolutePathsForNewData()
+
+        // Now that the paths have been reset the new data can be pushed in the DB shards
+        pushJSONDataIntoDBs()
     }
 }

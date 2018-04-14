@@ -5,12 +5,10 @@
 
 package edu.gbcg.utils.client;
 
-import edu.gbcg.configs.columnsAndKeys.RedditComs;
 import edu.gbcg.configs.columnsAndKeys.RedditSubs;
 import edu.gbcg.dbInteraction.RSMapperOutput;
 import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
-import edu.gbcg.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import edu.gbcg.dbInteraction.dbSelector.DBSelector;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +18,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class AntevortaClient {
     private static final String USER = "USER";
     private static final String PASS = "PASS";

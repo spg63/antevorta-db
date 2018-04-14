@@ -12,26 +12,26 @@ import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dbInteraction.dbcreator.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class SubmissionsFacilitator: Facilitator {
     constructor(): super()
 
-    override fun buildDBPaths()             = DBLocator.buildSubDBPaths()
-    override fun getJsonAbsolutePaths()     = RawDataLocator.redditJsonSubmissionAbsolutePaths()
-    override fun getDBAbsolutePaths()       = DBLocator.redditSubsAbsolutePaths()
-    override fun getDBDirectoryPaths()      = DBLocator.getSubDBPath()
-    override fun getJsonKeysOfInterest()    = RedditSubs.JSONKeys()
-    override fun getColumnNames()           = RedditSubs.columnNames()
-    override fun getDataTypes()             = RedditSubs.dataTypes()
-    override fun getTableName()             = Finals.SUB_TABLE_NAME
+    override fun buildDBPaths()                     = DBLocator.buildSubDBPaths()
+    override fun getJsonAbsolutePaths()             = RawDataLocator.redditJsonSubmissionAbsolutePaths()
+    override fun getDBAbsolutePaths()               = DBLocator.redditSubsAbsolutePaths()
+    override fun getDBDirectoryPaths()              = DBLocator.getSubDBPath()
+    override fun getJsonKeysOfInterest()            = RedditSubs.JSONKeys()
+    override fun getColumnNames()                   = RedditSubs.columnNames()
+    override fun getDataTypes()                     = RedditSubs.dataTypes()
+    override fun getTableName()                     = Finals.SUB_TABLE_NAME
+    override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
 
     override fun populateJsonWorkers(): List<JsonPusher> {
-        var workers = ArrayList<JsonPusher>()
+        val workers = ArrayList<JsonPusher>()
         for(i in 0 until Finals.DB_SHARD_NUM)
             workers.add(SubmissionsJsonPusher())
         return workers
     }
-
-
 
     override fun createIndices() {
         createDBIndex(Finals.AUTHOR, "attrs_author")
@@ -48,17 +48,18 @@ class SubmissionsFacilitator: Facilitator {
         createDBIndex("subreddit_id", "attrs_sub_id")
     }
 
-    // The default values above for raw data location need to be reset to only account for the new data that's
-    // getting added to the system.
-    override fun addNewData() {
-        // Clear the existing list. NOTE: clear can't be called on a "List" so just replace it with a new one
-        // TODO: Is this step even necessary?
-        this.jsonAbsolutePaths_ = ArrayList()
-
-        // Get the path(s) to the new json file(s)
-        this.jsonAbsolutePaths_ = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
-
-        // Now that the paths have been reset the new data can be pushed into the DB shards
-        this.pushJSONDataIntoDBs()
+    override fun dropIndices() {
+        dropDBIndices("attrs_author")
+        dropDBIndices("attrs_created")
+        dropDBIndices("attrs_host")
+        dropDBIndices("attrs_gilded")
+        dropDBIndices("attrs_pid")
+        dropDBIndices("attrs_comments")
+        dropDBIndices("attrs_med_author")
+        dropDBIndices("attrs_med_provider")
+        dropDBIndices("attrs_media")
+        dropDBIndices("attrs_score")
+        dropDBIndices("attrs_sub_name")
+        dropDBIndices("attrs_sub_id")
     }
 }

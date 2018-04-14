@@ -76,8 +76,8 @@ class Dolius(private val socket: Socket): Runnable {
         }
 
         // Read client JSON request. Should contain user, pass, query
-        var inputReader: BufferedReader
-        var input: String
+        val inputReader: BufferedReader
+        val input: String
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
             input = inputReader.readLine()
@@ -178,7 +178,7 @@ class Dolius(private val socket: Socket): Runnable {
      * Get a json object from the input string
      */
     private fun getJsonObject(jsonString: String): JSONObject?{
-        var obj: JSONObject
+        val obj: JSONObject
         try {
             obj = JSONObject(jsonString)
         }
@@ -265,7 +265,7 @@ class Dolius(private val socket: Socket): Runnable {
 }
 
 fun main(args: Array<String>){
-    var sock = ServerSocket(Finals.SERVER_SOCKET)
+    val sock = ServerSocket(Finals.SERVER_SOCKET)
     while(true)
         Dolius(sock.accept()).run()
 }

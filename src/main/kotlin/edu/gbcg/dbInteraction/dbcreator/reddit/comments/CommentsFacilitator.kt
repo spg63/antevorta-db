@@ -12,17 +12,19 @@ import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.dbInteraction.dbcreator.Facilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class CommentsFacilitator: Facilitator {
     constructor(): super()
 
-    override fun buildDBPaths()             = DBLocator.buildComDBPaths()
-    override fun getJsonAbsolutePaths()     = RawDataLocator.redditJsonCommentAbsolutePaths()
-    override fun getDBAbsolutePaths()       = DBLocator.redditComsAbsolutePaths()
-    override fun getDBDirectoryPaths()      = DBLocator.getComDBPath()
-    override fun getJsonKeysOfInterest()    = RedditComs.JSONKeys()
-    override fun getColumnNames()           = RedditComs.columnNames()
-    override fun getDataTypes()             = RedditComs.dataTypes()
-    override fun getTableName()             = Finals.COM_TABLE_NAME
+    override fun buildDBPaths()                     = DBLocator.buildComDBPaths()
+    override fun getJsonAbsolutePaths()             = RawDataLocator.redditJsonCommentAbsolutePaths()
+    override fun getDBAbsolutePaths()               = DBLocator.redditComsAbsolutePaths()
+    override fun getDBDirectoryPaths()              = DBLocator.getComDBPath()
+    override fun getJsonKeysOfInterest()            = RedditComs.JSONKeys()
+    override fun getColumnNames()                   = RedditComs.columnNames()
+    override fun getDataTypes()                     = RedditComs.dataTypes()
+    override fun getTableName()                     = Finals.COM_TABLE_NAME
+    override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
 
     override fun populateJsonWorkers(): List<JsonPusher> {
         val workers = ArrayList<JsonPusher>()
@@ -44,18 +46,16 @@ class CommentsFacilitator: Facilitator {
         createDBIndex("subreddit_id", "attrs_sub_id")
     }
 
-    // The default values above for raw data location need to be reset to only account for the new data that's
-    // getting added to the system.
-    // NOTE: This means replacing "this.jsonAbsolutePaths_" list with a list of new json files (or just a single file)
-    override fun addNewData(){
-        // Clear the existing list. Note: clear can't be called on a "List" so jst replace it with a new one
-        // TODO: Is this step even necessary?
-        this.jsonAbsolutePaths_ = ArrayList()
-
-        // Get the path(s) to the new json file(s)
-        this.jsonAbsolutePaths_ = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
-
-        // Now that the paths have been reset the new data can be pushed into the DB shards
-        this.pushJSONDataIntoDBs()
+    override fun dropIndices() {
+        dropDBIndices("attrs_author")
+        dropDBIndices("attrs_cont_score")
+        dropDBIndices("attrs_created")
+        dropDBIndices("attrs_gilded")
+        dropDBIndices("attrs_pid")
+        dropDBIndices("attrs_linkid")
+        dropDBIndices("attrs_parentid")
+        dropDBIndices("attrs_score")
+        dropDBIndices("attrs_sub_name")
+        dropDBIndices("attrs_sub_id")
     }
 }

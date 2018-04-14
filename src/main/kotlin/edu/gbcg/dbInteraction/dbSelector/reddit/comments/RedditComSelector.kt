@@ -12,6 +12,7 @@ import edu.gbcg.dbInteraction.dbSelector.SelectionWorker
 import edu.gbcg.dbInteraction.dbSelector.Selector
 
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class RedditComSelector: Selector {
     constructor(){ this.tableName = Finals.COM_TABLE_NAME }
 
@@ -19,7 +20,7 @@ class RedditComSelector: Selector {
         val DBs = DBLocator.redditComsAbsolutePaths()
         verifyDBsExist(DBs)
 
-        var workers = ArrayList<SelectionWorker>()
+        val workers = ArrayList<SelectionWorker>()
         for(i in 0 until DBs.size)
             workers.add(SelectionWorker(DBs[i], SQLStatement, CommentSetMapper()))
         return genericSelect(workers, SQLStatement)

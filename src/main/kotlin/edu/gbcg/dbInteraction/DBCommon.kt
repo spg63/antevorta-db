@@ -3,6 +3,8 @@
  * License: MIT
  */
 
+@file:Suppress("unused")
+
 package edu.gbcg.dbInteraction
 
 import edu.gbcg.configs.Finals
@@ -177,6 +179,15 @@ object DBCommon{
      */
     @JvmStatic fun getDBIndexSQLStatement(table: String, columnToIndex: String, indexName: String): String {
         return "create index $indexName on $table ($columnToIndex);"
+    }
+
+    /**
+     * Get a SQL string to drop an existing index
+     * @param indexName The index name to drop
+     * @return The SQL string
+     */
+    @JvmStatic fun getDropDBIndexSQLStatement(indexName: String): String {
+        return "drop index if exists '$indexName';"
     }
 
     /**

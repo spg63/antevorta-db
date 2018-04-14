@@ -11,6 +11,7 @@ import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker
 import edu.gbcg.dbInteraction.dbSelector.Selector
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class RedditSubSelector: Selector {
     constructor(){
         this.tableName = Finals.SUB_TABLE_NAME
@@ -20,7 +21,7 @@ class RedditSubSelector: Selector {
         val DBs = DBLocator.redditSubsAbsolutePaths()
         verifyDBsExist(DBs)
 
-        var workers = ArrayList<SelectionWorker>()
+        val workers = ArrayList<SelectionWorker>()
         for(i in 0 until DBs.size)
             workers.add(SelectionWorker(DBs[i], SQLStatement, SubmissionSetMapper()))
         return genericSelect(workers, SQLStatement)
