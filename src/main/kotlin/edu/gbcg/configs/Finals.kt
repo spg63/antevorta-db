@@ -5,6 +5,8 @@
 
 package edu.gbcg.configs
 
+import java.io.File
+
 /**
  * Finals is a class to hold variables related to program state. Items like the database
  * driver being used, if testing mode is enabled, database batch size limits, number of database
@@ -16,6 +18,8 @@ object Finals{
     @JvmField val TESTING_MODE = !isWindows()
     // Drops the DBs if they exist and reads in the data again
     @JvmField val START_FRESH = false
+    // Simple check to make sure we really want to add new data to the DBs
+    @JvmField val ADD_NEW_DATA = true
 
 
     /*-------------------- Database control --------------------*/
@@ -50,6 +54,7 @@ object Finals{
     /*-------------------- Server control ---------------------------*/
     const val SERVER_SOCKET = 3383
     const val SERVER_CONFIG_FILE_NAME = "doliusServerConfigsAndUsers.json"
+    var CLIENT_CONFIG = "serverConfigFileDir${File.separator}clientConfig.json"
 
     // NOTE: These columns are common to all DB types and are named here for consistency across insertions and
     // selection from various data sources. It will allow for further generalization in higher levels of code

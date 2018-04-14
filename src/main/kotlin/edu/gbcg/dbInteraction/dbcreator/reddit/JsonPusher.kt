@@ -5,6 +5,7 @@
 
 package edu.gbcg.dbInteraction.dbcreator.reddit
 
+import edu.gbcg.utils.TSL
 import org.json.JSONObject
 
 abstract class JsonPusher: Runnable {
@@ -69,22 +70,6 @@ abstract class JsonPusher: Runnable {
         return sb.toString()
     }
 
-/*
-// Want to automate the grabbing of json values and putting them into a PreparedStatement, unfortunately I'm not sure
-// how to deal with nested json objects in unknown datasets.
-    protected fun setElementInPS(ps: PreparedStatement, keyName: String, datatype: String){
-        // Text insertion
-        if(keyName.startsWith("TEXT")){
-
-        }
-
-        // Boolean insertion
-        else if("INTEGER DEFAULT 0".equals(keyName) || "INTEGER DEFAULT 0,".equals(keyName)){
-
-        }
-
-
-    }
-*/
+    // DB specific parsing and pushing of data
     protected abstract fun parseAndPushDataToDB()
 }

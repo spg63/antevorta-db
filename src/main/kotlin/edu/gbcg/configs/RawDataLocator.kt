@@ -35,4 +35,24 @@ object RawDataLocator{
         val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_COM_DATA_PATH else DataPaths.COM_DATA_PATH
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path)
     }
+
+    /**
+     * Get a list of all raw json files for reddit submission data that needs to be added to an existing database.
+     * This path changes depending on while machine the code is running on.
+     * @return List of all reddit submission files for NEW json data, otherwise null
+     */
+    @JvmStatic fun redditJsonSubmissionAbsolutePathsNewData(): List<String> {
+        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_SUB_DATA_PATH else DataPaths.NEW_SUB_DATA_PATH
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", path)
+    }
+
+    /**
+     * Get a list of all raw json files for reddit comment data that needs to be added to an existing database.
+     * This path changes depending on while machine the code is running on.
+     * @return List of all reddit comment files for NEW json data, otherwise null
+     */
+    @JvmStatic fun redditJsonCommentAbsolutePathsNewData(): List<String> {
+        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_COM_DATA_PATH else DataPaths.NEW_COM_DATA_PATH
+        return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path)
+    }
 }
