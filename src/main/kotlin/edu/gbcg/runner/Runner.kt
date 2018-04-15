@@ -37,8 +37,8 @@ fun main(args : Array<String>){
     //doServerComs()
     //doSubs()
     //doComs()
-    pushNewSubs()
-    //pushNewComs()
+    //pushNewSubs()
+    pushNewComs()
 
     sw.stop()
 
