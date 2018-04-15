@@ -66,6 +66,24 @@ public class FileUtils{
     }
 
     /**
+     * Get the number of lines in a file
+     * @param filePath the path to the file
+     * @return number or lines, -1 if error
+     */
+    public long lineCount(String filePath){
+        long lines = 0;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            while (br.readLine() != null) ++lines;
+            br.close();
+        }
+        catch(IOException e){
+            return -1;
+        }
+        return lines;
+    }
+
+    /**
      * Read a file in as a string
      * @param filepath The path to the file
      * @return The file, as a string, if it's found and read successfully

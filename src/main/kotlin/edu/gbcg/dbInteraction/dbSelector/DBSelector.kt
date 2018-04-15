@@ -107,9 +107,9 @@ class DBSelector {
 
     fun orderBy(name: String, ascending: Boolean): DBSelector {
         if(ascending)
-            orderBys.add(name + " asc")
+            orderBys.add("$name asc")
         else
-            orderBys.add(name + " desc")
+            orderBys.add("$name desc")
         return this
     }
 
@@ -151,9 +151,9 @@ class DBSelector {
                 sql.append(" nowait")
         }
         if(limit > 0)
-            sql.append(" limit " + limit)
+            sql.append(" limit $limit")
         if(offset > 0)
-            sql.append(", " + offset)
+            sql.append(", $offset")
 
         return sql.toString()
     }

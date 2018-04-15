@@ -26,6 +26,7 @@ import java.net.Socket
  * users access to the resources concurrently.
  */
 
+// NOTE: These two vars are the kotlin version of static class vars, available to all instances of the class
 var currentThreads = 0
 const val MAX_THREADS = 5
 
@@ -59,7 +60,7 @@ class Dolius(private val socket: Socket): Runnable {
             }
             logger_.warn("Dolius: currentThreads >= MAX_THREADS")
         }
-        currentThreads++
+        ++currentThreads
     }
 
     /**
@@ -76,8 +77,8 @@ class Dolius(private val socket: Socket): Runnable {
         }
 
         // Read client JSON request. Should contain user, pass, query
-        var inputReader: BufferedReader
-        var input: String
+        val inputReader: BufferedReader
+        val input: String
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
             //logger_.info("Incoming IP: ${socket.remoteSocketAddress.toString()}")
@@ -180,7 +181,7 @@ class Dolius(private val socket: Socket): Runnable {
      * Get a json object from the input string
      */
     private fun getJsonObject(jsonString: String): JSONObject?{
-        var obj: JSONObject
+        val obj: JSONObject
         try {
             obj = JSONObject(jsonString)
         }
@@ -267,7 +268,7 @@ class Dolius(private val socket: Socket): Runnable {
 }
 
 fun main(args: Array<String>){
-    var sock = ServerSocket(Finals.SERVER_SOCKET)
+    val sock = ServerSocket(Finals.SERVER_SOCKET)
     while(true)
         Dolius(sock.accept()).run()
 }

@@ -21,7 +21,7 @@ import java.util.concurrent.Future
  */
 abstract class Selector{
     protected var tableName: String = ""
-    protected val logger_ = TSL.get()
+    protected val logger_: TSL = TSL.get()
 
 //----------------------------------------------------------------------------------------------------------------------
 // NOTE: This can be used when one of the functions below doesn't satisfy your querying needs. I suggest just writing
@@ -127,15 +127,16 @@ abstract class Selector{
     /*
         Perform a multi-threaded selection against the DB shards. Each shard is given a single thread
      */
+    @Suppress("UNCHECKED_CAST")
     protected fun genericSelect(workers: List<SelectionWorker>, SQLStatement: String): List<RSMapper> {
-        var futureResults: ArrayList<Future<ArrayList<RSMapper>>> = ArrayList()
+        val futureResults: ArrayList<Future<ArrayList<RSMapper>>> = ArrayList()
         val executor = Executors.newFixedThreadPool(Finals.DB_SHARD_NUM)
 
         // For each worker in workers, submit to executor and put result in futureResults
         workers.mapTo(futureResults) { executor.submit(it) as Future<ArrayList<RSMapper>> }
 
         // Get all results from the worker threads and place the RSMappers in the results ArrayList
-        var results = ArrayList<RSMapper>()
+        val results = ArrayList<RSMapper>()
         try{
             for(i in 0 until Finals.DB_SHARD_NUM) {
                 results.addAll(futureResults[i].get())
@@ -157,7 +158,7 @@ abstract class Selector{
         Kill the program if the DBs don't exist or a shard is missing
      */
     protected fun verifyDBsExist(DBs: List<String>) {
-        if(DBs == null)
+        if(DBs.isEmpty())
             logger_.logAndKill("Selector.verifyDBsExist DBs was null")
         if(DBs.size != Finals.DB_SHARD_NUM)
             logger_.logAndKill("Selector.verifyDBsExist DBs.size != Finals.DB_SHARD_NUM")

@@ -5,7 +5,6 @@
 
 package edu.gbcg.dbInteraction.dbcreator.reddit
 
-import edu.gbcg.utils.TSL
 import org.json.JSONObject
 
 abstract class JsonPusher: Runnable {
@@ -47,7 +46,7 @@ abstract class JsonPusher: Runnable {
     // Setters and getters are automatically generated for the class vars
 
     protected fun buildInsertionString(): String {
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         sb.append("INSERT INTO ")
         sb.append(this.tableName)
         sb.append(" (")

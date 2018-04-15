@@ -14,10 +14,10 @@ import edu.gbcg.utils.FileUtils
  */
 object DBLocator {
     private val drives = arrayOf("F", "G", "H", "I", "J", "K")
-    private val subpath = ":/DBs/reddit/Submissions/${DataPaths.SUB_DB_PREFIX}.sqlite3"
-    private val compath = ":/DBs/reddit/Comments/${DataPaths.COM_DB_PREFIX}.sqlite3"
-    private val SubDBPath = ":/DBs/reddit/Submissions/"
-    private val ComDBPath = ":/DBs/reddit/Comments/"
+    private const val subpath = ":/DBs/reddit/Submissions/${DataPaths.SUB_DB_PREFIX}.sqlite3"
+    private const val compath = ":/DBs/reddit/Comments/${DataPaths.COM_DB_PREFIX}.sqlite3"
+    private const val SubDBPath = ":/DBs/reddit/Submissions/"
+    private const val ComDBPath = ":/DBs/reddit/Comments/"
 
     /**
      * Get a list of absolute file paths to all reddit submission DBs
@@ -102,9 +102,9 @@ object DBLocator {
         * Actually builds the paths to the DBs based on requested com/sub dir and their prefix
      */
     private fun buildDBPaths(db_dir: String, db_prefix: String): List<String> {
-        var sbs = ArrayList<StringBuilder>()
+        val sbs = ArrayList<StringBuilder>()
         for(i in 0 until Finals.DB_SHARD_NUM){
-            var sb = StringBuilder()
+            val sb = StringBuilder()
             sb.append(db_dir)
             sb.append(db_prefix)
             sb.append(i)

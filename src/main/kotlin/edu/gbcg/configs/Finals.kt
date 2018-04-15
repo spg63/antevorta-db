@@ -3,6 +3,8 @@
  * License: MIT
  */
 
+@file:Suppress("MayBeConstant")
+
 package edu.gbcg.configs
 
 import java.io.File
@@ -17,9 +19,9 @@ object Finals{
     // True when working locally on MBP, false when working on full dataset -- changes data & db paths
     @JvmField val TESTING_MODE = !isWindows()
     // Drops the DBs if they exist and reads in the data again
-    @JvmField val START_FRESH = false
+    @JvmField val START_FRESH = true
     // Simple check to make sure we really want to add new data to the DBs
-    @JvmField val ADD_NEW_DATA = true
+    @JvmField val ADD_NEW_DATA = false
 
 
     /*-------------------- Database control --------------------*/
@@ -28,9 +30,9 @@ object Finals{
     const val DB_TYPE_EXT = ".sqlite3"
     const val ENABLE_FOREIGN_KEYS = false
     // Larger batch size performs better on research machine with individual HDDs for each DB shard
-    const private val RESEARCH_BATCH_SIZE = 7500
+    private const val RESEARCH_BATCH_SIZE = 7500
     // Performs better on single laptop SSD
-    const private val LAPTOP_BATCH_SIZE = 1000
+    private const val LAPTOP_BATCH_SIZE = 1000
     @JvmField val DB_BATCH_LIMIT = if(isWindows()) RESEARCH_BATCH_SIZE else LAPTOP_BATCH_SIZE
     // Turns off sqlite synchronous mode, faster batch insertions
     const val SYNC_MODE_OFF = true

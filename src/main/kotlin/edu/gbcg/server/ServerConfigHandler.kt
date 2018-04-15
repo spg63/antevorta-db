@@ -13,9 +13,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 
+@Suppress("unused")
 class ServerConfigHandler {
     private var jsonObject = JSONObject()
-    //private var configFileMap = HashMap<String, String>()
     private val myRootDir = DataPaths.DB_CONFIG_PATH
     private val myConfigFile = myRootDir + Finals.SERVER_CONFIG_FILE_NAME
     private val fileUtils_ = FileUtils.get()
@@ -36,7 +36,7 @@ class ServerConfigHandler {
     fun getBannedSQLWords(): List<String>{
         // There should be an array of JSONObjects where each object is a banned word
         val bannedArray = this.jsonObject.getJSONArray(BANN_ARR)
-        var bannedWords = ArrayList<String>()
+        val bannedWords = ArrayList<String>()
         for(i in 0 until bannedArray.length())
             bannedWords.add(bannedArray.getJSONObject(i).getString(BAN))
 
@@ -137,7 +137,7 @@ class ServerConfigHandler {
         if(!configExists()) return false
 
         // No great way to do this, loop through the users, add to new array, skipping the one we want to remove
-        var usersArray = this.jsonObject.getJSONArray(USER_ARR)
+        val usersArray = this.jsonObject.getJSONArray(USER_ARR)
         for(i in 0 until usersArray.length()){
             val user = usersArray.getJSONObject(i)
             // Remove the user from the users array
@@ -191,7 +191,7 @@ class ServerConfigHandler {
 }
 
 fun main(args: Array<String>){
-    var sc = ServerConfigHandler()
+    val sc = ServerConfigHandler()
     sc.createConfigFile()
     sc.addUserPassToConfigFile("sean", "PASS")
     sc.addUserPassToConfigFile("USER", "PASS")

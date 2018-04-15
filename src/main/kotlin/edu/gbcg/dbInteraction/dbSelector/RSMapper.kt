@@ -7,7 +7,6 @@ package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.utils.TSL
-import org.json.JSONArray
 import org.json.JSONObject
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -26,7 +25,7 @@ import java.time.LocalDateTime
  */
 abstract class RSMapper {
     protected var map: Map<String, String> = HashMap()
-    protected val logger_ = TSL.get()
+    protected val logger_: TSL = TSL.get()
 
     constructor()
     constructor(map: Map<String, String>) {
@@ -34,7 +33,7 @@ abstract class RSMapper {
     }
 
     constructor(jsonObject: JSONObject){
-        var tmpMap = HashMap<String, String>()
+        val tmpMap = HashMap<String, String>()
         for(key in jsonObject.keys())
             tmpMap[key] = jsonObject.getString(key)
         this.map = tmpMap
@@ -138,7 +137,7 @@ abstract class RSMapper {
      * @return All items from row as a List of strings
      */
     fun getAllItemsAsString(): List<String> {
-        var vals = ArrayList<String>()
+        val vals = ArrayList<String>()
         vals.addAll(this.map.values)
         return vals
     }
@@ -181,13 +180,14 @@ abstract class RSMapper {
     /*
         The implementation of buildMappers
      */
+    @Suppress("ReplacePutWithAssignment", "SENSELESS_COMPARISON")
     protected fun buildMappersImpl(rs: ResultSet, colNames: List<String>): MutableList<RSMapper> {
-        var maps = ArrayList<RSMapper>()
+        val maps = ArrayList<RSMapper>()
 
         if(rs == null)
             return maps
 
-        var colIDs = HashMap<String, Int>()
+        val colIDs = HashMap<String, Int>()
         try{
             // If there are no results for a search the resultset will appear closed
             if(rs.isClosed)
@@ -210,7 +210,7 @@ abstract class RSMapper {
 
             // Loop through all results that were found
             while(rs.next()){
-                var map = HashMap<String, String>()
+                val map = HashMap<String, String>()
 
                 // For each column, check to see if we have a value and if so, add it to the map
                 // NOTE: using the keyset instead of colNames because columns are missing from non-* queries
