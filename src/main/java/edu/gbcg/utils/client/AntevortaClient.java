@@ -53,7 +53,6 @@ public class AntevortaClient {
         catch(IOException e){
             System.err.println("Failed to write " + configFile);
         }
-
     }
 
     private String configPath;
@@ -61,7 +60,6 @@ public class AntevortaClient {
     private int hostport;
     private String user;
     private String pass;
-
 
     // The config file will need to include the server hostname, the server port, the client username and the client
     // password. The idea here really isn't for some secure login system, it's just a very basic attempt to stop
@@ -82,7 +80,7 @@ public class AntevortaClient {
         String emptyArray = "[]";
         JSONArray results = null;
         try {
-            // Open the socket to the
+            // Open the socket to the server
             Socket sock = new Socket(hostname, hostport);
             DataOutputStream serverWriter = new DataOutputStream(sock.getOutputStream());
             BufferedReader serverReader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -100,7 +98,8 @@ public class AntevortaClient {
             String jsonArrayString = serverReader.readLine();
 
             // String could perhaps be null if a failure occurs, however in practice it should just hang on the
-            // readLine() call
+            // readLine() call -- Might be smart to add a timeout for that call that is reasonable to accomodate
+            // large requests.
             if(jsonArrayString == null) jsonArrayString = emptyArray;
 
             // Response starts with NOOP_FLAG if the server didn't perform the request, a reason for the failure will
@@ -125,7 +124,6 @@ public class AntevortaClient {
 // ---------------------------------------------------------------------------------------------------------------------
 
     private void parseConfigFile(){
-        //TODO: Read the config file, get hostname, port, and auth information for user
         String fullString = null;
         try(BufferedReader br = new BufferedReader(new FileReader(this.configPath))){
             // Read in the JSON file

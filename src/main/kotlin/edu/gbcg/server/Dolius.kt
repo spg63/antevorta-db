@@ -26,6 +26,7 @@ import java.net.Socket
  * users access to the resources concurrently.
  */
 
+// NOTE: These two vars are the kotlin version of static class vars, available to all instances of the class
 var currentThreads = 0
 const val MAX_THREADS = 5
 
@@ -59,7 +60,7 @@ class Dolius(private val socket: Socket): Runnable {
             }
             logger_.warn("Dolius: currentThreads >= MAX_THREADS")
         }
-        currentThreads++
+        ++currentThreads
     }
 
     /**

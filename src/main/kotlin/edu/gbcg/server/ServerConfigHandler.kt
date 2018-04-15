@@ -16,7 +16,6 @@ import java.io.File
 @Suppress("unused")
 class ServerConfigHandler {
     private var jsonObject = JSONObject()
-    //private var configFileMap = HashMap<String, String>()
     private val myRootDir = DataPaths.DB_CONFIG_PATH
     private val myConfigFile = myRootDir + Finals.SERVER_CONFIG_FILE_NAME
     private val fileUtils_ = FileUtils.get()
