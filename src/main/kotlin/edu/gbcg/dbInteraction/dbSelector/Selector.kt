@@ -166,7 +166,7 @@ abstract class Selector{
 
     /*
         Get selector type based on string matching...stupid idea, will revisit another time
-        NOTE: The companion object is kotlin specific, to
+        NOTE: The companion object is kotlin specific
      */
     companion object {
         fun getSelectorOnType(matchingString: String): Selector{

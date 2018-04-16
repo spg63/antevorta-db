@@ -13,11 +13,16 @@ import edu.gbcg.utils.FileUtils
  * class abstracts away the paths to the DB files.
  */
 object DBLocator {
-    private val drives = arrayOf("F", "G", "H", "I", "J", "K")
-    private const val subpath = ":/DBs/reddit/Submissions/${DataPaths.SUB_DB_PREFIX}.sqlite3"
-    private const val compath = ":/DBs/reddit/Comments/${DataPaths.COM_DB_PREFIX}.sqlite3"
-    private const val SubDBPath = ":/DBs/reddit/Submissions/"
-    private const val ComDBPath = ":/DBs/reddit/Comments/"
+    // List of drive letters on the research machine that stores the db shards
+    private val DRIVES = arrayOf("F", "G", "H", "I", "J", "K")
+
+    // Paths to the DB shards without the drive letter prefix
+    private const val REDDIT_SUBPATH = ":/DBs/reddit/Submissions/${DataPaths.REDDIT_SUB_DB_PREFIX}.sqlite3"
+    private const val REDDIT_COMPATH = ":/DBs/reddit/Comments/${DataPaths.REDDIT_COM_DB_PREFIX}.sqlite3"
+
+    // Paths to the directories that hold the DB shards without the drive letter prefix
+    private const val REDDIT_SUB_DB_PATH = ":/DBs/reddit/Submissions/"
+    private const val REDDIT_COM_DB_PATH = ":/DBs/reddit/Comments/"
 
     /**
      * Get a list of absolute file paths to all reddit submission DBs
@@ -25,7 +30,7 @@ object DBLocator {
      */
     @JvmStatic fun redditSubsAbsolutePaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBPath()[0])
+            true -> FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBDirectoryPath()[0])
             false -> subDBPathsList()
         }
     }
@@ -36,7 +41,7 @@ object DBLocator {
      */
     @JvmStatic fun redditComsAbsolutePaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBPath()[0])
+            true -> FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBDirectoryPath()[0])
             false -> comDBPathsList()
         }
     }
@@ -46,12 +51,12 @@ object DBLocator {
      * which machine this code is running on.
      * @return Absolute file path to the directories holding the submission databases
      */
-    @JvmStatic fun getSubDBPath(): List<String> {
+    @JvmStatic fun getSubDBDirectoryPath(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> listOf(DataPaths.LOCAL_SUB_DB_PATH)
+            true -> listOf(DataPaths.LOCAL_REDDIT_SUB_DB_PATH)
             false -> {
                 val paths = ArrayList<String>()
-                drives.mapTo(paths) { it + SubDBPath }
+                DRIVES.mapTo(paths) { it + REDDIT_SUB_DB_PATH }
                 paths
             }
         }
@@ -62,12 +67,12 @@ object DBLocator {
      * which machine this code is running on.
      * @return Absolute file path to the directories holding the submission databases
      */
-    @JvmStatic fun getComDBPath(): List<String> {
+    @JvmStatic fun getComDBDirectoryPath(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> listOf(DataPaths.LOCAL_COM_DB_PATH)
+            true -> listOf(DataPaths.LOCAL_REDDIT_COM_DB_PATH)
             false -> {
                 val paths = ArrayList<String>()
-                drives.mapTo(paths) { it + ComDBPath }
+                DRIVES.mapTo(paths) { it + REDDIT_COM_DB_PATH }
                 paths
             }
         }
@@ -80,7 +85,7 @@ object DBLocator {
      */
     @JvmStatic fun buildSubDBPaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> buildDBPaths(getSubDBPath()[0], DataPaths.SUB_DB_PREFIX)
+            true -> buildDBPaths(getSubDBDirectoryPath()[0], DataPaths.REDDIT_SUB_DB_PREFIX)
             false -> subDBPathsList()
         }
     }
@@ -92,7 +97,7 @@ object DBLocator {
      */
     @JvmStatic fun buildComDBPaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> buildDBPaths(getComDBPath()[0], DataPaths.COM_DB_PREFIX)
+            true -> buildDBPaths(getComDBDirectoryPath()[0], DataPaths.REDDIT_COM_DB_PREFIX)
             false -> comDBPathsList()
         }
     }
@@ -119,14 +124,14 @@ object DBLocator {
 
     private fun subDBPathsList(): List<String> {
         val re = ArrayList<String>()
-        // for-loop replacement, for each item in drives, add item + subpath to 're'
-        drives.mapTo(re) { it + subpath }
+        // for-loop replacement, for each item in DRIVES, add item + REDDIT_SUBPATH to 're'
+        DRIVES.mapTo(re) { it + REDDIT_SUBPATH }
         return re
     }
 
     private fun comDBPathsList(): List<String> {
         val re = ArrayList<String>()
-        drives.mapTo(re) { it + compath }
+        DRIVES.mapTo(re) { it + REDDIT_COMPATH }
         return re
     }
 }
