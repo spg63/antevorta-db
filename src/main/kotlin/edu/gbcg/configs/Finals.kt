@@ -20,7 +20,7 @@ object Finals{
     @JvmField val TESTING_MODE = !isWindows()
     // Drops the DBs if they exist and reads in the data again
     @JvmField val START_FRESH = false
-    // Simple check to make sure data should be added to the DBs
+    // Simple check to make sure we really want to add new data to the DBs
     @JvmField val ADD_NEW_DATA = false
 
 
