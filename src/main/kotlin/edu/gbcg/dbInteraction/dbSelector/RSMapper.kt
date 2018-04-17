@@ -172,7 +172,8 @@ abstract class RSMapper {
         val res = this.map[key]
         if(res == null) {
             logger_.err("RSMapper.getItem() No value for $key")
-            throw IllegalArgumentException("RSMapper.getItem() No value for $key")
+            return ""
+            //throw IllegalArgumentException("RSMapper.getItem() No value for $key")
         }
         return res
     }

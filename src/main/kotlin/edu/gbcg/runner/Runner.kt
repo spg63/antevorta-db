@@ -7,6 +7,7 @@
 
 package edu.gbcg.runner
 
+import com.fasterxml.jackson.databind.ser.Serializers
 import com.google.common.base.Stopwatch
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.columnsAndKeys.RedditComs
@@ -35,10 +36,11 @@ fun main(args : Array<String>){
     val sw = Stopwatch.createStarted()
 
     //doServerComs()
-    //doSubs()
+    doSubs()
+    //doServerSubs()
     //doComs()
     //pushNewSubs()
-    pushNewComs()
+    //pushNewComs()
 
     sw.stop()
 
@@ -56,6 +58,8 @@ fun doServerComs(){
     val dbsql = DBSelector()
             .from(Finals.COM_TABLE_NAME)
             .where("author = '$author'")
+            .orderBy("created_dt")
+
 
     // If results are null, return
     val jsonResults = client.queryServer(dbsql.sql()) ?: return
@@ -73,6 +77,28 @@ fun doServerComs(){
 
 }
 
+fun doServerSubs(){
+    val client = AntevortaClient(Finals.CLIENT_CONFIG)
+    val author = "SciTroll"
+
+    val dbsql = DBSelector()
+            .from(Finals.SUB_TABLE_NAME)
+            .where("author = '$author'")
+            .orderBy("created_dt")
+
+    val jsonResults = client.queryServer(dbsql.sql()) ?: return
+
+    val objects = ArrayList<JSONObject>()
+    for(i in 0 until jsonResults.length())
+        objects.add(jsonResults.getJSONObject(i))
+
+    val mappers = ArrayList<RSMapper>()
+    for(jsonobj in objects)
+        mappers.add(BaseMapper(jsonobj))
+
+    RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
+}
+
 fun doSubs(){
     if(Finals.START_FRESH){
         buildDBShards(SubmissionsFacilitator())
@@ -80,7 +106,7 @@ fun doSubs(){
     }
     val rss = RedditSubSelector()
 
-    val res = rss.selectAllFromAuthor("a4k04")
+    //val res = rss.selectAllFromAuthor("a4k04")
 
     //val comGetter = RedditComOrganizer(res[1])
 
@@ -89,7 +115,8 @@ fun doSubs(){
     //        .dataTypesForPrinting())
 
     //return
-    //val results = rss.selectAllAfterDate(2017, 11, 30, 23, 59, 58)
+    //val res = rss.selectAllAfterDate(2018, 2, 28, 23, 59, 58)
+    val res = rss.selectAllFromAuthor("SciTroll")
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rss.selectAllBetweenDates(startDate, endDate)
@@ -109,6 +136,7 @@ fun doComs(){
     val rcs = RedditComSelector()
 
     val res = rcs.selectAllFromAuthor("a4k04")
+    //val res = rcs.selectAllAfterDate(2018, 2, 28, 23, 59, 50)
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rcs.selectAllBetweenDates(startDate, endDate)

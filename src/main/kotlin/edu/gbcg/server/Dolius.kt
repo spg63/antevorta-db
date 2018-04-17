@@ -16,6 +16,7 @@ import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.IOException
 import java.io.InputStreamReader
+import java.lang.reflect.InvocationTargetException
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -209,9 +210,14 @@ class Dolius(private val socket: Socket): Runnable {
      * Write non-json objects back to the client
      */
     private fun writeMessageToClient(message: String){
-        val clientWriter = DataOutputStream(socket.getOutputStream())
-        clientWriter.writeBytes(message)
-        clientWriter.close()
+        try {
+            val clientWriter = DataOutputStream(socket.getOutputStream())
+            clientWriter.writeBytes(message)
+            clientWriter.close()
+        }
+        catch(e: InvocationTargetException){
+            logger_.exception(e)
+        }
     }
 
     /**
