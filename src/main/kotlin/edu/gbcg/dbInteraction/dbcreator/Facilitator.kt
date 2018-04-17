@@ -168,7 +168,6 @@ abstract class Facilitator {
                             val currentComplete = readLines / total_lines_in_file
                             val percentComplete = (currentComplete * 100).toInt()
                             logger_.info("$percentComplete% done ${f.name}")
-                            //    logger_.info("${numberFormat_.format(total_lines_read)} lines read from ${f.name}")
                         }
                         ++write_total_lines_read
 

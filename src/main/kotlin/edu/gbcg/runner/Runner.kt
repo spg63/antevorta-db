@@ -7,7 +7,6 @@
 
 package edu.gbcg.runner
 
-import com.fasterxml.jackson.databind.ser.Serializers
 import com.google.common.base.Stopwatch
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.columnsAndKeys.RedditComs
@@ -35,8 +34,8 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    //doServerComs()
-    doSubs()
+    doServerComs()
+    //doSubs()
     //doServerSubs()
     //doComs()
     //pushNewSubs()
