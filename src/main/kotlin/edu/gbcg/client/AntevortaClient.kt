@@ -7,8 +7,10 @@ package edu.gbcg.client
 
 import edu.gbcg.utils.TSL
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
+import java.net.Socket
 
 // Kotlin version of public static vars. Not accessible from Java but no java needs these vars in this system.
 // They're used in the companion object to create the config file as well as when the server is queried
@@ -59,7 +61,7 @@ class AntevortaClient(configFilePath: String) {
                 val fw = FileWriter(configFile)
                 fw.write(json.toString())
             } catch (e: IOException) {
-                logger_.exception(e)
+                TSL.get().exception(e)
             }
         }
     }
@@ -72,7 +74,49 @@ class AntevortaClient(configFilePath: String) {
      * @return
      */
     fun queryServer(SQLQuery: String): JSONArray {
-        return JSONArray()
+        val emptyArray = "[]"
+        val results: JSONArray
+        try{
+            // Open the socket to the server
+            val sock = Socket(this.hostname, this.hostport)
+            val serverWriter = DataOutputStream(sock.getOutputStream())
+            val serverReader = BufferedReader(InputStreamReader(sock.getInputStream()))
+
+            // Build JSONObject, consisting of user, pass, and query string
+            val queryObject = buildJSONObject(SQLQuery)
+
+            // Server reads line by line, need to ensure the string ends with a newline char or the server will hang
+            serverWriter.writeBytes(queryObject.toString() + "\n")
+            serverWriter.flush()
+
+            // Sit here and wait for the server to respond. JSONArray will be returned in one line for easy parsing
+            // by the client. This seems to work fine for large results running over TCP, if problems arise this can
+            // be revised to transfer raw bytes with better error handling
+            var jsonArrayString = serverReader.readLine()
+
+            // String could perhaps be null if a failure occurs, however in practice it should just hang on the
+            // readLine() call -- Might be smart to add a timeout for that call that is reasonable to accomodate
+            // large results
+            if(jsonArrayString == null)
+                jsonArrayString = emptyArray
+
+            // Response starts with NOOP_FLAG if the server didn't perform the request, a reason for the failure will
+            // come after the flag
+            if(jsonArrayString.startsWith(NOOP_FLAG)){
+                logger_.err("Server failed to return results: ${jsonArrayString.substring(NOOP_FLAG.length)}")
+                return JSONArray(emptyArray)
+            }
+
+            // NOTE: A query returning no results will return [], a valid (but empty) JSONArray. RSMapperOutput knows
+            // how to handle empty results
+            results = JSONArray(jsonArrayString)
+        }
+        catch(e: IOException){
+            logger_.exception(e)
+            return JSONArray()
+        }
+
+        return results
     }
 
 //----- Internal methods -----------------------------------------------------------------------------------------------
@@ -98,22 +142,31 @@ class AntevortaClient(configFilePath: String) {
             logger_.logAndKill("Unable to parse config file")
         }
 
-        val json        = JSONObject(fullString)
+        val json: JSONObject = try {
+            JSONObject(fullString)
+        }
+        catch(e: JSONException) {
+            logger_.logAndKill(e)
+            JSONObject()
+        }
+
         this.hostname   = json.getString(HOST_NAME)
-        this.hostpost   = json.getInt(HOST_PORT)
+        this.hostport   = json.getInt(HOST_PORT)
         this.user       = json.getString(USER)
         this.pass       = json.getString(PASS)
     }
 
     private fun buildJSONObject(SQLQuery: String): JSONObject {
+        val json = JSONObject()
+        json.put(USER, this.user)
+        json.put(PASS, this.pass)
+        json.put(QUERY, SQLQuery)
 
+        return json
     }
 
 
 //----- See the older Java version for usage of this class. At the moment it's still up-to-date ------------------------
-    init {
-        parseConfigFile()
-    }
 
 
 }

@@ -8,6 +8,7 @@
 package edu.gbcg.runner
 
 import com.google.common.base.Stopwatch
+import edu.gbcg.client.AntevortaClient
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
@@ -22,7 +23,6 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
-import edu.gbcg.utils.client.AntevortaClient
 import org.json.JSONObject
 
 fun main(args : Array<String>){
@@ -73,6 +73,7 @@ fun doServerComs(){
         mappers.add(BaseMapper(jsonobj))
 
     RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
+    //RSMapperOutput.RSMappersToCSV(mappers, RedditComs.columnsForPrinting(), "output.csv")
 
 }
 
