@@ -62,7 +62,7 @@ public class TSL extends Thread{
 
     @Override
     public void run(){
-        FileUtils.get().checkAndCreateDir("logs");
+        this.futils.checkAndCreateDir("logs");
         PrintWriter pw = null;
         try{
             String item;
@@ -75,7 +75,6 @@ public class TSL extends Thread{
                 out.writeln_err("*** ThreadSafeLogger IOException");
             }
 
-            futils.checkAndCreateDir("logs");
             while(!(item = (String)itemsToLog.take()).equals(SHUTDOWN_REQ)){
                 String label;
                 if(item.startsWith("[INFO]"))
@@ -97,16 +96,16 @@ public class TSL extends Thread{
                 pw.println(sb.toString());
                 pw.flush();
                 if(LOG_TO_CONSOLE)
-                    Out.get().writeln(sb.toString());
+                    this.out.writeln(sb.toString());
             }
         }
         catch(InterruptedException e){
-            out.writeln_err("ThreadSafeLogger -- I was interrupted");
+            this.out.writeln_err("ThreadSafeLogger -- I was interrupted");
         }
         finally{
             loggerTerminated = true;
             if(pw != null)
-                pw.close();;
+                pw.close();
         }
     }
 
@@ -183,14 +182,14 @@ public class TSL extends Thread{
     }
 
     /**
-     * Shutdown the logger, thread will sleep for 250ms to allow proper flushing
+     * Shutdown the logger, thread will sleep for 500ms to allow proper flushing
      */
     public void shutDown() {
         shuttingDown = true;
         try {
             itemsToLog.put(SHUTDOWN_REQ);
             // Force a pause of the main thread to give the logger thread a change to write all data to the file system
-            Thread.sleep(250);
+            Thread.sleep(500);
         }
         catch(InterruptedException e){
             throw new RuntimeException("ThreadSafeLogger.shutDown() -- Unexpected interruption");
@@ -245,7 +244,6 @@ public class TSL extends Thread{
         else
             mil_s = Integer.toString(milli);
 
-        String time_s = "("+hour_s+":"+min_s+":"+sec_s+"."+mil_s+") > ";
-        return time_s;
+        return "("+hour_s+":"+min_s+":"+sec_s+"."+mil_s+") > ";
     }
 }
