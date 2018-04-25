@@ -23,7 +23,7 @@ class CommentsFacilitator: Facilitator {
     override fun getJsonKeysOfInterest()            = RedditComs.JSONKeys()
     override fun getColumnNames()                   = RedditComs.columnNames()
     override fun getDataTypes()                     = RedditComs.dataTypes()
-    override fun getTableName()                     = Finals.COM_TABLE_NAME
+    override fun getTableName()                     = Finals.REDDIT_COM_TABLE
     override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
 
     override fun populateJsonWorkers(): List<JsonPusher> {

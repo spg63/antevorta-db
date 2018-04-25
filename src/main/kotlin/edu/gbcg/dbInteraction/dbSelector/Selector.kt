@@ -10,6 +10,7 @@ import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.gbcg.utils.TSL
+import java.sql.SQLSyntaxErrorException
 import java.time.LocalDateTime
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
@@ -151,7 +152,58 @@ abstract class Selector{
         executor.shutdown()
 
         logger_.info("$SQLStatement --- ${results.size} results.")
+
+        // The research machine has multiple DB shards which makes "orderby" requests almost useless. The code below
+        // will search for orderby in the query, if it exists it will determine which column name the ordering is to
+        // be done on and if the ordering is ascending or decending (default assumes ascending).
+        // NOTE: This only handles a single orderby clause right now!!!
+        return handleOrderBy(SQLStatement, results)
+    }
+
+    /*
+        Takes in the query and the results, checks the query to see if it contains an orderby clause, if it does it will
+        process the orderby, determine how to sort the results based on the columns the ordering should be done on
+        and if the ordering should be ascending (default) or descending, then it will return the properly sorted
+        results. If there is no orderby clause the results will be returned unmodified.
+     */
+    private fun handleOrderBy(query: String, results: List<RSMapper>): List<RSMapper>{
+        if(!query.toLowerCase().contains("orderby") && !query.toLowerCase().contains("order by")) return results
+
+        // Determine which columns names should be sorted, and if it should be sorted ascending or descending
+        val orderByMap = determineOrderByColumns(query)
+
+        // Do the sorting
+        for(key in orderByMap.keys)
+            doTheSort(key, orderByMap[key] ?: true) // Assume ascending if the value in the map is null
+
+        System.exit(0)
         return results
+    }
+
+    /*
+        Determine which column should be used in the sorting when an orderby clause is added to the SQL query
+        It takes in the query string and returns a map of column names and a boolean. The boolean is true when the
+        sorting should be done in ascending order (the default) and false when it should be done in decending order.
+     */
+    //TODO: This is bullshited for created_dt
+    private fun determineOrderByColumns(query: String): Map<String, Boolean> {
+        val orderByMap = HashMap<String, Boolean>()
+        orderByMap["created_dt"] = true
+        return orderByMap
+    }
+
+    /*
+        The columnName is the column that the sort needs to be based on
+        If isAscending is true the data should be sorted in ascending order, if it's false it should be sorted in
+        descending order
+     */
+    private fun doTheSort(columnName: String, isAscending: Boolean): List<RSMapper> {
+
+
+
+        println(columnName)
+        println(isAscending)
+        return ArrayList()
     }
 
     /*
@@ -159,7 +211,7 @@ abstract class Selector{
      */
     protected fun verifyDBsExist(DBs: List<String>) {
         if(DBs.isEmpty())
-            logger_.logAndKill("Selector.verifyDBsExist DBs was null")
+            logger_.logAndKill("Selector.verifyDBsExist DBs was empty")
         if(DBs.size != Finals.DB_SHARD_NUM)
             logger_.logAndKill("Selector.verifyDBsExist DBs.size != Finals.DB_SHARD_NUM")
     }
@@ -171,8 +223,8 @@ abstract class Selector{
     companion object {
         fun getSelectorOnType(matchingString: String): Selector{
             return when {
-                matchingString.toLowerCase().contains(Finals.COM_TABLE_NAME) -> RedditComSelector()
-                matchingString.toLowerCase().contains(Finals.SUB_TABLE_NAME) -> RedditSubSelector()
+                matchingString.toLowerCase().contains(Finals.REDDIT_COM_TABLE) -> RedditComSelector()
+                matchingString.toLowerCase().contains(Finals.REDDIT_SUB_TABLE) -> RedditSubSelector()
                 else -> throw IllegalArgumentException("Selector.getSelectorOnType is a stupid idea Sean")
             }
         }

@@ -18,7 +18,7 @@ object RSMapperOutput{
 
     @JvmStatic fun printAllColumnsFromRSMappers(mappers: List<RSMapper>, columnNames: List<String>,
                                                 dataTypes: List<String>) {
-        if(mappers == null || mappers.isEmpty()){
+        if(mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
             return
         }

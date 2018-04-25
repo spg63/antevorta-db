@@ -23,7 +23,7 @@ class SubmissionsFacilitator: Facilitator {
     override fun getJsonKeysOfInterest()            = RedditSubs.JSONKeys()
     override fun getColumnNames()                   = RedditSubs.columnNames()
     override fun getDataTypes()                     = RedditSubs.dataTypes()
-    override fun getTableName()                     = Finals.SUB_TABLE_NAME
+    override fun getTableName()                     = Finals.REDDIT_SUB_TABLE
     override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
 
     override fun populateJsonWorkers(): List<JsonPusher> {

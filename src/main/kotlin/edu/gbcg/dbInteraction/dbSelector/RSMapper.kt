@@ -173,7 +173,6 @@ abstract class RSMapper {
         if(res == null) {
             logger_.err("RSMapper.getItem() No value for $key")
             return ""
-            //throw IllegalArgumentException("RSMapper.getItem() No value for $key")
         }
         return res
     }

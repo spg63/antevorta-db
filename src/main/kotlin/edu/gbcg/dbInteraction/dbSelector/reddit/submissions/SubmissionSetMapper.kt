@@ -18,3 +18,4 @@ class SubmissionSetMapper: RSMapper {
         return buildMappersImpl(rs, RedditSubs.columnNames())
     }
 }
+

@@ -30,7 +30,7 @@ object Finals{
     const val DB_TYPE_EXT = ".sqlite3"
     const val ENABLE_FOREIGN_KEYS = false
     // Larger batch size performs better on research machine with individual HDDs for each DB shard
-    private const val RESEARCH_BATCH_SIZE = 7500
+    private const val RESEARCH_BATCH_SIZE = 10000
     // Performs better on single laptop SSD
     private const val LAPTOP_BATCH_SIZE = 1000
     @JvmField val DB_BATCH_LIMIT = if(isWindows()) RESEARCH_BATCH_SIZE else LAPTOP_BATCH_SIZE
@@ -39,8 +39,8 @@ object Finals{
     // There are 6 available HDDs for data storage on research machine, use all of them
     const val DB_SHARD_NUM = 6
     // Reddit table names
-    const val SUB_TABLE_NAME = "submission_attrs"
-    const val COM_TABLE_NAME = "comment_attrs"
+    const val REDDIT_SUB_TABLE = "submission_attrs"
+    const val REDDIT_COM_TABLE = "comment_attrs"
 
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost

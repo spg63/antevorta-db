@@ -13,9 +13,7 @@ import edu.gbcg.dbInteraction.dbSelector.Selector
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class RedditSubSelector: Selector {
-    constructor(){
-        this.tableName = Finals.SUB_TABLE_NAME
-    }
+    constructor(){ this.tableName = Finals.REDDIT_SUB_TABLE }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
         val DBs = DBLocator.redditSubsAbsolutePaths()

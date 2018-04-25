@@ -14,7 +14,7 @@ import edu.gbcg.dbInteraction.dbSelector.Selector
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class RedditComSelector: Selector {
-    constructor(){ this.tableName = Finals.COM_TABLE_NAME }
+    constructor(){ this.tableName = Finals.REDDIT_COM_TABLE }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
         val DBs = DBLocator.redditComsAbsolutePaths()

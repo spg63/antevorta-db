@@ -34,10 +34,10 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doServerComs()
+    //doServerComs()
     //doSubs()
     //doServerSubs()
-    //doComs()
+    doComs()
     //pushNewSubs()
     //pushNewComs()
 
@@ -55,7 +55,7 @@ fun doServerComs(){
     val author = "a4k04"
 
     val dbsql = DBSelector()
-            .from(Finals.COM_TABLE_NAME)
+            .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
             .orderBy("created_dt")
 
@@ -82,7 +82,7 @@ fun doServerSubs(){
     val author = "SciTroll"
 
     val dbsql = DBSelector()
-            .from(Finals.SUB_TABLE_NAME)
+            .from(Finals.REDDIT_SUB_TABLE)
             .where("author = '$author'")
             .orderBy("created_dt")
 
@@ -133,14 +133,22 @@ fun doComs(){
         buildDBShards(CommentsFacilitator())
         return
     }
+    val author = "a4k04"
     val rcs = RedditComSelector()
 
-    val res = rcs.selectAllFromAuthor("a4k04")
+    //val res = rcs.selectAllFromAuthor("a4k04")
     //val res = rcs.selectAllAfterDate(2018, 2, 28, 23, 59, 50)
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rcs.selectAllBetweenDates(startDate, endDate)
     //val results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
+
+    val dbsql = DBSelector()
+            .from(Finals.REDDIT_COM_TABLE)
+            .where("author = '$author'")
+            .orderBy("created_dt", false)
+
+    val res = rcs.generalSelection(dbsql.sql())
 
     RSMapperOutput.printAllColumnsFromRSMappers(res, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
 }
