@@ -146,7 +146,7 @@ fun doComs(){
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
-            .orderBy("created_dt", false)
+            .orderBy("created_dt", true)
 
     val res = rcs.generalSelection(dbsql.sql())
 

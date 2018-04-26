@@ -10,7 +10,6 @@ import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.gbcg.utils.TSL
-import java.sql.SQLSyntaxErrorException
 import java.time.LocalDateTime
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
@@ -167,17 +166,16 @@ abstract class Selector{
         results. If there is no orderby clause the results will be returned unmodified.
      */
     private fun handleOrderBy(query: String, results: List<RSMapper>): List<RSMapper>{
+        // If the query doesn't contain "orderby" and it doesn't contain "order by", or the query returned no results
+        // return the results without further processing
+        if(results.isEmpty()) return results
         if(!query.toLowerCase().contains("orderby") && !query.toLowerCase().contains("order by")) return results
 
         // Determine which columns names should be sorted, and if it should be sorted ascending or descending
-        val orderByMap = determineOrderByColumns(query)
+        val columnsAndOrders = determineOrderByColumns(query)
 
-        // Do the sorting
-        for(key in orderByMap.keys)
-            doTheSort(key, orderByMap[key] ?: true) // Assume ascending if the value in the map is null
-
-        System.exit(0)
-        return results
+        //logger_.logAndKill()
+        return doTheSort(results, columnsAndOrders)
     }
 
     /*
@@ -186,10 +184,8 @@ abstract class Selector{
         sorting should be done in ascending order (the default) and false when it should be done in decending order.
      */
     //TODO: This is bullshited for created_dt
-    private fun determineOrderByColumns(query: String): Map<String, Boolean> {
-        val orderByMap = HashMap<String, Boolean>()
-        orderByMap["created_dt"] = true
-        return orderByMap
+    private fun determineOrderByColumns(query: String): OrderBySelection {
+        return OrderBySelection("created_dt", true)
     }
 
     /*
@@ -197,13 +193,29 @@ abstract class Selector{
         If isAscending is true the data should be sorted in ascending order, if it's false it should be sorted in
         descending order
      */
-    private fun doTheSort(columnName: String, isAscending: Boolean): List<RSMapper> {
+    private fun doTheSort(results: List<RSMapper>, columnsWithOrder: OrderBySelection): List<RSMapper> {
+        val mutableResults = results.toMutableList()
 
+        mutableResults.sortWith(Comparator<RSMapper> { rs1, rs2 ->
+            when {
+                rs1.getLong(columnsWithOrder.primaryColumn) > rs2.getLong(columnsWithOrder.primaryColumn) -> 1
+                rs1.getLong(columnsWithOrder.primaryColumn) == rs2.getLong(columnsWithOrder.primaryColumn) -> 0
+                else -> -1
+            }
+        })
 
+        return mutableResults
 
-        println(columnName)
-        println(isAscending)
-        return ArrayList()
+    /*
+        products.sortWith(object: Comparator<Product>{
+            override fun compare(p1: Product, p2: Product): Int = when {
+                p1.price > p2.price -> 1
+                p1.price == p2.price -> 0
+                else -> -1
+            }
+        })
+    */
+
     }
 
     /*
