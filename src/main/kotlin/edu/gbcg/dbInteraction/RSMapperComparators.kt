@@ -9,30 +9,49 @@ import edu.gbcg.dbInteraction.dbSelector.OrderBySelection
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.utils.TSL
 
-class RSMapperComparators {
-    companion object: Comparator<RSMapper> {
+object RSMapperComparators: Comparator<RSMapper> {
 
-        var columnsWithOrder: OrderBySelection? = null
+    var columnsWithOrder: OrderBySelection? = null
+    var primaryColumnBadName = false
 
-        override fun compare(rs1: RSMapper, rs2: RSMapper): Int {
-            // columns with order *must* be set before this function can work, it's the only way we know how to sort
-            // the mappers, by date, name, or other. If this is null, it wasn't set, we'll leave things unsorted by
-            // telling the sortWith function using this comparator that all values are equal and we'll log an error
-            // message. The user should reset this variable to null when they're done the sorting.
-            if(columnsWithOrder == null) {
-                TSL.get().err("RSMapperComparators.columnsWithOrder was null, sorting was not completed!")
-                return 0
-            }
-
-
-
-
+    override fun compare(rs1: RSMapper, rs2: RSMapper): Int {
+        // columns with order *must* be set before this function can work, it's the only way to know how to sort
+        // the mappers, by date, name, or other. If this is null, it wasn't set, leave things unsorted by
+        // telling the sortWith function using this comparator that all values are equal and log an error
+        // message. The user should reset this variable to null when they're done the sorting.
+        if(columnsWithOrder == null) {
+            TSL.get().err("RSMapperComparators.columnsWithOrder was null, sorting was not completed!")
             return 0
+        }
+
+        // Return quickly if the column name supplied does not match with an existing column name in the RSMapper.
+        // This returns 0, indicating equal values, and no sorting will happen
+        if(primaryColumnBadName || badColumnName(rs1, columnsWithOrder!!.primaryColumn)){
+            
+        }
+
+        // Now determine how to do the sort based on the number of columns and the ordering
+        if(columnsWithOrder!!.numColumnsToSortBy == 1){
+            return compareAscending(rs1, rs2, columnsWithOrder!!.primaryColumn)
+        }
+        return 0
+    }
+
+    private fun compareAscending(rs1: RSMapper, rs2: RSMapper, columnName: String): Int {
+        if(badColumnName(rs1, columnName)) return 0
+        return when{
+            rs1.getString(columnName) > rs2.getString(columnName) -> 1
+            rs1.getString(columnName) == rs2.getString(columnName) -> 0
+            else -> -1
         }
     }
 
-    fun compareAscending(rs1: RSMapper, rs2: RSMapper, columnName: String){
-
+    /*
+        If the column doesn't exist, or it's not comparable, getString will return "". In this case return true, and
+        the calling function will know to return a no-compare value, 0, and move on
+     */
+    private fun badColumnName(rs: RSMapper, columnName: String): Boolean {
+        return rs.getString(columnName) == ""
     }
 }
 
