@@ -6,6 +6,7 @@
 package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.configs.Finals
+import edu.gbcg.dbInteraction.RSMapperComparators
 import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
@@ -174,7 +175,6 @@ abstract class Selector{
         // Determine which columns names should be sorted, and if it should be sorted ascending or descending
         val columnsAndOrders = determineOrderByColumns(query)
 
-        //logger_.logAndKill()
         return doTheSort(results, columnsAndOrders)
     }
 
@@ -196,13 +196,24 @@ abstract class Selector{
     private fun doTheSort(results: List<RSMapper>, columnsWithOrder: OrderBySelection): List<RSMapper> {
         val mutableResults = results.toMutableList()
 
+        // Set the columns and ordering in the comparator object for use in sorting
+        RSMapperComparators.columnsWithOrder = columnsWithOrder
+
+        mutableResults.sortWith(RSMapperComparators)
+
+        /*
         mutableResults.sortWith(Comparator<RSMapper> { rs1, rs2 ->
             when {
-                rs1.getLong(columnsWithOrder.primaryColumn) > rs2.getLong(columnsWithOrder.primaryColumn) -> 1
-                rs1.getLong(columnsWithOrder.primaryColumn) == rs2.getLong(columnsWithOrder.primaryColumn) -> 0
-                else -> -1
+                rs1.getString(columnsWithOrder.primaryColumn) > rs2.getString(columnsWithOrder.primaryColumn) -> -1
+                rs1.getString(columnsWithOrder.primaryColumn) == rs2.getString(columnsWithOrder.primaryColumn) -> 0
+                else -> 1
             }
         })
+        */
+
+        // Reset the columns and ordering in the comparator class to null so an old ordering isn't sitting there for
+        // another sort without being properly reset
+        RSMapperComparators.columnsWithOrder = null
 
         return mutableResults
 
@@ -217,6 +228,9 @@ abstract class Selector{
     */
 
     }
+
+
+
 
     /*
         Kill the program if the DBs don't exist or a shard is missing
