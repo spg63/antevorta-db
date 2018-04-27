@@ -62,9 +62,6 @@ object RSMapperComparator: Comparator<RSMapper> {
             1 -> -1
             -1 -> 1
             else -> compareMappers(rs1, rs2)
-            //rs1.getString(columnName) > rs2.getString(columnName) -> -1
-            //rs1.getString(columnName) < rs2.getString(columnName) -> 1
-            //else -> compareMappers(rs1, rs2)
         }
     }
 
