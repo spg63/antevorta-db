@@ -9,7 +9,7 @@ import edu.gbcg.dbInteraction.dbSelector.OrderBySelection
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.utils.TSL
 
-object RSMapperComparators: Comparator<RSMapper> {
+object RSMapperComparator: Comparator<RSMapper> {
 
     var columnsWithOrder = OrderBySelection()
 
@@ -18,16 +18,13 @@ object RSMapperComparators: Comparator<RSMapper> {
         // the mappers, by date, name, or other. If this is null, it wasn't set, leave things unsorted by
         // telling the sortWith function using this comparator that all values are equal and log an error
         // message. The user should reset this variable to null when they're done the sorting.
+        columnsWithOrder.reset()
         if(!columnsWithOrder.hasNextColumn()) {
-            TSL.get().err("RSMapperComparators.columnsWithOrder was empty, sorting was not completed!")
+            TSL.get().err("RSMapperComparator.columnsWithOrder was empty, sorting was not completed!")
             return 0
         }
         // Do the actual comparison, recursively if more than 1 column is used for tie-breaking
         return compareMappers(rs1, rs2)
-
-
-        // I guess we somehow missed all the possible options, return 0 for no sort
-        return 0
     }
 
     private fun compareMappers(rs1: RSMapper, rs2: RSMapper): Int {
@@ -39,6 +36,9 @@ object RSMapperComparators: Comparator<RSMapper> {
         val columnName = colpair.first
         val colOrder = colpair.second
 
+        // Check that the column name is valid, perform no sort if it's invalid
+        if(badColumnName(rs1, columnName)) return 0
+
         // Send it to ascending or descending based on orderby preferene
         return when(colOrder) {
             true -> compareAscending(rs1, rs2, columnName)
@@ -47,9 +47,6 @@ object RSMapperComparators: Comparator<RSMapper> {
     }
 
     private fun compareAscending(rs1: RSMapper, rs2: RSMapper, columnName: String): Int {
-        // Check that columnName is valid, perform no sort if it's invalid
-        if(badColumnName(rs1, columnName)) return 0
-
         return when {
             rs1.getString(columnName) > rs2.getString(columnName) -> 1
             rs1.getString(columnName) < rs2.getString(columnName) -> -1
@@ -60,13 +57,14 @@ object RSMapperComparators: Comparator<RSMapper> {
     }
 
     private fun compareDescending(rs1: RSMapper, rs2: RSMapper, columnName: String): Int {
-        // Check that columnName is valid, perform no sort if it's invalid
-        if(badColumnName(rs1, columnName)) return 0
-
-        return when {
-            rs1.getString(columnName) > rs2.getString(columnName) -> -1
-            rs1.getString(columnName) < rs2.getString(columnName) -> 1
+        // Just use compareAscending, reverse the return value or make the recursive call if values are equal
+        return when (compareAscending(rs1, rs2, columnName)) {
+            1 -> -1
+            -1 -> 1
             else -> compareMappers(rs1, rs2)
+            //rs1.getString(columnName) > rs2.getString(columnName) -> -1
+            //rs1.getString(columnName) < rs2.getString(columnName) -> 1
+            //else -> compareMappers(rs1, rs2)
         }
     }
 
@@ -76,7 +74,7 @@ object RSMapperComparators: Comparator<RSMapper> {
      */
     private fun badColumnName(rs: RSMapper, columnName: String): Boolean {
         if(rs.getString(columnName) == "") {
-            TSL.get().err("RSMapperComparators.badColumnName was true, sorting was not completed!")
+            TSL.get().err("RSMapperComparator.badColumnName was true, sorting was not completed!")
             return true
         }
         return false

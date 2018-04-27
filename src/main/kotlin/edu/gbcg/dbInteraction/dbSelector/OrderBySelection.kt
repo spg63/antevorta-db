@@ -20,6 +20,10 @@ class OrderBySelection() {
         this.columnList.add(Pair(columnName, isAscending))
     }
 
+    fun reset() {
+        currentColumn = -1
+    }
+
     /**
      * Determine if there is another column to use for sorting
      * @return true if another column exists, false otherwise

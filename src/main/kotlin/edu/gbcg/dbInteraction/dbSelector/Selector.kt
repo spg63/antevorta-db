@@ -6,7 +6,7 @@
 package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.configs.Finals
-import edu.gbcg.dbInteraction.RSMapperComparators
+import edu.gbcg.dbInteraction.RSMapperComparator
 import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
@@ -185,7 +185,11 @@ abstract class Selector{
      */
     //TODO: This is bullshited for created_dt
     private fun determineOrderByColumns(query: String): OrderBySelection {
-        return OrderBySelection("created_dt", true)
+        val order = OrderBySelection()
+        order.addColumn("subreddit_name", true)
+        order.addColumn(Finals.CREATED_DT, true)
+
+        return order
     }
 
     /*
@@ -198,18 +202,15 @@ abstract class Selector{
 
         // Set the OrderBySelection before doing the sort. Unfortunately this can't be done in the Comparator
         // function call because the comparator implements a specific interface. Oh well.
-        RSMapperComparators.columnsWithOrder = columnsWithOrder
+        RSMapperComparator.columnsWithOrder = columnsWithOrder
 
-        mutableResults.sortWith(RSMapperComparators)
+        mutableResults.sortWith(RSMapperComparator)
 
         // Reset the columnsWithOrder to the default value for future use
-        RSMapperComparators.columnsWithOrder = OrderBySelection()
+        RSMapperComparator.columnsWithOrder = OrderBySelection()
 
         return mutableResults
     }
-
-
-
 
     /*
         Kill the program if the DBs don't exist or a shard is missing
