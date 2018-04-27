@@ -196,37 +196,16 @@ abstract class Selector{
     private fun doTheSort(results: List<RSMapper>, columnsWithOrder: OrderBySelection): List<RSMapper> {
         val mutableResults = results.toMutableList()
 
-        // Set the columns and ordering in the comparator object for use in sorting
+        // Set the OrderBySelection before doing the sort. Unfortunately this can't be done in the Comparator
+        // function call because the comparator implements a specific interface. Oh well.
         RSMapperComparators.columnsWithOrder = columnsWithOrder
 
         mutableResults.sortWith(RSMapperComparators)
 
-        /*
-        mutableResults.sortWith(Comparator<RSMapper> { rs1, rs2 ->
-            when {
-                rs1.getString(columnsWithOrder.primaryColumn) > rs2.getString(columnsWithOrder.primaryColumn) -> -1
-                rs1.getString(columnsWithOrder.primaryColumn) == rs2.getString(columnsWithOrder.primaryColumn) -> 0
-                else -> 1
-            }
-        })
-        */
-
-        // Reset the columns and ordering in the comparator class to null so an old ordering isn't sitting there for
-        // another sort without being properly reset
-        RSMapperComparators.columnsWithOrder = null
+        // Reset the columnsWithOrder to the default value for future use
+        RSMapperComparators.columnsWithOrder = OrderBySelection()
 
         return mutableResults
-
-    /*
-        products.sortWith(object: Comparator<Product>{
-            override fun compare(p1: Product, p2: Product): Int = when {
-                p1.price > p2.price -> 1
-                p1.price == p2.price -> 0
-                else -> -1
-            }
-        })
-    */
-
     }
 
 

@@ -11,7 +11,7 @@ import edu.gbcg.utils.TSL
 
 object RSMapperComparators: Comparator<RSMapper> {
 
-    var columnsWithOrder: OrderBySelection? = null
+    var columnsWithOrder = OrderBySelection()
 
     override fun compare(rs1: RSMapper, rs2: RSMapper): Int {
         // columns with order *must* be set before this function can work, it's the only way to know how to sort
@@ -39,11 +39,18 @@ object RSMapperComparators: Comparator<RSMapper> {
         return 0
     }
 
-    private fun compareAscending(rs1: RSMapper, rs2: RSMapper, columnName: String, numCols: Int = 1): Int {
-        return when{
+    private fun compareAscending(rs1: RSMapper, rs2: RSMapper, columnName: String,
+                                 isAscending: Boolean, numCols: Int = 1): Int {
+        return when {
             rs1.getString(columnName) > rs2.getString(columnName) -> 1
-            rs1.getString(columnName) == rs2.getString(columnName) -> 0
-            else -> -1
+            rs1.getString(columnName) < rs2.getString(columnName) -> -1
+            // Values for the column are equal, recure through, using the secondary or tertiary column
+            else -> {
+                // Exit the recursion after we're done the columns, if this is hit the number of columns to use for
+                // comparison have been exhausted and it's time to just declare them equal
+                if(numCols == 1) return 0
+                compareAscending(rs1, rs2, "balls", true, numCols - 1)
+            }
         }
     }
 
@@ -55,6 +62,8 @@ object RSMapperComparators: Comparator<RSMapper> {
         }
     }
 
+    private fun compareTwoPrimaryAscending
+
 
     /*
         If the column doesn't exist, or it's not comparable, getString will return "". In this case return true, and
@@ -65,18 +74,3 @@ object RSMapperComparators: Comparator<RSMapper> {
         return rs.getString(columnName) == ""
     }
 }
-
-
-/*
-class CompareObjects {
-
-    companion object : Comparator<MyDate> {
-
-        override fun compare(a: MyDate, b: MyDate): Int = when {
-            a.year != b.year -> a.year - b.year
-            a.month != b.month -> a.month - b.month
-            else -> a.day - b.day
-        }
-    }
-}
-*/
