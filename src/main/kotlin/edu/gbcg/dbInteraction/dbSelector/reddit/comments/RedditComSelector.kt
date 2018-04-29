@@ -13,9 +13,8 @@ import edu.gbcg.dbInteraction.dbSelector.SelectionWorker
 import edu.gbcg.dbInteraction.dbSelector.Selector
 
 
-@Suppress("ConvertSecondaryConstructorToPrimary")
-class RedditComSelector: Selector {
-    constructor(){
+class RedditComSelector : Selector() {
+    init {
         this.tableName = Finals.REDDIT_COM_TABLE
         this.listOfColumns = RedditComs.columnNames()
     }

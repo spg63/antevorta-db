@@ -237,7 +237,7 @@ abstract class Selector{
         NOTE: The companion object is kotlin specific
      */
     companion object {
-        fun getSelectorOnType(matchingString: String): Selector{
+        fun getSelectorOnType(matchingString: String): Selector {
             return when {
                 matchingString.toLowerCase().contains(Finals.REDDIT_COM_TABLE) -> RedditComSelector()
                 matchingString.toLowerCase().contains(Finals.REDDIT_SUB_TABLE) -> RedditSubSelector()

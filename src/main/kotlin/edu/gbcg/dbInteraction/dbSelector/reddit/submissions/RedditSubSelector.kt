@@ -12,9 +12,8 @@ import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker
 import edu.gbcg.dbInteraction.dbSelector.Selector
 
-@Suppress("ConvertSecondaryConstructorToPrimary")
-class RedditSubSelector: Selector {
-    constructor(){
+class RedditSubSelector : Selector() {
+    init {
         this.tableName = Finals.REDDIT_SUB_TABLE
         this.listOfColumns = RedditSubs.columnNames()
     }
