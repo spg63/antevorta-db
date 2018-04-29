@@ -43,16 +43,10 @@ object Finals{
     const val REDDIT_SUB_TABLE = "submission_attrs"
     const val REDDIT_COM_TABLE = "comment_attrs"
 
-
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
-    // damn clue why and it'll take me a few hours to find this again. Future me: sorry bro.
-    /*-------------------- Database column names --------------------*/
-    @JvmStatic fun isWindows(): Boolean {
-        if(System.getProperty("os.name").toLowerCase().contains("win"))
-            return true
-        return false
-    }
+    // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
+    @JvmStatic fun isWindows(): Boolean = System.getProperty("os.name").toLowerCase().contains("win")
 
     /*-------------------- Server control ---------------------------*/
     const val SERVER_SOCKET = 3383

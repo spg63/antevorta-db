@@ -32,6 +32,9 @@ fun main(args : Array<String>){
     if(Finals.isWindows() && Finals.START_FRESH)
         logger.logAndKill("isWindows() was true while trying to start fresh")
 
+    if(Finals.isWindows() && Finals.ADD_NEW_DATA)
+        logger.logAndKill("isWindows() was true while trying to add new data")
+
     val sw = Stopwatch.createStarted()
 
     //doServerComs()
@@ -57,7 +60,7 @@ fun doServerComs(){
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
-            .orderBy("created_dt")
+            .orderBy(Finals.CREATED_DT)
 
 
     // If results are null, return
@@ -146,7 +149,9 @@ fun doComs(){
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
-            .orderBy("created_dt")
+            .orderBy(Finals.CREATED_DT, true)
+            .orderBy(Finals.AUTHOR, false)
+            .orderBy(Finals.SCRAPED_DT, false)
 
     val res = rcs.generalSelection(dbsql.sql())
 

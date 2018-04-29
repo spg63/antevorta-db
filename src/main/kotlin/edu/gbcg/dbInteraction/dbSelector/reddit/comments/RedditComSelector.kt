@@ -7,6 +7,7 @@ package edu.gbcg.dbInteraction.dbSelector.reddit.comments
 
 import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
+import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.SelectionWorker
 import edu.gbcg.dbInteraction.dbSelector.Selector
@@ -14,7 +15,10 @@ import edu.gbcg.dbInteraction.dbSelector.Selector
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class RedditComSelector: Selector {
-    constructor(){ this.tableName = Finals.REDDIT_COM_TABLE }
+    constructor(){
+        this.tableName = Finals.REDDIT_COM_TABLE
+        this.listOfColumns = RedditComs.columnNames()
+    }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
         val DBs = DBLocator.redditComsAbsolutePaths()

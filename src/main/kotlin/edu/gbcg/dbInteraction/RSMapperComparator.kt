@@ -18,7 +18,7 @@ object RSMapperComparator: Comparator<RSMapper> {
         // the mappers, by date, name, or other. If this is null, it wasn't set, leave things unsorted by
         // telling the sortWith function using this comparator that all values are equal and log an error
         // message. The user should reset this variable to null when they're done the sorting.
-        columnsWithOrder.reset()
+        columnsWithOrder.reset() // Reset the column count when this is called, columnsWithOrder is a 'static' var
         if(!columnsWithOrder.hasNextColumn()) {
             TSL.get().err("RSMapperComparator.columnsWithOrder was empty, sorting was not completed!")
             return 0

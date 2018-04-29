@@ -21,8 +21,12 @@ import java.util.concurrent.Future
  * the genericSelect function it will query the proper DB files and use the proper RSMapper object
  */
 abstract class Selector{
-    protected var tableName: String = ""
-    protected val logger_: TSL = TSL.get()
+    // tableName and listOfColumns get set in the derived class c'tors. tableName is used to select the right table
+    // from the DB shards (e.g. submission_attrs) for reddit submissions. listOfColumns is used by the orderby
+    // function for determining which words in a query refer to a valid column.
+    protected lateinit var tableName: String
+    protected lateinit var listOfColumns: List<String>
+    protected val logger_ = TSL.get()
 
 //----------------------------------------------------------------------------------------------------------------------
 // NOTE: This can be used when one of the functions below doesn't satisfy your querying needs. I suggest just writing
@@ -173,7 +177,7 @@ abstract class Selector{
         if(!query.toLowerCase().contains("orderby") && !query.toLowerCase().contains("order by")) return results
 
         // Determine which columns names should be sorted, and if it should be sorted ascending or descending
-        val columnsAndOrders = determineOrderByColumns(query)
+        val columnsAndOrders = determineOrderByColumns(query.toLowerCase())
 
         return doTheSort(results, columnsAndOrders)
     }
@@ -185,9 +189,15 @@ abstract class Selector{
      */
     //TODO: This is bullshited for created_dt
     private fun determineOrderByColumns(query: String): OrderBySelection {
+        // Split the string on the order by command, the left side doesn't matter, right side has the order by info
+        val orderBySplits = query.split("order by")
+        val columnsWithOrdering = orderBySplits[1].split(",")
+        for(column in columnsWithOrdering)
+            println(column)
+
+        TSL.get().logAndKill()
         val order = OrderBySelection()
-        order.addColumn("subreddit_name", true)
-        order.addColumn(Finals.CREATED_DT, true)
+        order.addColumn(Finals.AUTHOR, true)
 
         return order
     }
