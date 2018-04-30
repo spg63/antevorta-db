@@ -101,7 +101,7 @@ class DBSelector {
     }
 
     fun orderBy(name: String): DBSelector {
-        orderBys.add(name)
+        orderBys.add("$name asc")
         return this
     }
 
