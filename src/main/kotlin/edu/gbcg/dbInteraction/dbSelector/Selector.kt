@@ -189,7 +189,6 @@ abstract class Selector{
         It takes in the query string and returns a map of column names and a boolean. The boolean is true when the
         sorting should be done in ascending order (the default) and false when it should be done in decending order.
      */
-    //TODO: This is bullshited for created_dt
     private fun determineOrderByColumns(query: String): OrderBySelection {
         val theOrdering = OrderBySelection()
         // Split the string on the order by command, the left side doesn't matter, right side has the order by info
