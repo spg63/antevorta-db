@@ -149,9 +149,10 @@ fun doComs(){
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
+            .orderBy("subreddit_name", true)
             .orderBy(Finals.CREATED_DT, true)
-            .orderBy(Finals.AUTHOR, false)
-            .orderBy(Finals.SCRAPED_DT, false)
+            //.orderBy(Finals.AUTHOR, false)
+            //.orderBy(Finals.SCRAPED_DT, false)
 
     val res = rcs.generalSelection(dbsql.sql())
 

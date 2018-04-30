@@ -176,6 +176,8 @@ abstract class Selector{
         if(results.isEmpty()) return results
         if(!query.toLowerCase().contains("orderby") && !query.toLowerCase().contains("order by")) return results
 
+        logger_.warn("order by sorting is in beta, it may fail or throw an error, please check results!")
+
         // Determine which columns names should be sorted, and if it should be sorted ascending or descending
         val columnsAndOrders = determineOrderByColumns(query.toLowerCase())
 
@@ -189,17 +191,36 @@ abstract class Selector{
      */
     //TODO: This is bullshited for created_dt
     private fun determineOrderByColumns(query: String): OrderBySelection {
+        val theOrdering = OrderBySelection()
         // Split the string on the order by command, the left side doesn't matter, right side has the order by info
         val orderBySplits = query.split("order by")
+
+        // Split the columns names (with asc or desc) on comma
         val columnsWithOrdering = orderBySplits[1].split(",")
-        for(column in columnsWithOrdering)
-            println(column)
+        for(columnAndOrder in columnsWithOrdering) {
+            // Clean up the spaces from the beginning or end of the string
+            val column = columnAndOrder.trim()
 
-        TSL.get().logAndKill()
-        val order = OrderBySelection()
-        order.addColumn(Finals.AUTHOR, true)
+            // Split the column name from the asc or desc tag
+            val columnNameAndOrder = column.split(" ")
 
-        return order
+            // See if the column exists in the the table list, if it doesn't get out of here
+            val col = columnNameAndOrder[0]
+            if(!this.listOfColumns.contains(col)){
+                logger_.warn("Table does not appear to have column: $col")
+                break
+            }
+
+            // Get the "asc" or "desc" from the second part of the string
+            val order = columnNameAndOrder[1]
+            var orderBool = true
+            if(order == "desc" || order == "descending")
+                orderBool = false
+
+            theOrdering.addColumn(col, orderBool)
+        }
+
+        return theOrdering
     }
 
     /*
