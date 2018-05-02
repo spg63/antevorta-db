@@ -6,7 +6,6 @@
 package edu.gbcg.dbInteraction.dbSelector
 
 import edu.gbcg.configs.Finals
-import edu.gbcg.dbInteraction.RSMapperComparator
 import edu.gbcg.dbInteraction.TimeUtils
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector

@@ -6,7 +6,7 @@
 package edu.gbcg.utils.client;
 
 import edu.gbcg.configs.columnsAndKeys.RedditSubs;
-import edu.gbcg.dbInteraction.RSMapperOutput;
+import edu.gbcg.dbInteraction.dbSelector.RSMapperOutput;
 import edu.gbcg.dbInteraction.dbSelector.BaseMapper;
 import edu.gbcg.dbInteraction.dbSelector.RSMapper;
 import edu.gbcg.dbInteraction.dbSelector.DBSelector;

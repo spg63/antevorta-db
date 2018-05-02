@@ -3,10 +3,8 @@
  * License: MIT
  */
 
-package edu.gbcg.dbInteraction
+package edu.gbcg.dbInteraction.dbSelector
 
-import edu.gbcg.dbInteraction.dbSelector.OrderBySelection
-import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.utils.TSL
 
 object RSMapperComparator: Comparator<RSMapper> {

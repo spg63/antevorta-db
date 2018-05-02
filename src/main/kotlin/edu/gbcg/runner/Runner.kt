@@ -12,7 +12,7 @@ import edu.gbcg.client.AntevortaClient
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
-import edu.gbcg.dbInteraction.RSMapperOutput
+import edu.gbcg.dbInteraction.dbSelector.RSMapperOutput
 import edu.gbcg.dbInteraction.dbSelector.BaseMapper
 import edu.gbcg.dbInteraction.dbSelector.DBSelector
 import edu.gbcg.dbInteraction.dbSelector.RSMapper
