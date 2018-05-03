@@ -37,10 +37,10 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doServerComs()
+    //doServerComs()
     //doSubs()
     //doServerSubs()
-    //doComs()
+    doComs()
     //pushNewSubs()
     //pushNewComs()
 

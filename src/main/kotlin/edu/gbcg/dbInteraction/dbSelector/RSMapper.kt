@@ -163,7 +163,7 @@ abstract class RSMapper {
      * @param rs
      * @return The list of RSMappers
      */
-    abstract fun buildMappers(rs: ResultSet): MutableList<RSMapper>?
+    abstract fun buildMappers(rs: ResultSet): MutableList<RSMapper>
 
     /*
         Return item or ""
@@ -214,8 +214,12 @@ abstract class RSMapper {
 
                 // For each column, check to see if we have a value and if so, add it to the map
                 // NOTE: using the keyset instead of colNames because columns are missing from non-* queries
-                for(col in colIDs.keys)
-                    map.put(col, rs.getString(colIDs[col]!!))   // Null safety...sick
+                for(col in colIDs.keys) {
+                    val theID = colIDs[col] ?: -55
+                    if(theID == -55)
+                        logger_.logAndKill("colIDs map returned null for column name: $col")
+                    map.put(col, rs.getString(theID))
+                }
 
                 // Add it to the list
                 maps.add(BaseMapper(map))

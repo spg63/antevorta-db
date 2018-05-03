@@ -17,7 +17,8 @@ class BaseMapper: RSMapper {
     constructor(): super()
     constructor(map: Map<String, String>): super(map)
     constructor(jsonObject: JSONObject): super(jsonObject)
-    override fun buildMappers(rs: ResultSet): MutableList<RSMapper>? {
-        return null
+    override fun buildMappers(rs: ResultSet): MutableList<RSMapper> {
+        logger_.logAndKill("BaseMapper.buildMappers was called, this is not allowed!")
+        return ArrayList()
     }
 }

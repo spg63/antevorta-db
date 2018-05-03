@@ -14,7 +14,7 @@ class CommentSetMapper: RSMapper {
     constructor(map: Map<String, String>): super(map)
     constructor(jsonObject: JSONObject): super(jsonObject)
     constructor(): super()
-    override fun buildMappers(rs: ResultSet): MutableList<RSMapper>? {
+    override fun buildMappers(rs: ResultSet): MutableList<RSMapper> {
         return buildMappersImpl(rs, RedditComs.columnNames())
     }
 }
