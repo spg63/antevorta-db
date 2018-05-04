@@ -150,6 +150,7 @@ fun doComs(){
             .where("author = '$author'")
             .orderBy("subreddit_name")
             .orderBy(Finals.CREATED_DT, true)
+            .limit(5)
 
     val res = rcs.generalSelection(dbsql.sql())
 
