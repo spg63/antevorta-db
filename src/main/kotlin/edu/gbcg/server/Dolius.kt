@@ -296,4 +296,3 @@ fun main(args: Array<String>){
     // simply re-called to restart the server. Not a long term solution but it'll do for now.
     runServerInTryCatch()
 }
-
