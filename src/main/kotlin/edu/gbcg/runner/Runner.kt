@@ -37,10 +37,10 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    //doServerComs()
+    doServerComs()
     //doSubs()
     //doServerSubs()
-    doComs()
+    //doComs()
     //pushNewSubs()
     //pushNewComs()
 
@@ -60,8 +60,9 @@ fun doServerComs(){
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
+            .orderBy(Finals.CREATED_DT, true)
             .orderBy("subreddit_name")
-            .orderBy(Finals.CREATED_DT, false)
+            .limit(10)
 
     // If results are null, return
     val jsonResults = client.queryServer(dbsql.sql()) ?: return

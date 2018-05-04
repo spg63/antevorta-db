@@ -273,9 +273,26 @@ class Dolius(private val socket: Socket): Runnable {
     }
 }
 
-fun main(args: Array<String>){
+var restartCount = 0
+
+fun runServerInTryCatch(){
     val sock = ServerSocket(Finals.SERVER_SOCKET)
-    while(true)
-        Dolius(sock.accept()).run()
+    while(true){
+        try{
+            Dolius(sock.accept()).run()
+        }
+        catch(e: Exception){
+            ++restartCount
+            TSL.get().err("Dolius was hit in the face by an uncaught exception. Dolius has now been restarted $restartCount times.")
+            // Just re-call this function to restart the server if some un-caught exception is throw
+            runServerInTryCatch()
+        }
+    }
+}
+
+fun main(args: Array<String>){
+    // This function just runs the server in a while(true) continuous loop. If an exception is thrown the function is
+    // simply re-called to restart the server. Not a long term solution but it'll do for now.
+    runServerInTryCatch()
 }
 
