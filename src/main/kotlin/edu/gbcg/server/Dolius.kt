@@ -284,6 +284,7 @@ fun runServerInTryCatch(){
         catch(e: Exception){
             ++restartCount
             TSL.get().err("Dolius was hit in the face by an uncaught exception. Dolius has now been restarted $restartCount times.")
+            if(!sock.isClosed) sock.close()
             // Just re-call this function to restart the server if some un-caught exception is throw
             runServerInTryCatch()
         }
