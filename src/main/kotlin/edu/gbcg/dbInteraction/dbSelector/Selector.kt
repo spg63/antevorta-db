@@ -162,7 +162,12 @@ abstract class Selector{
         // be done on and if the ordering is ascending or decending (default assumes ascending). After checking for
         // the order by command and sorting (if necessary) we check for a limit command. If there is a limit command
         // return only the requested number of results, in sorted order (by order by, or created_dt if no order by)
-        return handleLimit(SQLStatement, handleOrderBy(SQLStatement, results))
+        val finalResults = handleLimit(SQLStatement, handleOrderBy(SQLStatement, results))
+
+        // Reset the hasBeenSorted var for future use, if necessary
+        if(this.hasBeenSorted) this.hasBeenSorted = false
+
+        return finalResults
     }
 
     /*

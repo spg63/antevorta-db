@@ -25,15 +25,16 @@ import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
 import org.json.JSONObject
 
+val logger_ = TSL.get()
+
 fun main(args : Array<String>){
-    val logger = TSL.get()
     val out = Out.get()
 
     if(Finals.isWindows() && Finals.START_FRESH)
-        logger.logAndKill("isWindows() was true while trying to start fresh")
+        logger_.logAndKill("isWindows() was true while trying to start fresh")
 
     if(Finals.isWindows() && Finals.ADD_NEW_DATA)
-        logger.logAndKill("isWindows() was true while trying to add new data")
+        logger_.logAndKill("isWindows() was true while trying to add new data")
 
     val sw = Stopwatch.createStarted()
 
@@ -46,11 +47,11 @@ fun main(args : Array<String>){
 
     sw.stop()
 
-    logger.info("Execution took " + out.timer_millis(sw))
-    logger.info("Execution took " + out.timer_secs(sw))
-    logger.info("Execution took " + out.timer_mins(sw))
+    logger_.info("Execution took " + out.timer_millis(sw))
+    logger_.info("Execution took " + out.timer_secs(sw))
+    logger_.info("Execution took " + out.timer_mins(sw))
 
-    logger.shutDown()
+    logger_.shutDown()
 }
 
 fun doServerComs(){
@@ -63,6 +64,8 @@ fun doServerComs(){
             .orderBy(Finals.CREATED_DT, true)
             .orderBy("subreddit_name")
             .limit(10)
+
+    logger_.info(dbsql.sql())
 
     // If results are null, return
     val jsonResults = client.queryServer(dbsql.sql()) ?: return
