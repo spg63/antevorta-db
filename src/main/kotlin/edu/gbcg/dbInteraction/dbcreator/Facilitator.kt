@@ -118,10 +118,8 @@ abstract class Facilitator {
         }
 
         // Just for some logging when adding new data to the DB shards
-        if(Finals.ADD_NEW_DATA){
-            for(path in this.jsonAbsolutePaths_)
-                logger_.info("Pulling new data from $path")
-        }
+        if(Finals.ADD_NEW_DATA)
+            this.jsonAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
 
         // For each json file, read it line by line, while reading start processing the data
         // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards

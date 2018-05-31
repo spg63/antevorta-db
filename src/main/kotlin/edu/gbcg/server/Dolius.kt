@@ -238,6 +238,7 @@ class Dolius(private val socket: Socket): Runnable {
      * Tells the client the server is busy and try again later
      */
     private fun handleBusy(){
+        --currentThreads
         logger_.warn("Dolius: handleBusy")
         writeMessageToClient(BUSY_STR)
     }
