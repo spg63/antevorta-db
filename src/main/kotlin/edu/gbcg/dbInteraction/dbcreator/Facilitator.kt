@@ -8,7 +8,6 @@ package edu.gbcg.dbInteraction.dbcreator
 import edu.gbcg.configs.Finals
 import edu.gbcg.dbInteraction.DBCommon
 import edu.gbcg.dbInteraction.DBWorker
-import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
 import edu.gbcg.utils.FileUtils
 import edu.gbcg.utils.TSL
 import java.io.*
@@ -22,8 +21,8 @@ abstract class Facilitator {
     protected val columnNames_: List<String>            // Names of the columns in the DB
     protected val dataTypes_: List<String>              // Type of data stored in the DB columns
     protected val DBPaths_: List<String>                // Paths to the DBs when they don't yet exist
-    protected var jsonAbsolutePaths_: List<String>      // Paths to the json files
-    protected val jsonKeysOfInterest_: List<String>     // JSON keys we care about grabbing for the DB
+    protected var dataAbsolutePaths_: List<String>      // Paths to the json files
+    protected val dataKeysOfInterest_: List<String>     // JSON keys we care about grabbing for the DB
     protected val tableName_: String                    // The name of the table in the DB
     protected val logger_: TSL = TSL.get()              // Instance of the logger
     protected val numberFormat_: NumberFormat           // Format number output for easier viewing
@@ -34,8 +33,8 @@ abstract class Facilitator {
         this.columnNames_                   = getColumnNames()
         this.dataTypes_                     = getDataTypes()
         this.DBPaths_                       = buildDBPaths()
-        this.jsonAbsolutePaths_             = getJsonAbsolutePaths()
-        this.jsonKeysOfInterest_            = getJsonKeysOfInterest()
+        this.dataAbsolutePaths_             = getJsonAbsolutePaths()
+        this.dataKeysOfInterest_            = getJsonKeysOfInterest()
         this.tableName_                     = getTableName()
         this.numberFormat_                  = NumberFormat.getInstance()
         this.numberFormat_.isGroupingUsed   = true
@@ -109,21 +108,21 @@ abstract class Facilitator {
         if (this.DBAbsolutePaths_.isEmpty())
             this.DBAbsolutePaths_ = getDBAbsolutePaths()
 
-        if (this.jsonAbsolutePaths_.isEmpty()) {
+        if (this.dataAbsolutePaths_.isEmpty()) {
             when {
-                Finals.START_FRESH -> this.jsonAbsolutePaths_ = getJsonAbsolutePaths()
-                Finals.ADD_NEW_DATA -> this.jsonAbsolutePaths_ = getJsonAbsolutePathsForNewData()
+                Finals.START_FRESH -> this.dataAbsolutePaths_ = getJsonAbsolutePaths()
+                Finals.ADD_NEW_DATA -> this.dataAbsolutePaths_ = getJsonAbsolutePathsForNewData()
                 else -> logger_.logAndKill("Facilitator.pushJSONDataIntoDBs -- Not START_FRESH or ADD_NEW_DATA")
             }
         }
 
         // Just for some logging when adding new data to the DB shards
         if(Finals.ADD_NEW_DATA)
-            this.jsonAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
+            this.dataAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
 
         // For each json file, read it line by line, while reading start processing the data
         // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards
-        for(json in this.jsonAbsolutePaths_){
+        for(json in this.dataAbsolutePaths_){
             val f = File(json)
             logger_.info("Counting number of lines in ${f.name}")
             val total_lines = FileUtils.get().lineCount(json)
@@ -289,10 +288,10 @@ abstract class Facilitator {
         dropIndices()
 
         // Clear the existing list. Note: clear can't be called on a "List" so just replace it with a new one
-        this.jsonAbsolutePaths_ = ArrayList()
+        this.dataAbsolutePaths_ = ArrayList()
 
         // Get the path(s) to the new json file(s)
-        this.jsonAbsolutePaths_ = getJsonAbsolutePathsForNewData()
+        this.dataAbsolutePaths_ = getJsonAbsolutePathsForNewData()
 
         // Now that the paths have been reset the new data can be pushed in the DB shards
         pushJSONDataIntoDBs()

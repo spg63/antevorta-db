@@ -6,7 +6,7 @@
 package edu.gbcg.dbInteraction.dbcreator.reddit.submissions
 
 import edu.gbcg.dbInteraction.DBCommon
-import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
+import edu.gbcg.dbInteraction.dbcreator.JsonPusher
 import edu.gbcg.utils.TSL
 import java.sql.PreparedStatement
 import java.sql.SQLException

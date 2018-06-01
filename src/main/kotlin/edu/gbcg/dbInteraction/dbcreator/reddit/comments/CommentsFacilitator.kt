@@ -10,7 +10,7 @@ import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.dbInteraction.dbcreator.Facilitator
-import edu.gbcg.dbInteraction.dbcreator.reddit.JsonPusher
+import edu.gbcg.dbInteraction.dbcreator.JsonPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class CommentsFacilitator: Facilitator {

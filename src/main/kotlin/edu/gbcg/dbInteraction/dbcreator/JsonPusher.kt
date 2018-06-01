@@ -3,7 +3,7 @@
  * License: MIT
  */
 
-package edu.gbcg.dbInteraction.dbcreator.reddit
+package edu.gbcg.dbInteraction.dbcreator
 
 import org.json.JSONObject
 
