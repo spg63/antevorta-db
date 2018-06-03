@@ -49,7 +49,7 @@ object Finals{
         // Check if this is a windows machine
         if(System.getProperty("os.name").toLowerCase().contains("win")){
             // Now need to check if it's the research machine or the SB2 laptop
-            
+            val numCores = Runtime.getRuntime().availableProcessors()
         }
 
         // Not a windows machine, not the research machine

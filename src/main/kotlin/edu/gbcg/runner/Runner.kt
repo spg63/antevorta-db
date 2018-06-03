@@ -32,6 +32,7 @@ fun main(args : Array<String>){
 
     for(str in System.getProperties())
         println("property: $str")
+    println(Runtime.getRuntime().availableProcessors())
 
     System.exit(0)
 
