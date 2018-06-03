@@ -30,12 +30,6 @@ val logger_ = TSL.get()
 fun main(args : Array<String>){
     val out = Out.get()
 
-    for(str in System.getProperties())
-        println("property: $str")
-    println(Runtime.getRuntime().availableProcessors())
-
-    System.exit(0)
-
     if(Finals.isResearchMachine() && Finals.START_FRESH)
         logger_.logAndKill("isResearchMachine() was true while trying to start fresh")
 

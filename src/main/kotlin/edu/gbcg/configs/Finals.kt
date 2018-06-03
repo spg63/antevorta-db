@@ -50,9 +50,13 @@ object Finals{
         if(System.getProperty("os.name").toLowerCase().contains("win")){
             // Now need to check if it's the research machine or the SB2 laptop
             val numCores = Runtime.getRuntime().availableProcessors()
+            // Research machine has 16 cores, 32 logical cores. However, there are some instances where the number of
+            // logical cores reported could be less than the real amount, so take that into account
+            if(numCores > 16)
+                return true
         }
 
-        // Not a windows machine, not the research machine
+        // Either a non-windows machine, or it has less than 17 logical cores. Not the research machine
         return false
     }
 
