@@ -30,11 +30,16 @@ val logger_ = TSL.get()
 fun main(args : Array<String>){
     val out = Out.get()
 
-    if(Finals.isWindows() && Finals.START_FRESH)
-        logger_.logAndKill("isWindows() was true while trying to start fresh")
+    for(str in System.getProperties())
+        println("property: $str")
 
-    if(Finals.isWindows() && Finals.ADD_NEW_DATA)
-        logger_.logAndKill("isWindows() was true while trying to add new data")
+    System.exit(0)
+
+    if(Finals.isResearchMachine() && Finals.START_FRESH)
+        logger_.logAndKill("isResearchMachine() was true while trying to start fresh")
+
+    if(Finals.isResearchMachine() && Finals.ADD_NEW_DATA)
+        logger_.logAndKill("isResearchMachine() was true while trying to add new data")
 
     val sw = Stopwatch.createStarted()
 
