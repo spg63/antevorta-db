@@ -36,3 +36,19 @@ Actor DB object:
 		- order, presumably the credit order in the movie
 	crew, should be a separate table
 		- Not sure about this stuff, but it's got some good shit that I should probably track, like casting people and production people who obviously have an impact on movie success
+
+
+---------------------
+
+Ignore the above.
+
+Going to go with a big table that stores the current json in json using the sqlite json1 extension. The data that's in
+json format won't need to be indexed like it is for reddit data, it's not really timeseries data and there won't be
+selects similar to gathering all from a sub within some date range.
+
+Lists of actors, producers, etc will be put into a json array and stored like that with a movie. No need for a
+complicated DB structure here. It's use once for training and forget, the performance at this level will be *way*
+overshadowed by the slowness at the training level.
+
+NOTE: This is, of course, not the most efficient solution. It is, however, the best solution from a development time
+standpoint -- a different kind of efficiency.
