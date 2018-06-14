@@ -102,7 +102,6 @@ class ServerConfigHandler {
         val userObj = JSONObject()
         userObj.put(USER, username)
         userObj.put(PASS, userpasss)
-        TSL.get().info("PASS: $userpasss")
 
         // Add the new user to the users array in the main json object
         this.jsonObject.getJSONArray(USER_ARR).put(userObj)

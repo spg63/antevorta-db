@@ -1,0 +1,11 @@
+Table names for
+    - movielens
+    - tmdb
+
+Parsing for
+    - movielens
+    - tmdb
+
+DB creation for
+    - movielens
+    - tmdb
