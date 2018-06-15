@@ -38,8 +38,8 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    doServerComs()
-    //doSubs()
+    //doServerComs()
+    doSubs()
     //doServerSubs()
     //doComs()
     //pushNewSubs()

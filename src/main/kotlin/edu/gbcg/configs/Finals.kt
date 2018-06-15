@@ -17,11 +17,11 @@ import java.io.File
 object Finals{
     /* ---------- Program control ----------------------------------------------------------------------------------- */
     // True when working locally on MBP, false when working on full dataset -- changes data & db paths
-    @JvmField val TESTING_MODE = !isResearchMachine()
+    val TESTING_MODE = !isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
-    @JvmField val START_FRESH = false
+    const val START_FRESH = false
     // Simple check to make sure we really want to add new data to the DBs
-    @JvmField val ADD_NEW_DATA = false
+    const val ADD_NEW_DATA = false
 
     /* ---------- Database control ---------------------------------------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"
@@ -32,7 +32,7 @@ object Finals{
     private const val RESEARCH_BATCH_SIZE = 10000
     // Performs better on single laptop SSD
     private const val LAPTOP_BATCH_SIZE = 1000
-    @JvmField val DB_BATCH_LIMIT = if(isResearchMachine()) RESEARCH_BATCH_SIZE else LAPTOP_BATCH_SIZE
+    val DB_BATCH_LIMIT = if(isResearchMachine()) RESEARCH_BATCH_SIZE else LAPTOP_BATCH_SIZE
     // Turns off sqlite synchronous mode, faster batch insertions
     const val SYNC_MODE_OFF = true
     // There are 6 available HDDs for data storage on research machine, use all of them
@@ -78,7 +78,7 @@ object Finals{
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
-    @JvmStatic fun isResearchMachine(): Boolean  {
+    fun isResearchMachine(): Boolean  {
         // Check if this is a windows machine
         if(System.getProperty("os.name").toLowerCase().contains("win")){
             // Now need to check if it's the research machine or the SB2 laptop
