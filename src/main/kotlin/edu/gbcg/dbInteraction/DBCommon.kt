@@ -22,7 +22,7 @@ import java.sql.SQLException
  */
 
 object DBCommon{
-    @JvmField val enforceForeignKeys = Finals.ENABLE_FOREIGN_KEYS
+    @JvmField val enforceForeignKeys = Finals.enableForeignKeys
     @JvmField val dbPrefix = Finals.DB_URL_PREFIX
     @JvmField val dbDriver = Finals.DB_DRIVER
 

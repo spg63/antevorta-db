@@ -9,3 +9,6 @@ Parsing for
 DB creation for
     - movielens
     - tmdb
+
+Table for movies, with all associated data
+Table for actors, with all associated data

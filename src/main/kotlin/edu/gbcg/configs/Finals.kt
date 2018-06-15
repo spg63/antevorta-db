@@ -15,7 +15,7 @@ import java.io.File
  * shards, etc...
  */
 object Finals{
-    /*-------------------- Program control --------------------*/
+    /* ---------- Program control ----------------------------------------------------------------------------------- */
     // True when working locally on MBP, false when working on full dataset -- changes data & db paths
     @JvmField val TESTING_MODE = !isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
@@ -23,12 +23,11 @@ object Finals{
     // Simple check to make sure we really want to add new data to the DBs
     @JvmField val ADD_NEW_DATA = false
 
-
-    /*-------------------- Database control --------------------*/
+    /* ---------- Database control ---------------------------------------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"
     const val DB_URL_PREFIX = "jdbc:sqlite:"
     const val DB_TYPE_EXT = ".sqlite3"
-    const val ENABLE_FOREIGN_KEYS = false
+    var enableForeignKeys = false
     // Larger batch size performs better on research machine with individual HDDs for each DB shard
     private const val RESEARCH_BATCH_SIZE = 10000
     // Performs better on single laptop SSD
@@ -42,30 +41,12 @@ object Finals{
     const val REDDIT_SUB_TABLE = "submission_attrs"
     const val REDDIT_COM_TABLE = "comment_attrs"
 
-    // Very basic, needs to be more robust but works now on my known machines. Will almost
-    // certainly fail at some point in the future with unexpected hardware and I won't have a
-    // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
-    @JvmStatic fun isResearchMachine(): Boolean  {
-        // Check if this is a windows machine
-        if(System.getProperty("os.name").toLowerCase().contains("win")){
-            // Now need to check if it's the research machine or the SB2 laptop
-            val numCores = Runtime.getRuntime().availableProcessors()
-            // Research machine has 16 cores, 32 logical cores. However, there are some instances where the number of
-            // logical cores reported could be less than the real amount, so take that into account
-            if(numCores > 16)
-                return true
-        }
-
-        // Either a non-windows machine, or it has less than 17 logical cores. Not the research machine
-        return false
-    }
-
-    /*-------------------- Server control ---------------------------*/
+    /* ---------- Server control ------------------------------------------------------------------------------------ */
     const val SERVER_SOCKET = 3383
     const val SERVER_CONFIG_FILE_NAME = "doliusServerConfigsAndUsers.json"
     var CLIENT_CONFIG = "serverConfigFileDir${File.separator}clientConfig.json"
 
-    // NOTE: These columns are common to all DB types and are named here for consistency across insertions and
+    // NOTE: These columns are common to most DB types and are named here for consistency across insertions and
     // selection from various data sources. It will allow for further generalization in higher levels of code
 
     // Used to identify the name or username of a poster
@@ -91,4 +72,24 @@ object Finals{
 
     // Used to identify a title of a post, if it exists
     const val TITLE = "post_title"
+
+    /* ---------- Helper functions ---------------------------------------------------------------------------------- */
+
+    // Very basic, needs to be more robust but works now on my known machines. Will almost
+    // certainly fail at some point in the future with unexpected hardware and I won't have a
+    // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
+    @JvmStatic fun isResearchMachine(): Boolean  {
+        // Check if this is a windows machine
+        if(System.getProperty("os.name").toLowerCase().contains("win")){
+            // Now need to check if it's the research machine or the SB2 laptop
+            val numCores = Runtime.getRuntime().availableProcessors()
+            // Research machine has 16 cores, 32 logical cores. However, there are some instances where the number of
+            // logical cores reported could be less than the real amount, so take that into account
+            if(numCores > 15)
+                return true
+        }
+
+        // Either a non-windows machine, or it has less than 17 logical cores. Not the research machine
+        return false
+    }
 }
