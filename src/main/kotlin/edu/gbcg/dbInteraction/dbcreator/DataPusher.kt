@@ -7,7 +7,7 @@ package edu.gbcg.dbInteraction.dbcreator
 
 import org.json.JSONObject
 
-abstract class JsonPusher: Runnable {
+abstract class DataPusher: Runnable {
     protected var json_objects: ArrayList<JSONObject>
 
     var JSONStrings: List<String>

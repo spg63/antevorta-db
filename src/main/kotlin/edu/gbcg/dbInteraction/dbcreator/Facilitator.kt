@@ -45,7 +45,7 @@ abstract class Facilitator {
     protected abstract fun getDBAbsolutePaths(): List<String>
     protected abstract fun getDBDirectoryPaths(): List<String>
     protected abstract fun getDataTypes(): List<String>
-    protected abstract fun populateJsonWorkers(): List<JsonPusher>
+    protected abstract fun populateJsonWorkers(): List<DataPusher>
     protected abstract fun getJsonKeysOfInterest(): List<String>
     protected abstract fun getColumnNames(): List<String>
     protected abstract fun getTableName(): String
@@ -259,7 +259,7 @@ abstract class Facilitator {
     }
 
     private fun letWorkersFly(lines: List<List<String>>) {
-        val workers: List<JsonPusher> = populateJsonWorkers()
+        val workers: List<DataPusher> = populateJsonWorkers()
         for(i in 0 until Finals.DB_SHARD_NUM){
             workers[i].DB = DBAbsolutePaths_[i]
             workers[i].JSONStrings = lines[i]

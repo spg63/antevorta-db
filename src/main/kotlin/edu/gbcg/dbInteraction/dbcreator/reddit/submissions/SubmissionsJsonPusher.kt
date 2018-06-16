@@ -6,13 +6,13 @@
 package edu.gbcg.dbInteraction.dbcreator.reddit.submissions
 
 import edu.gbcg.dbInteraction.DBCommon
-import edu.gbcg.dbInteraction.dbcreator.JsonPusher
+import edu.gbcg.dbInteraction.dbcreator.DataPusher
 import edu.gbcg.utils.TSL
 import java.sql.PreparedStatement
 import java.sql.SQLException
 import org.json.JSONObject
 
-class SubmissionsJsonPusher : JsonPusher {
+class SubmissionsJsonPusher : DataPusher {
     constructor(): super()
     constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
             : super(dbPath, jsonLines, columnNames, tableName)

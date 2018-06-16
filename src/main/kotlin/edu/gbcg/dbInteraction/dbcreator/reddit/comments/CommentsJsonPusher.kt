@@ -6,12 +6,12 @@
 package edu.gbcg.dbInteraction.dbcreator.reddit.comments
 
 import edu.gbcg.dbInteraction.DBCommon
-import edu.gbcg.dbInteraction.dbcreator.JsonPusher
+import edu.gbcg.dbInteraction.dbcreator.DataPusher
 import edu.gbcg.utils.TSL
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
-class CommentsJsonPusher : JsonPusher {
+class CommentsJsonPusher : DataPusher {
     constructor(): super()
     constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
     : super(dbPath, jsonLines, columnNames, tableName)

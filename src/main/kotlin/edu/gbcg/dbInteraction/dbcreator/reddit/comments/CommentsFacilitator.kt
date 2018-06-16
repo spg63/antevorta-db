@@ -10,7 +10,7 @@ import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.dbInteraction.dbcreator.Facilitator
-import edu.gbcg.dbInteraction.dbcreator.JsonPusher
+import edu.gbcg.dbInteraction.dbcreator.DataPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class CommentsFacilitator: Facilitator {
@@ -26,8 +26,8 @@ class CommentsFacilitator: Facilitator {
     override fun getTableName()                     = Finals.REDDIT_COM_TABLE
     override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
 
-    override fun populateJsonWorkers(): List<JsonPusher> {
-        val workers = ArrayList<JsonPusher>()
+    override fun populateJsonWorkers(): List<DataPusher> {
+        val workers = ArrayList<DataPusher>()
         for(i in 0 until Finals.DB_SHARD_NUM)
             workers.add(CommentsJsonPusher())
         return workers
