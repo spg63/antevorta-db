@@ -58,6 +58,7 @@ abstract class JsonPusher: Runnable {
             sb.append(this.columns[i])
             sb.append(",")
         }
+        // Add the one that was skipped
         sb.append(this.columns[this.columns.size - 1])
 
         // Start the values string

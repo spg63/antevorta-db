@@ -21,7 +21,7 @@ object RawDataLocator{
      * on which machine the code is running on.
      * @return List of all reddit submission files if available, otherwise null
      */
-    @JvmStatic fun redditJsonSubmissionAbsolutePaths(): List<String> {
+    fun redditJsonSubmissionAbsolutePaths(): List<String> {
         val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_REDDIT_SUB_DATA else DataPaths.REDDIT_SUB_DATA_PATH
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", path)
     }
@@ -31,7 +31,7 @@ object RawDataLocator{
      * which machine the code is running on.
      * @return List of all reddit comment files if available, otherwise null
      */
-    @JvmStatic fun redditJsonCommentAbsolutePaths(): List<String> {
+    fun redditJsonCommentAbsolutePaths(): List<String> {
         val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_REDDIT_COM_DATA else DataPaths.REDDIT_COM_DATA_PATH
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path)
     }
@@ -41,7 +41,7 @@ object RawDataLocator{
      * This path changes depending on while machine the code is running on.
      * @return List of all reddit submission files for NEW json data, otherwise null
      */
-    @JvmStatic fun redditJsonSubmissionAbsolutePathsNewData(): List<String> {
+    fun redditJsonSubmissionAbsolutePathsNewData(): List<String> {
         val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_REDDIT_SUB_DATA else DataPaths.NEW_REDDIT_SUB_DATA_PATH
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RS", path)
     }
@@ -51,7 +51,7 @@ object RawDataLocator{
      * This path changes depending on while machine the code is running on.
      * @return List of all reddit comment files for NEW json data, otherwise null
      */
-    @JvmStatic fun redditJsonCommentAbsolutePathsNewData(): List<String> {
+    fun redditJsonCommentAbsolutePathsNewData(): List<String> {
         val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_REDDIT_COM_DATA else DataPaths.NEW_REDDIT_COM_DATA_PATH
         return FileUtils.get().getAllFilePathsInDirWithPrefix("RC", path)
     }

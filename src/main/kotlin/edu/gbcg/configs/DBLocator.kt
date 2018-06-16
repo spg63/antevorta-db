@@ -6,31 +6,41 @@
 package edu.gbcg.configs
 
 import edu.gbcg.utils.FileUtils
+import javax.xml.crypto.Data
 
 /**
  * Similar concept to RawDataLocator. The location of the databases will be different depending
  * on which machine this code is running on and whether or not testing_mode is enabled. This
  * class abstracts away the paths to the DB files.
+ *
+ * NOTE: Functions below are split into groupings of however many different DBs exist. Each type of DB needs these
+ * functions for access. However many paths are found below in "Paths to the directories...." will tell you how many
+ * different functions should be in each grouping.
  */
 object DBLocator {
-    // List of drive letters on the research machine that stores the db shards
+    private val futils = FileUtils.get()
+    /* ----- List of drive letters on the research machine that stores the db shards -------------------------------- */
     private val DRIVES = arrayOf("F", "G", "H", "I", "J", "K")
 
-    // Paths to the DB shards without the drive letter prefix
-    private const val REDDIT_SUBPATH = ":/DBs/reddit/Submissions/${DataPaths.REDDIT_SUB_DB_PREFIX}.sqlite3"
-    private const val REDDIT_COMPATH = ":/DBs/reddit/Comments/${DataPaths.REDDIT_COM_DB_PREFIX}.sqlite3"
+    /* ----- Paths to the directories that hold the DB shards without the drive letter prefix ----------------------- */
+    private const val REDDIT_SUB_DB_DIR_PATH    = ":/DBs/Reddit/Submissions/"
+    private const val REDDIT_COM_DB_DIR_PATH    = ":/DBs/Reddit/Comments/"
+    private const val HOLLYWOOD_DB_DIR_PATH     = ":/DBs/Hollywood/"
 
-    // Paths to the directories that hold the DB shards without the drive letter prefix
-    private const val REDDIT_SUB_DB_PATH = ":/DBs/reddit/Submissions/"
-    private const val REDDIT_COM_DB_PATH = ":/DBs/reddit/Comments/"
+    /* ----- Paths to the DB shards without the drive letter prefix ------------------------------------------------- */
+    private const val REDDIT_SUB_SHARD  = "$REDDIT_SUB_DB_DIR_PATH${DataPaths.REDDIT_SUB_DB}${DataPaths.DBEXT}"
+    private const val REDDIT_COM_SHARD  = "$REDDIT_COM_DB_DIR_PATH${DataPaths.REDDIT_COM_DB}${DataPaths.DBEXT}"
+    private const val HOLLYWOOD_SHARD   = "$HOLLYWOOD_DB_DIR_PATH${DataPaths.HOLLYWOOD_DB}${DataPaths.DBEXT}"
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Get a list of absolute file paths to all reddit submission DBs
      * @return List of file paths to submission DBs if they exist, otherwise null
      */
-    @JvmStatic fun redditSubsAbsolutePaths(): List<String> {
+    fun redditSubsAbsolutePaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> FileUtils.get().getAllFilePathsInDirWithPrefix("RS", getSubDBDirectoryPath()[0])
+            true -> futils.getAllFilePathsInDirWithPrefix(DataPaths.REDDIT_SUB_DB, getSubDBDirectoryPath()[0])
             false -> subDBPathsList()
         }
     }
@@ -39,24 +49,37 @@ object DBLocator {
      * Get a list of absolute file paths to all reddit comment DBs
      * @return List of file paths to comment DBs if they exist, otherwise null
      */
-    @JvmStatic fun redditComsAbsolutePaths(): List<String> {
+    fun redditComsAbsolutePaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> FileUtils.get().getAllFilePathsInDirWithPrefix("RC", getComDBDirectoryPath()[0])
+            true -> futils.getAllFilePathsInDirWithPrefix(DataPaths.REDDIT_COM_DB, getComDBDirectoryPath()[0])
             false -> comDBPathsList()
         }
     }
+
+    /**
+     * Get a list of absolute file paths to all hollywood DBs
+     * $return List of file paths to the hollywood DBs if they exist, otherwise null
+     */
+    fun hollywoodAbsolutePaths(): List<String> {
+        return when(Finals.TESTING_MODE){
+            true -> futils.getAllFilePathsInDirWithPrefix(DataPaths.HOLLYWOOD_DB, getHollywoodDBDirectoryPaths()[0])
+            false -> hollywoodDBPathsList()
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * Get the path to the directory that holds the submission DBs. This path changes depending on
      * which machine this code is running on.
      * @return Absolute file path to the directories holding the submission databases
      */
-    @JvmStatic fun getSubDBDirectoryPath(): List<String> {
+    fun getSubDBDirectoryPath(): List<String> {
         return when(Finals.TESTING_MODE){
             true -> listOf(DataPaths.LOCAL_REDDIT_SUB_DB_PATH)
             false -> {
                 val paths = ArrayList<String>()
-                DRIVES.mapTo(paths) { it + REDDIT_SUB_DB_PATH }
+                DRIVES.mapTo(paths) { it + REDDIT_SUB_DB_DIR_PATH }
                 paths
             }
         }
@@ -65,27 +88,45 @@ object DBLocator {
     /**
      * Get the path to the directory that holds the comment DBs. This path changes depending on
      * which machine this code is running on.
-     * @return Absolute file path to the directories holding the submission databases
+     * @return Absolute file path to the directories holding the comments databases
      */
-    @JvmStatic fun getComDBDirectoryPath(): List<String> {
+    fun getComDBDirectoryPath(): List<String> {
         return when(Finals.TESTING_MODE){
             true -> listOf(DataPaths.LOCAL_REDDIT_COM_DB_PATH)
             false -> {
                 val paths = ArrayList<String>()
-                DRIVES.mapTo(paths) { it + REDDIT_COM_DB_PATH }
+                DRIVES.mapTo(paths) { it + REDDIT_COM_DB_DIR_PATH }
                 paths
             }
         }
     }
 
     /**
+     * Get a path to the directory that holds the hollywood DBs. This path changes depending on which
+     * machine this code is running on.
+     * #return Absolute file path to the directories holding the hollywood databases
+     */
+    fun getHollywoodDBDirectoryPaths(): List<String> {
+        return when(Finals.TESTING_MODE){
+            true -> listOf(DataPaths.LOCAL_HOLLYWOOD_DB_PATH)
+            false -> {
+                val paths = ArrayList<String>()
+                DRIVES.mapTo(paths) { it + HOLLYWOOD_DB_DIR_PATH }
+                paths
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
      * Build paths to the submission databases. Intended to be used when the DBs don't yet exist
      * but a path to the DBs is needed for creation.
      * @return List of absolute paths to DBs (that don't yet exist)
      */
-    @JvmStatic fun buildSubDBPaths(): List<String> {
+    fun buildSubDBPaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> buildDBPaths(getSubDBDirectoryPath()[0], DataPaths.REDDIT_SUB_DB_PREFIX)
+            true -> buildDBPaths(getSubDBDirectoryPath()[0], DataPaths.REDDIT_SUB_DB)
             false -> subDBPathsList()
         }
     }
@@ -95,12 +136,26 @@ object DBLocator {
      * a path to the DBs is needed for creation.
      * @return List of absolute paths to the DBs (that don't yet exist)
      */
-    @JvmStatic fun buildComDBPaths(): List<String> {
+    fun buildComDBPaths(): List<String> {
         return when(Finals.TESTING_MODE){
-            true -> buildDBPaths(getComDBDirectoryPath()[0], DataPaths.REDDIT_COM_DB_PREFIX)
+            true -> buildDBPaths(getComDBDirectoryPath()[0], DataPaths.REDDIT_COM_DB)
             false -> comDBPathsList()
         }
     }
+
+    /**
+     * Build paths to the hollywood databases. intended to be used when the DBs don't yet exist but
+     * a path to the DBs is needed for creation.
+     * @return List of absolute paths to the DBs (that don't yet exist)
+     */
+    fun buildHollywoodDBPaths(): List<String> {
+        return when(Finals.TESTING_MODE){
+            true -> buildDBPaths(getHollywoodDBDirectoryPaths()[0], DataPaths.HOLLYWOOD_DB)
+            false -> hollywoodDBPathsList()
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     /*
         ** NO JAVADOC **
@@ -113,7 +168,7 @@ object DBLocator {
             sb.append(db_dir)
             sb.append(db_prefix)
             sb.append(i)
-            sb.append(DataPaths.DB_POSTFIX)
+            sb.append(DataPaths.DBEXT)
             sbs.add(sb)
         }
 
@@ -124,14 +179,20 @@ object DBLocator {
 
     private fun subDBPathsList(): List<String> {
         val re = ArrayList<String>()
-        // for-loop replacement, for each item in DRIVES, add item + REDDIT_SUBPATH to 're'
-        DRIVES.mapTo(re) { it + REDDIT_SUBPATH }
+        // for-loop replacement, for each item in DRIVES, add item + REDDIT_SUB_SHARD to 're'
+        DRIVES.mapTo(re) { it + REDDIT_SUB_SHARD }
         return re
     }
 
     private fun comDBPathsList(): List<String> {
         val re = ArrayList<String>()
-        DRIVES.mapTo(re) { it + REDDIT_COMPATH }
+        DRIVES.mapTo(re) { it + REDDIT_COM_SHARD }
+        return re
+    }
+
+    private fun hollywoodDBPathsList(): List<String> {
+        val re = ArrayList<String>()
+        DRIVES.mapTo(re) { it + HOLLYWOOD_SHARD }
         return re
     }
 }

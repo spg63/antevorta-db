@@ -12,3 +12,90 @@ DB creation for
 
 Table for movies, with all associated data
 Table for actors, with all associated data
+
+
+NOTE: Any field that is JSON is under consideration to be moved to a separate table
+
+Movies Table:
+    int     autoincrement
+    int     tmdb_movieid        // The movie id from the tmdb dataset
+    int     imdb_movieid        // Get from links table
+    int     movielens_movieid   // The movie id from the movielens dataset
+    int     budget              // Budget information from tmdb
+    int     tagID1              // The first most common tag (genre), will have to look up the text in the tag table
+    int     tagID2              // The second most common tag
+    int     tagID3              // The third most common tag
+    JSON    genres              // This should be unnecessary data, but no reason to discard right now
+    text    link to website     // HTTP link to the movie website
+    JSON    movie keywords
+    text    original language
+    text    original title
+    text    overview of movie
+    real    popularity score
+    JSON    production compaies
+    JSON    production countries
+    int     release date --> Need to convert this to unix time from julian
+    int     revenue, money made
+    int     total runtime
+    JSON    spoken languages
+    int [0] represent a boolean for released or not
+    text    tagline
+    text    IMDB title
+    text    movielens title
+    real    vote average --> average rating for a movie
+    int     vote count --> total votes
+    JSON    movie cast
+    JSON    movie crew
+
+// The different "genre" tags that movielens came up with
+Genome_Tags Table:
+    int     autoincrement
+    int     tagid
+    text    tag
+
+// Assigns a score to each genre for each movie, basically how much a movie fits some genre
+Genome_Scores Table:
+    int     autoincrement
+    int     tmdb_movieid        // Get from links_table
+    int     imdb_movieid        // Get from links_table
+    int     movielens_movieid
+    int     tagid
+    real    relevance score
+
+Links_Table:
+    int     autoincrement
+    int     tmdb_movieid        // Point a foreign key to the movie entry?
+    int     imdb_movieid        // Currently unnecessary, but IMDB data may be used in the future
+    int     movielens_movieid   // Point a foreign key to the movie entry?
+
+// A table that holds each individual tag that a user put on a movie
+Individual_Tags_Table:
+    int     autoincrement
+    int     userid
+    int     tmdb_movieid
+    int     imdb_movieid
+    int     movielens_movieid
+    text    the tag
+    int     timestamp --> Need to convert to unix from julian
+
+// Contains each rating that a user gave to a specific movie
+Individual_Rating_Table:
+    int     autoincrement
+    int     userid
+    int     tmdb_movieid
+    int     imdb_movieid
+    int     movielens_movieid
+    real    rating
+    int     timestamp --> Need to convert to unix from julian
+
+
+
+
+
+
+
+
+
+
+
+

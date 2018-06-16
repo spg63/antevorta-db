@@ -49,15 +49,15 @@ object DataPaths{
     /* ---------- Path to TESTING_MODE db files --------------------------------------------------------------------- */
     const val LOCAL_REDDIT_SUB_DB_PATH  = "LocalDB/RedditSubs/"
     const val LOCAL_REDDIT_COM_DB_PATH  = "LocalDB/RedditComs/"
-    const val LOCAL_MOVIES_DB_PATH      = "LocalDB/Hollywood/"
-    const val LOCAL_ACTORS_DB_PATH      = "LocalDB/Hollywood/"
+    const val LOCAL_HOLLYWOOD_DB_PATH   = "LocalDB/Hollywood/"
 
     /* ---------- Pieces of information to build DB paths on research machine --------------------------------------- */
-    const val REDDIT_SUB_DB_PREFIX      = "RS_DB"
-    const val REDDIT_COM_DB_PREFIX      = "RC_DB"
-    const val MOVIES_DB_PREFIX          = "MOVIES"
-    const val ACTORS_DB_PREFIX          = "ACTORS"
-    const val DB_POSTFIX                = Finals.DB_TYPE_EXT
+    const val REDDIT_SUB_DB             = "RS_DB"
+    const val REDDIT_COM_DB             = "RC_DB"
+    const val HOLLYWOOD_DB              = "HOLLYWOOD"
+
+    // The DB file extension for sqlite3 files
+    const val DBEXT                     = Finals.DB_TYPE_EXT
 
     /* ---------- Path to the location of the server configuration file --------------------------------------------- */
     val DB_CONFIG_PATH                  = "dbConfigs${File.separator}"
