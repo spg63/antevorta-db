@@ -6,7 +6,6 @@
 package edu.gbcg.configs
 
 import edu.gbcg.utils.FileUtils
-import javax.xml.crypto.Data
 
 /**
  * Similar concept to RawDataLocator. The location of the databases will be different depending
@@ -77,11 +76,7 @@ object DBLocator {
     fun getSubDBDirectoryPath(): List<String> {
         return when(Finals.TESTING_MODE){
             true -> listOf(DataPaths.LOCAL_REDDIT_SUB_DB_PATH)
-            false -> {
-                val paths = ArrayList<String>()
-                DRIVES.mapTo(paths) { it + REDDIT_SUB_DB_DIR_PATH }
-                paths
-            }
+            false -> buildPathsWithDriveLetter(REDDIT_SUB_DB_DIR_PATH)
         }
     }
 
@@ -93,11 +88,7 @@ object DBLocator {
     fun getComDBDirectoryPath(): List<String> {
         return when(Finals.TESTING_MODE){
             true -> listOf(DataPaths.LOCAL_REDDIT_COM_DB_PATH)
-            false -> {
-                val paths = ArrayList<String>()
-                DRIVES.mapTo(paths) { it + REDDIT_COM_DB_DIR_PATH }
-                paths
-            }
+            false -> buildPathsWithDriveLetter(REDDIT_COM_DB_DIR_PATH)
         }
     }
 
@@ -109,11 +100,7 @@ object DBLocator {
     fun getHollywoodDBDirectoryPaths(): List<String> {
         return when(Finals.TESTING_MODE){
             true -> listOf(DataPaths.LOCAL_HOLLYWOOD_DB_PATH)
-            false -> {
-                val paths = ArrayList<String>()
-                DRIVES.mapTo(paths) { it + HOLLYWOOD_DB_DIR_PATH }
-                paths
-            }
+            false -> buildPathsWithDriveLetter(HOLLYWOOD_DB_DIR_PATH)
         }
     }
 
@@ -158,8 +145,22 @@ object DBLocator {
     // -----------------------------------------------------------------------------------------------------------------
 
     /*
+        Just adds the drive letters to the path. This is implemented below with buildPathsWithDriveLetter and the
+        above functions just pass along the proper path to the shard depending on DB type
+    */
+
+    // Build paths for the reddit submission db shards
+    private fun subDBPathsList(): List<String> = buildPathsWithDriveLetter(REDDIT_SUB_SHARD)
+    // Build paths for the reddit comment db shards
+    private fun comDBPathsList(): List<String> = buildPathsWithDriveLetter(REDDIT_COM_SHARD)
+    // Build paths for the hollywood db shards
+    private fun hollywoodDBPathsList(): List<String> = buildPathsWithDriveLetter(HOLLYWOOD_SHARD)
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /*
         ** NO JAVADOC **
-        * Actually builds the paths to the DBs based on requested com/sub dir and their prefix
+        * Actually builds the paths to the DBs based on requested com/sub dir and their prefix when the DBs don't exist
      */
     private fun buildDBPaths(db_dir: String, db_prefix: String): List<String> {
         val sbs = ArrayList<StringBuilder>()
@@ -177,22 +178,14 @@ object DBLocator {
         return paths
     }
 
-    private fun subDBPathsList(): List<String> {
+    /*
+        ** NO JAVADOC **
+        * Returns a list of strings with the drive letters prepended to them. Drive letters come from the above
+        * DRIVES list
+     */
+    private fun buildPathsWithDriveLetter(thePath: String): List<String> {
         val re = ArrayList<String>()
-        // for-loop replacement, for each item in DRIVES, add item + REDDIT_SUB_SHARD to 're'
-        DRIVES.mapTo(re) { it + REDDIT_SUB_SHARD }
-        return re
-    }
-
-    private fun comDBPathsList(): List<String> {
-        val re = ArrayList<String>()
-        DRIVES.mapTo(re) { it + REDDIT_COM_SHARD }
-        return re
-    }
-
-    private fun hollywoodDBPathsList(): List<String> {
-        val re = ArrayList<String>()
-        DRIVES.mapTo(re) { it + HOLLYWOOD_SHARD }
+        DRIVES.mapTo(re) { it + thePath }
         return re
     }
 }
