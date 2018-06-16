@@ -5,45 +5,19 @@
 
 package edu.gbcg.dbInteraction.dbcreator
 
-import org.json.JSONObject
-
 abstract class DataPusher: Runnable {
-    protected var json_objects: ArrayList<JSONObject>
-
-    var JSONStrings: List<String>
-    // Custom setter for JSONStrings so that numObjects also gets set when setting JSONStrings outside of c'tor
-    set(value){
-        field = value
-        this.numObjects = this.JSONStrings.size
-    }
-
     lateinit var DB: String
     lateinit var columns: List<String>
     lateinit var tableName: String
-    protected var numObjects = 0
 
+    constructor()
 
-    constructor(){
-        this.json_objects = ArrayList()
-        this.JSONStrings = ArrayList()
-    }
-
-    constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String){
+    // The stuff the base class should know about
+    constructor(dbPath: String, columnNames: List<String>, tableName: String) {
         this.DB = dbPath
-        this.JSONStrings = jsonLines
         this.columns = columnNames
         this.tableName = tableName
-        this.numObjects = JSONStrings.size
-        this.json_objects = ArrayList()
     }
-
-    override fun run(){
-        for(i in 0 until this.numObjects)
-            this.json_objects.add(JSONObject(this.JSONStrings[i]))
-        parseAndPushDataToDB()
-    }
-
-    // Setters and getters are automatically generated for the class vars
 
     protected fun buildInsertionString(): String {
         val sb = StringBuilder()
@@ -70,6 +44,8 @@ abstract class DataPusher: Runnable {
         return sb.toString()
     }
 
-    // DB specific parsing and pushing of data
+    // DB specific parsing and pushing of data. This will be implemented in the most derived classes and will be
+    // specific to json or csv or other type of data. The function is specific to the data being read and the data
+    // being written to the DB
     protected abstract fun parseAndPushDataToDB()
 }

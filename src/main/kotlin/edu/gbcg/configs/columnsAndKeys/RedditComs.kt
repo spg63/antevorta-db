@@ -8,7 +8,7 @@ package edu.gbcg.configs.columnsAndKeys
 import edu.gbcg.configs.Finals
 
 object RedditComs {
-    @JvmStatic fun JSONKeys() = listOf(
+    fun JSONKeys() = listOf(
         "author",           "author_flair_text",    "body",
         "can_gild",         "controversiality",     "created_utc",
         "distinguished",    "edited",               "gilded",
@@ -19,7 +19,7 @@ object RedditComs {
     )
 
 
-    @JvmStatic fun columnNames() = listOf(
+    fun columnNames() = listOf(
         "ID",               Finals.AUTHOR,      "author_flair_text",
         Finals.BODY,        "can_gild",         "controversial_score",
         Finals.CREATED_DT,  "distinguished",    "been_edited",
@@ -31,7 +31,7 @@ object RedditComs {
         "text_exp_2",       "text_exp_3",       "text_exp_4"
     )
 
-    @JvmStatic fun columnsForPrinting() = listOf(
+    fun columnsForPrinting() = listOf(
         "ID",               Finals.AUTHOR,      "author_flair_text",
         Finals.BODY,        "can_gild",         "controversial_score",
         Finals.CREATED_DT,  "distinguished",    "been_edited",
@@ -41,7 +41,7 @@ object RedditComs {
         "subreddit_name",   "subreddit_id",     "subreddit_type"
     )
 
-    @JvmStatic fun dataTypesForPrinting() = listOf(
+    fun dataTypesForPrinting() = listOf(
         "INT",  "TEXT", "TEXT",
         "TEXT", "BOOL", "INT",
         "INT",  "TEXT", "BOOL",
@@ -51,7 +51,7 @@ object RedditComs {
         "TEXT", "TEXT", "TEXT"
     )
 
-    @JvmStatic fun dataTypes() = listOf(
+    fun dataTypes() = listOf(
         " INTEGER PRIMARY KEY AUTOINCREMENT,",  " TEXT,",               " TEXT,",
         " TEXT,",                               " INTEGER DEFAULT 0,",  " INTEGER DEFAULT 0,",
         " INTEGER,",                            " TEXT,",               " INTEGER DEFAULT 0,",

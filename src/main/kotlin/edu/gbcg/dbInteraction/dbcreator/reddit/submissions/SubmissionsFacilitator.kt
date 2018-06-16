@@ -9,25 +9,25 @@ import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
-import edu.gbcg.dbInteraction.dbcreator.Facilitator
-import edu.gbcg.dbInteraction.dbcreator.DataPusher
+import edu.gbcg.dbInteraction.dbcreator.JsonFacilitator
+import edu.gbcg.dbInteraction.dbcreator.JsonPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
-class SubmissionsFacilitator: Facilitator {
+class SubmissionsFacilitator: JsonFacilitator {
     constructor(): super()
 
     override fun buildDBPaths()                     = DBLocator.buildSubDBPaths()
-    override fun getJsonAbsolutePaths()             = RawDataLocator.redditJsonSubmissionAbsolutePaths()
+    override fun getDataFileAbsolutePaths()         = RawDataLocator.redditJsonSubmissionAbsolutePaths()
     override fun getDBAbsolutePaths()               = DBLocator.redditSubsAbsolutePaths()
     override fun getDBDirectoryPaths()              = DBLocator.getSubDBDirectoryPath()
     override fun getJsonKeysOfInterest()            = RedditSubs.JSONKeys()
     override fun getColumnNames()                   = RedditSubs.columnNames()
     override fun getDataTypes()                     = RedditSubs.dataTypes()
     override fun getTableName()                     = Finals.REDDIT_SUB_TABLE
-    override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
+    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
 
-    override fun populateJsonWorkers(): List<DataPusher> {
-        val workers = ArrayList<DataPusher>()
+    override fun populateJsonWorkers(): List<JsonPusher> {
+        val workers = ArrayList<JsonPusher>()
         for(i in 0 until Finals.DB_SHARD_NUM)
             workers.add(SubmissionsJsonPusher())
         return workers

@@ -9,25 +9,25 @@ import edu.gbcg.configs.DBLocator
 import edu.gbcg.configs.Finals
 import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditComs
-import edu.gbcg.dbInteraction.dbcreator.Facilitator
-import edu.gbcg.dbInteraction.dbcreator.DataPusher
+import edu.gbcg.dbInteraction.dbcreator.JsonFacilitator
+import edu.gbcg.dbInteraction.dbcreator.JsonPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
-class CommentsFacilitator: Facilitator {
+class CommentsFacilitator: JsonFacilitator {
     constructor(): super()
 
     override fun buildDBPaths()                     = DBLocator.buildComDBPaths()
-    override fun getJsonAbsolutePaths()             = RawDataLocator.redditJsonCommentAbsolutePaths()
+    override fun getDataFileAbsolutePaths()         = RawDataLocator.redditJsonCommentAbsolutePaths()
     override fun getDBAbsolutePaths()               = DBLocator.redditComsAbsolutePaths()
     override fun getDBDirectoryPaths()              = DBLocator.getComDBDirectoryPath()
     override fun getJsonKeysOfInterest()            = RedditComs.JSONKeys()
     override fun getColumnNames()                   = RedditComs.columnNames()
     override fun getDataTypes()                     = RedditComs.dataTypes()
     override fun getTableName()                     = Finals.REDDIT_COM_TABLE
-    override fun getJsonAbsolutePathsForNewData()   = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
+    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
 
-    override fun populateJsonWorkers(): List<DataPusher> {
-        val workers = ArrayList<DataPusher>()
+    override fun populateJsonWorkers(): List<JsonPusher> {
+        val workers = ArrayList<JsonPusher>()
         for(i in 0 until Finals.DB_SHARD_NUM)
             workers.add(CommentsJsonPusher())
         return workers

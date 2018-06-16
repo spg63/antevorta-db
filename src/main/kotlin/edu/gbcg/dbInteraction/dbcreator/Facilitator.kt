@@ -10,54 +10,53 @@ import edu.gbcg.dbInteraction.DBCommon
 import edu.gbcg.dbInteraction.DBWorker
 import edu.gbcg.utils.FileUtils
 import edu.gbcg.utils.TSL
-import java.io.*
 import java.sql.Connection
 import java.text.NumberFormat
 
 @Suppress("LeakingThis", "ConvertSecondaryConstructorToPrimary")
 abstract class Facilitator {
-    protected var DBAbsolutePaths_: List<String>        // Path to the DBs once they exist
-    protected val DBDirectoryPaths_: List<String>       // Path to the directory / directories that hold the DB shards
+    protected var dbAbsolutePaths_: List<String>        // Path to the DBs once they exist
+    protected val dbDirectoryPaths_: List<String>       // Path to the directory / directories that hold the DB shards
     protected val columnNames_: List<String>            // Names of the columns in the DB
     protected val dataTypes_: List<String>              // Type of data stored in the DB columns
-    protected val DBPaths_: List<String>                // Paths to the DBs when they don't yet exist
-    protected var dataAbsolutePaths_: List<String>      // Paths to the json files
-    protected val dataKeysOfInterest_: List<String>     // JSON keys we care about grabbing for the DB
+    protected val dbPaths_: List<String>                // Paths to the DBs when they don't yet exist
+    protected var dataAbsolutePaths_: List<String>      // Paths to the data files
     protected val tableName_: String                    // The name of the table in the DB
     protected val logger_: TSL = TSL.get()              // Instance of the logger
     protected val numberFormat_: NumberFormat           // Format number output for easier viewing
 
     constructor(){
-        this.DBAbsolutePaths_               = getDBAbsolutePaths()
-        this.DBDirectoryPaths_              = getDBDirectoryPaths()
+        this.dbAbsolutePaths_               = getDBAbsolutePaths()
+        this.dbDirectoryPaths_              = getDBDirectoryPaths()
         this.columnNames_                   = getColumnNames()
         this.dataTypes_                     = getDataTypes()
-        this.DBPaths_                       = buildDBPaths()
-        this.dataAbsolutePaths_             = getJsonAbsolutePaths()
-        this.dataKeysOfInterest_            = getJsonKeysOfInterest()
+        this.dbPaths_                       = buildDBPaths()
+        this.dataAbsolutePaths_             = getDataFileAbsolutePaths()
         this.tableName_                     = getTableName()
         this.numberFormat_                  = NumberFormat.getInstance()
         this.numberFormat_.isGroupingUsed   = true
     }
 
     protected abstract fun buildDBPaths(): List<String>
-    protected abstract fun getJsonAbsolutePaths(): List<String>
+    protected abstract fun getDataFileAbsolutePaths(): List<String>
     protected abstract fun getDBAbsolutePaths(): List<String>
     protected abstract fun getDBDirectoryPaths(): List<String>
     protected abstract fun getDataTypes(): List<String>
-    protected abstract fun populateJsonWorkers(): List<DataPusher>
-    protected abstract fun getJsonKeysOfInterest(): List<String>
     protected abstract fun getColumnNames(): List<String>
     protected abstract fun getTableName(): String
     protected abstract fun createIndices()
     protected abstract fun dropIndices()
-    protected abstract fun getJsonAbsolutePathsForNewData(): List<String>
+    protected abstract fun getDataAbsolutePathsForNewData(): List<String>
+    protected abstract fun pushDataIntoDBs()
+    // Creates a list of DataPushers (json, csv, other), passes a list of lines that pusher is supposed to parse
+    // and push into the DB, starts each pusher in a thread, lets them work, joins them.
+    protected abstract fun letWorkersFly(lines: List<List<String>>)
 
     fun createDBs() {
         // Check if the DBs exist.
-        if(this.DBAbsolutePaths_.isEmpty())
-            this.DBAbsolutePaths_ = ArrayList()
-        val dbs_exist = this.DBAbsolutePaths_.size == Finals.DB_SHARD_NUM
+        if(this.dbAbsolutePaths_.isEmpty())
+            this.dbAbsolutePaths_ = ArrayList()
+        val dbs_exist = this.dbAbsolutePaths_.size == Finals.DB_SHARD_NUM
 
         // Early exit if the DBs exist and we don't want to start fresh
         if(dbs_exist && !Finals.START_FRESH)
@@ -69,21 +68,21 @@ abstract class Facilitator {
             logger_.info("Dropping table in DB shards")
             val sql = "drop table if exists ${this.tableName_};"
             // For each db in the list, drop the table
-            this.DBAbsolutePaths_.forEach{ DBCommon.delete(it, sql) }
+            this.dbAbsolutePaths_.forEach{ DBCommon.delete(it, sql) }
         }
 
         // The DBs don't exist, create the empty sqlite files
         if(!dbs_exist){
             logger_.info("Creating DB shard paths and initializing DB files")
             // Create the directories that hold the DBs
-            this.DBDirectoryPaths_.forEach{ FileUtils.get().checkAndCreateDir(it) }
+            this.dbDirectoryPaths_.forEach{ FileUtils.get().checkAndCreateDir(it) }
             // Build the paths to the Dbs so they can be created
-            this.DBPaths_.forEach{
+            this.dbPaths_.forEach{
                 val conn = DBCommon.connect(it)
                 DBCommon.disconnect(conn)
             }
             // Now that the DBs exist, populate the absolute paths list
-            this.DBAbsolutePaths_ = getDBAbsolutePaths()
+            this.dbAbsolutePaths_ = getDBAbsolutePaths()
         }
 
         // Create the table schema
@@ -97,108 +96,8 @@ abstract class Facilitator {
         val sql = sb.toString()
 
         logger_.info("Writing table to DB shards")
-        this.DBAbsolutePaths_.forEach{ DBCommon.insert(it, sql) }
+        this.dbAbsolutePaths_.forEach{ DBCommon.insert(it, sql) }
         logger_.info("DBs have been created")
-    }
-
-    fun pushJSONDataIntoDBs() {
-        // Early exit if we're not pushing data
-        if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return
-
-        if (this.DBAbsolutePaths_.isEmpty())
-            this.DBAbsolutePaths_ = getDBAbsolutePaths()
-
-        if (this.dataAbsolutePaths_.isEmpty()) {
-            when {
-                Finals.START_FRESH -> this.dataAbsolutePaths_ = getJsonAbsolutePaths()
-                Finals.ADD_NEW_DATA -> this.dataAbsolutePaths_ = getJsonAbsolutePathsForNewData()
-                else -> logger_.logAndKill("Facilitator.pushJSONDataIntoDBs -- Not START_FRESH or ADD_NEW_DATA")
-            }
-        }
-
-        // Just for some logging when adding new data to the DB shards
-        if(Finals.ADD_NEW_DATA)
-            this.dataAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
-
-        // For each json file, read it line by line, while reading start processing the data
-        // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards
-        for(json in this.dataAbsolutePaths_){
-            val f = File(json)
-            logger_.info("Counting number of lines in ${f.name}")
-            val total_lines = FileUtils.get().lineCount(json)
-            val total_lines_in_file = total_lines.toDouble()
-            logger_.info("Reading ${f.name}")
-            logger_.info("${f.name} has ${numberFormat_.format(total_lines_in_file)} lines")
-
-            var br: BufferedReader? = null
-            val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
-            var lineReadCounter = 0
-            var total_lines_read: Long = 0
-            var write_total_lines_read = 1
-            var whichWorker = 0
-            val linesList: ArrayList<ArrayList<String>> = ArrayList()
-            for(i in 0 until Finals.DB_SHARD_NUM)
-                linesList.add(ArrayList())
-
-            try{
-                br = BufferedReader(FileReader(json))
-                var line = br.readLine()
-                while(line != null){
-                    ++lineReadCounter
-                    linesList[whichWorker].add(line)
-
-                    // Increment the worker number so we're evenly distributing lines to the workers
-                    ++whichWorker
-                    if(whichWorker >= Finals.DB_SHARD_NUM)
-                        whichWorker = 0
-
-                    // Limit before dumping data to the DB, start the threads and perform the dump
-                    if(lineReadCounter >= dbDumpLimit){
-                        letWorkersFly(linesList)
-
-                        total_lines_read += lineReadCounter
-                        lineReadCounter = 0
-                        linesList.clear()
-
-                        if(write_total_lines_read % 25 == 0) {
-                            val readLines = total_lines_read.toDouble()
-                            val currentComplete = readLines / total_lines_in_file
-                            val percentComplete = (currentComplete * 100).toInt()
-                            logger_.info("$percentComplete% done ${f.name}")
-                        }
-                        ++write_total_lines_read
-
-                        // Give the linesList new ArrayLists to store next set of lines
-                        for(j in 0 until Finals.DB_SHARD_NUM)
-                            linesList.add(ArrayList())
-                    }
-                    line = br.readLine()
-                }
-
-                // There could be leftover json lines that don't get pushed due to not meeting the dbDumpLimit amount
-                // of lines. Start up the workers again and push the remaining lines
-                logger_.info("Launching final JSON push for ${f.name}")
-                total_lines_read += lineReadCounter
-                logger_.info("Total lines read ${numberFormat_.format(total_lines_read)} for ${f.name}")
-                letWorkersFly(linesList)
-            }
-            catch(e: IOException){
-                logger_.exception(e)
-            }
-            finally{
-                if(br != null){
-                    try{
-                        br.close()
-                    }
-                    catch(e: IOException){
-                        logger_.exception(e)
-                    }
-                }
-            }
-        }
-
-        // Create the indices on all shards. This happens on table creation and after batch inserts for new data
-        createIndices()
     }
 
     fun createDBIndex(columnName: String, indexName: String) {
@@ -206,11 +105,11 @@ abstract class Facilitator {
         val workers = ArrayList<Thread>()
         val conns = ArrayList<Connection>()
         val sql = DBCommon.getDBIndexSQLStatement(this.tableName_, columnName, indexName)
-        if(this.DBAbsolutePaths_.isEmpty())
-            this.DBAbsolutePaths_ = getDBAbsolutePaths()
+        if(this.dbAbsolutePaths_.isEmpty())
+            this.dbAbsolutePaths_ = getDBAbsolutePaths()
 
-        // For each db in DBAbsolutePaths_ create a connection and put it in conns
-        this.DBAbsolutePaths_.mapTo(conns) { DBCommon.connect(it) }
+        // For each db in dbAbsolutePaths_ create a connection and put it in conns
+        this.dbAbsolutePaths_.mapTo(conns) { DBCommon.connect(it) }
 
         for(i in 0 until conns.size){
             workers.add(Thread(DBWorker(conns[i], sql)))
@@ -236,7 +135,7 @@ abstract class Facilitator {
         val workers = ArrayList<Thread>()
 
         // Get a connection to each DB and put the connections in conns list
-        this.DBAbsolutePaths_.mapTo(conns){DBCommon.connect(it)}
+        this.dbAbsolutePaths_.mapTo(conns){DBCommon.connect(it)}
 
         // Get the SQL statement
         val sql = DBCommon.getDropDBIndexSQLStatement(indexName)
@@ -258,30 +157,6 @@ abstract class Facilitator {
         conns.forEach{ DBCommon.disconnect(it) }
     }
 
-    private fun letWorkersFly(lines: List<List<String>>) {
-        val workers: List<DataPusher> = populateJsonWorkers()
-        for(i in 0 until Finals.DB_SHARD_NUM){
-            workers[i].DB = DBAbsolutePaths_[i]
-            workers[i].JSONStrings = lines[i]
-            workers[i].columns = columnNames_
-            workers[i].tableName = tableName_
-        }
-        val threads: MutableList<Thread> = ArrayList()
-        for(i in 0 until Finals.DB_SHARD_NUM){
-            threads.add(Thread(workers[i]))
-            threads[i].start()
-        }
-
-        for(i in 0 until Finals.DB_SHARD_NUM){
-            try{
-                threads[i].join()
-            }
-            catch(e: InterruptedException){
-                logger_.exception(e)
-            }
-        }
-    }
-
     // Push new data into the DB shards
     fun pushNewData(){
         // Batch inserting large data on tables with a lot of indices is slow. Drop them and re-create at the end
@@ -291,9 +166,9 @@ abstract class Facilitator {
         this.dataAbsolutePaths_ = ArrayList()
 
         // Get the path(s) to the new json file(s)
-        this.dataAbsolutePaths_ = getJsonAbsolutePathsForNewData()
+        this.dataAbsolutePaths_ = getDataAbsolutePathsForNewData()
 
         // Now that the paths have been reset the new data can be pushed in the DB shards
-        pushJSONDataIntoDBs()
+        pushDataIntoDBs()
     }
 }

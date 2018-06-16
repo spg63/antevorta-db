@@ -163,7 +163,7 @@ fun doComs(){
 
 fun buildDBShards(fac: Facilitator){
     fac.createDBs()
-    fac.pushJSONDataIntoDBs()
+    fac.pushDataIntoDBs()
 }
 
 fun pushNewComs(){
