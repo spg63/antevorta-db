@@ -182,7 +182,6 @@ class SubmissionsJsonPusher : JsonPusher {
 
                 ps.addBatch()
             }
-
             ps.executeBatch()
             conn.commit()
         }

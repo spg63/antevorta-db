@@ -20,6 +20,7 @@ import edu.gbcg.dbInteraction.dbSelector.RSMapper
 import edu.gbcg.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.gbcg.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.gbcg.dbInteraction.dbcreator.Facilitator
+import edu.gbcg.dbInteraction.dbcreator.hollywood.movies.MovielensLinkFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.gbcg.utils.Out
@@ -41,20 +42,12 @@ fun main(args : Array<String>){
     if(Finals.isResearchMachine() && Finals.ADD_NEW_DATA)
         logger_.logAndKill("isResearchMachine() was true while trying to add new data")
 
-
-    val format = CSVFormat.DEFAULT
-    val parser = CSVParser.parse(FileReader(File(RawDataLocator.movielensLinkAbsolutePath())), format)
-    for(record in parser)
-        logger_.info("${record[0]},${record[1]}, ${record[2]}")
-
-
-    logger_.logAndKill("pause")
-
     val sw = Stopwatch.createStarted()
 
-    //doServerComs()
+    //PullFromServer.doServerComs()
+    //PullFromServer.doServerSubs()
     doSubs()
-    //doServerSubs()
+    //doMovieLensLink()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
@@ -68,55 +61,11 @@ fun main(args : Array<String>){
     logger_.shutDown()
 }
 
-fun doServerComs(){
-    val client = AntevortaClient(Finals.CLIENT_CONFIG)
-    val author = "a4k04"
-
-    val dbsql = DBSelector()
-            .from(Finals.REDDIT_COM_TABLE)
-            .where("author = '$author'")
-            .orderBy(Finals.CREATED_DT, true)
-            .orderBy("subreddit_name")
-            .limit(10)
-
-    logger_.info(dbsql.sql())
-
-    // If results are null, return
-    val jsonResults = client.queryServer(dbsql.sql()) ?: return
-
-    // Get all objects from the JSONArray
-    val objects = ArrayList<JSONObject>()
-    for(i in 0 until jsonResults.length())
-        objects.add(jsonResults.getJSONObject(i))
-
-    val mappers = ArrayList<RSMapper>()
-    for(jsonobj in objects)
-        mappers.add(BaseMapper(jsonobj))
-
-    RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
-
-}
-
-fun doServerSubs(){
-    val client = AntevortaClient(Finals.CLIENT_CONFIG)
-    val author = "SciTroll"
-
-    val dbsql = DBSelector()
-            .from(Finals.REDDIT_SUB_TABLE)
-            .where("author = '$author'")
-            .orderBy("created_dt")
-
-    val jsonResults = client.queryServer(dbsql.sql()) ?: return
-
-    val objects = ArrayList<JSONObject>()
-    for(i in 0 until jsonResults.length())
-        objects.add(jsonResults.getJSONObject(i))
-
-    val mappers = ArrayList<RSMapper>()
-    for(jsonobj in objects)
-        mappers.add(BaseMapper(jsonobj))
-
-    RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
+fun doMovieLensLink(){
+    if(Finals.START_FRESH){
+        buildDBShards(MovielensLinkFacilitator())
+        return
+    }
 }
 
 fun doSubs(){
@@ -125,6 +74,7 @@ fun doSubs(){
         return
     }
     val rss = RedditSubSelector()
+    val res = rss.selectAllFromAuthor("SciTroll")
 
     //val res = rss.selectAllFromAuthor("a4k04")
 
@@ -136,7 +86,6 @@ fun doSubs(){
 
     //return
     //val res = rss.selectAllAfterDate(2018, 2, 28, 23, 59, 58)
-    val res = rss.selectAllFromAuthor("SciTroll")
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rss.selectAllBetweenDates(startDate, endDate)

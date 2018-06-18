@@ -24,12 +24,17 @@ object MovielensLink{
     fun columnsForPrinting() = columnNames()
 
     fun dataTypes() = listOf(
+            " INTEGER PRIMARY KEY AUTOINCREMENT,",
+            " INTEGER,",
+            " INTEGER,",
+            " INTEGER"
+    )
+
+    // Not eliminating any columns when printing objects from this table
+    fun dataTypesForPrinting() = listOf(
             "INT",
             "INT",
             "INT",
             "INT"
     )
-
-    // Not eliminating any columns when printing objects from this table
-    fun dataTypesForPrinting() = dataTypes()
 }
