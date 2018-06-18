@@ -120,6 +120,12 @@ object RawDataLocator{
 
     /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs --------------------------------- */
     /**
+     * Some data is added once without update, however the function to gather new data still needs to be implemented.
+     * The below function exists as a fake-out for that limitation in class structure
+     */
+    fun getEmptyArrayList() = ArrayList<String>()
+
+    /**
      * Get a list of all raw json files for reddit submission data that needs to be added to an existing database.
      * This path changes depending on while machine the code is running on.
      * @return List of all reddit submission files for NEW json data, otherwise null

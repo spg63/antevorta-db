@@ -24,6 +24,7 @@ abstract class Facilitator {
     protected val tableName_: String                    // The name of the table in the DB
     protected val logger_: TSL = TSL.get()              // Instance of the logger
     protected val numberFormat_: NumberFormat           // Format number output for easier viewing
+    protected val dataNamesOfInterest_: List<String>    // Name of csv column of json key we need
 
     constructor(){
         this.dbAbsolutePaths_               = getDBAbsolutePaths()
@@ -35,6 +36,7 @@ abstract class Facilitator {
         this.tableName_                     = getTableName()
         this.numberFormat_                  = NumberFormat.getInstance()
         this.numberFormat_.isGroupingUsed   = true
+        this.dataNamesOfInterest_           = getDataKeysOfInterest()
     }
 
     protected abstract fun buildDBPaths(): List<String>
@@ -47,6 +49,7 @@ abstract class Facilitator {
     protected abstract fun createIndices()
     protected abstract fun dropIndices()
     protected abstract fun getDataAbsolutePathsForNewData(): List<String>
+    protected abstract fun getDataKeysOfInterest(): List<String>
 
     abstract fun pushDataIntoDBs()
     // Creates a list of DataPushers (json, csv, other), passes a list of lines that pusher is supposed to parse
@@ -79,26 +82,25 @@ abstract class Facilitator {
     }
 
     fun createDBs() {
+        if(!Finals.START_FRESH)
+            logger_.logAndKill("Called createDBs when Finals.START_FRESH was false. Check your logic.")
+
         // Check if the DBs exist.
         if(this.dbAbsolutePaths_.isEmpty())
             this.dbAbsolutePaths_ = ArrayList()
         val dbs_exist = this.dbAbsolutePaths_.size == Finals.DB_SHARD_NUM
 
-        // Early exit if the DBs exist and we don't want to start fresh
-        if(dbs_exist && !Finals.START_FRESH)
-            return
-
         // The DBs exist but we want to start fresh, get rid of them
-        if(dbs_exist && Finals.START_FRESH){
+        if(dbs_exist){
             logger_.warn("DB shards exist && starting fresh")
-            logger_.info("Dropping table in DB shards")
+            logger_.info("Dropping table(s) in DB shards")
             val sql = "drop table if exists ${this.tableName_};"
             // For each db in the list, drop the table
             this.dbAbsolutePaths_.forEach{ DBCommon.delete(it, sql) }
         }
 
         // The DBs don't exist, create the empty sqlite files
-        if(!dbs_exist){
+        else if(!dbs_exist){
             logger_.info("Creating DB shard paths and initializing DB files")
             // Create the directories that hold the DBs
             this.dbDirectoryPaths_.forEach{ FileUtils.get().checkAndCreateDir(it) }
@@ -110,6 +112,8 @@ abstract class Facilitator {
             // Now that the DBs exist, populate the absolute paths list
             this.dbAbsolutePaths_ = getDBAbsolutePaths()
         }
+        else
+            logger_.logAndKill("createDBs; somehow the DBs exist and don't exist. What's that cat joke?")
 
         // Create the table schema
         val sb = StringBuilder()

@@ -13,14 +13,10 @@ import java.io.FileReader
 import java.io.IOException
 
 abstract class JsonFacilitator: Facilitator {
-    protected val jsonKeysOfInterest_: List<String> // JSON keys we care about grabbing for the DB
 
-    constructor(): super(){
-        this.jsonKeysOfInterest_ = getJsonKeysOfInterest()
-    }
+    constructor(): super()
 
     // Json specific functions
-    protected abstract fun getJsonKeysOfInterest(): List<String>
     protected abstract fun populateJsonWorkers(): List<JsonPusher>
 
     override fun pushDataIntoDBs() {
