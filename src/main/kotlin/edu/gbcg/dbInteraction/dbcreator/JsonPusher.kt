@@ -12,6 +12,7 @@ import org.json.JSONObject
  */
 abstract class JsonPusher: DataPusher {
     protected var jsonObjects: ArrayList<JSONObject>
+    protected var numObjects = 0
 
     var JSONStrings: List<String>
     // Custom setter for JSONStrings so that numObjects also gets set when setting JSONStrings outside of c'tor
@@ -20,8 +21,6 @@ abstract class JsonPusher: DataPusher {
         this.numObjects = this.JSONStrings.size
     }
 
-    protected var numObjects = 0
-
     constructor(): super() {
         this.jsonObjects = ArrayList()
         this.JSONStrings = ArrayList()
@@ -29,7 +28,7 @@ abstract class JsonPusher: DataPusher {
 
     // Base DataPusher will handle the path to the DB, the names for the table columns, and the table name
     constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
-    : super(dbPath, columnNames, tableName)
+            : super(dbPath, columnNames, tableName)
     {
         this.JSONStrings = jsonLines
         this.numObjects = JSONStrings.size

@@ -5,12 +5,16 @@
 
 package edu.gbcg.dbInteraction.dbcreator
 
-import edu.gbcg.configs.Finals
+import edu.gbcg.utils.TSL
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.SQLException
 
 abstract class DataPusher: Runnable {
     lateinit var DB: String
     lateinit var columns: List<String>
     lateinit var tableName: String
+    val logger_ = TSL.get()
 
     constructor()
 
@@ -50,4 +54,42 @@ abstract class DataPusher: Runnable {
     // specific to json or csv or other type of data. The function is specific to the data being read and the data
     // being written to the DB
     protected abstract fun parseAndPushDataToDB()
+
+    /*
+     *  The below two functions centralize error handling when pushing data into the DB. These error blocks can be long
+     *  and there's no reason to repeat them over all of the different derived classes. Do it here.
+     */
+    protected fun pusherCatchBlock(e: SQLException?, conn: Connection?){
+        logger_.exception(e)
+        try{
+            conn!!.rollback()
+        }
+        catch(exp: SQLException){
+            logger_.logAndKill(exp)
+        }
+    }
+
+    protected fun pusherFinallyBlock(conn: Connection?, ps: PreparedStatement?){
+        try{
+            if(!conn!!.autoCommit)
+                conn.autoCommit = true
+        }
+        catch(exp: SQLException){
+            logger_.logAndKill(exp)
+        }
+        if(ps != null){
+            try{
+                ps.close()
+            }
+            catch(ex: SQLException){
+                logger_.exception(ex)
+            }
+        }
+        try{
+            conn!!.close()
+        }
+        catch(ex: SQLException){
+            logger_.logAndKill(ex)
+        }
+    }
 }

@@ -7,11 +7,15 @@ package edu.gbcg.dbInteraction.dbcreator
 
 import org.apache.commons.csv.CSVFormat
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 abstract class CSVFacilitator: Facilitator {
     protected val parseFormat = CSVFormat.DEFAULT!!
     protected val parser = null
 
     constructor(): super()
+
+    // CSV specific functions
+    protected abstract fun populateCSVWorkers(): List<CSVPusher>
 
     override fun pushDataIntoDBs() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

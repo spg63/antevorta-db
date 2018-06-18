@@ -38,8 +38,9 @@ object Finals{
     // There are 6 available HDDs for data storage on research machine, use all of them
     const val DB_SHARD_NUM = 6
     // Reddit table names
-    const val REDDIT_SUB_TABLE = "submission_attrs"
-    const val REDDIT_COM_TABLE = "comment_attrs"
+    const val REDDIT_SUB_TABLE          = "submission_attrs"
+    const val REDDIT_COM_TABLE          = "comment_attrs"
+    const val MOVIE_LENS_LINK_TABLE     = "links_table"
 
     /* ---------- Server control ------------------------------------------------------------------------------------ */
     const val SERVER_SOCKET = 3383

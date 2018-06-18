@@ -187,36 +187,10 @@ class SubmissionsJsonPusher : JsonPusher {
             conn.commit()
         }
         catch(e: SQLException){
-            TSL.get().exception(e)
-            try{
-                conn.rollback()
-            }
-            catch(exp: SQLException){
-                TSL.get().logAndKill(exp)
-            }
+            pusherCatchBlock(e, conn)
         }
         finally{
-            try{
-                if(!conn.autoCommit)
-                    conn.autoCommit = true
-            }
-            catch(exp: SQLException){
-                TSL.get().logAndKill(exp)
-            }
-            if(ps != null){
-                try{
-                    ps.close()
-                }
-                catch(ex: SQLException){
-                    TSL.get().exception(ex)
-                }
-            }
-            try{
-                conn.close()
-            }
-            catch(ex: SQLException){
-                TSL.get().logAndKill(ex)
-            }
+            pusherFinallyBlock(conn, ps)
         }
     }
 }
