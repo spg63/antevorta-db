@@ -106,7 +106,7 @@ abstract class JsonFacilitator: Facilitator {
         createIndices()
     }
 
-    override fun letWorkersFly(lines: List<List<String>>) {
+    fun letWorkersFly(lines: List<List<String>>) {
         val workers: List<JsonPusher> = populateJsonWorkers()
         for(i in 0 until Finals.DB_SHARD_NUM){
             workers[i].DB = dbAbsolutePaths_[i]

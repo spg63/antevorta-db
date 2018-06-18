@@ -52,9 +52,6 @@ abstract class Facilitator {
     protected abstract fun getDataKeysOfInterest(): List<String>
 
     abstract fun pushDataIntoDBs()
-    // Creates a list of DataPushers (json, csv, other), passes a list of lines that pusher is supposed to parse
-    // and push into the DB, starts each pusher in a thread, lets them work, joins them.
-    protected abstract fun letWorkersFly(lines: List<List<String>>)
 
     // Used by pushDataIntoDBs(), regardless of data type, to check if the function should continue.
     // It will shortcirtuit pushData if the data already exists or START_FRESH is false and ADD_NEW_DATA is false
