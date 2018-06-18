@@ -24,26 +24,13 @@ abstract class JsonFacilitator: Facilitator {
     protected abstract fun populateJsonWorkers(): List<JsonPusher>
 
     override fun pushDataIntoDBs() {
-        // Early exit if we're not pushing data
-        if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return
-
-        if (this.dbAbsolutePaths_.isEmpty())
-            this.dbAbsolutePaths_ = getDBAbsolutePaths()
-
-        if (this.dataAbsolutePaths_.isEmpty()) {
-            when {
-                Finals.START_FRESH -> this.dataAbsolutePaths_ = getDataFileAbsolutePaths()
-                Finals.ADD_NEW_DATA -> this.dataAbsolutePaths_ = getDataAbsolutePathsForNewData()
-                else -> logger_.logAndKill("Facilitator.pushDataIntoDBs -- Not START_FRESH or ADD_NEW_DATA")
-            }
-        }
-
-        // Just for some logging when adding new data to the DB shards
-        if(Finals.ADD_NEW_DATA)
-            this.dataAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
+        // Check if START_FRESH or ADD_NEW_DATA is set to true, if so continue, else return. Also check if the proper
+        // data paths have been set, if not, set them.
+        if(shouldFunctionReturnEarly()) return
 
         // For each json file, read it line by line, while reading start processing the data
-        // Each iteration of the loop adds a line to a new worker thread to evenly share the data across all DB shards
+        // Each iteration of the below while loop adds a line to a new worker thread to evenly share the data across all
+        // DB shards
         for(json in this.dataAbsolutePaths_){
             val f = File(json)
             logger_.info("Counting number of lines in ${f.name}")
@@ -55,8 +42,8 @@ abstract class JsonFacilitator: Facilitator {
             var br: BufferedReader? = null
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
             var lineReadCounter = 0
-            var total_lines_read: Long = 0
-            var write_total_lines_read = 1
+            var totalLinesRead: Long = 0
+            var writeTotalLinesRead = 1
             var whichWorker = 0
             val linesList: ArrayList<ArrayList<String>> = ArrayList()
             for(i in 0 until Finals.DB_SHARD_NUM)
@@ -78,17 +65,17 @@ abstract class JsonFacilitator: Facilitator {
                     if(lineReadCounter >= dbDumpLimit){
                         letWorkersFly(linesList)
 
-                        total_lines_read += lineReadCounter
+                        totalLinesRead += lineReadCounter
                         lineReadCounter = 0
                         linesList.clear()
 
-                        if(write_total_lines_read % 25 == 0) {
-                            val readLines = total_lines_read.toDouble()
+                        if(writeTotalLinesRead % 25 == 0) {
+                            val readLines = totalLinesRead.toDouble()
                             val currentComplete = readLines / total_lines_in_file
                             val percentComplete = (currentComplete * 100).toInt()
                             logger_.info("$percentComplete% done ${f.name}")
                         }
-                        ++write_total_lines_read
+                        ++writeTotalLinesRead
 
                         // Give the linesList new ArrayLists to store next set of lines
                         for(j in 0 until Finals.DB_SHARD_NUM)
@@ -100,8 +87,8 @@ abstract class JsonFacilitator: Facilitator {
                 // There could be leftover json lines that don't get pushed due to not meeting the dbDumpLimit amount
                 // of lines. Start up the workers again and push the remaining lines
                 logger_.info("Launching final JSON push for ${f.name}")
-                total_lines_read += lineReadCounter
-                logger_.info("Total lines read ${numberFormat_.format(total_lines_read)} for ${f.name}")
+                totalLinesRead += lineReadCounter
+                logger_.info("Total lines read ${numberFormat_.format(totalLinesRead)} for ${f.name}")
                 letWorkersFly(linesList)
             }
             catch(e: IOException){

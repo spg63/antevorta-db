@@ -47,10 +47,36 @@ abstract class Facilitator {
     protected abstract fun createIndices()
     protected abstract fun dropIndices()
     protected abstract fun getDataAbsolutePathsForNewData(): List<String>
-    protected abstract fun pushDataIntoDBs()
+
+    abstract fun pushDataIntoDBs()
     // Creates a list of DataPushers (json, csv, other), passes a list of lines that pusher is supposed to parse
     // and push into the DB, starts each pusher in a thread, lets them work, joins them.
     protected abstract fun letWorkersFly(lines: List<List<String>>)
+
+    // Used by pushDataIntoDBs(), regardless of data type, to check if the function should continue.
+    // It will shortcirtuit pushData if the data already exists or START_FRESH is false and ADD_NEW_DATA is false
+    // NOTE: The idea really is the stuff going on in this function needs to be enforced across all sub
+    // Facilitators so this fucntion moves these important checks into the base Facilitator class
+    protected fun shouldFunctionReturnEarly(): Boolean {
+        // Early exit if we're not pushing data into the DBs
+        if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return true
+        if(this.dbAbsolutePaths_.isEmpty())
+            this.dbAbsolutePaths_ = getDBAbsolutePaths()
+
+        if(this.dataAbsolutePaths_.isEmpty()){
+            when{
+                Finals.START_FRESH -> this.dataAbsolutePaths_ = getDataFileAbsolutePaths()
+                Finals.ADD_NEW_DATA -> this.dataAbsolutePaths_ = getDataAbsolutePathsForNewData()
+                else -> logger_.logAndKill("Facilitator.shouldFunctionReturnEarly -- Not START_FRESH or ADD_NEW_DATA")
+            }
+        }
+
+        // Used for logging when adding new data to the DB shards
+        if(Finals.ADD_NEW_DATA)
+            this.dataAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
+
+        return false
+    }
 
     fun createDBs() {
         // Check if the DBs exist.

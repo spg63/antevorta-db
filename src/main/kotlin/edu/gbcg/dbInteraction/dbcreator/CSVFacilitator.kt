@@ -5,7 +5,12 @@
 
 package edu.gbcg.dbInteraction.dbcreator
 
+import org.apache.commons.csv.CSVFormat
+
 abstract class CSVFacilitator: Facilitator {
+    protected val parseFormat = CSVFormat.DEFAULT!!
+    protected val parser = null
+
     constructor(): super()
 
     override fun pushDataIntoDBs() {

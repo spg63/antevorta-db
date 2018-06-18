@@ -189,7 +189,7 @@ public class TSL extends Thread{
         try {
             itemsToLog.put(SHUTDOWN_REQ);
             // Force a pause of the main thread to give the logger thread a change to write all data to the file system
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }
         catch(InterruptedException e){
             throw new RuntimeException("ThreadSafeLogger.shutDown() -- Unexpected interruption");
@@ -204,7 +204,7 @@ public class TSL extends Thread{
         shuttingDown = true;
         try{
             itemsToLog.put(SHUTDOWN_REQ);
-            Thread.sleep(500);
+            Thread.sleep(1000);
             System.exit(6);
         }
         catch(InterruptedException e){

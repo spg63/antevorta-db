@@ -16,7 +16,7 @@ import kotlin.text.StringBuilder
 object RSMapperOutput{
     private val out = Out.get()
 
-    @JvmStatic fun printAllColumnsFromRSMappers(mappers: List<RSMapper>, columnNames: List<String>,
+    fun printAllColumnsFromRSMappers(mappers: List<RSMapper>, columnNames: List<String>,
                                                 dataTypes: List<String>) {
         if(mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
@@ -39,7 +39,7 @@ object RSMapperOutput{
     }
 
     @Suppress("SENSELESS_COMPARISON")
-    @JvmStatic fun RSMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String) {
+    fun RSMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String) {
         if(mappers == null || mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
             return

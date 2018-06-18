@@ -5,6 +5,8 @@
 
 package edu.gbcg.dbInteraction.dbcreator
 
+import edu.gbcg.configs.Finals
+
 abstract class DataPusher: Runnable {
     lateinit var DB: String
     lateinit var columns: List<String>

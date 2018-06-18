@@ -10,6 +10,7 @@ package edu.gbcg.runner
 import com.google.common.base.Stopwatch
 import edu.gbcg.client.AntevortaClient
 import edu.gbcg.configs.Finals
+import edu.gbcg.configs.RawDataLocator
 import edu.gbcg.configs.columnsAndKeys.RedditComs
 import edu.gbcg.configs.columnsAndKeys.RedditSubs
 import edu.gbcg.dbInteraction.dbSelector.RSMapperOutput
@@ -23,7 +24,11 @@ import edu.gbcg.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.gbcg.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.gbcg.utils.Out
 import edu.gbcg.utils.TSL
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
 import org.json.JSONObject
+import java.io.File
+import java.io.FileReader
 
 val logger_ = TSL.get()
 
@@ -35,6 +40,15 @@ fun main(args : Array<String>){
 
     if(Finals.isResearchMachine() && Finals.ADD_NEW_DATA)
         logger_.logAndKill("isResearchMachine() was true while trying to add new data")
+
+
+    val format = CSVFormat.DEFAULT
+    val parser = CSVParser.parse(FileReader(File(RawDataLocator.movielensLinkAbsolutePath())), format)
+    for(record in parser)
+        logger_.info("${record[0]},${record[1]}, ${record[2]}")
+
+
+    logger_.logAndKill("pause")
 
     val sw = Stopwatch.createStarted()
 

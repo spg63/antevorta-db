@@ -165,6 +165,7 @@ public class AntevortaClient {
 // ---------------------------------------------------------------------------------------------------------------------
 
     public static void main(String[] args){
+        /*
         // Table names for the 2 DBs
         final String redditComTable = "comment_attrs";
         final String redditSubTable = "submission_attrs";
@@ -214,6 +215,7 @@ public class AntevortaClient {
         // Print the RSMapper objects
         RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(), RedditSubs
                 .dataTypesForPrinting());
+                */
     }
 
 }
