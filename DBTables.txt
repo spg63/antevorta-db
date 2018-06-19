@@ -26,7 +26,15 @@ Hollywood:
             No indices
 
 
-         2nd table: movielens_movies    (movie.csv)
+        2nd table: genome_tags          (genome_tags.csv)
+            - Contains a tagid and the tag name. The tags are genres and other related words for movies
+            int     autoincrement       // primary
+            int     tagid               // The id of the genome tag
+            text    tag                 // The genome tag
+            No indices
+
+
+        3rd table: movielens_movies    (movie.csv)
             - Contains the list of movies in the movielens dataset, the movie title, and the most common genres
             associated with the movie
             int     autoincrement       // primary
@@ -38,7 +46,7 @@ Hollywood:
             no indices
 
 
-        3rd table: tmdb_credits         (tmdb_5000_credits.csv)
+        4th table: tmdb_credits         (tmdb_5000_credits.csv)
             - Contains the movieid, title of movie, and JSON for cast and crew of movies
             int     autoincrement       // primary
             int     tmdb_movieid        // The movie id found in the tmdb data          (select from links_table)
@@ -49,14 +57,6 @@ Hollywood:
             JSON    crew                // The entire crew from TMDB
             no indices
 
-
-        4th table: genome_tags          (genome_tags.csv)
-            - Contains a tagid and the tag name. The tags are genres and other related words for movies
-
-            int     autoincrement       // primary
-            int     tagid               // The id of the genome tag
-            text    tag                 // The genome tag
-            No indices
 
         5th table: genome_scores        (genome_scores.csv)
             - Contains 60 of the most popular movies in the movielens dataset, as well as a FP relevance score for every
