@@ -42,7 +42,9 @@ object Finals{
     // Reddit table names
     const val REDDIT_SUB_TABLE          = "submission_attrs"
     const val REDDIT_COM_TABLE          = "comment_attrs"
-    const val MOVIE_LENS_LINK_TABLE     = "links_table"
+    const val ML_LINK_TABLE             = "links_table"
+    const val ML_GENOME_TAGS_TABLE      = "genome_tags"
+    const val ML_GENOME_SCORES_TABLE    = "genome_scores"
 
     /* ---------- Server control ------------------------------------------------------------------------------------ */
     const val SERVER_SOCKET = 3383

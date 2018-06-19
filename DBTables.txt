@@ -1,0 +1,45 @@
+Reddit stuff:
+
+
+
+Hollywood:
+    - Movies
+        - These tables need to be created in a specific order due to foreign key constaints on some tables.
+        - All tables reside in the same DB shards.
+
+        1st table: links_table
+            - Contains the mapping between movielens_movieid, tmdb_movieid, and imdb_movieid. Multiple other tables need
+             to know this mapping as some data comes from movielens, some from tmdb, and there will be additional imdb
+             data. Multiple foreign keys, on non-primary key columsn, would be necessary so the subsequent tables will
+             instead reference this table during creation. Insertions are less efficient, selections are more efficient,
+              and storage requirements are less efficient.
+
+            int     autoincrement       // primary
+            int     tmdb_movieid        // The movie id found in the tmdb data
+            int     imdb_movieid        // The movie id found in the imdb data
+            int     movielens_movieid   // The movielens id from the movielens dataset
+            No indices
+
+
+        2nd table: genome_tags
+            - Contains a tagid and the tag name. The tags are genres and other related words for movies
+
+            int     autoincrement       // primary
+            int     tagid               // The id of the genome tag
+            text    tag                 // The genome tag
+            No indices
+
+        3rd table: genome_scores
+            - Contains 60 of the most popular movies in the movielens dataset, as well as a FP relevance score for every
+             genome tag in the dataset -- 1128 entries for each of the 60 movies
+
+             int    autoincrement       // primary
+             int    tmdb_movieid        // The movie id found in the tmdb data          (select from links_table)
+             int    imdb_movieid        // The movie id found in the imdb data          (select from links_table)
+             int    movielens_movieid   // The movielens id from the movielens dataset
+             int    tagid               // The id of the genome tag
+             real   relevance           // A FP val denoting how relevant a specific tag is to the movie, normalized 0-1
+             Index for relevance for potential future use to compute least relevant tags
+
+
+        4th table:

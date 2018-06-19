@@ -47,27 +47,6 @@ Movies Table:
     JSON    movie cast
     JSON    movie crew
 
-// The different "genre" tags that movielens came up with
-Genome_Tags Table:
-    int     autoincrement
-    int     tagid
-    text    tag
-
-// Assigns a score to each genre for each movie, basically how much a movie fits some genre
-Genome_Scores Table:
-    int     autoincrement
-    int     tmdb_movieid        // Get from links_table
-    int     imdb_movieid        // Get from links_table
-    int     movielens_movieid
-    int     tagid
-    real    relevance score
-
-Links_Table:
-    int     autoincrement
-    int     tmdb_movieid        // Point a foreign key to the movie entry?
-    int     imdb_movieid        // Currently unnecessary, but IMDB data may be used in the future
-    int     movielens_movieid   // Point a foreign key to the movie entry?
-
 // A table that holds each individual tag that a user put on a movie
 Individual_Tags_Table:
     int     autoincrement
@@ -75,6 +54,7 @@ Individual_Tags_Table:
     int     tmdb_movieid
     int     imdb_movieid
     int     movielens_movieid
+    int     tagid
     text    the tag
     int     timestamp --> Need to convert to unix from julian
 

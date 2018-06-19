@@ -18,7 +18,7 @@ class MovielensLinkFacilitator: AbstractMoviesFacilitator{
     override fun getDataKeysOfInterest()            = MovielensLink.CSVKeys()
     override fun getColumnNames()                   = MovielensLink.columnNames()
     override fun getDataTypes()                     = MovielensLink.dataTypes()
-    override fun getTableName()                     = Finals.MOVIE_LENS_LINK_TABLE
+    override fun getTableName()                     = Finals.ML_LINK_TABLE
     override fun getDataAbsolutePathsForNewData()   = RawDataLocator.getEmptyArrayList()
 
     override fun populateCSVWorkers(): List<CSVPusher> {
@@ -29,14 +29,10 @@ class MovielensLinkFacilitator: AbstractMoviesFacilitator{
     }
 
     override fun createIndices() {
-        createDBIndex("tmdb_movieid", "tmdb_index")
-        createDBIndex("imdb_movieid", "imdb_index")
-        createDBIndex("movielens_movieid", "lens_index")
+        logger_.warn("No indices to create for ${this.tableName_}")
     }
 
     override fun dropIndices() {
-        dropDBIndices("tmdb_index")
-        dropDBIndices("imdb_index")
-        dropDBIndices("lens_index")
+        logger_.warn("No indices to drop for ${this.tableName_}")
     }
 }
