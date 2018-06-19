@@ -40,11 +40,16 @@ object Finals{
     // There are 6 available HDDs for data storage on research machine, use all of them
     const val DB_SHARD_NUM = 6
     // Reddit table names
-    const val REDDIT_SUB_TABLE          = "submission_attrs"
-    const val REDDIT_COM_TABLE          = "comment_attrs"
-    const val ML_LINK_TABLE             = "links_table"
-    const val ML_GENOME_TAGS_TABLE      = "genome_tags"
-    const val ML_GENOME_SCORES_TABLE    = "genome_scores"
+    const val REDDIT_SUB_TABLE              = "submission_attrs"
+    const val REDDIT_COM_TABLE              = "comment_attrs"
+    const val ML_LINK_TABLE                 = "links_table"
+    const val ML_GENOME_TAGS_TABLE          = "genome_tags"
+    const val ML_GENOME_SCORES_TABLE        = "genome_scores"
+    const val ML_INDIVIUDAL_TAGS_TABLE      = "individual_tags"
+    const val ML_INDIVIDUAL_RATING_TABLE    = "individual_ratings"
+    const val TMDB_CREDITS_TABLE            = "tmdb_credits"
+    const val MOVIES_TABLE                  = "movies"
+
 
     /* ---------- Server control ------------------------------------------------------------------------------------ */
     const val SERVER_SOCKET = 3383
