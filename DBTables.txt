@@ -1,6 +1,86 @@
 Reddit stuff:
+    - Comments
+        comment_attrs:
+        int     autoincrement       // primary
+        text    author              // Author of comment
+        text    author_flair_text   // Flair text, if author has it
+        text    body                // The content of the comment
+        int [0] can_gild            // If the comment is gildable
+        int [0] controversial_score // Is the comment controversial
+        int     created_dt          // Date/time for comment posting
+        text    distinguised        // Not sure
+        int [0] been_edited         // True when the comment has been modified from original posting
+        int [0] giled               // True if comment has been gilded
+        text    post_id             // The hexadecimal id of the comment
+        int [0] is_submitter        // True when the author also submitted the post
+        text    link_id             // Hard link to the comment
+        text    parent_id           // hexadecimal id of the parent comment (or post, if top-level comment)
+        text    permalink           // HTML link to comment
+        int     scraped_dt          // Date/time for comment scraping
+        int [0] score               // Score of the comment
+        int [0] is_stickied         // True if comment has been stickeied
+        text    subreddit_name      // Name of subreddit the comment was posted in
+        text    subreddit_id        // hexadecimal id of the subreddit
+        text    subreddit_type      // Not sure
+        int     intg_exp_1          // Built-in int expansion
+        real    real_exp_1          // Built-in real expansion
+        text    text_exp_1          // Built-in text expansion
+        text    text_exp_2          // See above
+        text    text_exp_3          // See above
+        text    text_exp_4          // See above
 
+    - Submissions:
+        submission_attrs:
+        int     autoincrement       // primary
+        int [0] archived            // True if post has been archived
+        text    author              // Author of post
+        int [0] brand_safe          // True if it's okay for all advertisiers
+        int [0] content_mode        // True if content mode -- dunno what that is though
+        int     created_dt          // Date/time for submission posting
+        text    distinguised        // Not sure
+        text    host_domain         // If it's not reddit content, domain of hosting website
+        int [0] edited              // True if submission has been edited
+        int     gilded              // Gilding counter
+        int [0] hidden              // True if hidden
+        text    post_id             // hexa post id
+        int [0] is_self_post        // Text only, no link
+        int [0] is_video_post       // True when a video
+        text    link_flair_text     // User flair
+        int [0] is_locked           // True when locked
+        int     num_comments        // Post comment counter
+        text    media_author_name   // Name of author if external media
+        text    media_provider_name // Name of external provider
+        text    media_title         // Title of external media
+        text    media_type          // Type of external media
+        int     num_crossposts      // Number of crossposts to different subreddits
+        int [0] over_18             // True if mature content
+        text    permalink           // Permenant HTML link to post
+        int [0] is_pinned           // True if a pinned post
+        int     scraped_dt          // Date/time for submission scraping
+        int     score               // Numeric score for submission at time of scraping
+        text    selftext            // Body of post if it's selftext
+        int [0] is_stickied         // True if stickied
+        text    subreddit_name      // Name of the subreddit submission was posted in
+        text    subreddit_id        // Hexa subreddit id
+        text    subreddit_type      // Sub type
+        text    title               // Title of the posting
+        text    link_url            // URL to external link
+        int     intg_exp_1          // Built-in int expansion
+        int     intg_exp_2          // See above
+        int     intg_exp_3          // See above
+        real    real_exp_1          // Built-in real expansion
+        real    real_exp_2          // See above
+        text    text_exp_1          // See above
+        text    text_exp_2          // See above
+        text    text_exp_3          // See above
+        text    text_exp_4          // See above
+        text    text_exp_5          // See above
+        text    text_exp_6          // See above
+        text    text_exp_7          // See above
+        text    text_exp_8          // See above
+        text    text_exp_9          // See above
 
+------------------------------------------------------------------------------------------------------------------------
 
 Hollywood:
     - Movies
@@ -134,4 +214,4 @@ Hollywood:
             JSON    crew                    // The crew involved                    (select from tmdb_credits)
 
 
-
+------------------------------------------------------------------------------------------------------------------------
