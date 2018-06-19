@@ -113,26 +113,11 @@ abstract class Facilitator {
             logger_.logAndKill("createDBs; somehow the DBs exist and don't exist. What's that cat joke?")
 
         createNewTable()
-        /*
-        // Create the table schema
-        val sb = StringBuilder()
-        sb.append("create table if not exists ${this.tableName_}(")
-        for(i in 0 until this.columnNames_.size){
-            sb.append(this.columnNames_[i])
-            sb.append(this.dataTypes_[i])
-        }
-        sb.append(");")
-        val sql = sb.toString()
-
-        logger_.info("Writing table to DB shards")
-        this.dbAbsolutePaths_.forEach{ DBCommon.insert(it, sql) }
-        logger_.info("DBs have been created")
-        */
     }
 
     fun createNewTableInExistingDBs(){
-        if(!Finals.ADD_NEW_TABLE)
-            logger_.logAndKill("Called createNewTableInExistingDBs when Finals.ADD_NEW_TABLE was false")
+        if(!Finals.START_FRESH)
+            logger_.logAndKill("Called createNewTableInExistingDBs when Finals.START_FRESH was false")
 
         val dbs_exist = this.dbAbsolutePaths_.size == Finals.DB_SHARD_NUM
         if(!dbs_exist)

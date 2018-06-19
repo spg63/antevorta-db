@@ -23,7 +23,6 @@ object Finals{
     // Simple check to make sure we really want to add new data to the DBs
     const val ADD_NEW_DATA = false
     // Used when adding a table to an existing DB
-    const val ADD_NEW_TABLE = false
 
     /* ---------- Database control ---------------------------------------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"

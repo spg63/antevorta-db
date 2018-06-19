@@ -20,6 +20,7 @@ import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import edu.antevorta.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevorta.dbInteraction.dbcreator.Facilitator
+import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensGenomeTagsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensLinkFacilitator
 import edu.antevorta.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
@@ -47,7 +48,7 @@ fun main(args : Array<String>){
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    doMovieLensLink()
+    createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
@@ -61,11 +62,18 @@ fun main(args : Array<String>){
     logger_.shutDown()
 }
 
-fun doMovieLensLink(){
-    if(Finals.START_FRESH){
-        buildDBShards(MovielensLinkFacilitator())
+fun createHollywoodDB(){
+    if(!Finals.START_FRESH)
         return
-    }
+
+    // Create the DB, and the first table in the DB (links_table)
+    buildDBShards(MovielensLinkFacilitator())
+
+    /* ---------- Now start adding tables to the DB shards ---------------------------------------------------------- */
+
+    // 2nd table should be the genome_tags table
+    addTableToShards(MovielensGenomeTagsFacilitator())
+
 }
 
 fun doSubs(){
@@ -126,6 +134,11 @@ fun doComs(){
 
 fun buildDBShards(fac: Facilitator){
     fac.createDBs()
+    fac.pushDataIntoDBs()
+}
+
+fun addTableToShards(fac: Facilitator){
+    fac.createNewTableInExistingDBs()
     fac.pushDataIntoDBs()
 }
 
