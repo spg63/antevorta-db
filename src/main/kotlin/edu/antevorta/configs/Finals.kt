@@ -43,11 +43,12 @@ object Finals{
     const val REDDIT_SUB_TABLE              = "submission_attrs"
     const val REDDIT_COM_TABLE              = "comment_attrs"
     const val ML_LINK_TABLE                 = "links_table"
+    const val ML_MOVIES_TABLE               = "movielens_movies"
+    const val TMDB_CREDITS_TABLE            = "tmdb_credits"
     const val ML_GENOME_TAGS_TABLE          = "genome_tags"
     const val ML_GENOME_SCORES_TABLE        = "genome_scores"
     const val ML_INDIVIUDAL_TAGS_TABLE      = "individual_tags"
     const val ML_INDIVIDUAL_RATING_TABLE    = "individual_ratings"
-    const val TMDB_CREDITS_TABLE            = "tmdb_credits"
     const val MOVIES_TABLE                  = "movies"
 
 
