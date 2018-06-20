@@ -5,6 +5,7 @@
 
 package edu.antevorta.dbInteraction.dbcreator
 
+import edu.antevorta.dbInteraction.DBCommon
 import edu.antevorta.utils.TSL
 import java.sql.Connection
 import java.sql.PreparedStatement

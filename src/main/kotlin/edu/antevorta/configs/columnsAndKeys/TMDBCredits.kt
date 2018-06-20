@@ -38,6 +38,12 @@ object TMDBCredits {
     )
 
     fun dataTypesForPrinting() = listOf(
-
+            "INT",
+            "INT",
+            "INT",
+            "INT",
+            "TEXT",
+            "JSON",
+            "JSON"
     )
 }

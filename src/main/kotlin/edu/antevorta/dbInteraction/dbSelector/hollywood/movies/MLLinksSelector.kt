@@ -50,7 +50,7 @@ class MLLinksSelector: Selector() {
         }
 
         if(res.size > 1){
-            logger_.err("Multiple results from $mlcol vslue of $mlID")
+            logger_.err("Multiple results from $mlcol value of $mlID")
             return Pair(-1, -1)
         }
 
@@ -60,6 +60,31 @@ class MLLinksSelector: Selector() {
         if(imdb_val == 0) imdb_val = -1
 
         return Pair(tmdb_val, imdb_val)
+    }
+
+    fun getIMDBandMLIDFromTMDBMovieID(tmdbID: Int): Pair<Int, Int>{
+        val dbsql = DBSelector()
+                .column(imdbcol)
+                .column(mlcol)
+                .from(this.tableName)
+                .where("$tmdbcol = $tmdbID")
+        val res = this.generalSelection(dbsql.sql())
+
+        if(res.isEmpty()){
+            logger_.err("Unable to locate values for $tmdbcol value of $tmdbID")
+            return Pair(-1, -1)
+        }
+
+        if(res.size > 1){
+            logger_.err("Multiple results from $tmdbcol value of $tmdbID")
+            return Pair(-1, -1)
+        }
+
+        var imdb_val = res[0].getInt(imdbcol)
+        if(imdb_val == 0) imdb_val = -1
+        var ml_val = res[0].getInt(mlcol)
+        if(ml_val == 0) ml_val = -1
+        return Pair(imdb_val, ml_val)
     }
 
     fun getIMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, imdbcol)

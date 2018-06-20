@@ -25,6 +25,7 @@ import edu.antevorta.dbInteraction.dbcreator.Facilitator
 import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensGenomeTagsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensLinkFacilitator
 import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensMoviesFacilitator
+import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.TMDBCreditsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.antevorta.utils.Out
@@ -78,6 +79,7 @@ fun createHollywoodDB(){
     // 2nd table should be the genome_tags table
     addTableToShards(MovielensGenomeTagsFacilitator())
     addTableToShards(MovielensMoviesFacilitator())
+    addTableToShards(TMDBCreditsFacilitator())
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
 }
