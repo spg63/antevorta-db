@@ -37,61 +37,38 @@ class MLLinksSelector: Selector() {
      * Get the tmdb_movieid and imdb_movieid values from a movielens_movieid value
      * @return Pair(TMDB_ID, IMDB_ID) or Pair(-1, -1) if values couldn't be located or otherwise errored
      */
-    fun getIMDBandTMDBFromMovielensMovieID(mlID: Int): Pair<Int, Int>{
-        val dbsql = DBSelector()
-                .column(tmdbcol)
-                .column(imdbcol)
-                .from(this.tableName)
-                .where("$mlcol = $mlID")
-        val res = this.generalSelection(dbsql.sql())
-        if(res.isEmpty()){
-            logger_.err("Unable to locate values for $mlcol value of $mlID")
-            return Pair(-1, -1)
-        }
-
-        if(res.size > 1){
-            logger_.err("Multiple results from $mlcol value of $mlID")
-            return Pair(-1, -1)
-        }
-
-        var tmdb_val = res[0].getInt(tmdbcol)
-        if(tmdb_val == 0) tmdb_val = -1
-        var imdb_val = res[0].getInt(imdbcol)
-        if(imdb_val == 0) imdb_val = -1
-
-        return Pair(tmdb_val, imdb_val)
-    }
-
-    fun getIMDBandMLIDFromTMDBMovieID(tmdbID: Int): Pair<Int, Int>{
-        val dbsql = DBSelector()
-                .column(imdbcol)
-                .column(mlcol)
-                .from(this.tableName)
-                .where("$tmdbcol = $tmdbID")
-        val res = this.generalSelection(dbsql.sql())
-
-        if(res.isEmpty()){
-            logger_.err("Unable to locate values for $tmdbcol value of $tmdbID")
-            return Pair(-1, -1)
-        }
-
-        if(res.size > 1){
-            logger_.err("Multiple results from $tmdbcol value of $tmdbID")
-            return Pair(-1, -1)
-        }
-
-        var imdb_val = res[0].getInt(imdbcol)
-        if(imdb_val == 0) imdb_val = -1
-        var ml_val = res[0].getInt(mlcol)
-        if(ml_val == 0) ml_val = -1
-        return Pair(imdb_val, ml_val)
-    }
+    fun getIMDBandTMDBFromMovielensMovieID(mlID: Int) = selectBothIDs(tmdbcol, imdbcol, mlcol, mlID)
+    fun getIMDBandMLIDFromTMDBMovieID(tmdbID: Int) = selectBothIDs(imdbcol, mlcol, tmdbcol, tmdbID)
 
     fun getIMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, imdbcol)
     fun getTMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, tmdbcol)
     fun getMLMovieIDFromIMDBMovieID(imdbID: Int) = selectValFromSpecificCol(imdbcol, imdbID, mlcol)
     fun getMLMovieIDFromTMDBMovieID(tmdbID: Int) = selectValFromSpecificCol(tmdbcol, tmdbID, mlcol)
 
+    private fun selectBothIDs(firstCol: String, secondCol: String, fromCol: String, fromColID: Int): Pair<Int, Int>{
+        val dbsql = DBSelector()
+                .column(firstCol)
+                .column(secondCol)
+                .from(this.tableName)
+                .where("$fromCol = $fromColID")
+        val res = this.generalSelection(dbsql.sql())
+        if(res.isEmpty()){
+            logger_.warn("Unable to locate values for $firstCol, $secondCol from $fromCol with value $fromColID")
+            return Pair(-1, -1)
+        }
+
+        if(res.size > 1){
+            logger_.err("Multiple results for $fromCol with value $fromColID")
+            return Pair(-1, -1)
+        }
+
+        var firstVal = res[0].getInt(firstCol)
+        if(firstVal == 0) firstVal = -1
+        var secondVal = res[0].getInt(secondCol)
+        if(secondVal == 0) secondVal = -1
+
+        return Pair(firstVal, secondVal)
+    }
 
     private fun selectValFromSpecificCol(selectCol: String, selectVal: Int, from: String): Int {
         val dbsql = DBSelector()
@@ -101,7 +78,7 @@ class MLLinksSelector: Selector() {
         val res = this.generalSelection(dbsql.sql())    // This should produce a single result, ONLY!
 
         if(res.isEmpty()) {
-            logger_.err("Unable to locate $from for $selectCol value of $selectVal")
+            logger_.warn("Unable to locate $from for $selectCol value of $selectVal")
             return -1
         }
 
@@ -112,5 +89,4 @@ class MLLinksSelector: Selector() {
         }
         return res[0].getInt(from)
     }
-
 }

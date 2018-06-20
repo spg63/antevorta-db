@@ -40,9 +40,6 @@ class TMDBCreditsPusher: CSVPusher {
                 val movieid = imdb_mlid_ids.second
                 val title = this.csvRecords[i][1]
 
-                println("cast: ${this.csvRecords[i][2]}")
-                System.exit(0)
-
                 val castJson = JSONObject().put("Cast", JSONArray(this.csvRecords[i][2].trim()))
                 val crewJson = JSONObject().put("Crew", JSONArray(this.csvRecords[i][3].trim()))
 

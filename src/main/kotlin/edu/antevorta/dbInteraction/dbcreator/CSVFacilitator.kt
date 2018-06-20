@@ -15,7 +15,7 @@ import java.io.FileReader
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 abstract class CSVFacilitator: Facilitator {
-    protected val parseFormat = CSVFormat.DEFAULT!!.withQuote(null)
+    protected var parseFormat = CSVFormat.DEFAULT!!.withQuote(null)
     protected var parser: CSVParser? = null
 
     constructor(): super()

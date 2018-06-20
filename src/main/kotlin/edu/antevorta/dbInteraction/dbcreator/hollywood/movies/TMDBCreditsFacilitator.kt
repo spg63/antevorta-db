@@ -9,9 +9,11 @@ import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
 import edu.antevorta.configs.columnsAndKeys.TMDBCredits
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
+import org.apache.commons.csv.CSVFormat
 
 class TMDBCreditsFacilitator: AbstractMoviesFacilitator {
-    constructor(): super()
+    // Reset the format for this dataset due to commas within the json data
+    constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.tmdbCreditsCSVAbsolutePath())
     override fun getDataKeysOfInterest()            = TMDBCredits.CSVKeys()
