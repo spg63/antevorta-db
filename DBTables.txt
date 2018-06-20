@@ -92,7 +92,7 @@ Hollywood:
             - Drop tmdb_credits
         - All tables reside in the same DB shards.
 
-        1st table: links_table          (link.csv)
+        [DONE] 1st table: links_table          (link.csv)
             - Contains the mapping between movielens_movieid, tmdb_movieid, and imdb_movieid. Multiple other tables need
              to know this mapping as some data comes from movielens, some from tmdb, and there will be additional imdb
              data. Multiple foreign keys, on non-primary key columsn, would be necessary so the subsequent tables will
@@ -106,7 +106,7 @@ Hollywood:
             No indices
 
 
-        2nd table: genome_tags          (genome_tags.csv)
+        [DONE] 2nd table: genome_tags          (genome_tags.csv)
             - Contains a tagid and the tag name. The tags are genres and other related words for movies
             int     autoincrement       // primary
             int     tagid               // The id of the genome tag
@@ -114,7 +114,7 @@ Hollywood:
             No indices
 
 
-        3rd table: movielens_movies    (movie.csv)
+        [DONE] 3rd table: movielens_movies    (movie.csv)
             - Contains the list of movies in the movielens dataset, the movie title, and the most common genres
             associated with the movie
             int     autoincrement       // primary

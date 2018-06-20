@@ -16,7 +16,7 @@ import edu.antevorta.dbInteraction.dbSelector.Selector
 class MLLinksSelector: Selector() {
     private val tmdbcol = "tmdb_movieid"
     private val imdbcol = "imdb_movieid"
-    private val mlcol   = "movielents_movieid"
+    private val mlcol   = "movielens_movieid"
 
     init {
         this.tableName = Finals.ML_LINK_TABLE
@@ -33,6 +33,35 @@ class MLLinksSelector: Selector() {
         return genericSelect(workers, SQLStatement)
     }
 
+    /**
+     * Get the tmdb_movieid and imdb_movieid values from a movielens_movieid value
+     * @return Pair(TMDB_ID, IMDB_ID) or Pair(-1, -1) if values couldn't be located or otherwise errored
+     */
+    fun getIMDBandTMDBFromMovielensMovieID(mlID: Int): Pair<Int, Int>{
+        val dbsql = DBSelector()
+                .column(tmdbcol)
+                .column(imdbcol)
+                .from(this.tableName)
+                .where("$mlcol = $mlID")
+        val res = this.generalSelection(dbsql.sql())
+        if(res.isEmpty()){
+            logger_.err("Unable to locate values for $mlcol value of $mlID")
+            return Pair(-1, -1)
+        }
+
+        if(res.size > 1){
+            logger_.err("Multiple results from $mlcol vslue of $mlID")
+            return Pair(-1, -1)
+        }
+
+        var tmdb_val = res[0].getInt(tmdbcol)
+        if(tmdb_val == 0) tmdb_val = -1
+        var imdb_val = res[0].getInt(imdbcol)
+        if(imdb_val == 0) imdb_val = -1
+
+        return Pair(tmdb_val, imdb_val)
+    }
+
     fun getIMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, imdbcol)
     fun getTMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, tmdbcol)
     fun getMLMovieIDFromIMDBMovieID(imdbID: Int) = selectValFromSpecificCol(imdbcol, imdbID, mlcol)
@@ -46,12 +75,17 @@ class MLLinksSelector: Selector() {
                 .where("$selectCol = $selectVal")
         val res = this.generalSelection(dbsql.sql())    // This should produce a single result, ONLY!
 
-        if(res.isEmpty())
-            logger_.logAndKill("Unable to locate $from for $selectCol value of $selectVal")
+        if(res.isEmpty()) {
+            logger_.err("Unable to locate $from for $selectCol value of $selectVal")
+            return -1
+        }
 
-        if(res.size > 1)
-            logger_.logAndKill("Multiple results for $from for $selectCol value of $selectVal")
 
+        if(res.size > 1) {
+            logger_.err("Multiple results for $from for $selectCol value of $selectVal")
+            return -1
+        }
         return res[0].getInt(from)
     }
+
 }

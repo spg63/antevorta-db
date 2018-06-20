@@ -325,8 +325,11 @@ abstract class Selector{
     protected fun verifyDBsExist(DBs: List<String>) {
         if(DBs.isEmpty())
             logger_.logAndKill("Selector.verifyDBsExist DBs was empty")
-        if(DBs.size != Finals.DB_SHARD_NUM)
+        if(DBs.size != Finals.DB_SHARD_NUM) {
+            logger_.err("Selector.verifyDBsExist DBs.size = ${DBs.size} | Finals.DB_SHARD_NUM = ${Finals.DB_SHARD_NUM}")
             logger_.logAndKill("Selector.verifyDBsExist DBs.size != Finals.DB_SHARD_NUM")
+
+        }
     }
 
     /*

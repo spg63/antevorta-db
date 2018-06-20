@@ -25,12 +25,14 @@ class MovielensGenomeTagsPusher: CSVPusher {
             ps = conn.prepareStatement(sql)
             conn.autoCommit = false
 
-            for(i in 1 until this.numRecords){
+            for(i in 0 until this.numRecords){
                 var key = 1
-                val tagID = this.csvRecords[i][0].toIntOrNull()
+
+                // If tagID returns null it's a broken record or header, just skip it
+                val tagID = this.csvRecords[i][0].toIntOrNull() ?: continue
                 val tagName = this.csvRecords[i][1]
 
-                ps.setInt(key++, tagID ?: -1)
+                ps.setInt(key++, tagID)
                 ps.setString(key, tagName)
 
                 ps.addBatch()

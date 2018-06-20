@@ -11,6 +11,7 @@ import edu.antevorta.configs.Finals
 import edu.antevorta.dbInteraction.TimeUtils
 import edu.antevorta.utils.FileUtils
 import edu.antevorta.utils.Out
+import org.json.JSONObject
 import kotlin.text.StringBuilder
 
 object RSMapperOutput{
@@ -28,6 +29,7 @@ object RSMapperOutput{
                 var outmap = when {
                     dataTypes[i] == "BOOL" -> mapper.getBoolean(columnNames[i]).toString()
                     dataTypes[i] == "INT" -> mapper.getLong(columnNames[i]).toString()
+                    dataTypes[i] == "JSON" -> JSONObject(mapper.getString(columnNames[i])).toString()
                     else -> mapper.getString(columnNames[i])
                 }
                 if(Finals.CREATED_DT == columnNames[i] || Finals.SCRAPED_DT == columnNames[i])
