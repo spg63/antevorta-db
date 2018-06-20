@@ -25,7 +25,7 @@ class MovielensLinkPusher: CSVPusher {
             ps = conn.prepareStatement(sql)
             conn.autoCommit = false
 
-            for(i in 1 until this.numRecords){
+            for(i in 0 until this.numRecords){
                 var key = 1
                 val movieID = this.csvRecords[i][0].trim().toIntOrNull()
                 val imdbID = this.csvRecords[i][1].trim().toIntOrNull()

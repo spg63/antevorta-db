@@ -20,7 +20,7 @@ object RedditComs {
 
 
     fun columnNames() = listOf(
-        "ID",               Finals.AUTHOR,      "author_flair_text",
+        Finals.ID,          Finals.AUTHOR,      "author_flair_text",
         Finals.BODY,        "can_gild",         "controversial_score",
         Finals.CREATED_DT,  "distinguished",    "been_edited",
         "gilded",           Finals.POST_ID,     "is_submitter",
@@ -32,7 +32,7 @@ object RedditComs {
     )
 
     fun columnsForPrinting() = listOf(
-        "ID",               Finals.AUTHOR,      "author_flair_text",
+        Finals.ID,          Finals.AUTHOR,      "author_flair_text",
         Finals.BODY,        "can_gild",         "controversial_score",
         Finals.CREATED_DT,  "distinguished",    "been_edited",
         "gilded",           Finals.POST_ID,     "is_submitter",

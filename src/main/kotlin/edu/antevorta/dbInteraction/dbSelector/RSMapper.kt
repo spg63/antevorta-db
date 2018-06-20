@@ -171,7 +171,7 @@ abstract class RSMapper {
     protected fun getItem(key: String): String {
         val res = this.map[key]
         if(res == null) {
-            logger_.err("RSMapper.getItem() No value for $key")
+            logger_.warn("RSMapper.getItem() No value for $key")
             return ""
         }
         return res

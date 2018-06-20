@@ -11,12 +11,14 @@ import com.google.common.base.Stopwatch
 import edu.antevorta.client.AntevortaClient
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
+import edu.antevorta.configs.columnsAndKeys.MovielensLink
 import edu.antevorta.configs.columnsAndKeys.RedditComs
 import edu.antevorta.configs.columnsAndKeys.RedditSubs
 import edu.antevorta.dbInteraction.dbSelector.RSMapperOutput
 import edu.antevorta.dbInteraction.dbSelector.BaseMapper
 import edu.antevorta.dbInteraction.dbSelector.DBSelector
 import edu.antevorta.dbInteraction.dbSelector.RSMapper
+import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevorta.dbInteraction.dbcreator.Facilitator
@@ -45,10 +47,11 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
+    hollywoodSelect()
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    createHollywoodDB()
+    //createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
@@ -74,6 +77,22 @@ fun createHollywoodDB(){
     // 2nd table should be the genome_tags table
     addTableToShards(MovielensGenomeTagsFacilitator())
 
+    TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
+}
+
+fun hollywoodSelect(){
+    val mlsel = MLLinksSelector()
+    val dbsql = DBSelector()
+            .column("tmdb_movieID")
+            .column("imdb_movieID")
+            .from(Finals.ML_LINK_TABLE)
+            .where("movielens_movieid = 1")
+    val res = mlsel.generalSelection(dbsql.sql())
+    for(result in res){
+        val tmdb = result.getInt("tmdb_movieid")
+        val imdb = result.getInt("imdb_movieid")
+        println("tmdb: $tmdb | imdb: $imdb")
+    }
 }
 
 fun doSubs(){

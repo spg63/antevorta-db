@@ -5,6 +5,8 @@
 
 package edu.antevorta.configs.columnsAndKeys
 
+import edu.antevorta.configs.Finals
+
 // Table = links_table
 object MovielensLink{
     fun CSVKeys() = listOf(
@@ -14,7 +16,7 @@ object MovielensLink{
     )
 
     fun columnNames() = listOf(
-            "ID",
+            Finals.ID,
             "tmdb_movieid",
             "imdb_movieid",
             "movielens_movieid"

@@ -5,6 +5,8 @@
 
 package edu.antevorta.configs.columnsAndKeys
 
+import edu.antevorta.configs.Finals
+
 object MovielensGenomeTags {
     fun CSVKeys() = listOf(
             "tagId",
@@ -12,7 +14,7 @@ object MovielensGenomeTags {
     )
 
     fun columnNames() = listOf(
-            "ID",
+            Finals.ID,
             "tagid",
             "tag"
     )

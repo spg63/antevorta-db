@@ -34,7 +34,7 @@ object RedditSubs {
     )
 
     fun columnNames() = listOf(
-        "ID",                   "archived",             Finals.AUTHOR,
+        Finals.ID,              "archived",             Finals.AUTHOR,
         "brand_safe",           "contest_mode",         Finals.CREATED_DT,
         "distinguished",        "host_domain",          "edited",
         "gilded",               "hidden",               Finals.POST_ID,
@@ -53,7 +53,7 @@ object RedditSubs {
     )
 
     fun columnsForPrinting() = listOf(
-        "ID",                   "archived",             Finals.AUTHOR,
+        Finals.ID,              "archived",             Finals.AUTHOR,
         "brand_safe",           "contest_mode",         Finals.CREATED_DT,
         "distinguished",        "host_domain",          "edited",
         "gilded",               "hidden",               Finals.POST_ID,

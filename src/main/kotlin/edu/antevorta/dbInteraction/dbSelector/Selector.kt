@@ -266,10 +266,16 @@ abstract class Selector{
         if(!SQLQuery.toLowerCase().contains("limit")) return results
 
         // If it hasn't been sorted yet, we need to sort it. Build an OrderBySelection and sort with ascending order
+        // using creating time if it exists, else sort by ID
         var sortedResults = results
         if(!this.hasBeenSorted){
             val orderBy = OrderBySelection()
-            orderBy.addColumn(Finals.CREATED_DT, true)
+
+            if(results[0].getString(Finals.CREATED_DT) != "")
+                orderBy.addColumn(Finals.CREATED_DT, true)
+            else
+                orderBy.addColumn(Finals.ID, true)
+
             sortedResults = doTheSort(results, orderBy)
         }
 
