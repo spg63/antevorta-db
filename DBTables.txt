@@ -126,15 +126,15 @@ Hollywood:
             no indices
 
 
-        4th table: tmdb_credits         (tmdb_5000_credits.csv)
+        [DONE] 4th table: tmdb_credits         (tmdb_5000_credits.csv)
             - Contains the movieid, title of movie, and JSON for cast and crew of movies
             int     autoincrement       // primary
             int     tmdb_movieid        // The movie id found in the tmdb data          (select from links_table)
             int     imdb_movieid        // The movie id found in the imdb data          (select from links_table)
             int     movielens_movieid   // The movielens id from the movielens dataset
             text    TMDB_title          // The title of the movie from TMDB
-            JSON    cast                // The entire cast from TMDB
-            JSON    crew                // The entire crew from TMDB
+            JSON    cast                // The entire cast from TMDB                    (convert to json object)
+            JSON    crew                // The entire crew from TMDB                    (convert to json object)
             no indices
 
 

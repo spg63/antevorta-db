@@ -71,6 +71,8 @@ fun createHollywoodDB(){
     if(!Finals.START_FRESH)
         return
 
+    // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
+
     // Create the DB, and the first table in the DB (links_table)
     buildDBShards(MovielensLinkFacilitator())
 
@@ -80,6 +82,7 @@ fun createHollywoodDB(){
     addTableToShards(MovielensGenomeTagsFacilitator())
     addTableToShards(MovielensMoviesFacilitator())
     addTableToShards(TMDBCreditsFacilitator())
+
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
 }
