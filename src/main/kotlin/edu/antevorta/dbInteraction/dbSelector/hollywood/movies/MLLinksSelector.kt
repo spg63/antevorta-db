@@ -85,9 +85,34 @@ class MLLinksSelector: Selector() {
         val thePair = Pair(firstVal, secondVal)
 
         // Values didn't exist in the memomap, add it to the map now
-        whichMemoMap(fromCol)[fromColID] = thePair
+        addToMemoMaps(fromCol, fromColID, firstVal, secondVal)
 
         return thePair
+    }
+
+    // Adds IDs to all maps based on a single selection
+    private fun addToMemoMaps(fromCol: String, fromColID: Int, firstVal: Int, secondVal: Int){
+        when(fromCol){
+            mlcol -> {
+                if(!mlMemoMap.contains(fromColID))      mlMemoMap[fromColID]    = Pair(firstVal, secondVal)
+                if(!imdbMemoMap.contains(firstVal))     imdbMemoMap[firstVal]   = Pair(secondVal, fromColID)
+                if(!tmdbMemoMap.contains(secondVal))    tmdbMemoMap[secondVal]  = Pair(firstVal, fromColID)
+            }
+
+            tmdbcol -> {
+                // tmdb, imdb, ml
+                if(!tmdbMemoMap.contains(fromColID))    tmdbMemoMap[fromColID]  = Pair(firstVal, secondVal)
+                if(!imdbMemoMap.contains(firstVal))     imdbMemoMap[firstVal]   = Pair(fromColID, secondVal)
+                if(!mlMemoMap.contains(secondVal))      mlMemoMap[secondVal]    = Pair(firstVal, fromColID)
+            }
+
+            imdbcol -> {
+                // imdb, tmdb, ml
+                if(!imdbMemoMap.contains(fromColID))    imdbMemoMap[fromColID]  = Pair(firstVal, secondVal)
+                if(!tmdbMemoMap.contains(firstVal))     tmdbMemoMap[firstVal]   = Pair(fromColID, secondVal)
+                if(!mlMemoMap.contains(secondVal))      mlMemoMap[secondVal]    = Pair(fromColID, firstVal)
+            }
+        }
     }
 
     private fun whichMemoMap(getFromColumn: String): MutableMap<Int, Pair<Int, Int>>{

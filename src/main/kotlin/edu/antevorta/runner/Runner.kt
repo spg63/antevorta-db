@@ -49,7 +49,6 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    //hollywoodSelect()
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
@@ -87,11 +86,6 @@ fun createHollywoodDB(){
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
 }
 
-fun hollywoodSelect(){
-    val mlsel = MLLinksSelector()
-    val tmdbID = mlsel.getTMDBMovieIDFromMovielensMovieID(1)
-    println("tmdbID: $tmdbID")
-}
 
 fun doSubs(){
     if(Finals.START_FRESH){
