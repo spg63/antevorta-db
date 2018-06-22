@@ -22,10 +22,7 @@ import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevorta.dbInteraction.dbcreator.Facilitator
-import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensGenomeTagsFacilitator
-import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensLinkFacilitator
-import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.MovielensMoviesFacilitator
-import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.TMDBCreditsFacilitator
+import edu.antevorta.dbInteraction.dbcreator.hollywood.movies.*
 import edu.antevorta.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.antevorta.utils.Out
@@ -56,6 +53,7 @@ fun main(args : Array<String>){
     //doComs()
     //pushNewSubs()
     //pushNewComs()
+    //hollywoodSelect()
 
     sw.stop()
 
@@ -64,6 +62,10 @@ fun main(args : Array<String>){
     logger_.info("Execution took " + out.timer_mins(sw))
 
     logger_.shutDown()
+}
+
+fun hollywoodSelect(){
+    return
 }
 
 fun createHollywoodDB(){
@@ -81,6 +83,7 @@ fun createHollywoodDB(){
     addTableToShards(MovielensGenomeTagsFacilitator())
     addTableToShards(MovielensMoviesFacilitator())
     addTableToShards(TMDBCreditsFacilitator())
+    addTableToShards(MovielensGenomeScoresFacilitator())
 
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")

@@ -86,11 +86,7 @@ abstract class DataPusher: Runnable {
                 logger_.exception(ex)
             }
         }
-        try{
-            conn!!.close()
-        }
-        catch(ex: SQLException){
-            logger_.logAndKill(ex)
-        }
+
+        DBCommon.disconnect(conn!!)     // Handles the try/catch nonsense
     }
 }

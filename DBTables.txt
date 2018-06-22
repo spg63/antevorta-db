@@ -138,7 +138,7 @@ Hollywood:
             no indices
 
 
-        5th table: genome_scores        (genome_scores.csv)
+        [DONE] 5th table: genome_scores        (genome_scores.csv)
             - Contains 60 of the most popular movies in the movielens dataset, as well as a FP relevance score for every
              genome tag in the dataset -- 1128 entries for each of the 60 movies
 
@@ -148,7 +148,7 @@ Hollywood:
              int    movielens_movieid       // The movielens id from the movielens dataset
              int    tagid                   // The id of the genome tag
              real   relevance               // A FP val denoting how relevant a specific tag is to the movie, normalized 0-1
-             Index for relevance for potential future use to compute least relevant tags
+             Index for relevance for potential future use to compute least relevant tags and tagid
 
 
         6th table: individual_tags      (tag.csv)
@@ -162,7 +162,7 @@ Hollywood:
             int     tagid                   // The numeric id for the tag                   (select from genome_tags)
             text    tag                     // The tag, as a string
             int     timestamp               // Unix time stamp                              (convert from julian to unix)
-            Indices on 3 movieid columns, tag, and timestamp
+            Indices on tag, and timestamp
 
 
         7th table: individual_ratings   (rating.csv)
