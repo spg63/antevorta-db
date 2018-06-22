@@ -151,7 +151,7 @@ Hollywood:
              Indices for relevance for potential future use to compute least relevant tags, and tagid
 
 
-        6th table: individual_tags      (tag.csv)
+        [DONE] 6th table: individual_tags      (tag.csv)
             - Contains the user who applied a tag to a movie and a corresponding datetime stamp
 
             int     autoincrement           // primary
@@ -211,7 +211,7 @@ Hollywood:
             int     movielens_vote_count    // Total votes cast from movielens dataset
             JSON    cast                    // The actors in the movie                      (select from tmdb_credits)
             JSON    crew                    // The crew involved                            (select from tmdb_credits)
-            Indices on budget, original_language, original_title, tmdb_populatiry, release_date, revenue, runtime, TMDB_title,
+            Indices on budget, original_language, original_title, tmdb_popularity, release_date, revenue, runtime, TMDB_title,
             movielens_title, tmdb_vote_average, movielens_vote_average, tmdb_vote_count, movielens_vote_count
 
 

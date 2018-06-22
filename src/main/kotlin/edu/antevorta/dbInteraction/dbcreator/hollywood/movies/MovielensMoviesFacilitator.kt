@@ -7,7 +7,7 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.MovielensMovies
+import edu.antevorta.dbInteraction.columnsAndKeys.MovielensMovies
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")

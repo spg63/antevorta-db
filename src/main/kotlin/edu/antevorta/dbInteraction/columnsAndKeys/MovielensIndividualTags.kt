@@ -3,15 +3,16 @@
  * License: MIT
  */
 
-package edu.antevorta.configs.columnsAndKeys
+package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 
-object MovielensMovies {
+object MovielensIndividualTags {
     fun CSVKeys() = listOf(
-            "movieID",
-            "title",
-            "genres"
+            "userId",
+            "movieId",
+            "tag",
+            "timestamp"
     )
 
     fun columnNames() = listOf(
@@ -19,8 +20,10 @@ object MovielensMovies {
             "tmdb_movieid",
             "imdb_movieid",
             "movielens_movieid",
-            "movielens_title",
-            "genres"
+            "userid",
+            "tagid",
+            "tag",
+            "timestamp"
     )
 
     fun columnsForPrinting() = columnNames()
@@ -30,8 +33,10 @@ object MovielensMovies {
             " INTEGER,",
             " INTEGER,",
             " INTEGER,",
+            " INTEGER,",
+            " INTEGER,",
             " TEXT,",
-            " JSON"
+            " INTEGER"
     )
 
     fun dataTypesForPrinting() = listOf(
@@ -39,7 +44,9 @@ object MovielensMovies {
             "INT",
             "INT",
             "INT",
+            "INT",
+            "INT",
             "TEXT",
-            "JSON"
+            "INT"
     )
 }

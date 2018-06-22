@@ -22,6 +22,7 @@ public class TSL extends Thread{
     public static boolean LOG_INFO = true;
     public static boolean LOG_WARN = true;
     public static boolean LOG_TO_CONSOLE = true;
+    public static boolean REWRITE_LOG_FILE = true;
 
     private String SHUTDOWN_REQ = null;
     private volatile boolean shuttingDown, loggerTerminated;
@@ -67,9 +68,16 @@ public class TSL extends Thread{
         try{
             String item;
             try{
-                pw = new PrintWriter(
-                        new BufferedWriter(
-                                new FileWriter("logs/tslogs_"+dt+".txt", true)));
+                if(!REWRITE_LOG_FILE) {
+                    pw = new PrintWriter(
+                            new BufferedWriter(
+                                    new FileWriter("logs/tslogs_" + dt + ".txt", true)));
+                }
+                else{
+                    pw = new PrintWriter(
+                            new BufferedWriter(
+                                    new FileWriter("logs/tslog.log")));
+                }
             }
             catch(IOException e){
                 out.writeln_err("*** ThreadSafeLogger IOException");

@@ -7,7 +7,7 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.TMDBCredits
+import edu.antevorta.dbInteraction.columnsAndKeys.TMDBCredits
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVFormat
 

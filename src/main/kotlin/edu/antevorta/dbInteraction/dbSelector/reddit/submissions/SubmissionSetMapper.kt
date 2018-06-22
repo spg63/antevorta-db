@@ -5,7 +5,7 @@
 
 package edu.antevorta.dbInteraction.dbSelector.reddit.submissions
 
-import edu.antevorta.configs.columnsAndKeys.RedditSubs
+import edu.antevorta.dbInteraction.columnsAndKeys.RedditSubs
 import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import org.json.JSONObject
 import java.sql.ResultSet

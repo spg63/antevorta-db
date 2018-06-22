@@ -7,16 +7,18 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.MovielensIndividualTags
+import edu.antevorta.dbInteraction.columnsAndKeys.MovielensIndividualTags
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
+import org.apache.commons.csv.CSVFormat
 
 class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
+    constructor(): super() //{ this.parseFormat = CSVFormat.DEFAULT }
+
     private val userIDX = "individual_tags_userid_idx"
     private val tagIDIDX = "individual_tags_tagid_idx"
     private val tagIDX = "individual_tags_tag_idx"
     private val timeIDX = "individual_tags_time_idx"
 
-    constructor(): super()
 
     override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensTagsAbsolutePath())
     override fun getDataKeysOfInterest() = MovielensIndividualTags.CSVKeys()

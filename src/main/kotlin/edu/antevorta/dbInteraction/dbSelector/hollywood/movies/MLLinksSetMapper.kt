@@ -5,7 +5,7 @@
 
 package edu.antevorta.dbInteraction.dbSelector.hollywood.movies
 
-import edu.antevorta.configs.columnsAndKeys.MovielensLink
+import edu.antevorta.dbInteraction.columnsAndKeys.MovielensLink
 import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import org.json.JSONObject
 import java.sql.ResultSet

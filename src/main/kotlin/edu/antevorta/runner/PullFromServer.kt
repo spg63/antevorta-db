@@ -7,8 +7,8 @@ package edu.antevorta.runner
 
 import edu.antevorta.client.AntevortaClient
 import edu.antevorta.configs.Finals
-import edu.antevorta.configs.columnsAndKeys.RedditComs
-import edu.antevorta.configs.columnsAndKeys.RedditSubs
+import edu.antevorta.dbInteraction.columnsAndKeys.RedditComs
+import edu.antevorta.dbInteraction.columnsAndKeys.RedditSubs
 import edu.antevorta.dbInteraction.dbSelector.BaseMapper
 import edu.antevorta.dbInteraction.dbSelector.DBSelector
 import edu.antevorta.dbInteraction.dbSelector.RSMapper

@@ -5,6 +5,7 @@
 
 package edu.antevorta.dbInteraction
 
+import edu.antevorta.utils.TSL
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -137,14 +138,20 @@ object TimeUtils{
         val ymd = parts[0].split("-")
         val hms = parts[1].split(":")
 
-        val year = ymd[0].toInt()
-        val month = ymd[1].toInt()
-        val day = ymd[2].toInt()
-        val hour = hms[0].toInt()
-        val minute = hms[1].toInt()
-        val second = hms[2].toInt()
+        return try {
+            val year = ymd[0].toInt()
+            val month = ymd[1].toInt()
+            val day = ymd[2].toInt()
+            val hour = hms[0].toInt()
+            val minute = hms[1].toInt()
+            val second = hms[2].toInt()
 
-        return LocalDateTime.of(year, month, day, hour, minute, second)
+            LocalDateTime.of(year, month, day, hour, minute, second)
+        }
+        catch(e: NumberFormatException){
+            TSL.get().exception(e)
+            LocalDateTime.of(2000, 1, 1, 0, 0, 0)
+        }
     }
 
     private fun getStringFromValueWithZeroWhereNecessary(value: Int): String {

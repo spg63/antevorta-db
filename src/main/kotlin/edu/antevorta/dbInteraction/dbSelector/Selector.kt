@@ -263,6 +263,7 @@ abstract class Selector{
      */
     private fun handleLimit(SQLQuery: String, results: List<RSMapper>): List<RSMapper> {
         // If the query doesn't contain the limit command just return the results
+        if(results.isEmpty()) return results
         if(!SQLQuery.toLowerCase().contains("limit")) return results
 
         // If it hasn't been sorted yet, we need to sort it. Build an OrderBySelection and sort with ascending order

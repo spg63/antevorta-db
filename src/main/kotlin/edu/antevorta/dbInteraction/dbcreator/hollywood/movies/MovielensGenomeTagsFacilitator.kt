@@ -7,14 +7,14 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.MovielensGenomeTags
+import edu.antevorta.dbInteraction.columnsAndKeys.MovielensGenomeTags
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
+import org.apache.commons.csv.CSVFormat
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class MovielensGenomeTagsFacilitator: AbstractMoviesFacilitator {
+    constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
     private val tagsIDX = "genome_tags_tag_idx"
-
-    constructor(): super()
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensGenomeTagsAbsolutePath())
     override fun getDataKeysOfInterest()            = MovielensGenomeTags.CSVKeys()

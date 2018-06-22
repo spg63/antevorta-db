@@ -3,7 +3,7 @@
  * License: MIT
  */
 
-package edu.antevorta.configs.columnsAndKeys
+package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 

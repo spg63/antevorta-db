@@ -7,7 +7,7 @@ package edu.antevorta.dbInteraction.dbSelector.reddit.comments
 
 import edu.antevorta.configs.DBLocator
 import edu.antevorta.configs.Finals
-import edu.antevorta.configs.columnsAndKeys.RedditComs
+import edu.antevorta.dbInteraction.columnsAndKeys.RedditComs
 import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import edu.antevorta.dbInteraction.dbSelector.SelectionWorker
 import edu.antevorta.dbInteraction.dbSelector.Selector

@@ -3,50 +3,40 @@
  * License: MIT
  */
 
-package edu.antevorta.configs.columnsAndKeys
+package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 
-object MovielensIndividualTags {
+// Table = links_table
+object MovielensLink{
     fun CSVKeys() = listOf(
-            "userId",
             "movieId",
-            "tag",
-            "timestamp"
+            "imdbId",
+            "tmdbId"
     )
 
     fun columnNames() = listOf(
             Finals.ID,
             "tmdb_movieid",
             "imdb_movieid",
-            "movielens_movieid",
-            "userid",
-            "tagid",
-            "tag",
-            "timestamp"
+            "movielens_movieid"
     )
 
+    // Not eliminating any columns when printing objects from this table
     fun columnsForPrinting() = columnNames()
 
     fun dataTypes() = listOf(
             " INTEGER PRIMARY KEY AUTOINCREMENT,",
             " INTEGER,",
             " INTEGER,",
-            " INTEGER,",
-            " INTEGER,",
-            " INTEGER,",
-            " TEXT,",
             " INTEGER"
     )
 
+    // Not eliminating any columns when printing objects from this table
     fun dataTypesForPrinting() = listOf(
             "INT",
             "INT",
             "INT",
-            "INT",
-            "INT",
-            "INT",
-            "TEXT",
             "INT"
     )
 }

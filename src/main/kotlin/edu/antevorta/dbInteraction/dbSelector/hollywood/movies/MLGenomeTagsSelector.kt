@@ -7,7 +7,7 @@ package edu.antevorta.dbInteraction.dbSelector.hollywood.movies
 
 import edu.antevorta.configs.DBLocator
 import edu.antevorta.configs.Finals
-import edu.antevorta.configs.columnsAndKeys.MovielensGenomeTags
+import edu.antevorta.dbInteraction.columnsAndKeys.MovielensGenomeTags
 import edu.antevorta.dbInteraction.dbSelector.DBSelector
 import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import edu.antevorta.dbInteraction.dbSelector.SelectionWorker
@@ -49,7 +49,7 @@ class MLGenomeTagsSelector: Selector() {
         val dbsql = DBSelector()
                 .column(tagidcol)
                 .from(this.tableName)
-                .where("$tagcol like '%$tag%'")
+                .where("$tagcol = '$tag'")
 
         val res = this.generalSelection(dbsql.sql())
 

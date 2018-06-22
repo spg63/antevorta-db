@@ -40,7 +40,7 @@ class MovielensIndividualTagsPusher: CSVPusher {
                 val imdb_tmdb_ids = linksSelector.getIMDBandTMDBFromMovielensMovieID(mlmid)
                 val imdbid = imdb_tmdb_ids.first
                 val tmdbid = imdb_tmdb_ids.second
-                val tagtext = this.csvRecords[i][2]
+                val tagtext = this.csvRecords[i][2].trim().replace("'", "").replace("\"", "")
 
                 // Get the tagid from the genome_tags table
                 val tagid = tagIDSelector.getTagIDFromTagText(tagtext)

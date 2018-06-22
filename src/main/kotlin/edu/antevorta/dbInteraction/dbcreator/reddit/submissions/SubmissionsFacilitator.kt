@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.dbcreator.reddit.submissions
 import edu.antevorta.configs.DBLocator
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.RedditSubs
+import edu.antevorta.dbInteraction.columnsAndKeys.RedditSubs
 import edu.antevorta.dbInteraction.dbcreator.JsonFacilitator
 import edu.antevorta.dbInteraction.dbcreator.JsonPusher
 

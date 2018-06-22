@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.dbcreator.reddit.comments
 import edu.antevorta.configs.DBLocator
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.RedditComs
+import edu.antevorta.dbInteraction.columnsAndKeys.RedditComs
 import edu.antevorta.dbInteraction.dbcreator.JsonFacilitator
 import edu.antevorta.dbInteraction.dbcreator.JsonPusher
 

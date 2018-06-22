@@ -5,18 +5,11 @@
 
 package edu.antevorta.utils.client;
 
-import edu.antevorta.configs.columnsAndKeys.RedditSubs;
-import edu.antevorta.dbInteraction.dbSelector.RSMapperOutput;
-import edu.antevorta.dbInteraction.dbSelector.BaseMapper;
-import edu.antevorta.dbInteraction.dbSelector.RSMapper;
-import edu.antevorta.dbInteraction.dbSelector.DBSelector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("ALL")
 public class AntevortaClient {

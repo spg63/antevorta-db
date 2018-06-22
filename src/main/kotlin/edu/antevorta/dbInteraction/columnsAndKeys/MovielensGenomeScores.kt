@@ -3,16 +3,15 @@
  * License: MIT
  */
 
-package edu.antevorta.configs.columnsAndKeys
+package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 
-object TMDBCredits {
+object MovielensGenomeScores {
     fun CSVKeys() = listOf(
-            "movie_id",
-            "title",
-            "cast",
-            "crew"
+            "movieId",
+            "tagId",
+            "relevance"
     )
 
     fun columnNames() = listOf(
@@ -20,9 +19,8 @@ object TMDBCredits {
             "tmdb_movieid",
             "imdb_movieid",
             "movielens_movieid",
-            "TMDB_title",
-            "cast",
-            "crew"
+            "tagid",
+            "relevance"
     )
 
     fun columnsForPrinting() = columnNames()
@@ -32,9 +30,8 @@ object TMDBCredits {
             " INTEGER,",
             " INTEGER,",
             " INTEGER,",
-            " TEXT,",
-            " JSON,",
-            " JSON"
+            " INTEGER,",
+            " REAL"
     )
 
     fun dataTypesForPrinting() = listOf(
@@ -42,8 +39,8 @@ object TMDBCredits {
             "INT",
             "INT",
             "INT",
-            "TEXT",
-            "JSON",
-            "JSON"
+            "INT",
+            "REAL"
     )
+
 }

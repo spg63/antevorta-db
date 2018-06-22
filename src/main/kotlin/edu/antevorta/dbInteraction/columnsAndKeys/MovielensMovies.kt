@@ -3,15 +3,15 @@
  * License: MIT
  */
 
-package edu.antevorta.configs.columnsAndKeys
+package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 
-object MovielensGenomeScores {
+object MovielensMovies {
     fun CSVKeys() = listOf(
-            "movieId",
-            "tagId",
-            "relevance"
+            "movieID",
+            "title",
+            "genres"
     )
 
     fun columnNames() = listOf(
@@ -19,8 +19,8 @@ object MovielensGenomeScores {
             "tmdb_movieid",
             "imdb_movieid",
             "movielens_movieid",
-            "tagid",
-            "relevance"
+            "movielens_title",
+            "genres"
     )
 
     fun columnsForPrinting() = columnNames()
@@ -30,8 +30,8 @@ object MovielensGenomeScores {
             " INTEGER,",
             " INTEGER,",
             " INTEGER,",
-            " INTEGER,",
-            " REAL"
+            " TEXT,",
+            " JSON"
     )
 
     fun dataTypesForPrinting() = listOf(
@@ -39,8 +39,7 @@ object MovielensGenomeScores {
             "INT",
             "INT",
             "INT",
-            "INT",
-            "REAL"
+            "TEXT",
+            "JSON"
     )
-
 }
