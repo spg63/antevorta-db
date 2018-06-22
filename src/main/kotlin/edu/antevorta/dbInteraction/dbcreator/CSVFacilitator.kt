@@ -66,7 +66,7 @@ abstract class CSVFacilitator: Facilitator {
                             val readLines = totalLinesRead.toDouble()
                             val currentComplete = readLines / totalLinesInFile
                             val percentComplete = (currentComplete * 100).toInt()
-                            logger_.info("$percentComplete done ${f.name}")
+                            logger_.info("$percentComplete% done ${f.name}")
                         }
                         ++writeTotalLinesRead
 

@@ -152,7 +152,7 @@ abstract class Facilitator {
         conns.forEach{ DBCommon.disconnect(it) }
     }
 
-    protected fun dropDBIndices(indexName: String){
+    protected fun dropDBIndex(indexName: String){
         logger_.info("Dropping $indexName from ${this.tableName_}")
         // Get a connection to each DB shard
         val conns = ArrayList<Connection>()

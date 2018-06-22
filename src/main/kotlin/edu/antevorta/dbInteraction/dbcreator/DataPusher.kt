@@ -15,7 +15,7 @@ abstract class DataPusher: Runnable {
     lateinit var DB: String
     lateinit var columns: List<String>
     lateinit var tableName: String
-    val logger_ = TSL.get()
+    val logger_ = TSL.get()!!
 
     constructor()
 

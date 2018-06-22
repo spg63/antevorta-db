@@ -8,17 +8,12 @@
 package edu.antevorta.runner
 
 import com.google.common.base.Stopwatch
-import edu.antevorta.client.AntevortaClient
 import edu.antevorta.configs.Finals
-import edu.antevorta.configs.RawDataLocator
-import edu.antevorta.configs.columnsAndKeys.MovielensLink
 import edu.antevorta.configs.columnsAndKeys.RedditComs
 import edu.antevorta.configs.columnsAndKeys.RedditSubs
 import edu.antevorta.dbInteraction.dbSelector.RSMapperOutput
-import edu.antevorta.dbInteraction.dbSelector.BaseMapper
 import edu.antevorta.dbInteraction.dbSelector.DBSelector
-import edu.antevorta.dbInteraction.dbSelector.RSMapper
-import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
+import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLGenomeTagsSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevorta.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevorta.dbInteraction.dbcreator.Facilitator
@@ -27,11 +22,6 @@ import edu.antevorta.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevorta.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.antevorta.utils.Out
 import edu.antevorta.utils.TSL
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
-import org.json.JSONObject
-import java.io.File
-import java.io.FileReader
 
 val logger_ = TSL.get()
 
@@ -65,6 +55,10 @@ fun main(args : Array<String>){
 }
 
 fun hollywoodSelect(){
+    val text = "boat"
+    val res = MLGenomeTagsSelector().getTagIDFromTagText(text)
+    println("$text: $res")
+
     return
 }
 
@@ -84,6 +78,7 @@ fun createHollywoodDB(){
     addTableToShards(MovielensMoviesFacilitator())
     addTableToShards(TMDBCreditsFacilitator())
     addTableToShards(MovielensGenomeScoresFacilitator())
+    addTableToShards(MovielensIndividualTagsFacilitator())
 
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")

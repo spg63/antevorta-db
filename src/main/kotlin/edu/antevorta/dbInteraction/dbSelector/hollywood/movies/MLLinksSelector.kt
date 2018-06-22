@@ -68,7 +68,6 @@ class MLLinksSelector: Selector() {
                 .where("$fromCol = $fromColID")
         val res = this.generalSelection(dbsql.sql())
         if(res.isEmpty()){
-            logger_.warn("Unable to locate values for $firstCol, $secondCol from $fromCol with value $fromColID")
             return Pair(-1, -1)
         }
 

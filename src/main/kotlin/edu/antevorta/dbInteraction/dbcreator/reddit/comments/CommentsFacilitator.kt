@@ -47,15 +47,15 @@ class CommentsFacilitator: JsonFacilitator {
     }
 
     override fun dropIndices() {
-        dropDBIndices("attrs_author")
-        dropDBIndices("attrs_cont_score")
-        dropDBIndices("attrs_created")
-        dropDBIndices("attrs_gilded")
-        dropDBIndices("attrs_pid")
-        dropDBIndices("attrs_linkid")
-        dropDBIndices("attrs_parentid")
-        dropDBIndices("attrs_score")
-        dropDBIndices("attrs_sub_name")
-        dropDBIndices("attrs_sub_id")
+        dropDBIndex("attrs_author")
+        dropDBIndex("attrs_cont_score")
+        dropDBIndex("attrs_created")
+        dropDBIndex("attrs_gilded")
+        dropDBIndex("attrs_pid")
+        dropDBIndex("attrs_linkid")
+        dropDBIndex("attrs_parentid")
+        dropDBIndex("attrs_score")
+        dropDBIndex("attrs_sub_name")
+        dropDBIndex("attrs_sub_id")
     }
 }

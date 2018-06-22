@@ -30,7 +30,7 @@ class MovielensGenomeTagsPusher: CSVPusher {
 
                 // If tagID returns null it's a broken record or header, just skip it
                 val tagID = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val tagName = this.csvRecords[i][1]
+                val tagName = this.csvRecords[i][1].trim().replace('\'', '.').replace('\"', '.')
 
                 ps.setInt(key++, tagID)
                 ps.setString(key, tagName)

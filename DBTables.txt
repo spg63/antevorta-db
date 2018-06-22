@@ -111,7 +111,7 @@ Hollywood:
             int     autoincrement           // primary
             int     tagid                   // The id of the genome tag
             text    tag                     // The genome tag
-            No indices
+            Index on tag
 
 
         [DONE] 3rd table: movielens_movies    (movie.csv)
@@ -148,33 +148,33 @@ Hollywood:
              int    movielens_movieid       // The movielens id from the movielens dataset
              int    tagid                   // The id of the genome tag
              real   relevance               // A FP val denoting how relevant a specific tag is to the movie, normalized 0-1
-             Index for relevance for potential future use to compute least relevant tags and tagid
+             Indices for relevance for potential future use to compute least relevant tags, and tagid
 
 
         6th table: individual_tags      (tag.csv)
             - Contains the user who applied a tag to a movie and a corresponding datetime stamp
 
             int     autoincrement           // primary
-            int     userid                  // numeric id for the user
             int     tmdb_movieid            // The movie id found in the tmdb data          (select from links_table)
             int     imdb_movieid            // The movie id found in the imdb data          (select from links_table)
             int     movielens_movieid       // The movielens id from the movielens dataset
+            int     userid                  // numeric id for the user
             int     tagid                   // The numeric id for the tag                   (select from genome_tags)
             text    tag                     // The tag, as a string
             int     timestamp               // Unix time stamp                              (convert from julian to unix)
-            Indices on tag, and timestamp
+            Indices on userid, tagid, tag, and timestamp
 
 
         7th table: individual_ratings   (rating.csv)
             - Contains the userid for a rating, the movie id the rating is about, the FP rating, and a timestamp
             int     autoincrement           // primary
-            int     userid                  // numeric if for the user
             int     tmdb_movieid            // The movie id found in the tmdb data          (select from links_table)
             int     imdb_movieid            // The movie id found in the imdb data          (select from links_table)
             int     movielens_movieid       // The movielens id from the movielens dataset
+            int     userid                  // numeric if for the user
             real    rating                  // The FP rating from user for movie
             int     timestamp               // Unix time stamp from rating                  (convert from julian to unix)
-            Indices on rating, timestamp
+            Indices on userid, rating, timestamp
 
 
         8th table: movies               (tmdb_5000_movies.csv, combination of others)
@@ -205,13 +205,14 @@ Hollywood:
             text    tagline                 // The tagline the movie would be known for
             text    TMDB_title              // The title the movie was released with, from TMDB
             text    movielens_title         // The title from movielens                     (select from movielens_movies)
-                    -- Get movielens_movieid from links_table, then find that ID in movielens_movies table and get title
             real    tmdb_vote_average       // The average rating from TMDB, out of 10
             real    movielens_vote_average  // Need to calculate from individual_rating table (x2 for x/10 score)
             int     tmdb_vote_count         // Total votes cast, from TMDB dataset
             int     movielens_vote_count    // Total votes cast from movielens dataset
             JSON    cast                    // The actors in the movie                      (select from tmdb_credits)
             JSON    crew                    // The crew involved                            (select from tmdb_credits)
+            Indices on budget, original_language, original_title, tmdb_populatiry, release_date, revenue, runtime, TMDB_title,
+            movielens_title, tmdb_vote_average, movielens_vote_average, tmdb_vote_count, movielens_vote_count
 
 
 ------------------------------------------------------------------------------------------------------------------------

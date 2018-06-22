@@ -12,6 +12,8 @@ import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
 class MovielensGenomeTagsFacilitator: AbstractMoviesFacilitator {
+    private val tagsIDX = "genome_tags_tag_idx"
+
     constructor(): super()
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensGenomeTagsAbsolutePath())
@@ -29,11 +31,11 @@ class MovielensGenomeTagsFacilitator: AbstractMoviesFacilitator {
     }
 
     override fun createIndices() {
-        logger_.info("No indices to create for ${this.tableName_}")
+        createDBIndex("tag", tagsIDX)
     }
 
     override fun dropIndices() {
-        logger_.warn("No indices to drop for ${this.tableName_}")
+        dropDBIndex(tagsIDX)
     }
 
 }
