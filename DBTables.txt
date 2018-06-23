@@ -165,7 +165,7 @@ Hollywood:
             Indices on userid, tagid, tag, and timestamp
 
 
-        7th table: individual_ratings   (rating.csv)
+        [DONE] 7th table: individual_ratings   (rating.csv)
             - Contains the userid for a rating, the movie id the rating is about, the FP rating, and a timestamp
             int     autoincrement           // primary
             int     tmdb_movieid            // The movie id found in the tmdb data          (select from links_table)

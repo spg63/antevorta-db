@@ -17,9 +17,9 @@ object MovielensLink{
 
     fun columnNames() = listOf(
             Finals.ID,
-            "tmdb_movieid",
-            "imdb_movieid",
-            "movielens_movieid"
+            Finals.TMDB_ID,
+            Finals.IMDB_ID,
+            Finals.ML_ID
     )
 
     // Not eliminating any columns when printing objects from this table

@@ -16,9 +16,9 @@ object MovielensMovies {
 
     fun columnNames() = listOf(
             Finals.ID,
-            "tmdb_movieid",
-            "imdb_movieid",
-            "movielens_movieid",
+            Finals.TMDB_ID,
+            Finals.IMDB_ID,
+            Finals.ML_ID,
             "movielens_title",
             "genres"
     )

@@ -20,9 +20,9 @@ val tmdbMemoMap = ConcurrentHashMap<Int, Pair<Int, Int>>()
 val imdbMemoMap = ConcurrentHashMap<Int, Pair<Int, Int>>()
 
 class MLLinksSelector: Selector() {
-    private val tmdbcol = "tmdb_movieid"
-    private val imdbcol = "imdb_movieid"
-    private val mlcol   = "movielens_movieid"
+    private val tmdbcol = Finals.TMDB_ID
+    private val imdbcol = Finals.IMDB_ID
+    private val mlcol   = Finals.ML_ID
 
     init {
         this.tableName = Finals.ML_LINK_TABLE

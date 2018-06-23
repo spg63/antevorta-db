@@ -17,9 +17,9 @@ object TMDBCredits {
 
     fun columnNames() = listOf(
             Finals.ID,
-            "tmdb_movieid",
-            "imdb_movieid",
-            "movielens_movieid",
+            Finals.TMDB_ID,
+            Finals.IMDB_ID,
+            Finals.ML_ID,
             "TMDB_title",
             "cast",
             "crew"

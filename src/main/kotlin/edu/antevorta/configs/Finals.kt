@@ -86,6 +86,18 @@ object Finals{
     // Used for the autoincrement key
     const val ID = "ID"
 
+    // Hollywood movie id for TMDB
+    const val TMDB_ID = "tmdb_movieid"
+
+    // Hollywood movie id for IMDB
+    const val IMDB_ID = "imdb_movieid"
+
+    // Hollywood movie id for Movielens
+    const val ML_ID = "movielens_movieid"
+
+    // User ID column (not user name! A numeric ID!)
+    const val USER_ID = "userid"
+
     /* ---------- Helper functions ---------------------------------------------------------------------------------- */
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost

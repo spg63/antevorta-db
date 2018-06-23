@@ -62,12 +62,12 @@ object DBLocator {
     fun hollywoodAbsolutePaths(): List<String> {
         return when(Finals.TESTING_MODE){
             true -> {
-                // Necessary to ignore the sqlite3 lock files when a DB is currently in use
+                // Necessary to ignore the sqlite3 journal files when a DB is currently in use
                 val allFiles = futils.getAllFilePathsInDirWithPrefix(DataPaths.HOLLYWOOD_DB,
                 getHollywoodDBDirectoryPaths()[0])
                 val correctFiles = ArrayList<String>()
                 for(file in allFiles){
-                    if(file.endsWith(".sqlite3"))
+                    if(file.endsWith(Finals.DB_TYPE_EXT))
                         correctFiles.add(file)
                 }
 

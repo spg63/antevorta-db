@@ -7,11 +7,11 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 
-object MovielensIndividualTags {
+object MovielensIndividualRatings {
     fun CSVKeys() = listOf(
             "userId",
             "movieId",
-            "tag",
+            "rating",
             "timestamp"
     )
 
@@ -21,12 +21,11 @@ object MovielensIndividualTags {
             Finals.IMDB_ID,
             Finals.ML_ID,
             Finals.USER_ID,
-            "tagid",
-            "tag",
+            "rating",
             Finals.CREATED_DT
     )
 
-    fun columnsForPrinting() = columnNames()
+    fun columnNamesForPrinting() = columnNames()
 
     fun dataTypes() = listOf(
             " INTEGER PRIMARY KEY AUTOINCREMENT,",
@@ -34,8 +33,7 @@ object MovielensIndividualTags {
             " INTEGER,",
             " INTEGER,",
             " INTEGER,",
-            " INTEGER,",
-            " TEXT,",
+            " REAL,",
             " INTEGER"
     )
 
@@ -45,8 +43,7 @@ object MovielensIndividualTags {
             "INT",
             "INT",
             "INT",
-            "INT",
-            "TEXT",
+            "REAL",
             "INT"
     )
 }

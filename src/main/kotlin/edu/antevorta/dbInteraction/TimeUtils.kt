@@ -131,7 +131,7 @@ object TimeUtils{
     /**
      * Convert a SQLite DateTime string to a Java LocalDateTime object
      * @param SQLDateTime The SQLite DateTime string
-     * @return The Java LocalDateTime object
+     * @return The Java LocalDateTime object if parsable, else Jan. 1st, 2000 @ 00:00:00 (yeah, we passed Y2K!)
      */
     @JvmStatic fun SQLDateTimeToJavaDateTime(SQLDateTime: String): LocalDateTime {
         val parts = SQLDateTime.split(" ")

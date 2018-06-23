@@ -35,10 +35,10 @@ class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
     }
 
     override fun createIndices(){
-        createDBIndex("userid", userIDX)
+        createDBIndex(Finals.USER_ID, userIDX)
         createDBIndex("tagid", tagIDIDX)
         createDBIndex("tag", tagIDX)
-        createDBIndex("timestamp", timeIDX)
+        createDBIndex(Finals.CREATED_DT, timeIDX)
     }
 
     override fun dropIndices() {

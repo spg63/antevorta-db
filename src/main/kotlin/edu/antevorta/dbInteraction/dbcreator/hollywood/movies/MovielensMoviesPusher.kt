@@ -60,7 +60,6 @@ class MovielensMoviesPusher: CSVPusher {
         finally{
             pusherFinallyBlock(conn, ps)
         }
-
     }
 
     private fun splitGenresIntoJsonObject(genres: String): JSONObject {

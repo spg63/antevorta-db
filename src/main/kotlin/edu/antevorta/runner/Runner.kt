@@ -80,6 +80,7 @@ fun createHollywoodDB(){
     addTableToShards(TMDBCreditsFacilitator())
     addTableToShards(MovielensGenomeScoresFacilitator())
     addTableToShards(MovielensIndividualTagsFacilitator())
+    addTableToShards(MovielensIndividualRatingsFacilitator())
 
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
