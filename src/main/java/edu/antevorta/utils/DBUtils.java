@@ -339,7 +339,7 @@ public class DBUtils {
         }
         catch(SQLException e){
             e.printStackTrace();
-            throw new RuntimeException("DBUtils.executeGenericUpdate failure");
+            throw new RuntimeException("DBUtils.executeGenericUpdate failure for: " + SQLStatement);
         }
         finally{
             if(stmt != null) {
