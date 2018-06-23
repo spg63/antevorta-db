@@ -134,9 +134,19 @@ object TimeUtils{
      * @return The Java LocalDateTime object if parsable, else Jan. 1st, 2000 @ 00:00:00 (yeah, we passed Y2K!)
      */
     @JvmStatic fun SQLDateTimeToJavaDateTime(SQLDateTime: String): LocalDateTime {
-        val parts = SQLDateTime.split(" ")
-        val ymd = parts[0].split("-")
-        val hms = parts[1].split(":")
+        val parts: List<String>
+        val ymd: List<String>
+        val hms: List<String>
+
+        try {
+            parts = SQLDateTime.split(" ")
+            ymd = parts[0].split("-")
+            hms = parts[1].split(":")
+        }
+        catch(e: Exception){
+            TSL.get().exception(e)
+            return LocalDateTime.of(2000, 1, 1, 0, 0, 0)
+        }
 
         return try {
             val year = ymd[0].toInt()
