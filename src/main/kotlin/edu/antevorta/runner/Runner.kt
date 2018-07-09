@@ -27,7 +27,7 @@ val logger_ = TSL.get()
 
 fun main(args : Array<String>){
     val out = Out.get()
-    TSL.LOG_TO_CONSOLE = false
+    TSL.LOG_TO_CONSOLE = true
 
     if(Finals.isResearchMachine() && Finals.START_FRESH)
         logger_.logAndKill("isResearchMachine() was true while trying to start fresh")
@@ -40,11 +40,11 @@ fun main(args : Array<String>){
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    createHollywoodDB()
+    //createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
-    //hollywoodSelect()
+    hollywoodSelect()
 
     sw.stop()
 
@@ -60,7 +60,6 @@ fun hollywoodSelect(){
     val res = MLGenomeTagsSelector().getTagIDFromTagText(text)
     println("$text: $res")
 
-    return
 }
 
 fun createHollywoodDB(){
