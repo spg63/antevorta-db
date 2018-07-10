@@ -24,7 +24,6 @@ class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
     override fun getColumnNames()                   = TMDBMovies.columnNames()
     override fun getDataTypes()                     = TMDBMovies.dataTypes()
     override fun getTableName()                     = Finals.TMDB_MOVIES_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.getEmptyArrayList()
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()
