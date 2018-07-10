@@ -8,3 +8,5 @@
     - Selecting the JSON crew from tmdb_credits using tmdb_movieid
 - Make both date formats cleanly convert to and from unix time
     - (IMDB and movielens use different formats for the date, sick)
+
+- Randomly splitting up 5 or so features and giving them to each agent randomly with random weights and letting them figure out what's important that way. 

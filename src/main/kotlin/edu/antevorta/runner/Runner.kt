@@ -40,11 +40,11 @@ fun main(args : Array<String>){
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    createHollywoodDB()
+    //createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
-    //hollywoodSelect()
+    hollywoodSelect()
 
     sw.stop()
 
@@ -60,7 +60,6 @@ fun hollywoodSelect(){
     val res = MLGenomeTagsSelector().getTagIDFromTagText(text)
     println("$text: $res")
 
-    return
 }
 
 fun createHollywoodDB(){

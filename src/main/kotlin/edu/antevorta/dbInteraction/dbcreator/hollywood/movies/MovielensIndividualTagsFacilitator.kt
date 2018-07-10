@@ -19,11 +19,11 @@ class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
     private val tagIDX = "individual_tags_tag_idx"
     private val timeIDX = "individual_tags_time_idx"
 
-    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensTagsAbsolutePath())
-    override fun getDataKeysOfInterest() = MovielensIndividualTags.CSVKeys()
-    override fun getColumnNames() = MovielensIndividualTags.columnNames()
-    override fun getDataTypes() = MovielensIndividualTags.dataTypes()
-    override fun getTableName() = Finals.ML_INDIVIUDAL_TAGS_TABLE
+    override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensTagsAbsolutePath())
+    override fun getDataKeysOfInterest()            = MovielensIndividualTags.CSVKeys()
+    override fun getColumnNames()                   = MovielensIndividualTags.columnNames()
+    override fun getDataTypes()                     = MovielensIndividualTags.dataTypes()
+    override fun getTableName()                     = Finals.ML_INDIVIUDAL_TAGS_TABLE
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

@@ -211,8 +211,8 @@ Hollywood:
             int     movielens_vote_count    // Total votes cast from movielens dataset
             JSON    cast                    // The actors in the movie                      (select from tmdb_credits)
             JSON    crew                    // The crew involved                            (select from tmdb_credits)
-            Indices on budget, original_language, original_title, tmdb_popularity, release_date, revenue, runtime, TMDB_title,
-            movielens_title, tmdb_vote_average, movielens_vote_average, tmdb_vote_count, movielens_vote_count
+            Indices on budget, original_language, tmdb_popularity, revenue, runtime,
+            tmdb_vote_average, movielens_vote_average, tmdb_vote_count, movielens_vote_count
 
 
 ------------------------------------------------------------------------------------------------------------------------
