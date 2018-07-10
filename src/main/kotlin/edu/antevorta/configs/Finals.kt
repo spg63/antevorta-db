@@ -48,7 +48,7 @@ object Finals{
     const val ML_GENOME_SCORES_TABLE        = "genome_scores"
     const val ML_INDIVIUDAL_TAGS_TABLE      = "individual_tags"
     const val ML_INDIVIDUAL_RATING_TABLE    = "individual_ratings"
-    const val MOVIES_TABLE                  = "movies"
+    const val TMDB_MOVIES_TABLE             = "movies"
 
 
     /* ---------- Server control ------------------------------------------------------------------------------------ */
