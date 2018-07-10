@@ -19,7 +19,6 @@ class MovielensLinkFacilitator: AbstractMoviesFacilitator{
     override fun getColumnNames()                   = MovielensLink.columnNames()
     override fun getDataTypes()                     = MovielensLink.dataTypes()
     override fun getTableName()                     = Finals.ML_LINK_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.getEmptyArrayList()
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

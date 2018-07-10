@@ -27,7 +27,7 @@ val logger_ = TSL.get()
 
 fun main(args : Array<String>){
     val out = Out.get()
-    TSL.LOG_TO_CONSOLE = false
+    TSL.LOG_TO_CONSOLE = true
 
     if(Finals.isResearchMachine() && Finals.START_FRESH)
         logger_.logAndKill("isResearchMachine() was true while trying to start fresh")

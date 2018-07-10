@@ -21,7 +21,6 @@ class MovielensGenomeScoresFacilitator: AbstractMoviesFacilitator {
     override fun getColumnNames()                   = MovielensGenomeScores.columnNames()
     override fun getDataTypes()                     = MovielensGenomeScores.dataTypes()
     override fun getTableName()                     = Finals.ML_GENOME_SCORES_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.getEmptyArrayList()
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

@@ -23,7 +23,6 @@ class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
     override fun getColumnNames()                   = MovielensIndividualRatings.columnNames()
     override fun getDataTypes()                     = MovielensIndividualRatings.dataTypes()
     override fun getTableName()                     = Finals.ML_INDIVIDUAL_RATING_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.getEmptyArrayList()
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

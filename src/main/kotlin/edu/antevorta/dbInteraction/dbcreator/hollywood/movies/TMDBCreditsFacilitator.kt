@@ -20,7 +20,6 @@ class TMDBCreditsFacilitator: AbstractMoviesFacilitator {
     override fun getColumnNames()                   = TMDBCredits.columnNames()
     override fun getDataTypes()                     = TMDBCredits.dataTypes()
     override fun getTableName()                     = Finals.TMDB_CREDITS_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.getEmptyArrayList()
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()
