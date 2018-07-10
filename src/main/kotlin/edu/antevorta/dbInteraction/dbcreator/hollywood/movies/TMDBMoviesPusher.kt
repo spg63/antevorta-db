@@ -30,7 +30,7 @@ class TMDBMoviesPusher: CSVPusher {
                 var key = 1
 
                 val budget = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val genres = JSONObject().put("genres", JSONArray(this.csvRecords[i][1].trim()))
+                val tmdb_genres = JSONObject().put("genres", JSONArray(this.csvRecords[i][1].trim()))
                 val homepage = this.csvRecords[i][2]
                 val tmdb_movieid = this.csvRecords[i][3].toIntOrNull() ?: continue
 
