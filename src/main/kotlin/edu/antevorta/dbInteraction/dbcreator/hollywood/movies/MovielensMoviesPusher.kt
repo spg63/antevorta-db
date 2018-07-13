@@ -72,7 +72,7 @@ class MovielensMoviesPusher: CSVPusher {
             jsonObject.put(GENRE_KEY, genre)
             jsonArray.put(jsonObject)
         }
-        mainJsonObject.put("Genres", jsonArray)
+        mainJsonObject.put("genres", jsonArray)
         return mainJsonObject
     }
 }
