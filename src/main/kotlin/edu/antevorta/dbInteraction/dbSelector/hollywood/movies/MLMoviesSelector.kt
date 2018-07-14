@@ -40,4 +40,17 @@ class MLMoviesSelector: Selector() {
 
         return JSONObject(res[0].getString("genres"))
     }
+
+    fun getTitleFromTMDBMovieID(tmdbID: Int): String {
+        val dbsql = DBSelector()
+                .column("movielens_title")
+                .from(Finals.ML_MOVIES_TABLE)
+                .where("tmdb_movieid = $tmdbID")
+
+        val res = this.generalSelection(dbsql.sql())
+        if(res.isEmpty())
+            return "NO MOVIELENS TITLE"
+
+        return res[0].getString("movielens_title")
+    }
 }

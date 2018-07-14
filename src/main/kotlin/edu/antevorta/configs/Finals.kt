@@ -117,4 +117,7 @@ object Finals{
         // Either a non-windows machine, or it has less than 17 logical cores. Not the research machine
         return false
     }
+
+    /* ---------- Random constants -----------------------------------------------------------------------------------*/
+    const val NOTAGLINE = "NO TAGLINE"
 }

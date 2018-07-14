@@ -206,8 +206,8 @@ Hollywood:
             text    TMDB_title              // The title the movie was released with, from TMDB
             text    movielens_title         // The title from movielens                     (select from movielens_movies)
             real    tmdb_vote_average       // The average rating from TMDB, out of 10
-            real    movielens_vote_average  // Need to calculate from individual_rating table (x2 for x/10 score)
             int     tmdb_vote_count         // Total votes cast, from TMDB dataset
+            real    movielens_vote_average  // Need to calculate from individual_rating table (x2 for x/10 score)
             int     movielens_vote_count    // Total votes cast from movielens dataset
             JSON    cast                    // The actors in the movie                      (select from tmdb_credits)
             JSON    crew                    // The crew involved                            (select from tmdb_credits)
