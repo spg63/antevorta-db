@@ -24,5 +24,5 @@ class MLMoviesSelector: Selector() {
         return genericSelect(workers, SQLStatement)
     }
 
-    fun getGenresFromTMDBMovieID(tmdbID: Int): 
+    //fun getGenresFromTMDBMovieID(tmdbID: Int):
 }

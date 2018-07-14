@@ -39,12 +39,12 @@ fun main(args : Array<String>){
 
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
-    //doSubs()
+    doSubs()
     //createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
-    hollywoodSelect()
+    //hollywoodSelect()
 
     sw.stop()
 
