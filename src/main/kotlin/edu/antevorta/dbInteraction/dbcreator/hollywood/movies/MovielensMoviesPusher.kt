@@ -69,7 +69,8 @@ class MovielensMoviesPusher: CSVPusher {
         var counter = 0
         for(genre in allGenres) {
             val jsonObject = JSONObject()
-            jsonObject.put(GENRE_KEY, genre)
+            // 7.14.18: Attempting to remove the leading / trailing quotes in the ml_genres data
+            jsonObject.put(GENRE_KEY, genre.replace("\"", ""))
             jsonArray.put(jsonObject)
         }
         mainJsonObject.put("genres", jsonArray)

@@ -2,6 +2,7 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 
 import edu.antevorta.dbInteraction.DBCommon
 import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
+import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLMoviesSelector
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVRecord
 import org.json.JSONArray
@@ -12,6 +13,7 @@ import java.sql.SQLException
 
 class TMDBMoviesPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
+    private val mlMoviesSelector = MLMoviesSelector()
 
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
@@ -31,16 +33,27 @@ class TMDBMoviesPusher: CSVPusher {
 
                 val budget = this.csvRecords[i][0].toIntOrNull() ?: continue
                 val tmdb_genres = JSONObject().put("genres", JSONArray(this.csvRecords[i][1].trim()))
-                val homepage = this.csvRecords[i][2]
+                val website = this.csvRecords[i][2]
                 val tmdb_movieid = this.csvRecords[i][3].toIntOrNull() ?: continue
+                val ml_genres = this.mlMoviesSelector.getGenresFromTMDBMovieID(tmdb_movieid)
+
 
                 // Get the other 2 IDs using the links selector
                 val imdb_mlid_ids = linksSelector.getIMDBandMLIDFromTMDBMovieID(tmdb_movieid)
                 val imdb_movieid = imdb_mlid_ids.first
                 val ml_movieid = imdb_mlid_ids.second
 
+                this.logger_.err("tmdb_movieid: $tmdb_movieid | ml_movieie: $ml_movieid")
+                this.logger_.logAndKill(ml_genres.toString())
 
+                ps.setInt(key++, tmdb_movieid)      // TMDB Movie ID
+                ps.setInt(key++, imdb_movieid)      // IMDB Movie ID
+                ps.setInt(key++, ml_movieid)        // Movielens Movie ID
+                ps.setInt(key++, budget)            // TMDB Movie budget
+                ps.setObject(key++, tmdb_genres)    // TMDB Genres list
 
+                // Need to add the ML genres here
+                ps.setString(key++, website)        // Website homepage, as per TMDB
 
 
                 ps.addBatch()

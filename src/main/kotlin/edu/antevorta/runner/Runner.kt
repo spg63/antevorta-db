@@ -40,11 +40,11 @@ fun main(args : Array<String>){
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    //createHollywoodDB()
+    createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
-    hollywoodSelect()
+    //hollywoodSelect()
 
     sw.stop()
 
@@ -69,6 +69,7 @@ fun createHollywoodDB(){
     // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
 
     // Create the DB, and the first table in the DB (links_table)
+    /*
     buildDBShards(MovielensLinkFacilitator())
 
     /* ---------- Now start adding tables to the DB shards ---------------------------------------------------------- */
@@ -80,6 +81,8 @@ fun createHollywoodDB(){
     addTableToShards(MovielensGenomeScoresFacilitator())
     addTableToShards(MovielensIndividualTagsFacilitator())
     addTableToShards(MovielensIndividualRatingsFacilitator())
+    */
+    addTableToShards(TMDBMoviesFacilitator())
 
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
