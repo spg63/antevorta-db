@@ -199,6 +199,11 @@ abstract class Facilitator {
     }
 
     private fun createNewTable(){
+        // Drop the table if it already exists
+        val dropsql = "drop table if exists ${this.tableName_};"
+        // For each db in the list, drop the table
+        this.dbAbsolutePaths_.forEach{ DBCommon.delete(it, dropsql) }
+
         // Create the table schema
         val sb = StringBuilder()
         sb.append("create table if not exists ${this.tableName_}(")
