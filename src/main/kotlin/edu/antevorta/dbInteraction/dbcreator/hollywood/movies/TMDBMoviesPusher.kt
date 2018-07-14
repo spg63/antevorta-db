@@ -6,6 +6,7 @@ import edu.antevorta.dbInteraction.TimeUtils
 import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLIndividualRatingsSelector
 import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
 import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLMoviesSelector
+import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.TMDBCreditsSelector
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVRecord
 import org.json.JSONArray
@@ -18,6 +19,7 @@ class TMDBMoviesPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
     private val mlMoviesSelector = MLMoviesSelector()
     private val mlratingSelector = MLIndividualRatingsSelector()
+    private val tmdbCreditsSelector = TMDBCreditsSelector()
 
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
@@ -77,8 +79,9 @@ class TMDBMoviesPusher: CSVPusher {
                 val mlVoteCount = ml_vote_pair.first
                 val mlVoteAverage = ml_vote_pair.second
 
-
-
+                val cast_and_crew = this.tmdbCreditsSelector.getCastAndCrewListFromTMDBID(tmdb_movieid)
+                val cast = cast_and_crew.first
+                val crew = cast_and_crew.second
 
                 ps.setInt(key++, tmdb_movieid)          // TMDB Movie ID
                 ps.setInt(key++, imdb_movieid)          // IMDB Movie ID
@@ -106,7 +109,8 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setInt(key++, tmdb_vote_count)       // Total votes from TMDB
                 ps.setDouble(key++, mlVoteAverage)      // Average score of the movielens votes
                 ps.setInt(key++, mlVoteCount)           // The total number of ML votes for this movie
-
+                ps.setObject(key++, cast)               // The JSON cast from TMDB
+                ps.setObject(key, crew)                 // The JSON crew from TMDB
 
                 ps.addBatch()
             }
@@ -146,16 +150,3 @@ class TMDBMoviesPusher: CSVPusher {
         return Pair(totalRatings, finalRatingAverage)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
