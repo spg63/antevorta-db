@@ -80,8 +80,7 @@ fun createHollywoodDB(){
     addTableToShards(TMDBCreditsFacilitator())
     addTableToShards(MovielensGenomeScoresFacilitator())
     addTableToShards(MovielensIndividualTagsFacilitator())
-    addTableToShards(MovielensIndividualRatingsFacilitator())
-    */
+    addTableToShards(MovielensIndividualRatingsFacilitator()) */
     addTableToShards(TMDBMoviesFacilitator())
 
 
