@@ -208,7 +208,7 @@ Hollywood:
             real    tmdb_vote_average       // The average rating from TMDB, out of 10
             int     tmdb_vote_count         // Total votes cast, from TMDB dataset
             real    movielens_vote_average  // Need to calculate from individual_rating table (x2 for x/10 score)
-            int     movielens_vote_count    // Total votes cast from movielens dataset
+            int     movielens_vote_count    // Total votes cast from movielens dataset      (This and the above from individual_ratings)
             JSON    cast                    // The actors in the movie                      (select from tmdb_credits)
             JSON    crew                    // The crew involved                            (select from tmdb_credits)
             Indices on budget, original_language, tmdb_popularity, revenue, runtime,

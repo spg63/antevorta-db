@@ -3,6 +3,7 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 import edu.antevorta.configs.Finals
 import edu.antevorta.dbInteraction.DBCommon
 import edu.antevorta.dbInteraction.TimeUtils
+import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLIndividualRatingsSelector
 import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
 import edu.antevorta.dbInteraction.dbSelector.hollywood.movies.MLMoviesSelector
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
@@ -16,6 +17,7 @@ import java.sql.SQLException
 class TMDBMoviesPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
     private val mlMoviesSelector = MLMoviesSelector()
+    private val mlratingSelector = MLIndividualRatingsSelector()
 
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
@@ -68,6 +70,15 @@ class TMDBMoviesPusher: CSVPusher {
                 val tmdb_title = this.csvRecords[i][17].trim()
                 val movielens_title = this.mlMoviesSelector.getTitleFromTMDBMovieID(tmdb_movieid)
 
+                val tmdb_vote_average = this.csvRecords[i][18].trim().toDoubleOrNull() ?: continue
+                val tmdb_vote_count = this.csvRecords[i][19].trim().toIntOrNull() ?: continue
+
+                val ml_vote_pair = getMLVoteCountAndAverage(tmdb_movieid)
+                val mlVoteCount = ml_vote_pair.first
+                val mlVoteAverage = ml_vote_pair.second
+
+
+
 
                 ps.setInt(key++, tmdb_movieid)          // TMDB Movie ID
                 ps.setInt(key++, imdb_movieid)          // IMDB Movie ID
@@ -91,8 +102,10 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setString(key++, tagline)            // Tagline, if it exists
                 ps.setString(key++, tmdb_title)         // Title, as per TMDB
                 ps.setString(key++, movielens_title)    // Title, as per movielens
-
-
+                ps.setDouble(key++, tmdb_vote_average)  // Average TMDB movie score
+                ps.setInt(key++, tmdb_vote_count)       // Total votes from TMDB
+                ps.setDouble(key++, mlVoteAverage)      // Average score of the movielens votes
+                ps.setInt(key++, mlVoteCount)           // The total number of ML votes for this movie
 
 
                 ps.addBatch()
@@ -113,4 +126,36 @@ class TMDBMoviesPusher: CSVPusher {
         val dateString = date + appendString
         return TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime(dateString))
     }
+
+    private fun getMLVoteCountAndAverage(tmdb_movieid: Int): Pair<Int, Double> {
+        val mappers = this.mlratingSelector.getMovielensRatingsForTMDBIDAsRSMappers(tmdb_movieid)
+        if(mappers == null || mappers.isEmpty())
+            return Pair(-1, -1.0)
+
+        val totalRatings = mappers.size
+
+        var cumulativeRating: Double = 0.0
+        // Remember that the ratings need to be multiplied by 2. TMDB ratings are out of 10, ML are out of 5
+        for(mapper in mappers) {
+            var theRating = mapper.getDouble("rating")
+            theRating *= 2
+            cumulativeRating += theRating
+        }
+
+        val finalRatingAverage = cumulativeRating / totalRatings
+        return Pair(totalRatings, finalRatingAverage)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

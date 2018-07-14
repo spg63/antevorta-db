@@ -30,7 +30,7 @@ class MLMoviesSelector: Selector() {
         val dbsql = DBSelector()
                 .column("genres")
                 .from(Finals.ML_MOVIES_TABLE)
-                .where("tmdb_movieid = $tmdbID")
+                .where("${Finals.TMDB_ID} = $tmdbID")
 
         val res = this.generalSelection(dbsql.sql())
         if(res.isEmpty())
@@ -45,7 +45,7 @@ class MLMoviesSelector: Selector() {
         val dbsql = DBSelector()
                 .column("movielens_title")
                 .from(Finals.ML_MOVIES_TABLE)
-                .where("tmdb_movieid = $tmdbID")
+                .where("${Finals.TMDB_ID} = $tmdbID")
 
         val res = this.generalSelection(dbsql.sql())
         if(res.isEmpty())
