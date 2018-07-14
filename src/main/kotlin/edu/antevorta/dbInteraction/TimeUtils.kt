@@ -12,7 +12,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
-object TimeUtils{
+object TimeUtils {
     /**
      * Return the utc seconds since epoch from LocalDateTime
      * NOTE: This function intentionally returns uncorrected UTC seconds. It assumes that the LocalDateTime object is
@@ -21,7 +21,8 @@ object TimeUtils{
      * @param ldt The LocalDateTime object
      * @return The intentionally uncorrected, utc zoned, seconds since epoch.
      */
-    @JvmStatic fun utcSecondsFromLDT_SEL(ldt: LocalDateTime): Long {
+    @JvmStatic
+    fun utcSecondsFromLDT_SEL(ldt: LocalDateTime): Long {
         return utcSecondsFromValues_SEL(ldt.year, ldt.monthValue, ldt.dayOfMonth, ldt.hour, ldt.minute, ldt.second)
     }
 
@@ -39,8 +40,9 @@ object TimeUtils{
      * @param second The second
      * @return An intentionally uncorrected utc value from the system local time
      */
-    @JvmStatic fun utcSecondsFromValues_SEL(year: Int, month: Int, day: Int,
-                                            hour: Int, minute: Int, second: Int): Long {
+    @JvmStatic
+    fun utcSecondsFromValues_SEL(year: Int, month: Int, day: Int,
+                                 hour: Int, minute: Int, second: Int): Long {
         val ldt = LocalDateTime.of(year, month, day, hour, minute, second)
         val zdt = ldt.atZone(ZoneId.of("UTC"))
         return zdt.toEpochSecond()
@@ -51,7 +53,8 @@ object TimeUtils{
      * @param utcSeconds
      * @return The LocalDateTime object
      */
-    @JvmStatic fun utcSecondsToLDT(utcSeconds: Long): LocalDateTime {
+    @JvmStatic
+    fun utcSecondsToLDT(utcSeconds: Long): LocalDateTime {
         val i = Instant.ofEpochSecond(utcSeconds)
         val zdt = ZonedDateTime.ofInstant(i, TimeZone.getDefault().toZoneId())
         return zdt.toLocalDateTime()
@@ -62,12 +65,12 @@ object TimeUtils{
      * @param utcSeconds
      * @return
      */
-    @JvmStatic fun utcSecondsToZDT(utcSeconds: String): String {
+    @JvmStatic
+    fun utcSecondsToZDT(utcSeconds: String): String {
         val utc: Long
         try {
             utc = utcSeconds.toLong()
-        }
-        catch(e: NumberFormatException){
+        } catch (e: NumberFormatException) {
             return "0"
         }
         val i = Instant.ofEpochSecond(utc)
@@ -79,12 +82,12 @@ object TimeUtils{
      * @param utcSeconds The seconds from epoch string
      * @return The LocalDateTime object
      */
-    @JvmStatic fun utcSecondsToLDT(utcSeconds: String): LocalDateTime {
+    @JvmStatic
+    fun utcSecondsToLDT(utcSeconds: String): LocalDateTime {
         val utc: Long
-        try{
+        try {
             utc = utcSeconds.toLong()
-        }
-        catch(e: NumberFormatException){
+        } catch (e: NumberFormatException) {
             return utcSecondsToLDT(0L)
         }
         return utcSecondsToLDT(utc)
@@ -95,13 +98,15 @@ object TimeUtils{
      * @param ldt The local date time object
      * @return the UTC time as a long
      */
-    @JvmStatic fun LDTtoUTCSeconds(ldt: LocalDateTime): Long {
+    @JvmStatic
+    fun LDTtoUTCSeconds(ldt: LocalDateTime): Long {
         val zdt = ldt.atZone(ZoneId.systemDefault())
         return zdt.withZoneSameInstant(ZoneId.of("UTC")).toEpochSecond()
     }
 
 
-    @JvmStatic fun sqlTimeToUTC(sqlTime: String): Long {
+    @JvmStatic
+    fun sqlTimeToUTC(sqlTime: String): Long {
         return SQLDateTimeToJavaDateTime(sqlTime).atZone(ZoneId.systemDefault()).toEpochSecond()
     }
 
@@ -110,7 +115,8 @@ object TimeUtils{
      * @param ldt
      * @return The SQLite DateTime compatible time string
      */
-    @JvmStatic fun javaDateTimeToSQLDateTime(ldt: LocalDateTime): String {
+    @JvmStatic
+    fun javaDateTimeToSQLDateTime(ldt: LocalDateTime): String {
         val year = ldt.year
         val month = ldt.monthValue
         val day = ldt.dayOfMonth
@@ -133,7 +139,8 @@ object TimeUtils{
      * @param SQLDateTime The SQLite DateTime string
      * @return The Java LocalDateTime object if parsable, else Jan. 1st, 2000 @ 00:00:00 (yeah, we passed Y2K!)
      */
-    @JvmStatic fun SQLDateTimeToJavaDateTime(SQLDateTime: String): LocalDateTime {
+    @JvmStatic
+    fun SQLDateTimeToJavaDateTime(SQLDateTime: String): LocalDateTime {
         val parts: List<String>
         val ymd: List<String>
         val hms: List<String>
@@ -142,8 +149,7 @@ object TimeUtils{
             parts = SQLDateTime.split(" ")
             ymd = parts[0].split("-")
             hms = parts[1].split(":")
-        }
-        catch(e: Exception){
+        } catch (e: Exception) {
             TSL.get().exception(e)
             return LocalDateTime.of(2000, 1, 1, 0, 0, 0)
         }
@@ -157,8 +163,7 @@ object TimeUtils{
             val second = hms[2].toInt()
 
             LocalDateTime.of(year, month, day, hour, minute, second)
-        }
-        catch(e: NumberFormatException){
+        } catch (e: NumberFormatException) {
             TSL.get().exception(e)
             LocalDateTime.of(2000, 1, 1, 0, 0, 0)
         }
@@ -167,15 +172,14 @@ object TimeUtils{
     private fun getStringFromValueWithZeroWhereNecessary(value: Int): String {
         val vals: String
 
-        try{
+        try {
             vals = value.toString()
-        }
-        catch(e: NumberFormatException){
+        } catch (e: NumberFormatException) {
             return "0"
         }
 
         val zero = "0"
-        if(value < 10)
+        if (value < 10)
             return zero + vals
         return vals
     }
