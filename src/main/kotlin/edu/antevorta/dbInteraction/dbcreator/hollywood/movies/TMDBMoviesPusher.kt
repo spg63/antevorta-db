@@ -41,7 +41,11 @@ class TMDBMoviesPusher: CSVPusher {
                 val tmdb_genres = JSONObject().put("genres", JSONArray(this.csvRecords[i][1].trim()))
                 val website = this.csvRecords[i][2].trim()
                 val tmdb_movieid = this.csvRecords[i][3].toIntOrNull() ?: continue
-                val ml_genres = this.mlMoviesSelector.getGenresFromTMDBMovieID(tmdb_movieid)
+                //val ml_genres = this.mlMoviesSelector.getGenresFromTMDBMovieID(tmdb_movieid)
+
+                val genres_and_movielens_title = this.mlMoviesSelector.getGenresAndTitleFromTMDBMovieID(tmdb_movieid)
+                val ml_genres = genres_and_movielens_title.first
+                val movielens_title = genres_and_movielens_title.second
 
                 // Get the other 2 IDs using the links selector
                 val imdb_mlid_ids = linksSelector.getIMDBandMLIDFromTMDBMovieID(tmdb_movieid)
@@ -70,7 +74,9 @@ class TMDBMoviesPusher: CSVPusher {
                     tagline = Finals.NOTAGLINE
 
                 val tmdb_title = this.csvRecords[i][17].trim()
-                val movielens_title = this.mlMoviesSelector.getTitleFromTMDBMovieID(tmdb_movieid)
+
+                // Selected above (genres_and_movielens_title) to hit the DB once instead of twice
+                //val movielens_title = this.mlMoviesSelector.getTitleFromTMDBMovieID(tmdb_movieid)
 
                 val tmdb_vote_average = this.csvRecords[i][18].trim().toDoubleOrNull() ?: continue
                 val tmdb_vote_count = this.csvRecords[i][19].trim().toIntOrNull() ?: continue
