@@ -69,6 +69,7 @@ fun createHollywoodDB(){
     // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
 
     // Create the DB, and the first table in the DB (links_table)
+    /*
     buildDBShards(MovielensLinkFacilitator())
 
     /* ---------- Now start adding tables to the DB shards ---------------------------------------------------------- */
@@ -80,7 +81,8 @@ fun createHollywoodDB(){
     addTableToShards(MovielensGenomeScoresFacilitator())
     addTableToShards(MovielensIndividualTagsFacilitator())
     addTableToShards(MovielensIndividualRatingsFacilitator())
-    addTableToShards(TMDBMoviesFacilitator())
+    */
+    addTableToShards(TMDBMoviesFacilitator())       // 1399 seconds, mbp
 
 
     //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")

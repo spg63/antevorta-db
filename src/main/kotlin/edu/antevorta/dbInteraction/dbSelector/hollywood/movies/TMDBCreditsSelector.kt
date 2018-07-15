@@ -27,8 +27,6 @@ class TMDBCreditsSelector: Selector() {
 
     fun getCastAndCrewListFromTMDBID(tmdbID: Int): Pair<JSONObject, JSONObject> {
         val dbsql = DBSelector()
-                .column("cast")
-                .column("crew")
                 .from(Finals.TMDB_CREDITS_TABLE)
                 .where("${Finals.TMDB_ID} = $tmdbID")
 
