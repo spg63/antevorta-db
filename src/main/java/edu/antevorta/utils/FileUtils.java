@@ -60,9 +60,11 @@ public class FileUtils{
      */
     public void checkAndCreateDir(String dirName){
         String path = getWorkingDir();
-        File tmp = new File(path + File.separator + dirName + File.separator);
-        if(!tmp.exists())
+        File tmp = new File(path + File.separator + dirName);
+        if(!tmp.exists()) {
+            TSL.get().info("Creating directory: " + tmp.toString());
             tmp.mkdirs();
+        }
     }
 
     /**
@@ -166,7 +168,7 @@ public class FileUtils{
 
         File[] files = new File(path).listFiles();
         if(files == null)
-            return null;
+            return new ArrayList<>();
         for(File f : files){
             if(f.isFile() && f.getName().startsWith(prefix))
                 filepaths.add(f.getAbsolutePath());

@@ -70,6 +70,7 @@ fun createHollywoodDB(){
 
     // Create the DB, and the first table in the DB (links_table)
     buildDBShards(MovielensLinkFacilitator())
+    logger_.logAndKill("DONE")
 
     /* ---------- Now start adding tables to the DB shards ---------------------------------------------------------- */
 
