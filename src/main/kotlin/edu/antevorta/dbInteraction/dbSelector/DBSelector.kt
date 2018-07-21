@@ -9,7 +9,7 @@ package edu.antevorta.dbInteraction.dbSelector
  * The main credit for this class goes to John Krasnay. I've modified it for my own uses.
  * https://github.com/jkrasnay/sqlbuilder
  */
-class DBSelector {
+open class DBSelector {
     private var tableName   = ArrayList<String>()
     private var columns     = ArrayList<String>()
     private var joins       = ArrayList<String>()
