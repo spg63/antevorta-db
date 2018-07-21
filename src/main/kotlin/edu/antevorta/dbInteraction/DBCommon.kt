@@ -3,7 +3,7 @@
  * License: MIT
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "ConstantConditionIf")
 
 package edu.antevorta.dbInteraction
 
@@ -22,9 +22,11 @@ import java.sql.SQLException
  */
 
 object DBCommon{
-    val enforceForeignKeys = Finals.enableForeignKeys
-    const val dbPrefix = Finals.DB_URL_PREFIX
-    const val dbDriver = Finals.DB_DRIVER
+    private val enforceForeignKeys = Finals.enableForeignKeys
+    private const val dbPrefix = Finals.DB_URL_PREFIX
+    private const val dbDriver = Finals.DB_DRIVER
+    private val dbutils = DBUtils.get()
+    private val logger = TSL.get()
 
     /**
      * Gets a DB Connection object based on db name, the URL to the DB and the type of DB driver in
@@ -42,7 +44,7 @@ object DBCommon{
                 st.close()
             }
             catch(e: SQLException){
-                TSL.get().logAndKill(e)
+                logger.logAndKill(e)
             }
         }
         return conn
@@ -53,7 +55,7 @@ object DBCommon{
      * @param conn The DB connection
      */
     fun disconnect(conn: Connection) {
-        DBUtils.get().disconnect(conn)
+        dbutils.disconnect(conn)
     }
 
     /**
@@ -63,7 +65,7 @@ object DBCommon{
      * @param SQLStatement The SQLstatement, as a string
      */
     fun insert(conn: Connection, SQLStatement: String) {
-        DBUtils.get().insert(conn, SQLStatement)
+        dbutils.insert(conn, SQLStatement)
     }
 
     /**
@@ -73,7 +75,7 @@ object DBCommon{
      * @param SQLStatement The SQLstatement, as a string
      */
     fun insert(db: String, SQLStatement: String) {
-        DBUtils.get().insert(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys)
+        dbutils.insert(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys)
     }
 
     /**
@@ -83,7 +85,7 @@ object DBCommon{
      * @param SQLStatement The SQLStatement, as a string
      */
     fun delete(conn: Connection, SQLStatement: String) {
-        DBUtils.get().delete(conn, SQLStatement)
+        dbutils.delete(conn, SQLStatement)
     }
 
     /**
@@ -93,7 +95,7 @@ object DBCommon{
      * @param SQLStatement The SQL Statement, as a string
      */
     fun delete(db: String, SQLStatement: String) {
-        DBUtils.get().delete(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys)
+        dbutils.delete(db, dbPrefix, dbDriver, SQLStatement, enforceForeignKeys)
     }
 
     /**
@@ -104,7 +106,7 @@ object DBCommon{
      * @param SQLStatements A list of SQL statements
      */
     fun insertAll(conn: Connection, SQLStatements: List<String>) {
-        DBUtils.get().insertAll(conn, SQLStatements)
+        dbutils.insertAll(conn, SQLStatements)
     }
 
     /**
@@ -115,7 +117,7 @@ object DBCommon{
      * @param SQLStatements A list of SQL statements
      */
     fun insertAll(db: String, SQLStatements: List<String>) {
-        DBUtils.get().insertAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys)
+        dbutils.insertAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys)
     }
 
     /**
@@ -126,7 +128,7 @@ object DBCommon{
      * @param SQLStatements A list of SQL statements
      */
     fun deleteAll(conn: Connection, SQLStatements: List<String>) {
-        DBUtils.get().deleteAll(conn, SQLStatements)
+        dbutils.deleteAll(conn, SQLStatements)
     }
 
     /**
@@ -136,7 +138,7 @@ object DBCommon{
      * @param SQLStatements A list of SQL statements
      */
     fun deleteAll(db: String, SQLStatements: List<String>) {
-        DBUtils.get().deleteAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys)
+        dbutils.deleteAll(db, dbPrefix, dbDriver, SQLStatements, enforceForeignKeys)
     }
 
     /**
@@ -147,7 +149,7 @@ object DBCommon{
      * @return A ResultSet if the selection was successful
      */
     fun select(conn: Connection, SQLStatement: String): ResultSet {
-        return DBUtils.get().select(conn, SQLStatement)
+        return dbutils.select(conn, SQLStatement)
     }
 
     /**
@@ -158,7 +160,7 @@ object DBCommon{
      * @return A list of ResultSet objects if the selections were successful
      */
     fun selectAll(conn: Connection, SQLStatements: List<String>): List<ResultSet> {
-        return DBUtils.get().selectAll(conn, SQLStatements)
+        return dbutils.selectAll(conn, SQLStatements)
     }
 
     /**
@@ -167,7 +169,7 @@ object DBCommon{
      * @param SQLStatement
      */
     fun execute(conn: Connection, SQLStatement: String) {
-        DBUtils.get().execute(conn, SQLStatement)
+        dbutils.execute(conn, SQLStatement)
     }
 
     /**
@@ -195,6 +197,6 @@ object DBCommon{
      * @param rs
      */
     fun closeResultSet(rs: ResultSet) {
-        DBUtils.get().closeResultSet(rs)
+        dbutils.closeResultSet(rs)
     }
 }
