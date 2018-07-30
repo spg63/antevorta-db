@@ -58,7 +58,7 @@ fun main(args : Array<String>){
 fun hollywoodSelect(){
     val text = "boat"
     val res = MLGenomeTagsSelector().getTagIDFromTagText(text)
-    println("$text: $res")
+    logger_.info("$text: $res")
 
 }
 

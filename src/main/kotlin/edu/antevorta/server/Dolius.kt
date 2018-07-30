@@ -21,10 +21,10 @@ import java.net.ServerSocket
 import java.net.Socket
 
 /**
- * Note: This server is intentionally capped at 5 threads. Access to the DB (and data processing) is already threaded
- * as much as it reasonably should be. Any threading here will introduce additional latency however the convenience to
- * make multiple requests at the same time out-weighs the downsides. This also allows for a minimal number of
- * users access to the resources concurrently.
+ * Note: This server is intentionally capped at 5 threads. Access to the DB (and data processing) is already
+ * threaded as much as it reasonably should be. Any threading here will introduce additional latency
+ * however the convenience to make multiple requests at the same time out-weighs the downsides. This also
+ * allows for a minimal number of users access to the resources concurrently.
  */
 
 // NOTE: These two vars are the kotlin version of static class vars, available to all instances of the class

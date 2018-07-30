@@ -232,7 +232,7 @@ public class DBUtils {
      * @return A list of ResultSet objects if the selections were successful
      */
     public List<ResultSet> selectAll(Connection conn, List<String> SQLStatements){
-        TSL.get().err("DBUtils.selectAll called; unoptimized.");
+        TSL.get().warn("DBUtils.selectAll called; unoptimized.");
         List<ResultSet> results = new ArrayList<>();
         for(String sql : SQLStatements)
             results.add(select(conn, sql));
@@ -269,8 +269,8 @@ public class DBUtils {
             // Disable autocommit
             conn.setAutoCommit(false);
 
-            for(int i = 0; i < SQLStatements.size(); ++i) {
-                stmt.addBatch(SQLStatements.get(i));
+            for (String SQLStatement : SQLStatements) {
+                stmt.addBatch(SQLStatement);
             }
 
             stmt.executeBatch();

@@ -132,9 +132,9 @@ class TMDBMoviesPusher: CSVPusher {
     }
 
     private fun convertDateToUnix(date: String): Long {
-        val appendString = " 00:00:00"
-        val dateString = date + appendString
-        return TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime(dateString))
+        // Note: The 00:00:00 gets appended because there is no time value, just a day date associated with
+        // this data. The time value keeps consistency with the rest of the DB data
+        return TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime("$date 00:00:00"))
     }
 
     private fun getMLVoteCountAndAverage(tmdb_movieid: Int): Pair<Int, Double> {
