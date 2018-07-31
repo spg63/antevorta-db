@@ -16,15 +16,15 @@ import edu.antevorta.dbInteraction.dbcreator.JsonPusher
 class SubmissionsFacilitator: JsonFacilitator {
     constructor(): super()
 
-    override fun buildDBPaths()                     = DBLocator.buildSubDBPaths()
-    override fun getDataFileAbsolutePaths()         = RawDataLocator.redditJsonSubmissionAbsolutePaths()
-    override fun getDBAbsolutePaths()               = DBLocator.redditSubsAbsolutePaths()
-    override fun getDBDirectoryPaths()              = DBLocator.getSubDBDirectoryPath()
-    override fun getDataKeysOfInterest()            = RedditSubs.jsonKeys()
-    override fun getColumnNames()                   = RedditSubs.columnNames()
-    override fun getDataTypes()                     = RedditSubs.dataTypes()
-    override fun getTableName()                     = Finals.REDDIT_SUB_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
+    override fun buildDBPaths()                    = DBLocator.buildSubDBPaths()
+    override fun getDataFileAbsolutePaths()        = RawDataLocator.redditJsonSubmissionAbsolutePaths()
+    override fun getDBAbsolutePaths()              = DBLocator.redditSubsAbsolutePaths()
+    override fun getDBDirectoryPaths()             = DBLocator.getSubDBDirectoryPath()
+    override fun getDataKeysOfInterest()           = RedditSubs.jsonKeys()
+    override fun getColumnNames()                  = RedditSubs.columnNames()
+    override fun getDataTypes()                    = RedditSubs.dataTypes()
+    override fun getTableName()                    = Finals.REDDIT_SUB_TABLE
+    override fun getDataAbsolutePathsForNewData()  = RawDataLocator.redditJsonSubmissionAbsolutePathsNewData()
 
     override fun populateJsonWorkers(): List<JsonPusher> {
         val workers = ArrayList<JsonPusher>()
