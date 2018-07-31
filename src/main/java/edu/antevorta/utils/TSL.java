@@ -17,6 +17,14 @@ import java.util.concurrent.BlockingQueue;
  */
 @SuppressWarnings({"unused", "WeakerAccess", "SpellCheckingInspection"})
 public class TSL extends Thread{
+    // NOTE: Using an enum here would be ideal, but enums in java don't appear to correspond to int values
+    // which means they can't be added to strings. So, without wasting an hour figuring out the "right" way to
+    // do this, I'm just going to define some ints.
+    private static final Integer INFO       = 0;
+    private static final Integer WARN       = 1;
+    private static final Integer ERROR      = 2;
+    private static final Integer EXCEPTION  = 3;
+
     private static volatile TSL _instance;
     public static boolean LOG_INFO = true;
     public static boolean LOG_WARN = true;
@@ -85,14 +93,15 @@ public class TSL extends Thread{
 
             while(!(item = (String)itemsToLog.take()).equals(SHUTDOWN_REQ)){
                 String label;
-                if(item.startsWith("[INFO]"))
+
+                if(Character.getNumericValue(item.charAt(0)) == INFO)
                     label = "[INF] ";
-                else if(item.startsWith("[WARN]"))
+                else if(Character.getNumericValue(item.charAt(0)) == WARN)
                     label = "[WAR] ";
-                else if(item.startsWith("[ERROR]"))
+                else if(Character.getNumericValue(item.charAt(0)) == ERROR)
                     label = "[ERR] ";
                 else
-                    label = "[EXP]";
+                    label = "[EXP] ";
 
                 // Split the init lable off the string
                 String[] splitItem = item.split(" ", 2);
@@ -125,7 +134,7 @@ public class TSL extends Thread{
         if(!LOG_INFO || shuttingDown || loggerTerminated)
             return;
         try{
-            itemsToLog.put("[INFO] " + str);
+            itemsToLog.put(INFO.toString() + " " + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
@@ -141,7 +150,7 @@ public class TSL extends Thread{
         if(!LOG_WARN || shuttingDown || loggerTerminated)
             return;
         try{
-            itemsToLog.put("[WARN] " + str);
+            itemsToLog.put(WARN.toString() + " " + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
@@ -157,7 +166,7 @@ public class TSL extends Thread{
         if(shuttingDown || loggerTerminated)
             return;
         try{
-            itemsToLog.put("[ERROR] " + str);
+            itemsToLog.put(ERROR.toString() + " " + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
@@ -169,7 +178,7 @@ public class TSL extends Thread{
         if(shuttingDown || loggerTerminated)
             return;
         try{
-            itemsToLog.put("[EXCEPTION] " + str);
+            itemsToLog.put(EXCEPTION.toString() + " " + str);
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
