@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 import edu.antevorta.configs.Finals
 
 object RedditSubs {
-    fun JSONKeys() = listOf(
+    fun jsonKeys() = listOf(
         "archived",         "author",           "brand_safe",
         "contest_mode",     "created_utc",      "distinguished",
         "domain",           "edited",           "gilded",

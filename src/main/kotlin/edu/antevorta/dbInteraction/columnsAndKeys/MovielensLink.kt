@@ -9,7 +9,7 @@ import edu.antevorta.configs.Finals
 
 // Table = links_table
 object MovielensLink{
-    fun CSVKeys() = listOf(
+    fun csvKeys() = listOf(
             "movieId",
             "imdbId",
             "tmdbId"

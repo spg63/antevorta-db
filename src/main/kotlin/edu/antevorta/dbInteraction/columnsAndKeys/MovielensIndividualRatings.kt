@@ -3,12 +3,14 @@
  * License: MIT
  */
 
+@file:Suppress("unused")
+
 package edu.antevorta.dbInteraction.columnsAndKeys
 
 import edu.antevorta.configs.Finals
 
 object MovielensIndividualRatings {
-    fun CSVKeys() = listOf(
+    fun csvKeys() = listOf(
             "userId",
             "movieId",
             "rating",

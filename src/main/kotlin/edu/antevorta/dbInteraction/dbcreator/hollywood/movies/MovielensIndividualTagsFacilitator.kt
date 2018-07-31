@@ -9,7 +9,6 @@ import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
 import edu.antevorta.dbInteraction.columnsAndKeys.MovielensIndividualTags
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
-import org.apache.commons.csv.CSVFormat
 
 class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
     constructor(): super() //{ this.parseFormat = CSVFormat.DEFAULT }
@@ -20,7 +19,7 @@ class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
     private val timeIDX = "individual_tags_time_idx"
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensTagsAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensIndividualTags.CSVKeys()
+    override fun getDataKeysOfInterest()            = MovielensIndividualTags.csvKeys()
     override fun getColumnNames()                   = MovielensIndividualTags.columnNames()
     override fun getDataTypes()                     = MovielensIndividualTags.dataTypes()
     override fun getTableName()                     = Finals.ML_INDIVIUDAL_TAGS_TABLE

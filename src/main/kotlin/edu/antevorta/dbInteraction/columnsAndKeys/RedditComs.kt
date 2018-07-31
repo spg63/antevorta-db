@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 import edu.antevorta.configs.Finals
 
 object RedditComs {
-    fun JSONKeys() = listOf(
+    fun jsonKeys() = listOf(
         "author",           "author_flair_text",    "body",
         "can_gild",         "controversiality",     "created_utc",
         "distinguished",    "edited",               "gilded",

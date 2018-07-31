@@ -8,7 +8,6 @@ package edu.antevorta.dbInteraction.dbcreator.hollywood.movies
 import edu.antevorta.configs.Finals
 import edu.antevorta.configs.RawDataLocator
 import edu.antevorta.dbInteraction.columnsAndKeys.MovielensIndividualRatings
-import edu.antevorta.dbInteraction.columnsAndKeys.MovielensIndividualTags
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 
 class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
@@ -19,7 +18,7 @@ class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
     constructor(): super()
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensRatingAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensIndividualRatings.CSVKeys()
+    override fun getDataKeysOfInterest()            = MovielensIndividualRatings.csvKeys()
     override fun getColumnNames()                   = MovielensIndividualRatings.columnNames()
     override fun getDataTypes()                     = MovielensIndividualRatings.dataTypes()
     override fun getTableName()                     = Finals.ML_INDIVIDUAL_RATING_TABLE

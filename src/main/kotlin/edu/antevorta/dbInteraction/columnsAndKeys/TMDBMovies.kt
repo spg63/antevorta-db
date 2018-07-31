@@ -3,7 +3,7 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 import edu.antevorta.configs.Finals
 
 object TMDBMovies{
-    fun CSVKeys() = listOf(
+    fun csvKeys() = listOf(
             "budget",
             "genres",
             "homepage",

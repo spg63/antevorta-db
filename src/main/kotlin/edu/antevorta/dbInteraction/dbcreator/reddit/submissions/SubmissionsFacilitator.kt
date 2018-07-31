@@ -20,7 +20,7 @@ class SubmissionsFacilitator: JsonFacilitator {
     override fun getDataFileAbsolutePaths()         = RawDataLocator.redditJsonSubmissionAbsolutePaths()
     override fun getDBAbsolutePaths()               = DBLocator.redditSubsAbsolutePaths()
     override fun getDBDirectoryPaths()              = DBLocator.getSubDBDirectoryPath()
-    override fun getDataKeysOfInterest()            = RedditSubs.JSONKeys()
+    override fun getDataKeysOfInterest()            = RedditSubs.jsonKeys()
     override fun getColumnNames()                   = RedditSubs.columnNames()
     override fun getDataTypes()                     = RedditSubs.dataTypes()
     override fun getTableName()                     = Finals.REDDIT_SUB_TABLE

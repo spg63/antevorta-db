@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 import edu.antevorta.configs.Finals
 
 object MovielensMovies {
-    fun CSVKeys() = listOf(
+    fun csvKeys() = listOf(
             "movieID",
             "title",
             "genres"

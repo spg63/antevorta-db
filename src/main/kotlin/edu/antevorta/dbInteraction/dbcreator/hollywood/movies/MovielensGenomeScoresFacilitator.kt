@@ -17,7 +17,7 @@ class MovielensGenomeScoresFacilitator: AbstractMoviesFacilitator {
     constructor(): super()
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensGenomeScoresAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensGenomeScores.CSVKeys()
+    override fun getDataKeysOfInterest()            = MovielensGenomeScores.csvKeys()
     override fun getColumnNames()                   = MovielensGenomeScores.columnNames()
     override fun getDataTypes()                     = MovielensGenomeScores.dataTypes()
     override fun getTableName()                     = Finals.ML_GENOME_SCORES_TABLE

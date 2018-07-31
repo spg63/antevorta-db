@@ -17,7 +17,7 @@ class MovielensGenomeTagsFacilitator: AbstractMoviesFacilitator {
     private val tagsIDX = "genome_tags_tag_idx"
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensGenomeTagsAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensGenomeTags.CSVKeys()
+    override fun getDataKeysOfInterest()            = MovielensGenomeTags.csvKeys()
     override fun getColumnNames()                   = MovielensGenomeTags.columnNames()
     override fun getDataTypes()                     = MovielensGenomeTags.dataTypes()
     override fun getTableName()                     = Finals.ML_GENOME_TAGS_TABLE

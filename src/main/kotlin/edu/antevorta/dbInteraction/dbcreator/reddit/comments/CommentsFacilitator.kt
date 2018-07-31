@@ -20,7 +20,7 @@ class CommentsFacilitator: JsonFacilitator {
     override fun getDataFileAbsolutePaths()         = RawDataLocator.redditJsonCommentAbsolutePaths()
     override fun getDBAbsolutePaths()               = DBLocator.redditComsAbsolutePaths()
     override fun getDBDirectoryPaths()              = DBLocator.getComDBDirectoryPath()
-    override fun getDataKeysOfInterest()            = RedditComs.JSONKeys()
+    override fun getDataKeysOfInterest()            = RedditComs.jsonKeys()
     override fun getColumnNames()                   = RedditComs.columnNames()
     override fun getDataTypes()                     = RedditComs.dataTypes()
     override fun getTableName()                     = Finals.REDDIT_COM_TABLE

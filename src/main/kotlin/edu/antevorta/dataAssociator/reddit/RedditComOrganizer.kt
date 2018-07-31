@@ -9,7 +9,7 @@ import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import edu.antevorta.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevorta.utils.TSL
 
-@Suppress("ConvertSecondaryConstructorToPrimary")
+@Suppress("ConvertSecondaryConstructorToPrimary", "unused")
 class RedditComOrganizer {
     private val submission: RSMapper
     private val _logger = TSL.get()

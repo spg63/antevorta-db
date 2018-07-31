@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 import edu.antevorta.configs.Finals
 
 object TMDBCredits {
-    fun CSVKeys() = listOf(
+    fun csvKeys() = listOf(
             "movie_id",
             "title",
             "cast",

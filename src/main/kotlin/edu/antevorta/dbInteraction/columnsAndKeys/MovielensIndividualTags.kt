@@ -8,7 +8,7 @@ package edu.antevorta.dbInteraction.columnsAndKeys
 import edu.antevorta.configs.Finals
 
 object MovielensIndividualTags {
-    fun CSVKeys() = listOf(
+    fun csvKeys() = listOf(
             "userId",
             "movieId",
             "tag",

@@ -15,7 +15,7 @@ class MovielensMoviesFacilitator: AbstractMoviesFacilitator {
     constructor(): super()
 
     override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensMovieAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensMovies.CSVKeys()
+    override fun getDataKeysOfInterest()            = MovielensMovies.csvKeys()
     override fun getColumnNames()                   = MovielensMovies.columnNames()
     override fun getDataTypes()                     = MovielensMovies.dataTypes()
     override fun getTableName()                     = Finals.ML_MOVIES_TABLE
