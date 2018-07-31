@@ -16,12 +16,12 @@ class TMDBCreditsSelector: Selector() {
     }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
-        val DBs = DBLocator.hollywoodAbsolutePaths()
-        verifyDBsExist(DBs)
+        val dbs = DBLocator.hollywoodAbsolutePaths()
+        verifyDBsExist(dbs)
 
         val workers = ArrayList<SelectionWorker>()
-        for(i in 0 until DBs.size)
-            workers.add(SelectionWorker(DBs[i], SQLStatement, TMDBCreditsSetMapper()))
+        for(i in 0 until dbs.size)
+            workers.add(SelectionWorker(dbs[i], SQLStatement, TMDBCreditsSetMapper()))
         return genericSelect(workers, SQLStatement)
     }
 

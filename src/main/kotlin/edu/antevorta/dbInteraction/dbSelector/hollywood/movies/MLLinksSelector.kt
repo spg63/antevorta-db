@@ -19,6 +19,7 @@ val mlMemoMap = ConcurrentHashMap<Int, Pair<Int, Int>>()
 val tmdbMemoMap = ConcurrentHashMap<Int, Pair<Int, Int>>()
 val imdbMemoMap = ConcurrentHashMap<Int, Pair<Int, Int>>()
 
+@Suppress("unused")
 class MLLinksSelector: Selector() {
     private val tmdbcol = Finals.TMDB_ID
     private val imdbcol = Finals.IMDB_ID
@@ -30,12 +31,12 @@ class MLLinksSelector: Selector() {
     }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
-        val DBs = DBLocator.hollywoodAbsolutePaths()
-        verifyDBsExist(DBs)
+        val dbs = DBLocator.hollywoodAbsolutePaths()
+        verifyDBsExist(dbs)
 
         val workers = ArrayList<SelectionWorker>()
-        for(i in 0 until DBs.size)
-            workers.add(SelectionWorker(DBs[i], SQLStatement, MLLinksSetMapper()))
+        for(i in 0 until dbs.size)
+            workers.add(SelectionWorker(dbs[i], SQLStatement, MLLinksSetMapper()))
         return genericSelect(workers, SQLStatement)
     }
 
@@ -55,7 +56,8 @@ class MLLinksSelector: Selector() {
     fun getMLMovieIDFromIMDBMovieID(imdbID: Int) = selectValFromSpecificCol(imdbcol, imdbID, mlcol)
     fun getMLMovieIDFromTMDBMovieID(tmdbID: Int) = selectValFromSpecificCol(tmdbcol, tmdbID, mlcol)
 
-    private fun selectBothIDs(firstCol: String, secondCol: String, fromCol: String, fromColID: Int): Pair<Int, Int>{
+    private fun selectBothIDs(firstCol: String, secondCol: String,
+                              fromCol: String, fromColID: Int): Pair<Int, Int> {
         // Check to see if this value exists in the memoization map of columns
         val memoResult = whichMemoMap(fromCol)[fromColID]
         if(memoResult != null)

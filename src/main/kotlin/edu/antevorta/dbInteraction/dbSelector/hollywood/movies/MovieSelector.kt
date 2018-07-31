@@ -7,6 +7,7 @@ import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import edu.antevorta.dbInteraction.dbSelector.SelectionWorker
 import edu.antevorta.dbInteraction.dbSelector.Selector
 
+@Suppress("unused")
 class MovieSelector: Selector() {
     init {
         this.tableName = Finals.TMDB_MOVIES_TABLE
@@ -14,12 +15,12 @@ class MovieSelector: Selector() {
     }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
-        val DBs = DBLocator.hollywoodAbsolutePaths()
-        verifyDBsExist(DBs)
+        val dbs = DBLocator.hollywoodAbsolutePaths()
+        verifyDBsExist(dbs)
 
         val workers = ArrayList<SelectionWorker>()
-        for(i in 0 until DBs.size)
-            workers.add(SelectionWorker(DBs[i], SQLStatement, MovieSetMapper()))
+        for(i in 0 until dbs.size)
+            workers.add(SelectionWorker(dbs[i], SQLStatement, MovieSetMapper()))
         return genericSelect(workers, SQLStatement)
     }
 }
