@@ -6,7 +6,6 @@
 package edu.antevorta.configs
 
 import edu.antevorta.utils.FileUtils
-import javax.xml.crypto.Data
 
 /**
  * Intended to locate the json files for database builds. The location of these files can and
@@ -118,30 +117,32 @@ object RawDataLocator{
         }
     }
 
-    /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs --------------------------------- */
+    /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs ----------------------- */
     /**
-     * Some data is added once without update, however the function to gather new data still needs to be implemented.
-     * The below function exists as a fake-out for that limitation in class structure
+     * Some data is added once without update, however the function to gather new data still needs to be
+     * implemented. The below function exists as a fake-out for that limitation in class structure
      */
     fun getEmptyArrayList() = ArrayList<String>()
 
     /**
-     * Get a list of all raw json files for reddit submission data that needs to be added to an existing database.
-     * This path changes depending on while machine the code is running on.
+     * Get a list of all raw json files for reddit submission data that needs to be added to an existing
+     * database. This path changes depending on while machine the code is running on.
      * @return List of all reddit submission files for NEW json data, otherwise null
      */
     fun redditJsonSubmissionAbsolutePathsNewData(): List<String> {
-        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_REDDIT_SUB_DATA else DataPaths.NEW_REDDIT_SUB_DATA_PATH
+        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_REDDIT_SUB_DATA
+                    else DataPaths.NEW_REDDIT_SUB_DATA_PATH
         return futils.getAllFilePathsInDirWithPrefix("RS", path)
     }
 
     /**
-     * Get a list of all raw json files for reddit comment data that needs to be added to an existing database.
-     * This path changes depending on while machine the code is running on.
+     * Get a list of all raw json files for reddit comment data that needs to be added to an existing
+     * database. This path changes depending on while machine the code is running on.
      * @return List of all reddit comment files for NEW json data, otherwise null
      */
     fun redditJsonCommentAbsolutePathsNewData(): List<String> {
-        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_REDDIT_COM_DATA else DataPaths.NEW_REDDIT_COM_DATA_PATH
+        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_NEW_REDDIT_COM_DATA
+                    else DataPaths.NEW_REDDIT_COM_DATA_PATH
         return futils.getAllFilePathsInDirWithPrefix("RC", path)
     }
 }

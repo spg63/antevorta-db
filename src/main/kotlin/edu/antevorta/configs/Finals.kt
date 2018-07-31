@@ -15,7 +15,7 @@ import java.io.File
  * shards, etc...
  */
 object Finals{
-    /* ---------- Program control ----------------------------------------------------------------------------------- */
+    /* ---------- Program control ------------------------------------------------------------------------- */
     // True when working locally on MBP, false when working on full dataset -- changes data & db paths
     val TESTING_MODE = !isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
@@ -24,7 +24,7 @@ object Finals{
     const val ADD_NEW_DATA = false
     // Used when adding a table to an existing DB
 
-    /* ---------- Database control ---------------------------------------------------------------------------------- */
+    /* ---------- Database control ------------------------------------------------------------------------ */
     const val DB_DRIVER = "org.sqlite.JDBC"
     const val DB_URL_PREFIX = "jdbc:sqlite:"
     const val DB_TYPE_EXT = ".sqlite3"
@@ -51,13 +51,14 @@ object Finals{
     const val TMDB_MOVIES_TABLE             = "movies"
 
 
-    /* ---------- Server control ------------------------------------------------------------------------------------ */
+    /* ---------- Server control -------------------------------------------------------------------------- */
     const val SERVER_SOCKET = 3383
     const val SERVER_CONFIG_FILE_NAME = "doliusServerConfigsAndUsers.json"
     var CLIENT_CONFIG = "serverConfigFileDir${File.separator}clientConfig.json"
 
-    // NOTE: These columns are common to most DB types and are named here for consistency across insertions and
-    // selection from various data sources. It will allow for further generalization in higher levels of code
+    // NOTE: These columns are common to most DB types and are named here for consistency across insertions
+    // and selection from various data sources. It will allow for further generalization in higher levels of
+    // code
 
     // Used to identify the name or username of a poster
     const val AUTHOR = "author"
@@ -98,7 +99,7 @@ object Finals{
     // User ID column (not user name! A numeric ID!)
     const val USER_ID = "userid"
 
-    /* ---------- Helper functions ---------------------------------------------------------------------------------- */
+    /* ---------- Helper functions ------------------------------------------------------------------------ */
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
@@ -108,8 +109,8 @@ object Finals{
         if(System.getProperty("os.name").toLowerCase().contains("win")){
             // Now need to check if it's the research machine or the SB2 laptop
             val numCores = Runtime.getRuntime().availableProcessors()
-            // Research machine has 16 cores, 32 logical cores. However, there are some instances where the number of
-            // logical cores reported could be less than the real amount, so take that into account
+            // Research machine has 16 cores, 32 logical cores. However, there are some instances where the
+            // number of logical cores reported could be less than the real amount, so take that into account
             if(numCores > 15)
                 return true
         }
@@ -118,6 +119,6 @@ object Finals{
         return false
     }
 
-    /* ---------- Random constants -----------------------------------------------------------------------------------*/
+    /* ---------- Random constants -------------------------------------------------------------------------*/
     const val NOTAGLINE = "NO TAGLINE"
 }

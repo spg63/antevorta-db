@@ -12,26 +12,26 @@ import edu.antevorta.utils.FileUtils
  * on which machine this code is running on and whether or not testing_mode is enabled. This
  * class abstracts away the paths to the DB files.
  *
- * NOTE: Functions below are split into groupings of however many different DBs exist. Each type of DB needs these
- * functions for access. However many paths are found below in "Paths to the directories...." will tell you how many
- * different functions should be in each grouping.
+ * NOTE: Functions below are split into groupings of however many different DBs exist. Each type of DB needs
+ * these functions for access. However many paths are found below in "Paths to the directories...." will tell
+ * you how many different functions should be in each grouping.
  */
 object DBLocator {
     private val futils = FileUtils.get()
-    /* ----- List of drive letters on the research machine that stores the db shards -------------------------------- */
+    /* ----- List of drive letters on the research machine that stores the db shards ---------------------- */
     private val DRIVES = arrayOf("F", "G", "H", "I", "J", "K")
 
-    /* ----- Paths to the directories that hold the DB shards without the drive letter prefix ----------------------- */
+    /* ----- Paths to the directories that hold the DB shards without the drive letter prefix ------------- */
     private const val REDDIT_SUB_DB_DIR_PATH    = ":/DBs/Reddit/Submissions/"
     private const val REDDIT_COM_DB_DIR_PATH    = ":/DBs/Reddit/Comments/"
     private const val HOLLYWOOD_DB_DIR_PATH     = ":/DBs/Hollywood/"
 
-    /* ----- Paths to the DB shards without the drive letter prefix ------------------------------------------------- */
-    private const val REDDIT_SUB_SHARD  = "$REDDIT_SUB_DB_DIR_PATH${DataPaths.REDDIT_SUB_DB}${DataPaths.DBEXT}"
-    private const val REDDIT_COM_SHARD  = "$REDDIT_COM_DB_DIR_PATH${DataPaths.REDDIT_COM_DB}${DataPaths.DBEXT}"
-    private const val HOLLYWOOD_SHARD   = "$HOLLYWOOD_DB_DIR_PATH${DataPaths.HOLLYWOOD_DB}${DataPaths.DBEXT}"
+    /* ----- Paths to the DB shards without the drive letter prefix --------------------------------------- */
+    private const val REDDIT_SUB_SHARD = "$REDDIT_SUB_DB_DIR_PATH${DataPaths.REDDIT_SUB_DB}${DataPaths.DBEXT}"
+    private const val REDDIT_COM_SHARD = "$REDDIT_COM_DB_DIR_PATH${DataPaths.REDDIT_COM_DB}${DataPaths.DBEXT}"
+    private const val HOLLYWOOD_SHARD  = "$HOLLYWOOD_DB_DIR_PATH${DataPaths.HOLLYWOOD_DB}${DataPaths.DBEXT}"
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
     /**
      * Get a list of absolute file paths to all reddit submission DBs
@@ -77,7 +77,7 @@ object DBLocator {
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
     /**
      * Get the path to the directory that holds the submission DBs. This path changes depending on
@@ -115,7 +115,7 @@ object DBLocator {
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
     /**
      * Build paths to the submission databases. Intended to be used when the DBs don't yet exist
@@ -153,11 +153,11 @@ object DBLocator {
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
     /*
-        Just adds the drive letters to the path. This is implemented below with buildPathsWithDriveLetter and the
-        above functions just pass along the proper path to the shard depending on DB type
+        Just adds the drive letters to the path. This is implemented below with buildPathsWithDriveLetter and
+        the above functions just pass along the proper path to the shard depending on DB type
     */
 
     // Build paths for the reddit submission db shards
@@ -167,11 +167,12 @@ object DBLocator {
     // Build paths for the hollywood db shards
     private fun hollywoodDBPathsList(): List<String> = buildPathsWithDriveLetter(HOLLYWOOD_SHARD)
 
-    // -----------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
     /*
         ** NO JAVADOC **
-        * Actually builds the paths to the DBs based on requested com/sub dir and their prefix when the DBs don't exist
+        * Actually builds the paths to the DBs based on requested com/sub dir and their prefix when the DBs
+        * don't exist
      */
     private fun buildDBPaths(db_dir: String, db_prefix: String): List<String> {
         val sbs = ArrayList<StringBuilder>()
@@ -191,8 +192,8 @@ object DBLocator {
 
     /*
         ** NO JAVADOC **
-        * Returns a list of strings with the drive letters prepended to them. Drive letters come from the above
-        * DRIVES list
+        * Returns a list of strings with the drive letters prepended to them. Drive letters come from the
+        * above DRIVES list
      */
     private fun buildPathsWithDriveLetter(thePath: String): List<String> {
         val re = ArrayList<String>()

@@ -12,7 +12,7 @@ import java.io.File
  * code and whether or not testing_mode has been enabled
  */
 object DataPaths{
-    /* ---------- File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) ------------ */
+    /* ---------- File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) -- */
     const val localPath = "LocalData/raw/"
     const val LOCAL_REDDIT_SUB_DATA     = "${localPath}submissions/"
     const val LOCAL_REDDIT_COM_DATA     = "${localPath}comments/"
@@ -29,7 +29,7 @@ object DataPaths{
     const val LOCAL_NEW_REDDIT_SUB_DATA = "${localPath}new/submissions/"
     const val LOCAL_NEW_REDDIT_COM_DATA = "${localPath}new/comments/"
 
-    /* ---------- File paths when running on the research machine --------------------------------------------------- */
+    /* ---------- File paths when running on the research machine ----------------------------------------- */
     const val researchPath = "A:/Data/Uncompressed/"
     const val REDDIT_SUB_DATA_PATH      = "${researchPath}Reddit/Submissions/"
     const val REDDIT_COM_DATA_PATH      = "${researchPath}Reddit/Comments/"
@@ -46,12 +46,12 @@ object DataPaths{
     const val NEW_REDDIT_SUB_DATA_PATH  = "${researchPath}Reddit/New/Submissions/"
     const val NEW_REDDIT_COM_DATA_PATH  = "${researchPath}Reddit/New/Comments/"
 
-    /* ---------- Path to TESTING_MODE db files --------------------------------------------------------------------- */
+    /* ---------- Path to TESTING_MODE db files ----------------------------------------------------------- */
     const val LOCAL_REDDIT_SUB_DB_PATH  = "LocalDB/RedditSubs/"
     const val LOCAL_REDDIT_COM_DB_PATH  = "LocalDB/RedditComs/"
     const val LOCAL_HOLLYWOOD_DB_PATH   = "LocalDB/Hollywood/"
 
-    /* ---------- Pieces of information to build DB paths on research machine --------------------------------------- */
+    /* ---------- Pieces of information to build DB paths on research machine ----------------------------- */
     const val REDDIT_SUB_DB             = "RS_DB"
     const val REDDIT_COM_DB             = "RC_DB"
     const val HOLLYWOOD_DB              = "HOLLYWOOD"
@@ -59,6 +59,6 @@ object DataPaths{
     // The DB file extension for sqlite3 files
     const val DBEXT                     = Finals.DB_TYPE_EXT
 
-    /* ---------- Path to the location of the server configuration file --------------------------------------------- */
+    /* ---------- Path to the location of the server configuration file ----------------------------------- */
     val DB_CONFIG_PATH                  = "dbConfigs${File.separator}"
 }
