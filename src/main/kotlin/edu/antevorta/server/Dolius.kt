@@ -31,17 +31,18 @@ import java.net.Socket
 var currentThreads = 0
 const val MAX_THREADS = 5
 
+@Suppress("PrivatePropertyName")
 class Dolius(private val socket: Socket): Runnable {
     private var sleepCounter = 0
-    private val MAX_SLEEP = 5
-    private val logger_ = TSL.get()
-    private var SERVER_BUSY = false
-    private var SANITIZE_FAIL = false
-    private var AUTH_FAIL = false
-    private val NOOP_FLAG = "=*="
-    private val BUSY_STR = "${NOOP_FLAG}Server was busy, unable to process request. Please try again later."
-    private val REJT_STR = "${NOOP_FLAG}Server will not perform that kind of work."
-    private val AUTH_STR = "${NOOP_FLAG}Server could not authenticate user, please check credentials."
+    private val maxSleep = 5
+    private val logger = TSL.get()
+    private var serverBusy = false
+    private var sanitizeFail = false
+    private var authFail = false
+    private val noopFlag = "=*="
+    private val busyStr = "${noopFlag}Server was busy, unable to process request. Please try again later."
+    private val rejectionStr = "${noopFlag}Server will not perform that kind of work."
+    private val authStr = "${noopFlag}Server could not authenticate user, please check credentials."
     private val sleepTimeMS: Long = 2000
     private val USER = "USER"
     private val PASS = "PASS"
@@ -51,27 +52,28 @@ class Dolius(private val socket: Socket): Runnable {
     // Log separately connections so I can easily track them
     init{
         while(currentThreads >= MAX_THREADS) {
-            logger_.info("Dolius: Sleeping for $sleepTimeMS")
+            logger.info("Dolius: Sleeping for $sleepTimeMS")
             Thread.sleep(sleepTimeMS)
             sleepCounter++
-            if(sleepCounter >= MAX_SLEEP) {
-                logger_.warn("Dolius: Reached MAX_SLEEP")
-                SERVER_BUSY = true
+            if(sleepCounter >= maxSleep) {
+                logger.warn("Dolius: Reached maxSleep")
+                serverBusy = true
                 break
             }
-            logger_.warn("Dolius: currentThreads >= MAX_THREADS")
+            logger.warn("Dolius: currentThreads >= MAX_THREADS")
         }
         ++currentThreads
     }
 
     /**
-     * Read the data from the socket, process the data to determine function call, call the function, parse the
-     * RSMapper into a list of JSON objects, push the JSON objects back to the client and close the connection
+     * Read the data from the socket, process the data to determine function call, call the function, parse
+     * the RSMapper into a list of JSON objects, push the JSON objects back to the client and close the
+     * connection
      */
     override fun run() {
         // Get the data from the socket
         // If the server has reached max threads and max sleep, tell client the server is busy and quit
-        if(SERVER_BUSY) {
+        if(serverBusy) {
             handleBusy()
             destroy()
             return
@@ -87,7 +89,7 @@ class Dolius(private val socket: Socket): Runnable {
             input = inputReader.readLine()
         }
         catch(e: IOException){
-            logger_.exception(e)
+            logger.exception(e)
             handleRejection("Server failed to read client input")
             destroy()
             return
@@ -111,14 +113,14 @@ class Dolius(private val socket: Socket): Runnable {
             authenticateUser(user, pass)
         }
         else{
-            logger_.err("jsonObject missing USER or PASS key")
+            logger.err("jsonObject missing USER or PASS key")
             handleRejection("JSON from client missing authentication information")
             destroy()
             return
         }
 
         // If auth fails, let client know and quit
-        if(AUTH_FAIL){
+        if(authFail){
             handleAuthFailure()
             destroy()
             return
@@ -129,7 +131,7 @@ class Dolius(private val socket: Socket): Runnable {
         if(jsonObject.has(QUERY))
             query = jsonObject.getString(QUERY)
         else{
-            logger_.err("jsonObject missing QUERY key")
+            logger.err("jsonObject missing QUERY key")
             handleRejection("JSON from client missing query information")
             destroy()
             return
@@ -139,13 +141,13 @@ class Dolius(private val socket: Socket): Runnable {
         sanitize(query)
 
         // If sanitization fails, let client know and quit
-        if(SANITIZE_FAIL){
+        if(sanitizeFail){
             handleRejection(input)
             destroy()
             return
         }
 
-        logger_.info("Dolius processing \"$query\" from $user")
+        logger.info("Dolius processing \"$query\" from $user")
 
         // Query the DB and get the RSMappers in return
         val mappers = process(query)
@@ -164,7 +166,7 @@ class Dolius(private val socket: Socket): Runnable {
 
 
 
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
 
     /**
@@ -187,8 +189,8 @@ class Dolius(private val socket: Socket): Runnable {
             obj = JSONObject(jsonString)
         }
         catch(e: JSONException){
-            logger_.err("Failed JSON Input: $jsonString")
-            logger_.exception(e)
+            logger.err("Failed JSON Input: $jsonString")
+            logger.exception(e)
             return null
         }
         return obj
@@ -196,13 +198,13 @@ class Dolius(private val socket: Socket): Runnable {
 
     /**
      * Authenticate a user
-     * NOTE: This is not designed to be some super secure system, it's just a basic attempt to prevent DOS attacks
-     * from people who may have found host / port in github commits
+     * NOTE: This is not designed to be some super secure system, it's just a basic attempt to prevent DOS
+     * attacks from people who may have found host / port in github commits
      */
     private fun authenticateUser(username: String, userpass: String){
-        AUTH_FAIL = !this.configHandler.isUserAuthorized(username, userpass)
-        if(AUTH_FAIL)
-            logger_.warn("Dolius: AUTH_FAIL for $username | $userpass")
+        authFail = !this.configHandler.isUserAuthorized(username, userpass)
+        if(authFail)
+            logger.warn("Dolius: authFail for $username | $userpass")
     }
 
 
@@ -216,7 +218,7 @@ class Dolius(private val socket: Socket): Runnable {
             clientWriter.close()
         }
         catch(e: InvocationTargetException){
-            logger_.exception(e)
+            logger.exception(e)
         }
     }
 
@@ -224,7 +226,7 @@ class Dolius(private val socket: Socket): Runnable {
      * Let the user know authentication has failed
      */
     private fun handleAuthFailure(){
-        writeMessageToClient(AUTH_STR)
+        writeMessageToClient(authStr)
     }
 
     /**
@@ -239,16 +241,16 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun handleBusy(){
         --currentThreads
-        logger_.warn("Dolius: handleBusy")
-        writeMessageToClient(BUSY_STR)
+        logger.warn("Dolius: handleBusy")
+        writeMessageToClient(busyStr)
     }
 
     /**
      * Tells the client the server didn't want to perform work, for any reason other than being busy
      */
     private fun handleRejection(inpurString: String){
-        logger_.warn("Dolius: handleRejection -- $inpurString")
-        writeMessageToClient(REJT_STR)
+        logger.warn("Dolius: handleRejection -- $inpurString")
+        writeMessageToClient(rejectionStr)
     }
 
     /**
@@ -260,7 +262,7 @@ class Dolius(private val socket: Socket): Runnable {
         val lowerInput = inputLine.toLowerCase()
         for(word in banned)
             if(word in lowerInput) {
-                SANITIZE_FAIL = true
+                sanitizeFail = true
                 return
             }
     }
@@ -284,7 +286,8 @@ fun runServerInTryCatch(){
         }
         catch(e: Exception){
             ++restartCount
-            TSL.get().err("Dolius was hit in the face by an uncaught exception. Dolius has now been restarted $restartCount times.")
+            TSL.get().err("Dolius was hit in the face by an uncaught exception. Dolius has now " +
+                    "been restarted $restartCount times.")
             if(!sock.isClosed) sock.close()
             // Just re-call this function to restart the server if some un-caught exception is throw
             runServerInTryCatch()
@@ -293,7 +296,7 @@ fun runServerInTryCatch(){
 }
 
 fun main(args: Array<String>){
-    // This function just runs the server in a while(true) continuous loop. If an exception is thrown the function is
-    // simply re-called to restart the server. Not a long term solution but it'll do for now.
+    // This function just runs the server in a while(true) continuous loop. If an exception is thrown the
+    // function is simply re-called to restart the server. Not a long term solution but it'll do for now.
     runServerInTryCatch()
 }

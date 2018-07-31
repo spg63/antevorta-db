@@ -8,17 +8,16 @@ package edu.antevorta.server
 import edu.antevorta.configs.DataPaths
 import edu.antevorta.configs.Finals
 import edu.antevorta.utils.FileUtils
-import edu.antevorta.utils.TSL
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 
-@Suppress("unused")
+@Suppress("unused", "PrivatePropertyName")
 class ServerConfigHandler {
     private var jsonObject = JSONObject()
     private val myRootDir = DataPaths.DB_CONFIG_PATH
     private val myConfigFile = myRootDir + Finals.SERVER_CONFIG_FILE_NAME
-    private val fileUtils_ = FileUtils.get()
+    private val fileUtils = FileUtils.get()
     private val USER = "USER"
     private val PASS = "PASS"
     private val BAN = "WORD"
@@ -26,7 +25,7 @@ class ServerConfigHandler {
     private val BANN_ARR = "BANNED"
 
     init {
-        fileUtils_.checkAndCreateDir(myRootDir)
+        fileUtils.checkAndCreateDir(myRootDir)
         readInConfigs()
     }
 
@@ -44,7 +43,8 @@ class ServerConfigHandler {
     }
 
     /**
-     * Users are stored in the config file with a preceeding USR* so look for USR* + "username" in the configFileMap
+     * Users are stored in the config file with a preceeding USR* so look for USR* + "username" in
+     * the configFileMap
      */
     fun isUserAuthorized(username: String, userpass: String): Boolean{
         val usersArray = this.jsonObject.getJSONArray(USER_ARR)
@@ -135,7 +135,8 @@ class ServerConfigHandler {
         // If it doesn't exist yet we can't remove a user
         if(!configExists()) return false
 
-        // No great way to do this, loop through the users, add to new array, skipping the one we want to remove
+        // No great way to do this, loop through the users, add to new array, skipping the one we want to
+        // remove
         val usersArray = this.jsonObject.getJSONArray(USER_ARR)
         for(i in 0 until usersArray.length()){
             val user = usersArray.getJSONObject(i)
@@ -157,7 +158,7 @@ class ServerConfigHandler {
         }
 
         // Read the file in as a single string
-        val fileString = fileUtils_.readFullFile(myConfigFile)
+        val fileString = fileUtils.readFullFile(myConfigFile)
 
         // Create the JSONObject from the string
         this.jsonObject = JSONObject(fileString)
@@ -168,7 +169,7 @@ class ServerConfigHandler {
      */
     private fun configExists(): Boolean{
         // Return false if function call returns null
-        val files = fileUtils_.getAllFilePathsInDir(myRootDir) ?: return false
+        val files = fileUtils.getAllFilePathsInDir(myRootDir) ?: return false
         return files.any { it.contains(myConfigFile) }
     }
 
@@ -185,7 +186,7 @@ class ServerConfigHandler {
      */
     private fun writeConfigFile(): Boolean{
         // Loop through the map and add all key,vals to the StringBuilder
-        return fileUtils_.writeNewFile(myConfigFile, this.jsonObject.toString())
+        return fileUtils.writeNewFile(myConfigFile, this.jsonObject.toString())
     }
 }
 
