@@ -3,6 +3,8 @@
  * License: MIT
  */
 
+@file:Suppress("FunctionName", "unused")
+
 package edu.antevorta.dbInteraction
 
 import edu.antevorta.utils.TSL
@@ -117,14 +119,14 @@ object TimeUtils {
         val minute = ldt.minute
         val second = ldt.second
 
-        var SQLTime = StringBuilder()
-        SQLTime.append(year.toString() + "-")
-        SQLTime.append(getStringFromValueWithZeroWhereNecessary(month)).append("-")
-        SQLTime.append(getStringFromValueWithZeroWhereNecessary(day)).append(" ")
-        SQLTime.append(getStringFromValueWithZeroWhereNecessary(hour)).append(":")
-        SQLTime.append(getStringFromValueWithZeroWhereNecessary(minute)).append(":")
-        SQLTime.append(getStringFromValueWithZeroWhereNecessary(second))
-        return SQLTime.toString()
+        val sqlTime = StringBuilder()
+        sqlTime.append(year.toString() + "-")
+        sqlTime.append(getStringFromValueWithZeroWhereNecessary(month)).append("-")
+        sqlTime.append(getStringFromValueWithZeroWhereNecessary(day)).append(" ")
+        sqlTime.append(getStringFromValueWithZeroWhereNecessary(hour)).append(":")
+        sqlTime.append(getStringFromValueWithZeroWhereNecessary(minute)).append(":")
+        sqlTime.append(getStringFromValueWithZeroWhereNecessary(second))
+        return sqlTime.toString()
     }
 
     /**

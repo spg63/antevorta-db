@@ -26,9 +26,11 @@ public class AntevortaClient {
      * @param hostname The host
      * @param hostport The port
      * @param user Your username
-     * @param pass Your password -- NOTE: THIS IS NOT SECURE, DON'T USE A PASSWORD YOU CURRENTLY OR WILL USE ELSEWHERE!!
+     * @param pass Your password -- NOTE: THIS IS NOT SECURE, DON'T USE A PASSWORD YOU CURRENTLY OR
+     *             WILL USE ELSEWHERE!!
      */
-    public static void writeConfigFile(String configFile, String hostname, Integer hostport, String user, String pass){
+    public static void writeConfigFile(String configFile, String hostname, Integer hostport,
+                                       String user, String pass){
         JSONObject json = new JSONObject();
         json.put(HOST_NAME, hostname);
         json.put(HOST_PORT, hostport);
@@ -54,18 +56,19 @@ public class AntevortaClient {
     private String user;
     private String pass;
 
-    // The config file will need to include the server hostname, the server port, the client username and the client
-    // password. The idea here really isn't for some secure login system, it's just a very basic attempt to stop
-    // people from scraping github and hitting my server with a bunch of requests.
-    // NOTE: Realistically I have no way to enforce usage of a config file, but not using it means you're a dick.
+    // The config file will need to include the server hostname, the server port, the client username and the
+    // client password. The idea here really isn't for some secure login system, it's just a very basic
+    // attempt to stop people from scraping github and hitting my server with a bunch of requests.
+    // NOTE: Realistically I have no way to enforce usage of a config file, but not using it means you're
+    // a jerk.
     public AntevortaClient(String configFilePath){
         this.configPath = configFilePath;
         parseConfigFile();
     }
 
     /**
-     * Query the server with your sql string. The server will determine which DB to query based on table name in the
-     * sql string.
+     * Query the server with your sql string. The server will determine which DB to query based on table name
+     * in the sql string.
      * @param SQLQuery, the sql compatible query string to use to query the DB
      * @return
      */
@@ -81,29 +84,31 @@ public class AntevortaClient {
             // Build JSONObject, consisting of user, pass, and query string
             JSONObject queryObject = buildJSONObject(SQLQuery);
 
-            // Server reads line by line; need to ensure the string ends with a newline char or server will hang
+            // Server reads line by line; need to ensure the string ends with a newline char or server
+            // will hang
             serverWriter.writeBytes(queryObject.toString() + "\n");
             serverWriter.flush();
 
-            // Sit here and wait for the server to respond. JSONArray will be returned in one line for easy parsing
-            // by the client. This seems to work fine for large results running over TCP, if problems arise this can
-            // be revised to transfer raw bytes with better error handling.
+            // Sit here and wait for the server to respond. JSONArray will be returned in one line for easy
+            // parsing by the client. This seems to work fine for large results running over TCP, if problems
+            // arise this can be revised to transfer raw bytes with better error handling.
             String jsonArrayString = serverReader.readLine();
 
-            // String could perhaps be null if a failure occurs, however in practice it should just hang on the
-            // readLine() call -- Might be smart to add a timeout for that call that is reasonable to accomodate
-            // large requests.
+            // String could perhaps be null if a failure occurs, however in practice it should just hang on
+            // the readLine() call -- Might be smart to add a timeout for that call that is reasonable to
+            // accomodate large requests.
             if(jsonArrayString == null) jsonArrayString = emptyArray;
 
-            // Response starts with NOOP_FLAG if the server didn't perform the request, a reason for the failure will
-            // come after the flag
+            // Response starts with NOOP_FLAG if the server didn't perform the request, a reason for the
+            // failure will come after the flag
             if(jsonArrayString.startsWith(NOOP_FLAG)){
-                System.out.println("Server failed to return results: " + jsonArrayString.substring(NOOP_FLAG.length()));
+                System.out.println("Server failed to return results: " +
+                        jsonArrayString.substring(NOOP_FLAG.length()));
                 return new JSONArray(emptyArray);
             }
 
-            // NOTE: A query returning no results will return [], a valid (but empty) JSONArray. RSMappersOutput knows
-            // how to handle empty results
+            // NOTE: A query returning no results will return [], a valid (but empty) JSONArray.
+            // RSMappersOutput knows how to handle empty results
             results = new JSONArray(jsonArrayString);
         }
         catch(IOException e){
@@ -114,7 +119,7 @@ public class AntevortaClient {
         return results;
     }
 
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 
     private void parseConfigFile(){
         String fullString = null;
@@ -154,61 +159,4 @@ public class AntevortaClient {
 
         return json;
     }
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-    public static void main(String[] args){
-        /*
-        // Table names for the 2 DBs
-        final String redditComTable = "comment_attrs";
-        final String redditSubTable = "submission_attrs";
-        final String configFileDir = "serverConfigFileDir";
-        final String configFileName = "clientConfig.json";
-        final String configPathAndName = configFileDir + File.separator + configFileName;
-
-        // Column name for author
-        final String authorColName = "author";
-        final String author = "a4k04";
-
-        // Create a new client
-        AntevortaClient av = new AntevortaClient(configPathAndName);
-
-        // Create a DBSelector to create an SQL query string. This thing is more helpful for more complex string, but
-        // here's a basic example selecting all comments or submissions from an author
-        DBSelector dbsql = new DBSelector()
-                .from(redditSubTable)
-                .where(authorColName + "='"+ author + "'");
-
-        // Get the sql string from DBSelector
-        String sql = dbsql.sql();
-
-        // Make the selection
-        JSONArray res = av.queryServer(sql);
-
-        // This *really* shouldn't ever happen. NOOP returns empty array and no results returns an empty array
-        if(res == null)
-            return;
-
-        // Get the objects out of the JSONArray
-        List<JSONObject> resultObjects = new ArrayList<>();
-        for(int i = 0; i < res.length(); ++i)
-            resultObjects.add(res.getJSONObject(i));
-
-        // Print the JSONObjects
-        //for(JSONObject obj : resultObjects)
-        //    System.out.println(obj);
-
-
-        // NOTE: The below is only if you want to convert back to RSMapper object for each JSON object. Definitely
-        // not a necessity
-        List<RSMapper> mappers = new ArrayList<>();
-        for(JSONObject obj : resultObjects)
-            mappers.add(new BaseMapper(obj));
-
-        // Print the RSMapper objects
-        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(), RedditSubs
-                .dataTypesForPrinting());
-                */
-    }
-
 }
