@@ -3,7 +3,7 @@
  * License: MIT
  */
 
-@file:Suppress("unused")
+@file:Suppress("unused", "ConstantConditionIf", "HasPlatformType")
 
 package edu.antevorta.runner
 
@@ -23,17 +23,17 @@ import edu.antevorta.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacil
 import edu.antevorta.utils.Out
 import edu.antevorta.utils.TSL
 
-val logger_ = TSL.get()
+val logger = TSL.get()
 
 fun main(args : Array<String>){
     val out = Out.get()
     TSL.LOG_TO_CONSOLE = true
 
     if(Finals.isResearchMachine() && Finals.START_FRESH)
-        logger_.logAndKill("isResearchMachine() was true while trying to start fresh")
+        logger.logAndKill("isResearchMachine() was true while trying to start fresh")
 
     if(Finals.isResearchMachine() && Finals.ADD_NEW_DATA)
-        logger_.logAndKill("isResearchMachine() was true while trying to add new data")
+        logger.logAndKill("isResearchMachine() was true while trying to add new data")
 
     val sw = Stopwatch.createStarted()
 
@@ -48,17 +48,17 @@ fun main(args : Array<String>){
 
     sw.stop()
 
-    logger_.info("Execution took " + out.timer_millis(sw))
-    logger_.info("Execution took " + out.timer_secs(sw))
-    logger_.info("Execution took " + out.timer_mins(sw))
+    logger.info("Execution took " + out.timer_millis(sw))
+    logger.info("Execution took " + out.timer_secs(sw))
+    logger.info("Execution took " + out.timer_mins(sw))
 
-    logger_.shutDown()
+    logger.shutDown()
 }
 
 fun hollywoodSelect(){
     val text = "boat"
     val res = MLGenomeTagsSelector().getTagIDFromTagText(text)
-    logger_.info("$text: $res")
+    logger.info("$text: $res")
 
 }
 
@@ -71,7 +71,7 @@ fun createHollywoodDB(){
     // Create the DB, and the first table in the DB (links_table)
     buildDBShards(MovielensLinkFacilitator())
 
-    /* ---------- Now start adding tables to the DB shards ---------------------------------------------------------- */
+    /* ---------- Now start adding tables to the DB shards ------------------------------------------------ */
 
     // 2nd table should be the genome_tags table
     addTableToShards(MovielensGenomeTagsFacilitator())
@@ -112,7 +112,8 @@ fun doSubs(){
     //val results = rss.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
 
 
-    RSMapperOutput.printAllColumnsFromRSMappers(res, RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
+    RSMapperOutput.printAllColumnsFromRSMappers(res, RedditSubs.columnsForPrinting(),
+            RedditSubs.dataTypesForPrinting())
     //RSMapperOutput.rsMappersToCSV(results, RedditSubs.columnsForPrinting(), "out.csv")
 }
 
@@ -140,7 +141,8 @@ fun doComs(){
 
     val res = rcs.generalSelection(dbsql.sql())
 
-    RSMapperOutput.printAllColumnsFromRSMappers(res, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
+    RSMapperOutput.printAllColumnsFromRSMappers(res, RedditComs.columnsForPrinting(),
+            RedditComs.dataTypesForPrinting())
 }
 
 fun buildDBShards(fac: Facilitator){

@@ -3,6 +3,8 @@
  * License: MIT
  */
 
+@file:Suppress("unused")
+
 package edu.antevorta.runner
 
 import edu.antevorta.client.AntevortaClient
@@ -27,10 +29,10 @@ object PullFromServer{
                 .orderBy("subreddit_name")
                 .limit(10)
 
-        logger_.info(dbsql.sql())
+        logger.info(dbsql.sql())
 
         // If results are null, return
-        val jsonResults = client.queryServer(dbsql.sql()) ?: return
+        val jsonResults = client.queryServer(dbsql.sql())
 
         // Get all objects from the JSONArray
         val objects = ArrayList<JSONObject>()
@@ -41,7 +43,8 @@ object PullFromServer{
         for(jsonobj in objects)
             mappers.add(BaseMapper(jsonobj))
 
-        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
+        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(),
+                RedditComs.dataTypesForPrinting())
     }
 
     fun doServerSubs(){
@@ -53,7 +56,7 @@ object PullFromServer{
                 .where("author = '$author'")
                 .orderBy("created_dt")
 
-        val jsonResults = client.queryServer(dbsql.sql()) ?: return
+        val jsonResults = client.queryServer(dbsql.sql())
 
         val objects = ArrayList<JSONObject>()
         for(i in 0 until jsonResults.length())
@@ -63,6 +66,7 @@ object PullFromServer{
         for(jsonobj in objects)
             mappers.add(BaseMapper(jsonobj))
 
-        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
+        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(),
+                RedditSubs.dataTypesForPrinting())
     }
 }
