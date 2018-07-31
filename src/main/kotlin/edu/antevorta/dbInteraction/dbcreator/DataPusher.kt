@@ -11,11 +11,12 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+@Suppress("MemberVisibilityCanBePrivate", "PropertyName")
 abstract class DataPusher: Runnable {
     lateinit var DB: String
     lateinit var columns: List<String>
     lateinit var tableName: String
-    val logger_ = TSL.get()!!
+    val logger = TSL.get()!!
 
     constructor()
 
@@ -51,22 +52,22 @@ abstract class DataPusher: Runnable {
         return sb.toString()
     }
 
-    // DB specific parsing and pushing of data. This will be implemented in the most derived classes and will be
-    // specific to json or csv or other type of data. The function is specific to the data being read and the data
-    // being written to the DB
+    // DB specific parsing and pushing of data. This will be implemented in the most derived classes and will
+    // be specific to json or csv or other type of data. The function is specific to the data being read and
+    // the data being written to the DB
     protected abstract fun parseAndPushDataToDB()
 
     /*
-     *  The below two functions centralize error handling when pushing data into the DB. These error blocks can be long
-     *  and there's no reason to repeat them over all of the different derived classes. Do it here.
+     *  The below two functions centralize error handling when pushing data into the DB. These error blocks
+     *  can be long and theres no reason to repeat them over all of the different derived classes. Do it here.
      */
     protected fun pusherCatchBlock(e: SQLException?, conn: Connection?){
-        logger_.exception(e)
+        logger.exception(e)
         try{
             conn!!.rollback()
         }
         catch(exp: SQLException){
-            logger_.logAndKill(exp)
+            logger.logAndKill(exp)
         }
     }
 
@@ -76,14 +77,14 @@ abstract class DataPusher: Runnable {
                 conn.autoCommit = true
         }
         catch(exp: SQLException){
-            logger_.logAndKill(exp)
+            logger.logAndKill(exp)
         }
         if(ps != null){
             try{
                 ps.close()
             }
             catch(ex: SQLException){
-                logger_.exception(ex)
+                logger.exception(ex)
             }
         }
 

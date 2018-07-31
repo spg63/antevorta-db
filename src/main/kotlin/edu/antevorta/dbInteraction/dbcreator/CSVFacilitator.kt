@@ -13,7 +13,7 @@ import org.apache.commons.csv.CSVRecord
 import java.io.File
 import java.io.FileReader
 
-@Suppress("ConvertSecondaryConstructorToPrimary")
+@Suppress("ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate", "HasPlatformType")
 abstract class CSVFacilitator: Facilitator {
     protected var parseFormat = CSVFormat.DEFAULT!!.withQuote(null)
     protected var parser: CSVParser? = null
@@ -26,15 +26,15 @@ abstract class CSVFacilitator: Facilitator {
     override fun pushDataIntoDBs() {
         if(shouldFunctionReturnEarly()) return
 
-        // For each CSV file, need to read each line of the file, turn it into a record, and give the records to the
-        // CSV pushers to parse them and push them into the DBs
-        for(csv in this.dataAbsolutePaths_){
+        // For each CSV file, need to read each line of the file, turn it into a record, and give the records
+        // to the CSV pushers to parse them and push them into the DBs
+        for(csv in this.dataAbsolutePaths){
             val f = File(csv)
-            logger_.info("Counting number of lines in ${f.name}")
+            logger.info("Counting number of lines in ${f.name}")
             val totalLines = FileUtils.get().lineCount(csv)
             val totalLinesInFile = totalLines.toDouble()
-            logger_.info("Reading ${f.name}")
-            logger_.info("${f.name} has ${numberFormat_.format(totalLinesInFile)} lines")
+            logger.info("Reading ${f.name}")
+            logger.info("${f.name} has ${numberFormat.format(totalLinesInFile)} lines")
 
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
             var lineReadCounter = 0
@@ -66,7 +66,7 @@ abstract class CSVFacilitator: Facilitator {
                             val readLines = totalLinesRead.toDouble()
                             val currentComplete = readLines / totalLinesInFile
                             val percentComplete = (currentComplete * 100).toInt()
-                            logger_.info("$percentComplete% done ${f.name}")
+                            logger.info("$percentComplete% done ${f.name}")
                         }
                         ++writeTotalLinesRead
 
@@ -74,28 +74,29 @@ abstract class CSVFacilitator: Facilitator {
                             recordsList.add(ArrayList())
                     }
                 }
-                // There could be leftover csv records that don't get pushed due to not meeting the dbDumpLimit amount
-                // of lines. Start up the workers again and push the remaining lines
-                logger_.info("Launching final CSV push for ${f.name}")
+                // There could be leftover csv records that don't get pushed due to not meeting the
+                // dbDumpLimit amount of lines. Start up the workers again and push the remaining lines
+                logger.info("Launching final CSV push for ${f.name}")
                 totalLinesRead += lineReadCounter
-                logger_.info("Total lines read ${numberFormat_.format(totalLinesRead)} for ${f.name}")
+                logger.info("Total lines read ${numberFormat.format(totalLinesRead)} for ${f.name}")
                 letWorkersFly(recordsList)
             }
             catch(e: Exception){
-                logger_.logAndKill(e)
+                logger.logAndKill(e)
             }
         }
-        // Create the indices on all shards. This happens on table creation and after batch inserts for new data
+        // Create the indices on all shards. This happens on table creation and after batch inserts for
+        // new data
         createIndices()
     }
 
     fun letWorkersFly(records: List<List<CSVRecord>>) {
         val workers: List<CSVPusher> = populateCSVWorkers()
         for(i in 0 until Finals.DB_SHARD_NUM){
-            workers[i].DB = dbAbsolutePaths_[i]
+            workers[i].DB = dbAbsolutePaths[i]
             workers[i].csvRecords = records[i]
-            workers[i].columns = columnNames_
-            workers[i].tableName = tableName_
+            workers[i].columns = dbColumnNames
+            workers[i].tableName = dbTableName
         }
 
         val threads: MutableList<Thread> = ArrayList()
@@ -109,7 +110,7 @@ abstract class CSVFacilitator: Facilitator {
                 threads[i].join()
             }
             catch(e: InterruptedException){
-                logger_.exception(e)
+                logger.exception(e)
             }
         }
     }

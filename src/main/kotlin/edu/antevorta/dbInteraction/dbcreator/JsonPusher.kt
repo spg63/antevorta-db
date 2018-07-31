@@ -14,31 +14,33 @@ abstract class JsonPusher: DataPusher {
     protected var jsonObjects: ArrayList<JSONObject>
     protected var numObjects = 0
 
-    var JSONStrings: List<String>
-    // Custom setter for JSONStrings so that numObjects also gets set when setting JSONStrings outside of c'tor
+    var jsonStrings: List<String>
+    // Custom setter for jsonStrings so that numObjects also gets set when setting jsonStrings outside of
+    // c'tor
     set(value){
         field = value
-        this.numObjects = this.JSONStrings.size
+        this.numObjects = this.jsonStrings.size
     }
 
     constructor(): super() {
         this.jsonObjects = ArrayList()
-        this.JSONStrings = ArrayList()
+        this.jsonStrings = ArrayList()
     }
 
     // Base DataPusher will handle the path to the DB, the names for the table columns, and the table name
     constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
             : super(dbPath, columnNames, tableName)
     {
-        this.JSONStrings = jsonLines
-        this.numObjects = JSONStrings.size
+        this.jsonStrings = jsonLines
+        this.numObjects = jsonStrings.size
         this.jsonObjects = ArrayList()
     }
 
     override fun run(){
         for(i in 0 until this.numObjects)
-            this.jsonObjects.add(JSONObject(this.JSONStrings[i]))
-        // This is implemented by a derived class, specific to the data being read and data being written to the DB
+            this.jsonObjects.add(JSONObject(this.jsonStrings[i]))
+        // This is implemented by a derived class, specific to the data being read and data being written
+        // to the DB
         parseAndPushDataToDB()
     }
 }

@@ -20,7 +20,7 @@ import java.util.concurrent.Future
  * the genericSelect function it will query the proper DB files and use the proper RSMapper object
  */
 abstract class Selector{
-    // tableName and listOfColumns get set in the derived class c'tors. tableName is used to select the right table
+    // dbTableName and listOfColumns get set in the derived class c'tors. dbTableName is used to select the right table
     // from the DB shards (e.g. submission_attrs) for reddit submissions. listOfColumns is used by the orderby
     // function for determining which words in a query refer to a valid column.
     protected lateinit var tableName: String
@@ -36,7 +36,7 @@ abstract class Selector{
     abstract fun generalSelection(SQLStatement: String): List<RSMapper>
 
 //----------------------------------------------------------------------------------------------------------------------
-// The following functions take the tableName variable (set the in the derived class default c'tors) and create an
+// The following functions take the dbTableName variable (set the in the derived class default c'tors) and create an
 // sql query string using the DBSelector class. The query string is passed back down to a derived class through
 // generalSelection to ascertain which workers to use and which DB shards to search before calling the generalized
 // genericSelect function below.

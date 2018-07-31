@@ -13,30 +13,30 @@ import edu.antevorta.utils.TSL
 import java.sql.Connection
 import java.text.NumberFormat
 
-@Suppress("LeakingThis", "ConvertSecondaryConstructorToPrimary")
+@Suppress("LeakingThis", "ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate", "ConstantConditionIf")
 abstract class Facilitator {
-    protected var dbAbsolutePaths_: List<String>        // Path to the DBs once they exist
-    protected val dbDirectoryPaths_: List<String>       // Path to the directory / directories that hold the DB shards
-    protected val columnNames_: List<String>            // Names of the columns in the DB
-    protected val dataTypes_: List<String>              // Type of data stored in the DB columns
-    protected val dbPaths_: List<String>                // Paths to the DBs when they don't yet exist
-    protected var dataAbsolutePaths_: List<String>      // Paths to the data files
-    protected val tableName_: String                    // The name of the table in the DB
-    protected val logger_: TSL = TSL.get()              // Instance of the logger
-    protected val numberFormat_: NumberFormat           // Format number output for easier viewing
-    protected val dataNamesOfInterest_: List<String>    // Name of csv column of json key we need
+    protected var dbAbsolutePaths: List<String>        // Path to the DBs once they exist
+    protected val dbDirectoryPaths: List<String>       // Path to the directories that hold the DB shards
+    protected val dbColumnNames: List<String>          // Names of the columns in the DB
+    protected val columnDataTypes: List<String>        // Type of data stored in the DB columns
+    protected val dbPaths: List<String>                // Paths to the DBs when they don't yet exist
+    protected var dataAbsolutePaths: List<String>      // Paths to the data files
+    protected val dbTableName: String                  // The name of the table in the DB
+    protected val logger: TSL = TSL.get()              // Instance of the logger
+    protected val numberFormat: NumberFormat           // Format number output for easier viewing
+    protected val dataNamesOfInterest: List<String>    // Name of csv column of json key we need
 
     constructor(){
-        this.dbAbsolutePaths_               = getDBAbsolutePaths()
-        this.dbDirectoryPaths_              = getDBDirectoryPaths()
-        this.columnNames_                   = getColumnNames()
-        this.dataTypes_                     = getDataTypes()
-        this.dbPaths_                       = buildDBPaths()
-        this.dataAbsolutePaths_             = getDataFileAbsolutePaths()
-        this.tableName_                     = getTableName()
-        this.numberFormat_                  = NumberFormat.getInstance()
-        this.numberFormat_.isGroupingUsed   = true
-        this.dataNamesOfInterest_           = getDataKeysOfInterest()
+        this.dbAbsolutePaths               = getDBAbsolutePaths()
+        this.dbDirectoryPaths              = getDBDirectoryPaths()
+        this.dbColumnNames                 = getColumnNames()
+        this.columnDataTypes               = getDataTypes()
+        this.dbPaths                       = buildDBPaths()
+        this.dataAbsolutePaths             = getDataFileAbsolutePaths()
+        this.dbTableName                   = getTableName()
+        this.numberFormat                  = NumberFormat.getInstance()
+        this.numberFormat.isGroupingUsed   = true
+        this.dataNamesOfInterest           = getDataKeysOfInterest()
     }
 
     protected abstract fun buildDBPaths(): List<String>
@@ -54,88 +54,89 @@ abstract class Facilitator {
     abstract fun pushDataIntoDBs()
 
     // Used by pushDataIntoDBs(), regardless of data type, to check if the function should continue.
-    // It will shortcirtuit pushData if the data already exists or START_FRESH is false and ADD_NEW_DATA is false
+    // It will shortcirtuit pushData if the data already exists or START_FRESH is false and ADD_NEW_DATA
+    // is false
     // NOTE: The idea really is the stuff going on in this function needs to be enforced across all sub
     // Facilitators so this fucntion moves these important checks into the base Facilitator class
     protected fun shouldFunctionReturnEarly(): Boolean {
         // Early exit if we're not pushing data into the DBs
         if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return true
-        if(this.dbAbsolutePaths_.isEmpty())
-            this.dbAbsolutePaths_ = getDBAbsolutePaths()
+        if(this.dbAbsolutePaths.isEmpty())
+            this.dbAbsolutePaths = getDBAbsolutePaths()
 
-        if(this.dataAbsolutePaths_.isEmpty()){
+        if(this.dataAbsolutePaths.isEmpty()){
             when{
-                Finals.START_FRESH -> this.dataAbsolutePaths_ = getDataFileAbsolutePaths()
-                Finals.ADD_NEW_DATA -> this.dataAbsolutePaths_ = getDataAbsolutePathsForNewData()
-                else -> logger_.logAndKill("Facilitator.shouldFunctionReturnEarly -- Not START_FRESH or ADD_NEW_DATA")
+                Finals.START_FRESH -> this.dataAbsolutePaths = getDataFileAbsolutePaths()
+                Finals.ADD_NEW_DATA -> this.dataAbsolutePaths = getDataAbsolutePathsForNewData()
+                else -> logger.logAndKill("Facilitator.shouldFunctionReturnEarly !START_FRESH, !ADD_NEW_DATA")
             }
         }
 
         // Used for logging when adding new data to the DB shards
         if(Finals.ADD_NEW_DATA)
-            this.dataAbsolutePaths_.forEach{logger_.info("Pulling new data from $it")}
+            this.dataAbsolutePaths.forEach{logger.info("Pulling new data from $it")}
 
         return false
     }
 
     fun createDBs() {
         if(!Finals.START_FRESH)
-            logger_.logAndKill("Called createDBs when Finals.START_FRESH was false. Check your logic.")
+            logger.logAndKill("Called createDBs when Finals.START_FRESH was false. Check your logic.")
 
         // Check if the DBs exist.
-        if(this.dbAbsolutePaths_.isEmpty())
-            this.dbAbsolutePaths_ = ArrayList()
-        val dbs_exist = this.dbAbsolutePaths_.size == Finals.DB_SHARD_NUM
+        if(this.dbAbsolutePaths.isEmpty())
+            this.dbAbsolutePaths = ArrayList()
+        val doDBsExist = this.dbAbsolutePaths.size == Finals.DB_SHARD_NUM
 
         // The DBs exist but we want to start fresh, get rid of them
-        if(dbs_exist){
-            logger_.warn("DB shards exist && starting fresh")
-            logger_.info("Dropping table(s) in DB shards")
-            val sql = "drop table if exists ${this.tableName_};"
+        if(doDBsExist){
+            logger.warn("DB shards exist && starting fresh")
+            logger.info("Dropping table(s) in DB shards")
+            val sql = "drop table if exists ${this.dbTableName};"
             // For each db in the list, drop the table
-            this.dbAbsolutePaths_.forEach{ DBCommon.delete(it, sql) }
+            this.dbAbsolutePaths.forEach{ DBCommon.delete(it, sql) }
         }
 
         // The DBs don't exist, create the empty sqlite files
-        else if(!dbs_exist){
-            logger_.info("Creating DB shard paths and initializing DB files")
+        else if(!doDBsExist){
+            logger.info("Creating DB shard paths and initializing DB files")
             // Create the directories that hold the DBs
-            this.dbDirectoryPaths_.forEach{ FileUtils.get().checkAndCreateDir(it) }
+            this.dbDirectoryPaths.forEach{ FileUtils.get().checkAndCreateDir(it) }
             // Build the paths to the Dbs so they can be created
-            this.dbPaths_.forEach{
+            this.dbPaths.forEach{
                 val conn = DBCommon.connect(it)
                 DBCommon.disconnect(conn)
             }
             // Now that the DBs exist, populate the absolute paths list
-            this.dbAbsolutePaths_ = getDBAbsolutePaths()
+            this.dbAbsolutePaths = getDBAbsolutePaths()
         }
         else
-            logger_.logAndKill("createDBs; somehow the DBs exist and don't exist. What's that cat joke?")
+            logger.logAndKill("createDBs; somehow the DBs exist and don't exist. What's that cat joke?")
 
         createNewTable()
     }
 
     fun createNewTableInExistingDBs(){
         if(!Finals.START_FRESH)
-            logger_.logAndKill("Called createNewTableInExistingDBs when Finals.START_FRESH was false")
+            logger.logAndKill("Called createNewTableInExistingDBs when Finals.START_FRESH was false")
 
-        val dbs_exist = this.dbAbsolutePaths_.size == Finals.DB_SHARD_NUM
-        if(!dbs_exist)
-            logger_.logAndKill("createNewTableInExistingDBs -- can't find existing DBs")
+        val doDBsExist = this.dbAbsolutePaths.size == Finals.DB_SHARD_NUM
+        if(!doDBsExist)
+            logger.logAndKill("createNewTableInExistingDBs -- can't find existing DBs")
 
         createNewTable()
     }
 
     protected fun createDBIndex(columnName: String, indexName: String) {
-        logger_.info("Creating $indexName on column $columnName")
+        logger.info("Creating $indexName on column $columnName")
         val workers = ArrayList<Thread>()
         val conns = ArrayList<Connection>()
-        val sql = DBCommon.getDBIndexSQLStatement(this.tableName_, columnName, indexName)
-        if(this.dbAbsolutePaths_.isEmpty())
-            this.dbAbsolutePaths_ = getDBAbsolutePaths()
+        val sql = DBCommon.getDBIndexSQLStatement(this.dbTableName, columnName, indexName)
+        if(this.dbAbsolutePaths.isEmpty())
+            this.dbAbsolutePaths = getDBAbsolutePaths()
 
-        // For each db in dbAbsolutePaths_ create a connection and put it in conns
-        this.dbAbsolutePaths_.mapTo(conns) { DBCommon.connect(it) }
+        // For each db in dbAbsolutePaths create a connection and put it in conns
+        this.dbAbsolutePaths.mapTo(conns) { DBCommon.connect(it) }
 
         for(i in 0 until conns.size){
             workers.add(Thread(DBWorker(conns[i], sql)))
@@ -146,14 +147,14 @@ abstract class Facilitator {
                 workers[i].join()
         }
         catch(e: InterruptedException){
-            logger_.exception(e)
+            logger.exception(e)
         }
 
         conns.forEach{ DBCommon.disconnect(it) }
     }
 
     protected fun dropDBIndex(indexName: String){
-        logger_.info("Dropping $indexName from ${this.tableName_}")
+        logger.info("Dropping $indexName from ${this.dbTableName}")
         // Get a connection to each DB shard
         val conns = ArrayList<Connection>()
 
@@ -161,7 +162,7 @@ abstract class Facilitator {
         val workers = ArrayList<Thread>()
 
         // Get a connection to each DB and put the connections in conns list
-        this.dbAbsolutePaths_.mapTo(conns){DBCommon.connect(it)}
+        this.dbAbsolutePaths.mapTo(conns){DBCommon.connect(it)}
 
         // Get the SQL statement
         val sql = DBCommon.getDropDBIndexSQLStatement(indexName)
@@ -176,7 +177,7 @@ abstract class Facilitator {
                 workers[i].join()
         }
         catch(e: InterruptedException){
-            logger_.exception(e)
+            logger.exception(e)
         }
 
         // Close all the connections
@@ -189,10 +190,10 @@ abstract class Facilitator {
         dropIndices()
 
         // Clear the existing list. Note: clear can't be called on a "List" so just replace it with a new one
-        this.dataAbsolutePaths_ = ArrayList()
+        this.dataAbsolutePaths = ArrayList()
 
         // Get the path(s) to the new json file(s)
-        this.dataAbsolutePaths_ = getDataAbsolutePathsForNewData()
+        this.dataAbsolutePaths = getDataAbsolutePathsForNewData()
 
         // Now that the paths have been reset the new data can be pushed in the DB shards
         pushDataIntoDBs()
@@ -200,21 +201,21 @@ abstract class Facilitator {
 
     private fun createNewTable(){
         // Drop the table if it already exists
-        val dropsql = "drop table if exists ${this.tableName_};"
+        val dropsql = "drop table if exists ${this.dbTableName};"
         // For each db in the list, drop the table
-        this.dbAbsolutePaths_.forEach{ DBCommon.delete(it, dropsql) }
+        this.dbAbsolutePaths.forEach{ DBCommon.delete(it, dropsql) }
 
         // Create the table schema
         val sb = StringBuilder()
-        sb.append("create table if not exists ${this.tableName_}(")
-        for(i in 0 until this.columnNames_.size){
-            sb.append(this.columnNames_[i])
-            sb.append(this.dataTypes_[i])
+        sb.append("create table if not exists ${this.dbTableName}(")
+        for(i in 0 until this.dbColumnNames.size){
+            sb.append(this.dbColumnNames[i])
+            sb.append(this.columnDataTypes[i])
         }
         sb.append(");")
         val sql = sb.toString()
-        logger_.info("Writing ${this.tableName_} to DB shards")
-        this.dbAbsolutePaths_.forEach{ DBCommon.insert(it, sql) }
-        logger_.info("${this.tableName_} has been created")
+        logger.info("Writing ${this.dbTableName} to DB shards")
+        this.dbAbsolutePaths.forEach{ DBCommon.insert(it, sql) }
+        logger.info("${this.dbTableName} has been created")
     }
 }

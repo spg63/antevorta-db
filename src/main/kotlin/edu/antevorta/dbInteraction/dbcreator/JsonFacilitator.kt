@@ -12,6 +12,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.IOException
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 abstract class JsonFacilitator: Facilitator {
 
     constructor(): super()
@@ -20,20 +21,20 @@ abstract class JsonFacilitator: Facilitator {
     protected abstract fun populateJsonWorkers(): List<JsonPusher>
 
     override fun pushDataIntoDBs() {
-        // Check if START_FRESH or ADD_NEW_DATA is set to true, if so continue, else return. Also check if the proper
-        // data paths have been set, if not, set them.
+        // Check if START_FRESH or ADD_NEW_DATA is set to true, if so continue, else return. Also check if
+        // the proper data paths have been set, if not, set them.
         if(shouldFunctionReturnEarly()) return
 
         // For each json file, read it line by line, while reading start processing the data
-        // Each iteration of the below while loop adds a line to a new worker thread to evenly share the data across all
-        // DB shards
-        for(json in this.dataAbsolutePaths_){
+        // Each iteration of the below while loop adds a line to a new worker thread to evenly share the data
+        // across all DB shards
+        for(json in this.dataAbsolutePaths){
             val f = File(json)
-            logger_.info("Counting number of lines in ${f.name}")
-            val total_lines = FileUtils.get().lineCount(json)
-            val total_lines_in_file = total_lines.toDouble()
-            logger_.info("Reading ${f.name}")
-            logger_.info("${f.name} has ${numberFormat_.format(total_lines_in_file)} lines")
+            logger.info("Counting number of lines in ${f.name}")
+            val totalLines = FileUtils.get().lineCount(json)
+            val totalLinesInFile = totalLines.toDouble()
+            logger.info("Reading ${f.name}")
+            logger.info("${f.name} has ${numberFormat.format(totalLinesInFile)} lines")
 
             var br: BufferedReader? = null
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
@@ -67,9 +68,9 @@ abstract class JsonFacilitator: Facilitator {
 
                         if(writeTotalLinesRead % 25 == 0) {
                             val readLines = totalLinesRead.toDouble()
-                            val currentComplete = readLines / total_lines_in_file
+                            val currentComplete = readLines / totalLinesInFile
                             val percentComplete = (currentComplete * 100).toInt()
-                            logger_.info("$percentComplete% done ${f.name}")
+                            logger.info("$percentComplete% done ${f.name}")
                         }
                         ++writeTotalLinesRead
 
@@ -80,15 +81,15 @@ abstract class JsonFacilitator: Facilitator {
                     line = br.readLine()
                 }
 
-                // There could be leftover json lines that don't get pushed due to not meeting the dbDumpLimit amount
-                // of lines. Start up the workers again and push the remaining lines
-                logger_.info("Launching final JSON push for ${f.name}")
+                // There could be leftover json lines that don't get pushed due to not meeting the dbDumpLimit
+                // amount of lines. Start up the workers again and push the remaining lines
+                logger.info("Launching final JSON push for ${f.name}")
                 totalLinesRead += lineReadCounter
-                logger_.info("Total lines read ${numberFormat_.format(totalLinesRead)} for ${f.name}")
+                logger.info("Total lines read ${numberFormat.format(totalLinesRead)} for ${f.name}")
                 letWorkersFly(linesList)
             }
             catch(e: IOException){
-                logger_.exception(e)
+                logger.exception(e)
             }
             finally{
                 if(br != null){
@@ -96,23 +97,24 @@ abstract class JsonFacilitator: Facilitator {
                         br.close()
                     }
                     catch(e: IOException){
-                        logger_.exception(e)
+                        logger.exception(e)
                     }
                 }
             }
         }
 
-        // Create the indices on all shards. This happens on table creation and after batch inserts for new data
+        // Create the indices on all shards. This happens on table creation and after batch inserts
+        // for new data
         createIndices()
     }
 
-    fun letWorkersFly(lines: List<List<String>>) {
+    private fun letWorkersFly(lines: List<List<String>>) {
         val workers: List<JsonPusher> = populateJsonWorkers()
         for(i in 0 until Finals.DB_SHARD_NUM){
-            workers[i].DB = dbAbsolutePaths_[i]
-            workers[i].JSONStrings = lines[i]
-            workers[i].columns = columnNames_
-            workers[i].tableName = tableName_
+            workers[i].DB = dbAbsolutePaths[i]
+            workers[i].jsonStrings = lines[i]
+            workers[i].columns = dbColumnNames
+            workers[i].tableName = dbTableName
         }
         val threads: MutableList<Thread> = ArrayList()
         for(i in 0 until Finals.DB_SHARD_NUM){
@@ -125,7 +127,7 @@ abstract class JsonFacilitator: Facilitator {
                 threads[i].join()
             }
             catch(e: InterruptedException){
-                logger_.exception(e)
+                logger.exception(e)
             }
         }
     }

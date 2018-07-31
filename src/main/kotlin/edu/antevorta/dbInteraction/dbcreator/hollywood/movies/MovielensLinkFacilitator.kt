@@ -28,10 +28,10 @@ class MovielensLinkFacilitator: AbstractMoviesFacilitator{
     }
 
     override fun createIndices() {
-        logger_.info("No indices to create for ${this.tableName_}")
+        logger.info("No indices to create for ${this.dbTableName}")
     }
 
     override fun dropIndices() {
-        logger_.warn("No indices to drop for ${this.tableName_}")
+        logger.warn("No indices to drop for ${this.dbTableName}")
     }
 }

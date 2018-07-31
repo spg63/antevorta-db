@@ -82,8 +82,8 @@ class Dolius(private val socket: Socket): Runnable {
         val input: String
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
-            //logger_.info("Incoming IP: ${socket.remoteSocketAddress.toString()}")
-            //logger_.info("Incoming Inet: ${socket.inetAddress.toString()}")
+            //logger.info("Incoming IP: ${socket.remoteSocketAddress.toString()}")
+            //logger.info("Incoming Inet: ${socket.inetAddress.toString()}")
             input = inputReader.readLine()
         }
         catch(e: IOException){

@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVRecord
 /**
  * This class implements CSV specific code for parsing and pushing the data into a newly created DB
  */
+@Suppress("unused", "HasPlatformType")
 abstract class CSVPusher: DataPusher {
     protected var numRecords = 0
     protected val parseFormat = CSVFormat.DEFAULT
