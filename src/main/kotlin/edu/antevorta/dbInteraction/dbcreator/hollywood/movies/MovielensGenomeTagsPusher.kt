@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVRecord
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+@Suppress("unused")
 class MovielensGenomeTagsPusher: CSVPusher {
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)

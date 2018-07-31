@@ -13,6 +13,7 @@ import org.apache.commons.csv.CSVRecord
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+@Suppress("unused")
 class MovielensIndividualRatingsPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
 
@@ -34,9 +35,9 @@ class MovielensIndividualRatingsPusher: CSVPusher {
 
                 val userid = this.csvRecords[i][0].toIntOrNull() ?: continue
                 val mlmid = this.csvRecords[i][1].toIntOrNull() ?: continue
-                val imdb_tmdb_mids = linksSelector.getIMDBandTMDBFromMovielensMovieID(mlmid)
-                val imdbid = imdb_tmdb_mids.first
-                val tmdbid = imdb_tmdb_mids.second
+                val imdbTmdbMids = linksSelector.getIMDBandTMDBFromMovielensMovieID(mlmid)
+                val imdbid = imdbTmdbMids.first
+                val tmdbid = imdbTmdbMids.second
                 val rating = this.csvRecords[i][2].trim().toFloatOrNull() ?: continue
                 val sqltime = this.csvRecords[i][3]
                 val time = TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime(sqltime))

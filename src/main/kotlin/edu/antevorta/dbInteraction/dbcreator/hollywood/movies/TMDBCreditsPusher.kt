@@ -14,6 +14,7 @@ import org.json.JSONObject
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+@Suppress("unused")
 class TMDBCreditsPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
 
@@ -34,17 +35,17 @@ class TMDBCreditsPusher: CSVPusher {
                 var key = 1
 
                 // If the movieid returns something unparsable to int then we have the header, just continue
-                val tmdb_movieid = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val imdb_mlid_ids = linksSelector.getIMDBandMLIDFromTMDBMovieID(tmdb_movieid)
-                val imdb_movieid = imdb_mlid_ids.first
-                val movieid = imdb_mlid_ids.second
+                val tmdbMovieID = this.csvRecords[i][0].toIntOrNull() ?: continue
+                val imdbMlidIds = linksSelector.getIMDBandMLIDFromTMDBMovieID(tmdbMovieID)
+                val imdbMovieid = imdbMlidIds.first
+                val movieid = imdbMlidIds.second
                 val title = this.csvRecords[i][1]
 
                 val castJson = JSONObject().put("cast", JSONArray(this.csvRecords[i][2].trim()))
                 val crewJson = JSONObject().put("crew", JSONArray(this.csvRecords[i][3].trim()))
 
-                ps.setInt(key++, tmdb_movieid)
-                ps.setInt(key++, imdb_movieid)
+                ps.setInt(key++, tmdbMovieID)
+                ps.setInt(key++, imdbMovieid)
                 ps.setInt(key++, movieid)
                 ps.setString(key++, title)
                 ps.setObject(key++, castJson)

@@ -14,9 +14,10 @@ import org.json.JSONObject
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+@Suppress("unused", "PrivatePropertyName")
 class MovielensMoviesPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
-    private val GENRE_KEY = "genre"
+    private val GENREKEY = "genre"
 
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
@@ -35,16 +36,16 @@ class MovielensMoviesPusher: CSVPusher {
                 var key = 1
                 // If the movieid returns something unparsable to int then we have the header, just continue
                 val movieid = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val tmdb_imdb_ids = linksSelector.getIMDBandTMDBFromMovielensMovieID(movieid)
-                val tmdb_movieid = tmdb_imdb_ids.first
-                val imdb_movieid = tmdb_imdb_ids.second
+                val tmdbImdbIds = linksSelector.getIMDBandTMDBFromMovielensMovieID(movieid)
+                val tmdbMovieID = tmdbImdbIds.first
+                val imdbMovieID = tmdbImdbIds.second
                 val title = this.csvRecords[i][1]
 
                 val genresString = this.csvRecords[i][2]
                 val genresJson = splitGenresIntoJsonObject(genresString)
 
-                ps.setInt(key++, tmdb_movieid)
-                ps.setInt(key++, imdb_movieid)
+                ps.setInt(key++, tmdbMovieID)
+                ps.setInt(key++, imdbMovieID)
                 ps.setInt(key++, movieid)
                 ps.setString(key++, title)
                 ps.setObject(key, genresJson)       // This is a json object
@@ -66,11 +67,10 @@ class MovielensMoviesPusher: CSVPusher {
         val allGenres = genres.split("|")
         val mainJsonObject = JSONObject()
         val jsonArray = JSONArray()
-        var counter = 0
         for(genre in allGenres) {
             val jsonObject = JSONObject()
             // 7.14.18: Attempting to remove the leading / trailing quotes in the ml_genres data
-            jsonObject.put(GENRE_KEY, genre.replace("\"", ""))
+            jsonObject.put(GENREKEY, genre.replace("\"", ""))
             jsonArray.put(jsonObject)
         }
         mainJsonObject.put("genres", jsonArray)

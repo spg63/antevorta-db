@@ -10,6 +10,7 @@ import edu.antevorta.configs.RawDataLocator
 import edu.antevorta.dbInteraction.columnsAndKeys.MovielensIndividualTags
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
     constructor(): super() //{ this.parseFormat = CSVFormat.DEFAULT }
 

@@ -11,6 +11,7 @@ import edu.antevorta.dbInteraction.columnsAndKeys.TMDBCredits
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVFormat
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class TMDBCreditsFacilitator: AbstractMoviesFacilitator {
     // Reset the format for this dataset due to commas within the json data
     constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }

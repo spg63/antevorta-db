@@ -10,6 +10,7 @@ import edu.antevorta.configs.RawDataLocator
 import edu.antevorta.dbInteraction.columnsAndKeys.MovielensIndividualRatings
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
     private val useridIDX = "individual_ratings_userid_idx"
     private val ratingIDX = "individual_ratings_rating_idx"
@@ -17,11 +18,11 @@ class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
 
     constructor(): super()
 
-    override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensRatingAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensIndividualRatings.csvKeys()
-    override fun getColumnNames()                   = MovielensIndividualRatings.columnNames()
-    override fun getDataTypes()                     = MovielensIndividualRatings.dataTypes()
-    override fun getTableName()                     = Finals.ML_INDIVIDUAL_RATING_TABLE
+    override fun getDataFileAbsolutePaths()     = listOf(RawDataLocator.movielensRatingAbsolutePath())
+    override fun getDataKeysOfInterest()        = MovielensIndividualRatings.csvKeys()
+    override fun getColumnNames()               = MovielensIndividualRatings.columnNames()
+    override fun getDataTypes()                 = MovielensIndividualRatings.dataTypes()
+    override fun getTableName()                 = Finals.ML_INDIVIDUAL_RATING_TABLE
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

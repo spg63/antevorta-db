@@ -15,6 +15,7 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 
 
+@Suppress("unused")
 class MovielensIndividualTagsPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
     private val tagIDSelector = MLGenomeTagsSelector()
@@ -37,9 +38,9 @@ class MovielensIndividualTagsPusher: CSVPusher {
 
                 val userid = this.csvRecords[i][0].toIntOrNull() ?: continue
                 val mlmid = this.csvRecords[i][1].toIntOrNull() ?: continue
-                val imdb_tmdb_ids = linksSelector.getIMDBandTMDBFromMovielensMovieID(mlmid)
-                val imdbid = imdb_tmdb_ids.first
-                val tmdbid = imdb_tmdb_ids.second
+                val imdbTmdbIds = linksSelector.getIMDBandTMDBFromMovielensMovieID(mlmid)
+                val imdbid = imdbTmdbIds.first
+                val tmdbid = imdbTmdbIds.second
                 val tagtext = this.csvRecords[i][2].trim().replace("'", "").replace("\"", "")
 
                 // Get the tagid from the genome_tags table

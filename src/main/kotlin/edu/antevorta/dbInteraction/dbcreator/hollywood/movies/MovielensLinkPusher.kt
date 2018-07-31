@@ -12,6 +12,7 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.util.*
 
+@Suppress("unused")
 class MovielensLinkPusher: CSVPusher {
     private val rand = Random()
     constructor(): super()

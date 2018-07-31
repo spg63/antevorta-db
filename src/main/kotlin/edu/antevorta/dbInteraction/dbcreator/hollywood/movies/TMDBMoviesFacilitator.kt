@@ -6,6 +6,7 @@ import edu.antevorta.dbInteraction.columnsAndKeys.TMDBMovies
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVFormat
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
     private val budgetIDX       = "tmdb_movies_budget_idx"
     private val origLangIDX     = "tmdb_movies_orig_lang_idx"
@@ -13,9 +14,9 @@ class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
     private val revenueIDX      = "tmdb_movies_revenue_idx"
     private val runtimeIDX      = "tmdb_movies_runtime_idx"
     private val tmdbVoteAvgIDX  = "tmdb_movies_vote_average_idx"
-    private val MLVoteAvgIDX    = "tmdb_movies_ml_vote_average_idx"
+    private val mlVoteAvgIDX    = "tmdb_movies_ml_vote_average_idx"
     private val tmdbVoteCntIDX  = "tmdb_movies_tmdb_vote_count_idx"
-    private val MLVoteCntIDX    = "tmdb_movies_ml_vote_count_idx"
+    private val mlVoteCntIDX    = "tmdb_movies_ml_vote_count_idx"
 
     constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
 
@@ -39,9 +40,9 @@ class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
         createDBIndex("revenue", revenueIDX)
         createDBIndex("runtime", runtimeIDX)
         createDBIndex("tmdb_vote_average", tmdbVoteAvgIDX)
-        createDBIndex("movielens_vote_average", MLVoteAvgIDX)
+        createDBIndex("movielens_vote_average", mlVoteAvgIDX)
         createDBIndex("tmdb_vote_count", tmdbVoteCntIDX)
-        createDBIndex("movielens_vote_count", MLVoteCntIDX)
+        createDBIndex("movielens_vote_count", mlVoteCntIDX)
     }
 
     override fun dropIndices() {
@@ -51,8 +52,8 @@ class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
         dropDBIndex(revenueIDX)
         dropDBIndex(runtimeIDX)
         dropDBIndex(tmdbVoteAvgIDX)
-        dropDBIndex(MLVoteAvgIDX)
+        dropDBIndex(mlVoteAvgIDX)
         dropDBIndex(tmdbVoteCntIDX)
-        dropDBIndex(MLVoteCntIDX)
+        dropDBIndex(mlVoteCntIDX)
     }
 }

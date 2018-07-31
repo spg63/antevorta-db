@@ -10,17 +10,18 @@ import edu.antevorta.configs.RawDataLocator
 import edu.antevorta.dbInteraction.columnsAndKeys.MovielensGenomeScores
 import edu.antevorta.dbInteraction.dbcreator.CSVPusher
 
+@Suppress("ConvertSecondaryConstructorToPrimary")
 class MovielensGenomeScoresFacilitator: AbstractMoviesFacilitator {
     private val tagIDX = "genome_scores_tagid_idx"
     private val relevanceIDX = "genome_scores_relevance_idx"
 
     constructor(): super()
 
-    override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.movielensGenomeScoresAbsolutePath())
-    override fun getDataKeysOfInterest()            = MovielensGenomeScores.csvKeys()
-    override fun getColumnNames()                   = MovielensGenomeScores.columnNames()
-    override fun getDataTypes()                     = MovielensGenomeScores.dataTypes()
-    override fun getTableName()                     = Finals.ML_GENOME_SCORES_TABLE
+    override fun getDataFileAbsolutePaths()     = listOf(RawDataLocator.movielensGenomeScoresAbsolutePath())
+    override fun getDataKeysOfInterest()        = MovielensGenomeScores.csvKeys()
+    override fun getColumnNames()               = MovielensGenomeScores.columnNames()
+    override fun getDataTypes()                 = MovielensGenomeScores.dataTypes()
+    override fun getTableName()                 = Finals.ML_GENOME_SCORES_TABLE
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()
