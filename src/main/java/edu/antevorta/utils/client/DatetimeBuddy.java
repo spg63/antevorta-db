@@ -19,6 +19,7 @@ import java.util.HashMap;
  * Maybe this should be changed to have an 'active' DateTimeFormatter...
  * then the functions could just call the 'activeDTF', and there would be fewer functions.
  */
+@SuppressWarnings("ALL")
 public class DatetimeBuddy {
 
    ZonedDateTime zdt;
@@ -43,7 +44,8 @@ public class DatetimeBuddy {
 
       /* this is an odd place to put this. but it's an odd function, so, here it is... */
 
-   public ZonedDateTime getZDT(int year, int month, int day, int hour, int minute, int second, int nanoOfSecond, ZoneId zid) {
+   public ZonedDateTime getZDT(int year, int month, int day, int hour, int minute,
+                               int second, int nanoOfSecond, ZoneId zid) {
       return ZonedDateTime.of(year, month, day, hour, minute, second, nanoOfSecond, zid);
    }
 
@@ -136,17 +138,12 @@ public class DatetimeBuddy {
     * @param outputZone
     * @return
     */
-   public String getDecreasingWithOffsetFromDecreasingWithInputZoneImplied(String dateTimeIn, ZoneId inputImpliedZone, ZoneId outputZone){
+   public String getDecreasingWithOffsetFromDecreasingWithInputZoneImplied(String dateTimeIn,
+                                                                           ZoneId inputImpliedZone,
+                                                                           ZoneId outputZone){
        zdt = getZDTfromDecreasingWithImpliedZone(dateTimeIn, inputImpliedZone);
       return zdt.format(dtFormats.get(decreasingWithZoneOffset).withZone(outputZone));
    }
-
-   /*
-   public String getDecreasingWithInputZoneImplied(String dateTimeIn, ZoneId inputImpliedZone, ZoneId outputZone){
-       zdt = getZDTfromDecreasingWithImpliedZone(dateTimeIn, inputImpliedZone);
-      return zdt.format(dtFormats.get(decreasing).withZone(outputZone));
-   }
-   */
 
    /**
     * 'decreasing' means the following format: uuuu-MM-dd HH:mm:ss
@@ -161,7 +158,8 @@ public class DatetimeBuddy {
     * @param outputZone
     * @return
     */
-   public long getMillisFromDecreasingWithInputZoneImplied(String dateTimeIn, ZoneId inputImpliedZone, ZoneId outputZone){
+   public long getMillisFromDecreasingWithInputZoneImplied(String dateTimeIn, ZoneId inputImpliedZone,
+                                                           ZoneId outputZone){
       zdt = getZDTfromDecreasingWithImpliedZone(dateTimeIn, inputImpliedZone);
       return getMillisWithZone(zdt, outputZone);
    }
@@ -178,7 +176,8 @@ public class DatetimeBuddy {
     * @param outputZone
     * @return
     */
-   public long getSecondsFromDecreasingWithInputZoneImplied(String dateTimeIn, ZoneId inputImpliedZone, ZoneId outputZone){
+   public long getSecondsFromDecreasingWithInputZoneImplied(String dateTimeIn, ZoneId inputImpliedZone,
+                                                            ZoneId outputZone){
       zdt = getZDTfromDecreasingWithImpliedZone(dateTimeIn, inputImpliedZone);
       return getSecondsWithZone(zdt, outputZone);
    }
@@ -195,7 +194,8 @@ public class DatetimeBuddy {
     * @param outputZone
     * @return
     */
-   public String getDecreasingWithOffsetFromMillisWithInputZoneImplied(long millis, ZoneId inputImpliedZone, ZoneId outputZone){
+   public String getDecreasingWithOffsetFromMillisWithInputZoneImplied(long millis, ZoneId inputImpliedZone,
+                                                                       ZoneId outputZone){
       zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), inputImpliedZone);
       return zdt.format(dtFormats.get(decreasing).withZone(outputZone));
    }
@@ -212,15 +212,17 @@ public class DatetimeBuddy {
     * @param outputZone
     * @return
     */
-   public String getDecreasingFromSecondsWithInputZoneImplied(long millis, ZoneId inputImpliedZone, ZoneId outputZone){
+   public String getDecreasingFromSecondsWithInputZoneImplied(long millis, ZoneId inputImpliedZone,
+                                                              ZoneId outputZone){
       zdt = ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), inputImpliedZone);
       return zdt.format(dtFormats.get(decreasing).withZone(outputZone));
    }
 
 
    /*
-   These are for Strings (input or output) that use a zone offset to specify time zone, e.g: -05 for EDT, +00 for UTC, etc.
-    */
+        These are for Strings (input or output) that use a zone offset to specify time zone, e.g: -05 for EDT,
+        +00 for UTC, etc.
+   */
 
 
    /**

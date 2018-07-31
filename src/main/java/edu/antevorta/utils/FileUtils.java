@@ -5,8 +5,6 @@
 
 package edu.antevorta.utils;
 
-import edu.antevorta.dbInteraction.dbSelector.RSMapper;
-import edu.antevorta.dbInteraction.dbSelector.reddit.comments.CommentSetMapper;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
@@ -14,15 +12,13 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Sean Grimes, spg63@cs.drexel.edu
  * @since 6/5/15
  */
+@SuppressWarnings({"WeakerAccess", "SpellCheckingInspection", "unused"})
 public class FileUtils{
     private static volatile FileUtils _instance;
     private Out out = Out.get();
@@ -63,7 +59,8 @@ public class FileUtils{
         File tmp = new File(path + File.separator + dirName);
         if(!tmp.exists()) {
             TSL.get().info("Creating directory: " + tmp.toString());
-            tmp.mkdirs();
+            if(!tmp.mkdirs())
+                TSL.get().err("Failed to create directory path: " + dirName);
         }
     }
 
@@ -168,12 +165,12 @@ public class FileUtils{
 
         File[] files = new File(path).listFiles();
         if(files == null)
-            return new ArrayList<>();
+            return Collections.emptyList();
         for(File f : files){
             if(f.isFile() && f.getName().startsWith(prefix))
                 filepaths.add(f.getAbsolutePath());
         }
-        if(filepaths.isEmpty()) Arrays.asList("");
+        if(filepaths.isEmpty()) return Collections.emptyList();
         Comparator<String> comparator = Comparator.comparing((String x) -> x);
         filepaths.sort(comparator);
         return filepaths;
@@ -188,11 +185,11 @@ public class FileUtils{
         List<String> filepaths = new ArrayList<>();
         File[] files = new File(path).listFiles();
         if(files == null)
-            return null;
+            return Collections.emptyList();
         for(File f : files)
             if(f.isFile())
                 filepaths.add(f.getAbsolutePath());
-        if(filepaths.isEmpty()) return null;
+        if(filepaths.isEmpty()) return Collections.emptyList();
         Comparator<String> comparator = Comparator.comparing((String x) -> x);
         filepaths.sort(comparator);
         return filepaths;
@@ -201,11 +198,13 @@ public class FileUtils{
     /**
      * Returns java File objects for all Files in a directory
      * @param path Path to the directory
-     * @return The list of File objects, null if no files in the directoryu
+     * @return The list of File objects, null if no files in the directory
      */
     public List<File> getAllFileObjectsInDir(String path){
         List<File> files = new ArrayList<>();
         File[] fs = new File(path).listFiles();
+        if(fs == null)
+            return Collections.emptyList();
         for(File f : fs)
             if(f.isFile())
                 files.add(f);
@@ -281,7 +280,7 @@ public class FileUtils{
     }
 
     private BufferedReader getBufferedReaderForCompressedFile(String filePath){
-        BufferedReader br = null;
+        BufferedReader br;
         try{
             FileInputStream fin = new FileInputStream(filePath);
             BufferedInputStream bis = new BufferedInputStream(fin);

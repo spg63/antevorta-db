@@ -13,13 +13,12 @@ import java.util.concurrent.TimeUnit;
  * @author Sean Grimes, spg63@cs.drexel.edu
  * @since 6/1/15
  */
+@SuppressWarnings({"unused", "SpellCheckingInspection", "WeakerAccess"})
 public class Out implements java.io.Serializable{
     private static final long serialVersionUID = 80085L;
     private static volatile Out _instance;
 
-
-    private Out(){
-    }
+    private Out(){ }
 
     public static Out get(){
         if(_instance == null){

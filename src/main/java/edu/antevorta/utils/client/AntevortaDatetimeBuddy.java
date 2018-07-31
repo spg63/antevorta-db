@@ -9,9 +9,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 /**
- * @author Sean Penis Grimes
+ * @author Sean Grimes
  * @author Andrew W.E. McDonald
  */
+@SuppressWarnings("ALL")
 public class AntevortaDatetimeBuddy extends DatetimeBuddy {
 
 
@@ -52,8 +53,4 @@ public class AntevortaDatetimeBuddy extends DatetimeBuddy {
     public LocalDateTime SQLDateTimeToJavaDateTime(String SQLDateTime){
         return getLDTfromDecreasing(SQLDateTime);
     }
-
-
-
-
 }

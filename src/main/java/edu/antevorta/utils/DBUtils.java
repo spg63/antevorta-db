@@ -13,9 +13,10 @@ import java.util.List;
 
 /**
  * Database utility functions. Nonspecific to this project.
- * NOTE: All failures in this class will throw an unchecked runtime exception. For my uses a DB failure means the
- * program can't continue, this certainly isn't true for other systems
+ * NOTE: All failures in this class will throw an unchecked runtime exception. For my uses a DB failure means
+ * the program can't continue, this certainly isn't true for other systems
  */
+@SuppressWarnings("ThrowFromFinallyBlock")
 public class DBUtils {
     private static volatile DBUtils _instance = null;
     private static final int QUERY_TIMEOUT = 240;
@@ -38,10 +39,11 @@ public class DBUtils {
      * @param db Path to your DB
      * @param dbURL The URL for the DB (e.g. jdbc:sqlite:)
      * @param dbDriverClassName The name of your DB driver (e.g. org.sqlite.JDBC)
-     * @param enforceForeignKeys Should be true if you want foreign keys enforced on your table(s), false otherwise
-     *                           to increase DB performance
+     * @param enforceForeignKeys Should be true if you want foreign keys enforced on your table(s), false
+     *                           otherwise to increase DB performance
      * @return The connection
      */
+    @SuppressWarnings("ConstantConditions")
     public Connection connect(String db, String dbURL, String dbDriverClassName, boolean enforceForeignKeys){
         String connString = dbURL + db;
         Connection conn = null;
@@ -93,8 +95,8 @@ public class DBUtils {
 
     /**
      * Perform a DB operation not related to insert, delete, update
-     * @param conn
-     * @param SQLStatement
+     * @param conn The Connection
+     * @param SQLStatement The SQLStatement
      */
     public void execute(Connection conn, String SQLStatement){
         executeGenericUpdate(conn, SQLStatement);
@@ -194,7 +196,7 @@ public class DBUtils {
      */
     public ResultSet select(Connection conn, String SQLStatement){
         Statement stmt;
-        ResultSet rs = null;
+        ResultSet rs;
         try {
             stmt = conn.createStatement();
             stmt.setFetchSize(1000);
@@ -211,7 +213,7 @@ public class DBUtils {
 
     /**
      * Close a ResultSet object, handling the try / catch
-     * @param rs
+     * @param rs The ResultSet
      */
     public void closeResultSet(ResultSet rs){
         try{

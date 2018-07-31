@@ -26,6 +26,7 @@ package edu.antevorta.utils.client;
  * It basically works like 'conversion factors' from high school chem.
  *
  */
+@SuppressWarnings("ALL")
 public class TUC {
 
 
@@ -52,7 +53,8 @@ public class TUC {
         boolean conversionStarted = false;
         boolean conversionComplete = false;
         // then we want to do the week to day conversion
-        // (if not, we either return the value untouched if conversionComplete = true, or set conversionStarted = true)
+        // (if not, we either return the value untouched if conversionComplete = true,
+        // or set conversionStarted = true)
         switch(from){
             case WEEK:
                 if (to.id == TU.WEEK.id) return converted;
@@ -181,5 +183,3 @@ public class TUC {
     }
 
 }
-
-

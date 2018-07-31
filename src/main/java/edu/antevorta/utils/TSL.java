@@ -10,13 +10,12 @@ import java.time.LocalDateTime;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-
 /**
  * @author Sean Grimes, spg63@cs.drexel.edu
  * @author Andrew W.E. McDonald
  * @since 6/6/15
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess", "SpellCheckingInspection"})
 public class TSL extends Thread{
     private static volatile TSL _instance;
     public static boolean LOG_INFO = true;
@@ -24,7 +23,7 @@ public class TSL extends Thread{
     public static boolean LOG_TO_CONSOLE = true;
     public static boolean REWRITE_LOG_FILE = true;
 
-    private String SHUTDOWN_REQ = null;
+    private String SHUTDOWN_REQ;
     private volatile boolean shuttingDown, loggerTerminated;
     private BlockingQueue<Object> itemsToLog = new ArrayBlockingQueue<>(1000000);
     @SuppressWarnings("FieldCanBeLocal")
@@ -48,7 +47,7 @@ public class TSL extends Thread{
 
     /**
      * Get reference to the logger
-     * @return
+     * @return A reference to the logger
      */
     public static TSL get(){
         if(_instance == null){
@@ -61,6 +60,7 @@ public class TSL extends Thread{
         return _instance;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void run(){
         this.futils.checkAndCreateDir("logs");
@@ -179,7 +179,7 @@ public class TSL extends Thread{
 
     /**
      * Log an exception
-     * @param e
+     * @param e The exception to be logged
      */
     public void exception(Exception e){
         StringWriter sw = new StringWriter();
@@ -196,7 +196,8 @@ public class TSL extends Thread{
         shuttingDown = true;
         try {
             itemsToLog.put(SHUTDOWN_REQ);
-            // Force a pause of the main thread to give the logger thread a change to write all data to the file system
+            // Force a pause of the main thread to give the logger thread a change to write all data to the
+            // file system
             Thread.sleep(1000);
         }
         catch(InterruptedException e){
@@ -205,7 +206,8 @@ public class TSL extends Thread{
     }
 
     /**
-     * Shutdown the logger, sleep for half a second to allow the logger to finish flushing to disk then kill the program
+     * Shutdown the logger, sleep for half a second to allow the logger to finish flushing to disk then kill
+     * the program
      * with exit code 6
      */
     public void logAndKill(){
@@ -222,7 +224,7 @@ public class TSL extends Thread{
 
     /**
      * Shutdown the logger, adding a final log message onto the queue before killing the program
-     * @param log_message
+     * @param log_message The message ot be logged before shutdown
      */
     public void logAndKill(String log_message){
         err(log_message);
