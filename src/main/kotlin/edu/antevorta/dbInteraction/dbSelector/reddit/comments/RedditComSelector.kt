@@ -12,7 +12,6 @@ import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import edu.antevorta.dbInteraction.dbSelector.SelectionWorker
 import edu.antevorta.dbInteraction.dbSelector.Selector
 
-
 class RedditComSelector : Selector() {
     init {
         this.tableName = Finals.REDDIT_COM_TABLE
@@ -20,12 +19,12 @@ class RedditComSelector : Selector() {
     }
 
     override fun generalSelection(SQLStatement: String): List<RSMapper> {
-        val DBs = DBLocator.redditComsAbsolutePaths()
-        verifyDBsExist(DBs)
+        val dbs = DBLocator.redditComsAbsolutePaths()
+        verifyDBsExist(dbs)
 
         val workers = ArrayList<SelectionWorker>()
-        for(i in 0 until DBs.size)
-            workers.add(SelectionWorker(DBs[i], SQLStatement, CommentSetMapper()))
+        for(i in 0 until dbs.size)
+            workers.add(SelectionWorker(dbs[i], SQLStatement, CommentSetMapper()))
         return genericSelect(workers, SQLStatement)
     }
 }

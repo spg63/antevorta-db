@@ -10,6 +10,7 @@ import edu.antevorta.dbInteraction.dbSelector.RSMapper
 import org.json.JSONObject
 import java.sql.ResultSet
 
+@Suppress("unused")
 class SubmissionSetMapper: RSMapper {
     constructor(map: Map<String, String>): super(map)
     constructor(jsonObject: JSONObject): super(jsonObject)
@@ -18,4 +19,3 @@ class SubmissionSetMapper: RSMapper {
         return buildMappersImpl(rs, RedditSubs.columnNames())
     }
 }
-
