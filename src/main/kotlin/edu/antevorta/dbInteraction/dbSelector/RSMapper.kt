@@ -13,19 +13,21 @@ import java.sql.SQLException
 import java.time.LocalDateTime
 
 /**
- * Builds the ResultSet mapper object. It will run through a list of column names and pull data from a ResultSet for
- * storage in memory. If a column name does not appear in the ResultSet it will skip that column while reading the data
- * NOTE: A 3rd utility mapper class is needed to prevent a switch over class type, BaseMapper. This class doesn't
- * implement any functionality regarding pulling data from a ResultSet but is used to give data back to the user from
- * buildMappersImpl.
+ * Builds the ResultSet mapper object. It will run through a list of column names and pull data from a
+ * ResultSet for storage in memory. If a column name does not appear in the ResultSet it will skip that column
+ * while reading the data
+ * NOTE: A 3rd utility mapper class is needed to prevent a switch over class type, BaseMapper. This class
+ * doesn't implement any functionality regarding pulling data from a ResultSet but is used to give data back
+ * to the user from buildMappersImpl.
  *
- * NOTE: Storing all elements as a String avoids the type casting when pulling data from the ResultSet which delays
- * the type cast until the value is pull from the internal map stored here, if the value is pulled as something other
- * than a string.
+ * NOTE: Storing all elements as a String avoids the type casting when pulling data from the ResultSet which
+ * delays the type cast until the value is pull from the internal map stored here, if the value is pulled as
+ * something other than a string.
  */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 abstract class RSMapper {
     protected var map: Map<String, String> = HashMap()
-    protected val logger_: TSL = TSL.get()
+    protected val logger: TSL = TSL.get()
 
     constructor()
     constructor(map: Map<String, String>) {
@@ -61,8 +63,8 @@ abstract class RSMapper {
             value = stringVal.toInt()
         }
         catch(e: NumberFormatException){
-            logger_.exception(e)
-            logger_.err("RSMapper.getInt conversion failed")
+            logger.exception(e)
+            logger.err("RSMapper.getInt conversion failed")
             throw e
         }
         return value
@@ -81,24 +83,25 @@ abstract class RSMapper {
             value = stringVal.toLong()
         }
         catch(e: NumberFormatException){
-            logger_.exception(e)
-            logger_.err("RSMapper.getLong conversion failed")
+            logger.exception(e)
+            logger.err("RSMapper.getLong conversion failed")
             throw e
         }
         return value
     }
 
     /**
-     * Get the value as an LocalDateTime object. One assumes this is only called for columns that contain time stored
-     * in UTC seconds
+     * Get the value as an LocalDateTime object. One assumes this is only called for columns that contain time
+     * stored in UTC seconds
      * @param key
      * @return The LocalDateTime object if possible, else null
      */
     fun getLTDFromColumnHoldingUTCSeconds(key: String): LocalDateTime? {
         val time = getLong(key)
         if(time == 0L){
-            logger_.err("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
-            throw IllegalArgumentException("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
+            logger.err("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to create LDT object")
+            throw IllegalArgumentException("RSMapper.getLDTFromColumnHoldingUTCSeconds unable to " +
+                    "create LDT object")
         }
         return TimeUtils.utcSecondsToLDT(time)
     }
@@ -116,8 +119,8 @@ abstract class RSMapper {
             value = stringVal.toDouble()
         }
         catch(e: NumberFormatException){
-            logger_.exception(e)
-            logger_.err("RSMapper.getDouble conversion failed")
+            logger.exception(e)
+            logger.err("RSMapper.getDouble conversion failed")
             throw e
         }
         return value
@@ -171,7 +174,7 @@ abstract class RSMapper {
     protected fun getItem(key: String): String {
         val res = this.map[key]
         if(res == null) {
-            logger_.warn("RSMapper.getItem() No value for $key")
+            logger.warn("RSMapper.getItem() No value for $key")
             return ""
         }
         return res
@@ -196,9 +199,10 @@ abstract class RSMapper {
             // Find the index for each column to prevent a lot of string comparisons
             for(col in colNames){
                 var colIDX: Int
-                // Need to do this in a try-catch. When a non-* query is performed the ResultSet will NOT contain all
-                // columns from the DB and trying to find non-existant columns will throw an SQLException. In the
-                // future this should be optimized to skip trying all columns and only try those from the query
+                // Need to do this in a try-catch. When a non-* query is performed the ResultSet will NOT
+                // contain all columns from the DB and trying to find non-existant columns will throw an
+                // SQLException. In the future this should be optimized to skip trying all columns and only
+                // try those from the query
                 try{
                     colIDX = rs.findColumn(col)
                 }
@@ -217,7 +221,7 @@ abstract class RSMapper {
                 for(col in colIDs.keys) {
                     val theID = colIDs[col] ?: -55
                     if(theID == -55)
-                        logger_.logAndKill("colIDs map returned null for column name: $col")
+                        logger.logAndKill("colIDs map returned null for column name: $col")
                     map.put(col, rs.getString(theID))
                 }
 
@@ -226,7 +230,7 @@ abstract class RSMapper {
             }
         }
         catch(e: SQLException){
-            logger_.exception(e)
+            logger.exception(e)
         }
         return maps
     }

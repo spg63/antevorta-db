@@ -12,11 +12,12 @@ object RSMapperComparator: Comparator<RSMapper> {
     var columnsWithOrder = OrderBySelection()
 
     override fun compare(rs1: RSMapper, rs2: RSMapper): Int {
-        // columns with order *must* be set before this function can work, it's the only way to know how to sort
-        // the mappers, by date, name, or other. If this is null, it wasn't set, leave things unsorted by
+        // columns with order *must* be set before this function can work, it's the only way to know how to
+        // sort the mappers, by date, name, or other. If this is null, it wasn't set, leave things unsorted by
         // telling the sortWith function using this comparator that all values are equal and log an error
         // message. The user should reset this variable to null when they're done the sorting.
-        columnsWithOrder.reset() // Reset the column count when this is called, columnsWithOrder is a 'static' var
+
+        columnsWithOrder.reset() // Reset the column count with this, columnsWithOrder is a 'static' var
         if(!columnsWithOrder.hasNextColumn()) {
             TSL.get().err("RSMapperComparator.columnsWithOrder was empty, sorting was not completed!")
             return 0
@@ -26,7 +27,8 @@ object RSMapperComparator: Comparator<RSMapper> {
     }
 
     private fun compareMappers(rs1: RSMapper, rs2: RSMapper): Int {
-        // End the recursion, the columns to be used for comparison have been exhausted, declare the objects equal
+        // End the recursion, the columns to be used for comparison have been exhausted, declare the objects
+        // equal
         if(!columnsWithOrder.hasNextColumn()) return 0
 
         // Get the column name, and if it should be ascending or descending for sort order
@@ -48,8 +50,8 @@ object RSMapperComparator: Comparator<RSMapper> {
         return when {
             rs1.getString(columnName) > rs2.getString(columnName) -> 1
             rs1.getString(columnName) < rs2.getString(columnName) -> -1
-            // Values are equal, make the recursive call, compareMappers will end the recursion when there's no more
-            // columns
+            // Values are equal, make the recursive call, compareMappers will end the recursion when there's
+            // no more columns
             else -> compareMappers(rs1, rs2)
         }
     }
@@ -64,8 +66,8 @@ object RSMapperComparator: Comparator<RSMapper> {
     }
 
     /*
-        If the column doesn't exist, or it's not comparable, getString will return "". In this case return true, and
-        the calling function will know to return a no-compare value, 0, and move on
+        If the column doesn't exist, or it's not comparable, getString will return "". In this case return
+        true, and the calling function will know to return a no-compare value, 0, and move on
      */
     private fun badColumnName(rs: RSMapper, columnName: String): Boolean {
         if(rs.getString(columnName) == "") {

@@ -16,9 +16,10 @@ import java.sql.SQLException
 
 
 /**
- * Class to hold functionality shared among DB classes and wrapping the generalized functions from DBUtils to handle
- * things like data paths, db locations, db type, and whether or not to enforce foreign keys. Basically just wraps up
- * DBUtils with default values for this specific project to simplify function calls in higher level code
+ * Class to hold functionality shared among DB classes and wrapping the generalized functions from DBUtils to
+ * handle things like data paths, db locations, db type, and whether or not to enforce foreign keys. Basically
+ * just wraps up DBUtils with default values for this specific project to simplify function calls in higher
+ * level code
  */
 
 object DBCommon{

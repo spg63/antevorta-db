@@ -74,7 +74,7 @@ class MLLinksSelector: Selector() {
         }
 
         if(res.size > 1){
-            logger_.err("Multiple results for $fromCol with value $fromColID")
+            logger.err("Multiple results for $fromCol with value $fromColID")
             return Pair(-1, -1)
         }
 
@@ -122,7 +122,7 @@ class MLLinksSelector: Selector() {
             tmdbcol -> tmdbMemoMap
             imdbcol -> imdbMemoMap
             else -> {
-                logger_.logAndKill("MLLinksSelector.whichMemoMap: no matching getFromColumn")
+                logger.logAndKill("MLLinksSelector.whichMemoMap: no matching getFromColumn")
                 HashMap()   // NOTE: This isn't ever returned, logger kills the program
             }
         }
@@ -136,13 +136,13 @@ class MLLinksSelector: Selector() {
         val res = this.generalSelection(dbsql.sql())    // This should produce a single result, ONLY!
 
         if(res.isEmpty()) {
-            logger_.warn("Unable to locate $from for $selectCol value of $selectVal")
+            logger.warn("Unable to locate $from for $selectCol value of $selectVal")
             return -1
         }
 
 
         if(res.size > 1) {
-            logger_.err("Multiple results for $from for $selectCol value of $selectVal")
+            logger.err("Multiple results for $from for $selectCol value of $selectVal")
             return -1
         }
         return res[0].getInt(from)

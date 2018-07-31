@@ -113,7 +113,7 @@ fun doSubs(){
 
 
     RSMapperOutput.printAllColumnsFromRSMappers(res, RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
-    //RSMapperOutput.RSMappersToCSV(results, RedditSubs.columnsForPrinting(), "out.csv")
+    //RSMapperOutput.rsMappersToCSV(results, RedditSubs.columnsForPrinting(), "out.csv")
 }
 
 fun doComs(){

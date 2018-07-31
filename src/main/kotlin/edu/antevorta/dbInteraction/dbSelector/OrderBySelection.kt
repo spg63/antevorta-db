@@ -7,6 +7,7 @@ package edu.antevorta.dbInteraction.dbSelector
 
 import edu.antevorta.utils.TSL
 
+@Suppress("RemoveEmptyPrimaryConstructor")
 class OrderBySelection() {
     private val columnList = ArrayList<Pair<String, Boolean>>()
     private var currentColumn = -1

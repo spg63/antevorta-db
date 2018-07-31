@@ -37,12 +37,12 @@ object RSMapperOutput{
                     outmap = TimeUtils.utcSecondsToZDT(outmap)
                 out.writef("%-20s: %s\n", columnNames[i], outmap)
             }
-            println("\n----------------------------------------------------------------------------------------------------\n")
+            println("\n-----------------------------------------------------------------------------------\n")
         }
     }
 
     @Suppress("SENSELESS_COMPARISON")
-    fun RSMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String) {
+    fun rsMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String) {
         if(mappers == null || mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
             return
