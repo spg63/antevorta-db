@@ -116,6 +116,7 @@ abstract class JsonFacilitator: Facilitator {
             workers[i].columns = dbColumnNames
             workers[i].tableName = dbTableName
         }
+
         val threads: MutableList<Thread> = ArrayList()
         for(i in 0 until Finals.DB_SHARD_NUM){
             threads.add(Thread(workers[i]))
@@ -131,5 +132,4 @@ abstract class JsonFacilitator: Facilitator {
             }
         }
     }
-
 }
