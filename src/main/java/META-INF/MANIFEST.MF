@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: edu.antevorta.runner.RunnerKt
+Main-Class: edu.antevortadb.runner.RunnerKt
 
