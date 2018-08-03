@@ -29,14 +29,19 @@ abstract class CSVFacilitator: Facilitator {
         // For each CSV file, need to read each line of the file, turn it into a record, and give the records
         // to the CSV pushers to parse them and push them into the DBs
         for(csv in this.dataAbsolutePaths){
+            val totalLinesInFile = printFileInformationReturnTotalLinesInFile(csv)
+            // NOTE: The below code is replaced by the function call above, remove the commented code 
+            /*
             val f = File(csv)
             logger.info("Counting number of lines in ${f.name}")
             val totalLines = FileUtils.get().lineCount(csv)
             val totalLinesInFile = totalLines.toDouble()
             logger.info("Reading ${f.name}")
             logger.info("${f.name} has ${numberFormat.format(totalLinesInFile)} lines")
+            */
 
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
+            val f = File(csv)
             var lineReadCounter = 0
             var totalLinesRead: Long = 0
             var writeTotalLinesRead = 1

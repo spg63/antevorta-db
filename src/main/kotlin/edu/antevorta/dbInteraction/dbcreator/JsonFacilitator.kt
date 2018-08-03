@@ -29,15 +29,11 @@ abstract class JsonFacilitator: Facilitator {
         // Each iteration of the below while loop adds a line to a new worker thread to evenly share the data
         // across all DB shards
         for(json in this.dataAbsolutePaths){
-            val f = File(json)
-            logger.info("Counting number of lines in ${f.name}")
-            val totalLines = FileUtils.get().lineCount(json)
-            val totalLinesInFile = totalLines.toDouble()
-            logger.info("Reading ${f.name}")
-            logger.info("${f.name} has ${numberFormat.format(totalLinesInFile)} lines")
+            val totalLinesInFile = printFileInformationReturnTotalLinesInFile(json)
 
             var br: BufferedReader? = null
             val dbDumpLimit = Finals.DB_SHARD_NUM * Finals.DB_BATCH_LIMIT
+            val f = File(json)
             var lineReadCounter = 0
             var totalLinesRead: Long = 0
             var writeTotalLinesRead = 1

@@ -10,6 +10,7 @@ import edu.antevorta.dbInteraction.DBCommon
 import edu.antevorta.dbInteraction.DBWorker
 import edu.antevorta.utils.FileUtils
 import edu.antevorta.utils.TSL
+import java.io.File
 import java.sql.Connection
 import java.text.NumberFormat
 
@@ -217,5 +218,17 @@ abstract class Facilitator {
         logger.info("Writing ${this.dbTableName} to DB shards")
         this.dbAbsolutePaths.forEach{ DBCommon.insert(it, sql) }
         logger.info("${this.dbTableName} has been created")
+    }
+
+    // Note this returns total lines as a double as the value is used to print % remaining of file, this
+    // means that calculation doesn't need to do a cast every time it's made
+    protected fun printFileInformationReturnTotalLinesInFile(filename: String): Double {
+        val f = File(filename)
+        logger.info("Counting number of lines in ${f.name}")
+        val totalLines = FileUtils.get().lineCount(filename)
+        val totalLinesInFile = totalLines.toDouble()
+        logger.info("Reading ${f.name}")
+        logger.info("${f.name} has ${numberFormat.format(totalLinesInFile)} lines")
+        return totalLinesInFile
     }
 }
