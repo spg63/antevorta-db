@@ -1,4 +1,2 @@
-rootProject.name = 'Antevorta'
-include 'dataDistributor'
-include 'antevortadb-db'
+rootProject.name = 'antevorta-db'
 

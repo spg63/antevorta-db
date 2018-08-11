@@ -68,7 +68,6 @@ class AntevortaClient(configFilePath: String) {
         }
     }
 
-
     /**
      * Query the server with your sql string. The server will determine which DB to query based on table name
      * in the sql string.

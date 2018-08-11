@@ -1,4 +1,4 @@
-group 'Antevorta'
+group 'antevorta-db'
 version '1.0'
 
 buildscript {
