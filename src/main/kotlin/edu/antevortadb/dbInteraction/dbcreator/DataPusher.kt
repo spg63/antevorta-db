@@ -6,7 +6,6 @@
 package edu.antevortadb.dbInteraction.dbcreator
 
 import edu.antevortadb.dbInteraction.DBCommon
-import edu.antevortadb.utils.TSL
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException

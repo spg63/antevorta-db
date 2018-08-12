@@ -1,2 +1,4 @@
 rootProject.name = 'antevorta-db'
 
+inlcude ":javalibs"
+project(":javalibs").projectDir = file("./javalibs")

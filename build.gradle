@@ -23,6 +23,8 @@ repositories {
 }
 
 dependencies {
+    compile project (":javalibs")
+
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
