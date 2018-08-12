@@ -5,6 +5,8 @@
 
 package edu.antevortadb.dbInteraction.dbSelector
 
+import edu.antevortadb.utils.TSL
+
 object RSMapperComparator: Comparator<RSMapper> {
 
     var columnsWithOrder = OrderBySelection()

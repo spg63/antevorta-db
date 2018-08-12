@@ -6,6 +6,7 @@
 package edu.antevortadb.dbInteraction.dbcreator
 
 import edu.antevortadb.dbInteraction.DBCommon
+import edu.antevortadb.utils.TSL
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
@@ -15,7 +16,7 @@ abstract class DataPusher: Runnable {
     lateinit var DB: String
     lateinit var columns: List<String>
     lateinit var tableName: String
-    val logger = TSL.get()!!
+    val logger = TSL.get()
 
     constructor()
 

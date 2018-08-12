@@ -21,6 +21,7 @@ import edu.antevortadb.dbInteraction.dbcreator.hollywood.movies.*
 import edu.antevortadb.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.antevortadb.utils.Out
+import edu.antevortadb.utils.TSL
 
 val logger = TSL.get()
 

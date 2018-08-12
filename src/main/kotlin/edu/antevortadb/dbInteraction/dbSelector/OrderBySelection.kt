@@ -5,6 +5,8 @@
 
 package edu.antevortadb.dbInteraction.dbSelector
 
+import edu.antevortadb.utils.TSL
+
 @Suppress("RemoveEmptyPrimaryConstructor")
 class OrderBySelection() {
     private val columnList = ArrayList<Pair<String, Boolean>>()
