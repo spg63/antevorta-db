@@ -59,7 +59,8 @@ class MLGenomeTagsSelector: Selector() {
         }
 
         // Instead of returning -1 here, just return the first result. Let the code continue
-        logger.err("${res.size} results for $tagText. Returning the last added result.")
+        if(res.size > 1)
+            logger.err("${res.size} results for '$tagText'. Returning the last added result.")
 
         // Get the tagid value from the RSMapper object
         val tagid = res[0].getInt(tagidcol)
