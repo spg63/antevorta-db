@@ -9,6 +9,7 @@ package edu.antevortadb.runner
 
 import edu.antevortadb.client.AntevortaClient
 import edu.antevortadb.configs.Finals
+import edu.antevortadb.configs.RawDataLocator
 import edu.antevortadb.dbInteraction.columnsAndKeys.RedditComs
 import edu.antevortadb.dbInteraction.columnsAndKeys.RedditSubs
 import edu.antevortadb.dbInteraction.dbSelector.BaseMapper
@@ -19,7 +20,7 @@ import org.json.JSONObject
 
 object PullFromServer{
     fun doServerComs(){
-        val client = AntevortaClient(Finals.CLIENT_CONFIG)
+        val client = AntevortaClient(RawDataLocator.clientConfigFile())
         val author = "a4k04"
 
         val dbsql = DBSelector()
@@ -48,7 +49,7 @@ object PullFromServer{
     }
 
     fun doServerSubs(){
-        val client = AntevortaClient(Finals.CLIENT_CONFIG)
+        val client = AntevortaClient(RawDataLocator.clientConfigFile())
         val author = "SciTroll"
 
         val dbsql = DBSelector()

@@ -13,10 +13,10 @@ import java.io.File
  */
 object DataPaths{
     /* ---------- The path to the local data folders ------------------------------------------------------ */
-    const val mainLocalPath = "C:/Users/Prometheus/ResearchData/"
+    const val localDataPathRoot = "C:/Users/Prometheus/ResearchData/"
 
     /* ---------- File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) -- */
-    const val localPath = "LocalData/raw/"
+    const val localPath = "${localDataPathRoot}LocalData/raw/"
     const val LOCAL_REDDIT_SUB_DATA     = "${localPath}submissions/"
     const val LOCAL_REDDIT_COM_DATA     = "${localPath}comments/"
     const val LOCAL_TMDB_CREDITS        = "${localPath}tmdb/credits.csv"
@@ -50,9 +50,10 @@ object DataPaths{
     const val NEW_REDDIT_COM_DATA_PATH  = "${researchPath}Reddit/New/Comments/"
 
     /* ---------- Path to TESTING_MODE db files ----------------------------------------------------------- */
-    const val LOCAL_REDDIT_SUB_DB_PATH  = "LocalDB/RedditSubs/"
-    const val LOCAL_REDDIT_COM_DB_PATH  = "LocalDB/RedditComs/"
-    const val LOCAL_HOLLYWOOD_DB_PATH   = "LocalDB/Hollywood/"
+    const val localDBPath = "${localDataPathRoot}LocalDB/"
+    const val LOCAL_REDDIT_SUB_DB_PATH  = "${localDBPath}RedditSubs/"
+    const val LOCAL_REDDIT_COM_DB_PATH  = "${localDBPath}RedditComs/"
+    const val LOCAL_HOLLYWOOD_DB_PATH   = "${localDBPath}Hollywood/"
 
     /* ---------- Pieces of information to build DB paths on research machine ----------------------------- */
     const val REDDIT_SUB_DB             = "RS_DB"
@@ -63,5 +64,11 @@ object DataPaths{
     const val DBEXT                     = Finals.DB_TYPE_EXT
 
     /* ---------- Path to the location of the server configuration file ----------------------------------- */
-    val DB_CONFIG_PATH                  = "dbConfigs${File.separator}"
+    //val DB_CONFIG_PATH                  = "dbConfigs${File.separator}"
+    val LOCAL_SERVER_CONFIG_FILE        = "${localDataPathRoot}serverConfig${File.separator}config.json"
+    val LOCAL_CLIENT_CONFIG_FILE        = "${localDataPathRoot}clientConfig${File.separator}config.json"
+    val LOCAL_SERVER_CONFIG_PATH        = "${localDataPathRoot}clientConfig${File.separator}"
+    val SERVER_CONFIG_FILE              = "determineThisPath"
+    val CLIENT_CONFIG_FILE              = "determineThisPath"
+    val SERVER_CONFIG_PATH              = "determineThisPath"
 }

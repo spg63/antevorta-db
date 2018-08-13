@@ -18,6 +18,36 @@ object RawDataLocator{
     private val futils = FileUtils.get()
 
     /**
+     * Returns the path to the server config file
+     */
+    fun serverConfigFile(): String {
+        return when(Finals.TESTING_MODE){
+            true -> DataPaths.LOCAL_SERVER_CONFIG_FILE
+            false -> DataPaths.SERVER_CONFIG_FILE
+        }
+    }
+
+    /**
+     * Returns the path to the client config file
+     */
+    fun clientConfigFile(): String {
+        return when(Finals.TESTING_MODE){
+            true -> DataPaths.LOCAL_CLIENT_CONFIG_FILE
+            false -> DataPaths.CLIENT_CONFIG_FILE
+        }
+    }
+
+    /**
+     * Returns the path to the server config directory
+     */
+    fun serverConfigPath(): String {
+        return when(Finals.TESTING_MODE){
+            true -> DataPaths.LOCAL_SERVER_CONFIG_PATH
+            false -> DataPaths.SERVER_CONFIG_PATH
+        }
+    }
+
+    /**
      * Get a list of all raw json files for reddit submission data. This path changes depending
      * on which machine the code is running on.
      * @return List of all reddit submission files if available, otherwise null

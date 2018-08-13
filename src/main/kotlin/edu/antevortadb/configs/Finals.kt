@@ -53,8 +53,8 @@ object Finals{
 
     /* ---------- Server control -------------------------------------------------------------------------- */
     const val SERVER_SOCKET = 3383
-    const val SERVER_CONFIG_FILE_NAME = "doliusServerConfigsAndUsers.json"
-    var CLIENT_CONFIG = "serverConfigFileDir${File.separator}clientConfig.json"
+    //const val SERVER_CONFIG_FILE_NAME = "doliusServerConfigsAndUsers.json"
+    //var CLIENT_CONFIG = "serverConfigFileDir${File.separator}clientConfig.json"
 
     // NOTE: These columns are common to most DB types and are named here for consistency across insertions
     // and selection from various data sources. It will allow for further generalization in higher levels of

@@ -166,9 +166,4 @@ class AntevortaClient(configFilePath: String) {
 
         return json
     }
-
-
-//----- See the older Java version for usage of this class. At the moment it's still up-to-date --------------
-
-
 }
