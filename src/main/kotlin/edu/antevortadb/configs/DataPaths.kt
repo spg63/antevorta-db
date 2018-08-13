@@ -12,6 +12,9 @@ import java.io.File
  * code and whether or not testing_mode has been enabled
  */
 object DataPaths{
+    /* ---------- The path to the local data folders ------------------------------------------------------ */
+    const val mainLocalPath = "C:/Users/Prometheus/ResearchData/"
+
     /* ---------- File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) -- */
     const val localPath = "LocalData/raw/"
     const val LOCAL_REDDIT_SUB_DATA     = "${localPath}submissions/"
