@@ -1,5 +1,5 @@
 # antevorta-db
-### The database module for Antevorta
+## The database module for Antevorta
 
 * This module handles the storage of the data, access to the data, and storing temporary data as networks are being created and trained. Anything that goes into any of the DBs will go through this module. 
 
