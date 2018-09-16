@@ -72,7 +72,8 @@ class Dolius(private val socket: Socket): Runnable {
      */
     override fun run() {
         // Get the data from the socket
-        // If the server has reached max threads and max sleep, tell client the server is busy and quit
+        // If the server has reached max threads and max sleep, tell client the server is
+        // busy and quit
         if(serverBusy) {
             handleBusy()
             destroy()
@@ -84,8 +85,6 @@ class Dolius(private val socket: Socket): Runnable {
         val input: String
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
-            //logger.info("Incoming IP: ${socket.remoteSocketAddress.toString()}")
-            //logger.info("Incoming Inet: ${socket.inetAddress.toString()}")
             input = inputReader.readLine()
         }
         catch(e: IOException){
@@ -166,14 +165,15 @@ class Dolius(private val socket: Socket): Runnable {
 
 
 
-// -----------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 
     /**
      * Determines which function to call and queries the DB after some basic validation
      */
     private fun process(sqlQuery: String): List<RSMapper> {
-        // Get a Selector object. Will auto detect which DB based on the table name. This is not ideal.
+        // Get a Selector object. Will auto detect which DB based on the table name.
+        // This is not ideal.
         val selector = Selector.getSelectorOnType(sqlQuery)
 
         // Make the selection, get the RSMappers

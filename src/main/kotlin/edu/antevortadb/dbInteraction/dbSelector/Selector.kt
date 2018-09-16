@@ -7,6 +7,7 @@ package edu.antevortadb.dbInteraction.dbSelector
 
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.TimeUtils
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.*
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevortadb.utils.TSL
@@ -347,13 +348,20 @@ abstract class Selector{
         NOTE: The companion object is kotlin specific
      */
     companion object {
-        fun getSelectorOnType(matchingString: String): Selector {
+        fun getSelectorOnType(input: String): Selector {
             return when {
-                matchingString.toLowerCase().contains(Finals.REDDIT_COM_TABLE) -> RedditComSelector()
-                matchingString.toLowerCase().contains(Finals.REDDIT_SUB_TABLE) -> RedditSubSelector()
-                else -> throw IllegalArgumentException("Selector.getSelectorOnType is a stupid idea Sean")
+                input.toLowerCase().contains(Finals.REDDIT_COM_TABLE) -> RedditComSelector()
+                input.toLowerCase().contains(Finals.REDDIT_SUB_TABLE) -> RedditSubSelector()
+                input.toLowerCase().contains(Finals.ML_GENOME_TAGS_TABLE) -> MLGenomeTagsSelector()
+                input.toLowerCase().contains(Finals.ML_INDIVIDUAL_RATING_TABLE) ->
+                    MLIndividualRatingsSelector()
+                input.toLowerCase().contains(Finals.ML_LINK_TABLE) -> MLLinksSelector()
+                input.toLowerCase().contains(Finals.ML_MOVIES_TABLE) -> MLMoviesSelector()
+                input.toLowerCase().contains(Finals.TMDB_MOVIES_TABLE) -> MovieSelector()
+                input.toLowerCase().contains(Finals.TMDB_CREDITS_TABLE) -> TMDBCreditsSelector()
+                else -> throw IllegalArgumentException("Selector.getSelectorOnType is a stupid " +
+                        "idea, Sean")
             }
         }
     }
-
 }
