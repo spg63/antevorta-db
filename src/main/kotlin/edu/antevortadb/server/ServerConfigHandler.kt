@@ -5,8 +5,6 @@
 
 package edu.antevortadb.server
 
-import edu.antevortadb.configs.DataPaths
-import edu.antevortadb.configs.Finals
 import edu.antevortadb.configs.RawDataLocator
 import edu.antevortadb.utils.FileUtils
 import org.json.JSONArray
@@ -16,8 +14,6 @@ import java.io.File
 @Suppress("unused", "PrivatePropertyName")
 class ServerConfigHandler {
     private var jsonObject = JSONObject()
-    //private val myRootDir = DataPaths.DB_CONFIG_PATH
-    //private val myConfigFile = myRootDir + Finals.SERVER_CONFIG_FILE_NAME
     private val myRootDir = RawDataLocator.serverConfigPath()
     private val myConfigFile = RawDataLocator.serverConfigFile()
     private val fileUtils = FileUtils.get()

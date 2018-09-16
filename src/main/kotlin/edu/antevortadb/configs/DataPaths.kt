@@ -3,9 +3,9 @@
  * License: MIT
  */
 
-package edu.antevortadb.configs
+@file:Suppress("MemberVisibilityCanBePrivate")
 
-import java.io.File
+package edu.antevortadb.configs
 
 /**
  * The different paths to the DB, Json, and CSV data depending on which machine is running the
@@ -13,49 +13,49 @@ import java.io.File
  */
 object DataPaths{
     /* ---------- The path to the local data folders ------------------------------------------------------ */
-    const val localDataPathRoot = "C:/Users/Prometheus/ResearchData/"
+    const val LOCAL_DATA_ROOT_PATH = "/Users/hades/Git/_DATA_"
 
     /* ---------- File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) -- */
-    const val localPath = "${localDataPathRoot}LocalData/raw/"
-    const val LOCAL_REDDIT_SUB_DATA     = "${localPath}submissions/"
-    const val LOCAL_REDDIT_COM_DATA     = "${localPath}comments/"
-    const val LOCAL_TMDB_CREDITS        = "${localPath}tmdb/credits.csv"
-    const val LOCAL_TMDB_MOVIES         = "${localPath}tmdb/movies.csv"
-    const val LOCAL_LENS_GENOME_SCORES  = "${localPath}movielens/genome_scores.csv"
-    const val LOCAL_LENS_GENOME_TAGS    = "${localPath}movielens/genome_tags.csv"
-    const val LOCAL_LENS_LINK           = "${localPath}movielens/link.csv"
-    const val LOCAL_LENS_MOVIE          = "${localPath}movielens/movie.csv"
-    const val LOCAL_LENS_RATING         = "${localPath}movielens/rating.csv"
-    const val LOCAL_LENS_TAG            = "${localPath}movielens/tag.csv"
+    const val LOCAL_PATH = "${LOCAL_DATA_ROOT_PATH}LocalData/raw/"
+    const val LOCAL_REDDIT_SUB_DATA     = "${LOCAL_PATH}submissions/"
+    const val LOCAL_REDDIT_COM_DATA     = "${LOCAL_PATH}comments/"
+    const val LOCAL_TMDB_CREDITS        = "${LOCAL_PATH}tmdb/credits.csv"
+    const val LOCAL_TMDB_MOVIES         = "${LOCAL_PATH}tmdb/movies.csv"
+    const val LOCAL_LENS_GENOME_SCORES  = "${LOCAL_PATH}movielens/genome_scores.csv"
+    const val LOCAL_LENS_GENOME_TAGS    = "${LOCAL_PATH}movielens/genome_tags.csv"
+    const val LOCAL_LENS_LINK           = "${LOCAL_PATH}movielens/link.csv"
+    const val LOCAL_LENS_MOVIE          = "${LOCAL_PATH}movielens/movie.csv"
+    const val LOCAL_LENS_RATING         = "${LOCAL_PATH}movielens/rating.csv"
+    const val LOCAL_LENS_TAG            = "${LOCAL_PATH}movielens/tag.csv"
 
     // Directory paths where new JSON data will be stored in 'TESTING_MODE'
-    const val LOCAL_NEW_REDDIT_SUB_DATA = "${localPath}new/submissions/"
-    const val LOCAL_NEW_REDDIT_COM_DATA = "${localPath}new/comments/"
+    const val LOCAL_NEW_REDDIT_SUB_DATA = "${LOCAL_PATH}new/submissions/"
+    const val LOCAL_NEW_REDDIT_COM_DATA = "${LOCAL_PATH}new/comments/"
 
     /* ---------- File paths when running on the research machine ----------------------------------------- */
-    const val researchPath = "A:/Data/Uncompressed/"
-    const val REDDIT_SUB_DATA_PATH      = "${researchPath}Reddit/Submissions/"
-    const val REDDIT_COM_DATA_PATH      = "${researchPath}Reddit/Comments/"
-    const val TMDB_CREDITS              = "${researchPath}tmdb/credits.csv"
-    const val TMDB_MOVIES               = "${researchPath}tmdb/movies.csv"
-    const val MOVIELENS_GENOME_SCORES   = "${researchPath}movielens/genome_scores.csv"
-    const val MOVIELENS_GENOME_TAGS     = "${researchPath}movielens/genome_tags.csv"
-    const val MOVIELENS_LINK            = "${researchPath}movielens/link.csv"
-    const val MOVIELENS_MOVIE           = "${researchPath}movielens/movie.csv"
-    const val MOVIELENS_RATING          = "${researchPath}movielens/rating.csv"
-    const val MOVIELENS_TAG             = "${researchPath}movielens/tag.csv"
+    const val RESEARCH_PATH = "A:/Data/Uncompressed/"
+    const val REDDIT_SUB_DATA_PATH      = "${RESEARCH_PATH}Reddit/Submissions/"
+    const val REDDIT_COM_DATA_PATH      = "${RESEARCH_PATH}Reddit/Comments/"
+    const val TMDB_CREDITS              = "${RESEARCH_PATH}tmdb/credits.csv"
+    const val TMDB_MOVIES               = "${RESEARCH_PATH}tmdb/movies.csv"
+    const val MOVIELENS_GENOME_SCORES   = "${RESEARCH_PATH}movielens/genome_scores.csv"
+    const val MOVIELENS_GENOME_TAGS     = "${RESEARCH_PATH}movielens/genome_tags.csv"
+    const val MOVIELENS_LINK            = "${RESEARCH_PATH}movielens/link.csv"
+    const val MOVIELENS_MOVIE           = "${RESEARCH_PATH}movielens/movie.csv"
+    const val MOVIELENS_RATING          = "${RESEARCH_PATH}movielens/rating.csv"
+    const val MOVIELENS_TAG             = "${RESEARCH_PATH}movielens/tag.csv"
 
     // Directory paths when running on the research machine for new JSON data
-    const val NEW_REDDIT_SUB_DATA_PATH  = "${researchPath}Reddit/New/Submissions/"
-    const val NEW_REDDIT_COM_DATA_PATH  = "${researchPath}Reddit/New/Comments/"
+    const val NEW_REDDIT_SUB_DATA_PATH  = "${RESEARCH_PATH}Reddit/New/Submissions/"
+    const val NEW_REDDIT_COM_DATA_PATH  = "${RESEARCH_PATH}Reddit/New/Comments/"
 
-    /* ---------- Path to TESTING_MODE db files ----------------------------------------------------------- */
-    const val localDBPath = "${localDataPathRoot}LocalDB/"
-    const val LOCAL_REDDIT_SUB_DB_PATH  = "${localDBPath}RedditSubs/"
-    const val LOCAL_REDDIT_COM_DB_PATH  = "${localDBPath}RedditComs/"
-    const val LOCAL_HOLLYWOOD_DB_PATH   = "${localDBPath}Hollywood/"
+    /* ---------- Path to TESTING_MODE db files ------------------------------------------------- */
+    const val LOCAL_DB_PATH = "${LOCAL_DATA_ROOT_PATH}LocalDB/"
+    const val LOCAL_REDDIT_SUB_DB_PATH  = "${LOCAL_DB_PATH}RedditSubs/"
+    const val LOCAL_REDDIT_COM_DB_PATH  = "${LOCAL_DB_PATH}RedditComs/"
+    const val LOCAL_HOLLYWOOD_DB_PATH   = "${LOCAL_DB_PATH}Hollywood/"
 
-    /* ---------- Pieces of information to build DB paths on research machine ----------------------------- */
+    /* ---------- Pieces of information to build DB paths on research machine -------------------- */
     const val REDDIT_SUB_DB             = "RS_DB"
     const val REDDIT_COM_DB             = "RC_DB"
     const val HOLLYWOOD_DB              = "HOLLYWOOD"
@@ -63,12 +63,13 @@ object DataPaths{
     // The DB file extension for sqlite3 files
     const val DBEXT                     = Finals.DB_TYPE_EXT
 
-    /* ---------- Path to the location of the server configuration file ----------------------------------- */
-    //val DB_CONFIG_PATH                  = "dbConfigs${File.separator}"
-    val LOCAL_SERVER_CONFIG_FILE        = "${localDataPathRoot}serverConfig${File.separator}config.json"
-    val LOCAL_CLIENT_CONFIG_FILE        = "${localDataPathRoot}clientConfig${File.separator}config.json"
-    val LOCAL_SERVER_CONFIG_PATH        = "${localDataPathRoot}clientConfig${File.separator}"
-    val SERVER_CONFIG_FILE              = "determineThisPath"
-    val CLIENT_CONFIG_FILE              = "determineThisPath"
-    val SERVER_CONFIG_PATH              = "determineThisPath"
+    /* ---------- Path to the location of the server configuration file ------------------------- */
+    const val LOCAL_SERVER_CONFIG_FILE  = "${LOCAL_DATA_ROOT_PATH}serverConfig/config.json"
+    const val LOCAL_CLIENT_CONFIG_FILE  = "${LOCAL_DATA_ROOT_PATH}clientConfig/config.json"
+    const val LOCAL_SERVER_CONFIG_PATH  = "${LOCAL_DATA_ROOT_PATH}clientConfig/"
+
+    const val DOLIUS_CONFIG_PATH        = "A:/DoliusConfigs/"
+    const val SERVER_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}serverConfig/config.json"
+    const val CLIENT_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}clientConfig/config.json"
+    const val SERVER_CONFIG_PATH        = "${DOLIUS_CONFIG_PATH}serverConfig/"
 }
