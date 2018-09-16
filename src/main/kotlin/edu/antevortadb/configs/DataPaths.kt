@@ -13,7 +13,7 @@ package edu.antevortadb.configs
  */
 object DataPaths{
     /* ---------- The path to the local data folders ------------------------------------------------------ */
-    const val LOCAL_DATA_ROOT_PATH = "/Users/hades/Git/_DATA_"
+    const val LOCAL_DATA_ROOT_PATH = "/Users/hades/Git/_DATA_/"
 
     /* ---------- File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) -- */
     const val LOCAL_PATH = "${LOCAL_DATA_ROOT_PATH}LocalData/raw/"
