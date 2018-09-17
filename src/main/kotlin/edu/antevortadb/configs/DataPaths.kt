@@ -7,6 +7,8 @@
 
 package edu.antevortadb.configs
 
+import java.io.File
+
 /**
  * The different paths to the DB, Json, and CSV data depending on which machine is running the
  * code and whether or not testing_mode has been enabled
@@ -68,8 +70,8 @@ object DataPaths{
     const val LOCAL_CLIENT_CONFIG_FILE  = "${LOCAL_DATA_ROOT_PATH}clientConfig/config.json"
     const val LOCAL_SERVER_CONFIG_PATH  = "${LOCAL_DATA_ROOT_PATH}clientConfig/"
 
-    const val DOLIUS_CONFIG_PATH        = "A:/DoliusConfigs/"
-    const val SERVER_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}serverConfig/config.json"
-    const val CLIENT_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}clientConfig/config.json"
-    const val SERVER_CONFIG_PATH        = "${DOLIUS_CONFIG_PATH}serverConfig/"
+    val DOLIUS_CONFIG_PATH        = "A:/DoliusConfigs${File.separator}"
+    val SERVER_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}serverConfig${File.separator}config.json"
+    val CLIENT_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}clientConfig${File.separator}config.json"
+    val SERVER_CONFIG_PATH        = "${DOLIUS_CONFIG_PATH}serverConfig${File.separator}"
 }
