@@ -70,7 +70,7 @@ object DataPaths{
     const val LOCAL_CLIENT_CONFIG_FILE  = "${LOCAL_DATA_ROOT_PATH}clientConfig/config.json"
     const val LOCAL_SERVER_CONFIG_PATH  = "${LOCAL_DATA_ROOT_PATH}clientConfig/"
 
-    val DOLIUS_CONFIG_PATH        = "A:/DoliusConfigs${File.separator}"
+    val DOLIUS_CONFIG_PATH        = "A:${File.separator}DoliusConfigs${File.separator}"
     val SERVER_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}serverConfig${File.separator}config.json"
     val CLIENT_CONFIG_FILE        = "${DOLIUS_CONFIG_PATH}clientConfig${File.separator}config.json"
     val SERVER_CONFIG_PATH        = "${DOLIUS_CONFIG_PATH}serverConfig${File.separator}"
