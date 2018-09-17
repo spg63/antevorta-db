@@ -37,11 +37,11 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    //PullFromServer.doServerComs()
+    PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
     //createHollywoodDB()
-    doComs()
+    //doComs()
     //pushNewSubs()
     //pushNewComs()
     //hollywoodSelect()
