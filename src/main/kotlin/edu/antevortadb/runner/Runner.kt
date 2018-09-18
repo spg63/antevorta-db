@@ -22,6 +22,7 @@ import edu.antevortadb.dbInteraction.dbcreator.reddit.comments.CommentsFacilitat
 import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
 import edu.antevortadb.utils.Out
 import edu.antevortadb.utils.TSL
+import java.io.File
 
 val logger = TSL.get()
 
