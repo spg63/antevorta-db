@@ -15,10 +15,10 @@ import java.io.File
  * code and whether or not testing_mode has been enabled
  */
 object DataPaths{
-    val SEP: String = File.separator
+    val SEP: String                 = File.separator
 
     /* ---------- The path to the local data folders -------------------------------------------- */
-    val LOCAL_DATA_ROOT_PATH = "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
+    val LOCAL_DATA_ROOT_PATH        = "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
 
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) - */
     val LOCAL_PATH                  = "${LOCAL_DATA_ROOT_PATH}LocalData${SEP}raw"
@@ -38,7 +38,7 @@ object DataPaths{
     val LOCAL_NEW_REDDIT_COM_DATA   = "${LOCAL_PATH}new${SEP}comments${SEP}"
 
     /* ---------- File paths when running on the research machine ------------------------------- */
-    val RESEARCH_PATH = "A:${SEP}Data${SEP}Uncompressed${SEP}"
+    val RESEARCH_PATH               = "A:${SEP}Data${SEP}Uncompressed${SEP}"
 
     val REDDIT_DATA_ROOT            = "${RESEARCH_PATH}Reddit${SEP}"
     val REDDIT_SUB_DATA_PATH        = "${REDDIT_DATA_ROOT}Submissions${SEP}"
