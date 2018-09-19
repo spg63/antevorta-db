@@ -82,9 +82,6 @@ fun createHollywoodDB(){
     addTableToShards(MovielensIndividualTagsFacilitator())
     addTableToShards(MovielensIndividualRatingsFacilitator())
     addTableToShards(TMDBMoviesFacilitator())
-
-
-    //TODO("DROP THE TABLES THAT AREN'T NECESSARY!")
 }
 
 

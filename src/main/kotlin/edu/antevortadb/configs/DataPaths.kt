@@ -21,7 +21,7 @@ object DataPaths{
     val LOCAL_DATA_ROOT_PATH        = "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
 
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) - */
-    val LOCAL_PATH                  = "${LOCAL_DATA_ROOT_PATH}LocalData${SEP}raw"
+    val LOCAL_PATH                  = "${LOCAL_DATA_ROOT_PATH}LocalData${SEP}raw${SEP}"
     val LOCAL_REDDIT_SUB_DATA       = "${LOCAL_PATH}submissions${SEP}"
     val LOCAL_REDDIT_COM_DATA       = "${LOCAL_PATH}comments${SEP}"
     val LOCAL_TMDB_CREDITS          = "${LOCAL_PATH}tmdb${SEP}credits.csv"
@@ -66,7 +66,7 @@ object DataPaths{
     val LOCAL_REDDIT_COM_DB_PATH    = "${LOCAL_DB_PATH}RedditComs${SEP}"
     val LOCAL_HOLLYWOOD_DB_PATH     = "${LOCAL_DB_PATH}Hollywood${SEP}"
 
-    /* ---------- Pieces of information to build DB paths on research machine -------------------- */
+    /* ---------- Pieces of information to build DB paths on research machine ------------------- */
     const val REDDIT_SUB_DB         = "RS_DB"
     const val REDDIT_COM_DB         = "RC_DB"
     const val HOLLYWOOD_DB          = "HOLLYWOOD"
