@@ -49,7 +49,8 @@ class MLMoviesSelector: Selector() {
         if(res.isEmpty())
             return JSONObject()
 
-        // NOTE: If the rsmapper somehow has multiple results for the tmdbID, just return the first one
+        // NOTE: If the rsmapper somehow has multiple results for the tmdbID, just return the
+        // first one
 
         return JSONObject(res[0].getString("genres"))
     }

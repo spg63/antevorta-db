@@ -42,7 +42,8 @@ class MLLinksSelector: Selector() {
 
     /**
      * Get the tmdb_movieid and imdb_movieid values from a movielens_movieid value
-     * @return Pair(TMDB_ID, IMDB_ID) or Pair(-1, -1) if values couldn't be located or otherwise errored
+     * @return Pair(TMDB_ID, IMDB_ID) or Pair(-1, -1) if values couldn't be located or otherwise
+     * errored
      */
     fun getIMDBandTMDBFromMovielensMovieID(mlID: Int) = selectBothIDs(tmdbcol, imdbcol, mlcol, mlID)
     fun getIMDBandMLIDFromTMDBMovieID(tmdbID: Int) = selectBothIDs(imdbcol, mlcol, tmdbcol, tmdbID)

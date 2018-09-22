@@ -20,11 +20,11 @@ class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
 
     constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
 
-    override fun getDataFileAbsolutePaths()         = listOf(RawDataLocator.tmdbMoviesCSVAbsolutePath())
-    override fun getDataKeysOfInterest()            = TMDBMovies.csvKeys()
-    override fun getColumnNames()                   = TMDBMovies.columnNames()
-    override fun getDataTypes()                     = TMDBMovies.dataTypes()
-    override fun getTableName()                     = Finals.TMDB_MOVIES_TABLE
+    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.tmdbMoviesCSVAbsolutePath())
+    override fun getDataKeysOfInterest()    = TMDBMovies.csvKeys()
+    override fun getColumnNames()           = TMDBMovies.columnNames()
+    override fun getDataTypes()             = TMDBMovies.dataTypes()
+    override fun getTableName()             = Finals.TMDB_MOVIES_TABLE
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

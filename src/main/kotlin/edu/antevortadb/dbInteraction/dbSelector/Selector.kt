@@ -17,32 +17,34 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
 /**
- * This class implements all shared functionality for DB selections. Based on the type of SelectionWorker
- * passed to the genericSelect function it will query the proper DB files and use the proper RSMapper object
+ * This class implements all shared functionality for DB selections. Based on the type of
+ * SelectionWorker passed to the genericSelect function it will query the proper DB files and
+ * use the proper RSMapper object
  */
 @Suppress("unused", "MemberVisibilityCanBePrivate", "HasPlatformType")
 abstract class Selector{
-    // dbTableName and listOfColumns get set in the derived class c'tors. dbTableName is used to select the
-    // right table from the DB shards (e.g. submission_attrs) for reddit submissions. listOfColumns is used by
-    // the orderby function for determining which words in a query refer to a valid column.
+    // dbTableName and listOfColumns get set in the derived class c'tors. dbTableName is used
+    // to select the right table from the DB shards (e.g. submission_attrs) for reddit
+    // submissions. listOfColumns is used by the orderby function for determining which words
+    // in a query refer to a valid column.
     protected lateinit var tableName: String
     protected lateinit var listOfColumns: List<String>
     protected val logger = TSL.get()
     private var hasBeenSorted = false
 
-//------------------------------------------------------------------------------------------------------------
-// NOTE: This can be used when one of the functions below doesn't satisfy your querying needs. I suggest
-// just writing the function below unless you're absolutely positive the query is a one-off so you don't need
-// to keep writing the same SQL string.
-//------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// NOTE: This can be used when one of the functions below doesn't satisfy your querying needs. I
+// suggest just writing the function below unless you're absolutely positive the query is
+// a one-off so you don't need to keep writing the same SQL string.
+//--------------------------------------------------------------------------------------------------
     abstract fun generalSelection(SQLStatement: String): List<RSMapper>
 
-//------------------------------------------------------------------------------------------------------------
-// The following functions take the dbTableName variable (set the in the derived class default c'tors) and
-// create an sql query string using the DBSelector class. The query string is passed back down to a derived
-// class through generalSelection to ascertain which workers to use and which DB shards to search before
-// calling the generalized genericSelect function below.
-//------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// The following functions take the dbTableName variable (set the in the derived class default
+// c'tors) and create an sql query string using the DBSelector class. The query string is passed
+// back down to a derived class through generalSelection to ascertain which workers to use and
+// which DB shards to search before calling the generalized genericSelect function below.
+//--------------------------------------------------------------------------------------------------
 
     fun selectAllFromAuthor(author: String): List<RSMapper> {
         return selectAllWhereColumnEquals(Finals.AUTHOR, author)
@@ -127,15 +129,16 @@ abstract class Selector{
     }
 
 
-//------------------------------------------------------------------------------------------------------------
-// The functions below implement the queries on the DB. verifyDBsExist simply checks that the requests DB
-// shards are in place on the disk where they're expected to be. If this fails the program dies...something
-// is very wrong if this failed. genericSelect is a generalized DB query function which gives a list of
-// selection workers will search the proper DB shards.
-//------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// The functions below implement the queries on the DB. verifyDBsExist simply checks that the
+// requests DB shards are in place on the disk where they're expected to be. If this fails the
+// program dies...something is very wrong if this failed. genericSelect is a generalized DB query
+// function which gives a list of selection workers will search the proper DB shards.
+//--------------------------------------------------------------------------------------------------
 
     /*
-        Perform a multi-threaded selection against the DB shards. Each shard is given a single thread
+        Perform a multi-threaded selection against the DB shards. Each shard is given a
+        single thread
      */
     @Suppress("UNCHECKED_CAST")
     protected fun genericSelect(workers: List<SelectionWorker>, SQLStatement: String): List<RSMapper> {
@@ -162,11 +165,12 @@ abstract class Selector{
 
         logger.info("$SQLStatement --- ${results.size} results.")
 
-        // The research machine has multiple DB shards which makes "orderby" requests almost useless. The code
-        // below will search for orderby in the query, if it exists it will determine which column name the
-        // ordering is to be done on and if the ordering is ascending or decending (default assumes
-        // ascending). After checking for the order by command and sorting (if necessary) we check for a limit
-        // command. If there is a limit command return only the requested number of results, in sorted order
+        // The research machine has multiple DB shards which makes "orderby" requests almost
+        // useless. The code below will search for orderby in the query, if it exists it will
+        // determine which column name the ordering is to be done on and if the ordering is
+        // ascending or descending (default assumes ascending). After checking for the order by
+        // command and sorting (if necessary) we check for a limit command. If there is a limit
+        // command return only the requested number of results, in sorted order
         // (by order by, or created_dt if no order by)
         val finalResults = handleLimit(SQLStatement, handleOrderBy(SQLStatement, results))
 
@@ -177,40 +181,39 @@ abstract class Selector{
     }
 
     /*
-        Takes in the query and the results, checks the query to see if it contains an orderby clause, if it
-        does it will process the orderby, determine how to sort the results based on the columns the ordering
-        should be done on and if the ordering should be ascending (default) or descending, then it will return
-        the properly sorted results. If there is no orderby clause the results will be returned unmodified.
+        Takes in the query and the results, checks the query to see if it contains an orderby
+        clause, if it does it will process the orderby, determine how to sort the results
+        based on the columns the ordering should be done on and if the ordering should be
+        ascending (default) or descending, then it will return the properly sorted results.
+        If there is no orderby clause the results will be returned unmodified.
      */
     private fun handleOrderBy(query: String, results: List<RSMapper>): List<RSMapper>{
-        // If the query doesn't contain "orderby" and it doesn't contain "order by", or the query returned no
-        // results return the results without further processing
+        // If the query doesn't contain "orderby" and it doesn't contain "order by", or the
+        // query returned no results return the results without further processing
         if(results.isEmpty()) return results
         if(!query.toLowerCase().contains("orderby") && !query.toLowerCase().contains("order by"))
             return results
 
-        // Tell the class that we're going through witht he sorting
+        // Tell the class that we're going through with the sorting
         this.hasBeenSorted = true
 
-        // Not entirely convinced this works yet, needs significantly more testing
-        logger.warn("order by sorting is in beta, it may fail or throw an error, please check results!")
-
-        // Determine which columns names should be sorted, and if it should be sorted ascending or descending
+        // Determine which columns names should be sorted, and if it should be sorted ascending
+        // or descending
         val columnsAndOrders = determineOrderByColumns(query.toLowerCase())
 
         return doTheSort(results, columnsAndOrders)
     }
 
     /*
-        Determine which column should be used in the sorting when an orderby clause is added to the SQL query
-        It takes in the query string and returns a map of column names and a boolean. The boolean is true when
-        the sorting should be done in ascending order (the default) and false when it should be done in
-        decending order.
+        Determine which column should be used in the sorting when an orderby clause is added to
+        the SQL query It takes in the query string and returns a map of column names and a
+        boolean. The boolean is true when the sorting should be done in ascending order
+        (the default) and false when it should be done in descending order.
      */
     private fun determineOrderByColumns(query: String): OrderBySelection {
         val theOrdering = OrderBySelection()
-        // Split the string on the order by command, the left side doesn't matter, right side has the order
-        // by info
+        // Split the string on the order by command, the left side doesn't matter, right side
+        // has the order by info
         val orderBySplits = query.split("order by")
 
         // Split the columns names (with asc or desc) on comma
@@ -243,14 +246,15 @@ abstract class Selector{
 
     /*
         The columnName is the column that the sort needs to be based on
-        If isAscending is true the data should be sorted in ascending order, if it's false it should be
-        sorted in descending order
+        If isAscending is true the data should be sorted in ascending order, if it's false it
+        should be sorted in descending order
      */
     private fun doTheSort(results: List<RSMapper>, columnsWithOrder: OrderBySelection): List<RSMapper> {
         val mutableResults = results.toMutableList()
 
-        // Set the OrderBySelection before doing the sort. Unfortunately this can't be done in the Comparator
-        // function call because the comparator implements a specific interface. Oh well.
+        // Set the OrderBySelection before doing the sort. Unfortunately this can't be done
+        // in the Comparator function call because the comparator implements a specific interface.
+        // Oh well.
         RSMapperComparator.columnsWithOrder = columnsWithOrder
 
         mutableResults.sortWith(RSMapperComparator)
@@ -262,12 +266,13 @@ abstract class Selector{
     }
 
     /*
-        When the limit command is given it is given to all 6 shards, resulting in 6x as many results as one
-        actually wants to receive. This function limits the results as if they're all coming from a single DB,
-        as that's what the user expects. If there was an order by command the results this function receives
-        will already be sorted as the user wants, if there is no order by command this function will default
-        to a sort based on created_dt, the creation time of the element in the DB as this is how the data is
-        stored in the DB (for the most part). This will, however, perform a full created_dt sort as there are
+        When the limit command is given it is given to all 6 shards, resulting in 6x as many
+        results as one actually wants to receive. This function limits the results as if they're
+        all coming from a single DB, as that's what the user expects. If there was an order
+        by command the results this function receives will already be sorted as the user wants,
+        if there is no order by command this function will default to a sort based on created_dt,
+        the creation time of the element in the DB as this is how the data is stored in the DB
+        (for the most part). This will, however, perform a full created_dt sort as there are
         some data inconsistencies around this for stored elements in the DBs
      */
     private fun handleLimit(SQLQuery: String, results: List<RSMapper>): List<RSMapper> {
@@ -275,8 +280,8 @@ abstract class Selector{
         if(results.isEmpty()) return results
         if(!SQLQuery.toLowerCase().contains("limit")) return results
 
-        // If it hasn't been sorted yet, we need to sort it. Build an OrderBySelection and sort with ascending
-        // order using creating time if it exists, else sort by ID
+        // If it hasn't been sorted yet, we need to sort it. Build an OrderBySelection and
+        // sort with ascending order using creating time if it exists, else sort by ID
         var sortedResults = results
         if(!this.hasBeenSorted){
             val orderBy = OrderBySelection()
@@ -293,9 +298,10 @@ abstract class Selector{
         val limitNumber = getLimitNumber(SQLQuery)
 
         // Check to make sure we'll stay within the bounds of the results array.
-        // NOTE: This is >= so that we can just return the results if the number of expected results is equal
-        // to the number of results we have. If this was just ">" (as one would expect) we would unnecessarily
-        // copy the results without ignoring any of the returned results
+        // NOTE: This is >= so that we can just return the results if the number of expected
+        // results is equal to the number of results we have. If this was just ">" (as one would
+        // expect) we would unnecessarily  copy the results without ignoring any of the
+        // returned results
         if(limitNumber >= sortedResults.size)
             return sortedResults
 
@@ -309,20 +315,22 @@ abstract class Selector{
     }
 
     /*
-        Parse an SQLQuery for the limit command and get the number of results the user expects to receive
+        Parse an SQLQuery for the limit command and get the number of results the user
+        expects to receive
      */
     private fun getLimitNumber(SQLStatement: String): Int {
-        // Splitting on limit guarantees the first word in the second array element will be the number of
-        // results the user expects (assuming a proper SQLStatement)
+        // Splitting on limit guarantees the first word in the second array element will be the
+        // number of results the user expects (assuming a proper SQLStatement)
         val splitOnLimit = SQLStatement.split("limit")
 
-        // Splitting it on spaces guarantees that the first elements in the split will be the limit number
-        // after cleaning up any extra leading or trailing spaces. This works when the limit command is the
-        // last command as well as when it's burried in a string with a bunch of other commands
+        // Splitting it on spaces guarantees that the first elements in the split will be the
+        // limit number after cleaning up any extra leading or trailing spaces. This works when
+        // the limit command is the last command as well as when it's buried in a string with a
+        // bunch of other commands
         val limitNumberStringSplits = splitOnLimit[1].trim().split(" ")
 
-        // Get the limit number and perform a final clean. There shouldn't be any non-printing characters on
-        // the string now but clean it up all the same
+        // Get the limit number and perform a final clean. There shouldn't be any non-printing
+        // characters on the string now but clean it up all the same
         val limitNumber = limitNumberStringSplits[0].trim()
 
         // Return the limit number as an integer

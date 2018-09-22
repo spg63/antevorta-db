@@ -18,11 +18,11 @@ class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
 
     constructor(): super()
 
-    override fun getDataFileAbsolutePaths()     = listOf(RawDataLocator.movielensRatingAbsolutePath())
-    override fun getDataKeysOfInterest()        = MovielensIndividualRatings.csvKeys()
-    override fun getColumnNames()               = MovielensIndividualRatings.columnNames()
-    override fun getDataTypes()                 = MovielensIndividualRatings.dataTypes()
-    override fun getTableName()                 = Finals.ML_INDIVIDUAL_RATING_TABLE
+    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensRatingAbsolutePath())
+    override fun getDataKeysOfInterest()    = MovielensIndividualRatings.csvKeys()
+    override fun getColumnNames()           = MovielensIndividualRatings.columnNames()
+    override fun getDataTypes()             = MovielensIndividualRatings.dataTypes()
+    override fun getTableName()             = Finals.ML_INDIVIDUAL_RATING_TABLE
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

@@ -134,8 +134,8 @@ class ServerConfigHandler {
         // If it doesn't exist yet we can't remove a user
         if(!configExists()) return false
 
-        // No great way to do this, loop through the users, add to new array, skipping the one we want to
-        // remove
+        // No great way to do this, loop through the users, add to new array, skipping the one
+        // we want to remove
         val usersArray = this.jsonObject.getJSONArray(USER_ARR)
         for(i in 0 until usersArray.length()){
             val user = usersArray.getJSONObject(i)

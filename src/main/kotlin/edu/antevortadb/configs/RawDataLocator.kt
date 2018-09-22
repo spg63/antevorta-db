@@ -53,7 +53,10 @@ object RawDataLocator{
      * @return List of all reddit submission files if available, otherwise null
      */
     fun redditJsonSubmissionAbsolutePaths(): List<String> {
-        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_REDDIT_SUB_DATA else DataPaths.REDDIT_SUB_DATA_PATH
+        val path = if(Finals.TESTING_MODE)
+            DataPaths.LOCAL_REDDIT_SUB_DATA
+        else
+            DataPaths.REDDIT_SUB_DATA_PATH
         return futils.getAllFilePathsInDirWithPrefix("RS", path)
     }
 
@@ -63,7 +66,10 @@ object RawDataLocator{
      * @return List of all reddit comment files if available, otherwise null
      */
     fun redditJsonCommentAbsolutePaths(): List<String> {
-        val path = if(Finals.TESTING_MODE) DataPaths.LOCAL_REDDIT_COM_DATA else DataPaths.REDDIT_COM_DATA_PATH
+        val path = if(Finals.TESTING_MODE)
+            DataPaths.LOCAL_REDDIT_COM_DATA
+        else
+            DataPaths.REDDIT_COM_DATA_PATH
         return futils.getAllFilePathsInDirWithPrefix("RC", path)
     }
 

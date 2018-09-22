@@ -13,7 +13,8 @@ import org.json.JSONObject
 
 @Suppress("unused")
 class SubmissionsJsonPusher : JsonPusher {
-    // This class doesn't store anything, the below variables will be split between JsonPusher and DataPusher
+    // This class doesn't store anything, the below variables will be split between JsonPusher
+    // and DataPusher
     constructor(): super()
     constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
             : super(dbPath, jsonLines, columnNames, tableName)

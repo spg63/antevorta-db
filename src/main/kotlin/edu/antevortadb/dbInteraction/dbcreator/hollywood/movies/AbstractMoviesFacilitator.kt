@@ -10,8 +10,8 @@ import edu.antevortadb.configs.RawDataLocator
 import edu.antevortadb.dbInteraction.dbcreator.CSVFacilitator
 
 abstract class AbstractMoviesFacilitator : CSVFacilitator() {
-    final override fun buildDBPaths()                       = DBLocator.buildHollywoodDBPaths()
-    final override fun getDBAbsolutePaths()                 = DBLocator.hollywoodAbsolutePaths()
-    final override fun getDBDirectoryPaths()                = DBLocator.getHollywoodDBDirectoryPaths()
-    final override fun getDataAbsolutePathsForNewData()     = RawDataLocator.getEmptyArrayList()
+    final override fun buildDBPaths()                   = DBLocator.buildHollywoodDBPaths()
+    final override fun getDBAbsolutePaths()             = DBLocator.hollywoodAbsolutePaths()
+    final override fun getDBDirectoryPaths()            = DBLocator.getHollywoodDBDirectoryPaths()
+    final override fun getDataAbsolutePathsForNewData() = RawDataLocator.getEmptyArrayList()
 }

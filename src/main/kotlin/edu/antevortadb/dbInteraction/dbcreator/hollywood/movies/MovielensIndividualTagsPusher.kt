@@ -47,8 +47,9 @@ class MovielensIndividualTagsPusher: CSVPusher {
                 val tagid = tagIDSelector.getTagIDFromTagText(tagtext)
 
                 val sqltime = this.csvRecords[i][3]
-                // Convert the sql time-string to LDT object, then convert LDT to UTC seconds. Could be more
-                // efficient but the code already exists to do it this way so this is how it's done
+                // Convert the sql time-string to LDT object, then convert LDT to UTC seconds.
+                // Could be more efficient but the code already exists to do it this way so this is
+                // how it's done
                 val time = TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime(sqltime))
 
                 ps.setInt(key++, tmdbid)

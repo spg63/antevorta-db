@@ -109,9 +109,9 @@ object DBLocator {
     }
 
     /**
-     * Get a path to the directory that holds the hollywood DBs. This path changes depending on which
-     * machine this code is running on.
-     * #return Absolute file path to the directories holding the hollywood databases
+     * Get a path to the directory that holds the hollywood DBs. This path changes depending on
+     * which machine this code is running on.
+     * @return Absolute file path to the directories holding the hollywood databases
      */
     fun getHollywoodDBDirectoryPaths(): List<String> {
         return when(Finals.TESTING_MODE){

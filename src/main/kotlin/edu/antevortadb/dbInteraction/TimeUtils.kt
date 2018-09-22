@@ -17,9 +17,10 @@ import java.util.*
 object TimeUtils {
     /**
      * Return the utc seconds since epoch from LocalDateTime
-     * NOTE: This function intentionally returns uncorrected UTC seconds. It assumes that the LocalDateTime
-     * object is created with the intention of being zoned in 'UTC'. This is only intended to be used for
-     * selection queries so users don't need to worry about their time zone vs that of UTC
+     * NOTE: This function intentionally returns uncorrected UTC seconds. It assumes that the
+     * LocalDateTime object is created with the intention of being zoned in 'UTC'. This is only
+     * intended to be used for selection queries so users don't need to worry about their time zone
+     * vs that of UTC
      * @param ldt The LocalDateTime object
      * @return The intentionally uncorrected, utc zoned, seconds since epoch.
      */
@@ -29,9 +30,9 @@ object TimeUtils {
     }
 
     /**
-     * Used *ONLY* for Selector Time selection. It *intentionally* returns an incorrectly zoned UTC value
-     * so a selection statement can be used using local time of midnight and select values from UTC
-     * midnight instead of the user calculating the time offset.
+     * Used *ONLY* for Selector Time selection. It *intentionally* returns an incorrectly zoned UTC
+     * value so a selection statement can be used using local time of midnight and select values
+     * from UTC midnight instead of the user calculating the time offset.
      * NOTE: If you need to get the correct UTC value, including offset from system default, use the
      * LDTtoUTCSeconds
      * function found below this one
@@ -132,8 +133,8 @@ object TimeUtils {
     /**
      * Convert a SQLite DateTime string to a Java LocalDateTime object
      * @param SQLDateTime The SQLite DateTime string
-     * @return The Java LocalDateTime object if parseable, else Jan. 1st, 2000 @ 00:00:00 (yeah, we passed
-     * Y2K!)
+     * @return The Java LocalDateTime object if parseable, else Jan. 1st, 2000 @ 00:00:00 (yeah,
+     * we passed Y2K!)
      */
     fun SQLDateTimeToJavaDateTime(SQLDateTime: String): LocalDateTime {
         val parts: List<String>

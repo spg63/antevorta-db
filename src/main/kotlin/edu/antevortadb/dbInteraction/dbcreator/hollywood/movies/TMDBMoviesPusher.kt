@@ -98,34 +98,34 @@ class TMDBMoviesPusher: CSVPusher {
                 val cast = castAndCrew.first
                 val crew = castAndCrew.second
 
-                ps.setInt(key++, tmdbMovieID)          // TMDB Movie ID
-                ps.setInt(key++, imdbMovieid)          // IMDB Movie ID
-                ps.setInt(key++, mlMovieid)            // Movielens Movie ID
-                ps.setInt(key++, budget)                // TMDB Movie budget
-                ps.setObject(key++, tmdbGenres)        // TMDB Genres list
-                ps.setObject(key++, mlGenres)          // Movielens genres list
-                ps.setString(key++, website)            // Website homepage, as per TMDB
-                ps.setObject(key++, tmdbKeywords)      // Keywords, according to TMDB
+                ps.setInt(key++, tmdbMovieID)               // TMDB Movie ID
+                ps.setInt(key++, imdbMovieid)               // IMDB Movie ID
+                ps.setInt(key++, mlMovieid)                 // Movielens Movie ID
+                ps.setInt(key++, budget)                    // TMDB Movie budget
+                ps.setObject(key++, tmdbGenres)             // TMDB Genres list
+                ps.setObject(key++, mlGenres)               // Movielens genres list
+                ps.setString(key++, website)                // Website homepage, as per TMDB
+                ps.setObject(key++, tmdbKeywords)           // Keywords, according to TMDB
                 ps.setString(key++, origLanguage)           // Original language
-                ps.setString(key++, origTitle)         // Pre-production title
-                ps.setString(key++, overview)           // Text overview of the movie
-                ps.setDouble(key++, tmdbPopulatiry)           // The popularity of movie, TMDB, scale unknown
-                ps.setObject(key++, productionCompanies)     // Production companies list
-                ps.setObject(key++, productionCountries)     // Production countries list
-                ps.setLong(key++, releaseDate)         // Date of release, stored in unix time
-                ps.setInt(key++, revenue)               // Generated revenue
-                ps.setInt(key++, runtime)               // Runtime in minutes
-                ps.setObject(key++, spokenLanguages)       // Languages spoken in the movie
-                ps.setInt(key++, released)              // 1 if released, else 0
-                ps.setString(key++, tagline)            // Tagline, if it exists
-                ps.setString(key++, tmdbTitle)         // Title, as per TMDB
-                ps.setString(key++, movielensTitle)    // Title, as per movielens
-                ps.setDouble(key++, tmdbVoteAverage)  // Average TMDB movie score
-                ps.setInt(key++, tmdbVoteCount)       // Total votes from TMDB
-                ps.setDouble(key++, mlVoteAverage)      // Average score of the movielens votes
-                ps.setInt(key++, mlVoteCount)           // The total number of ML votes for this movie
-                ps.setObject(key++, cast)               // The JSON cast from TMDB
-                ps.setObject(key, crew)                 // The JSON crew from TMDB
+                ps.setString(key++, origTitle)              // Pre-production title
+                ps.setString(key++, overview)               // Text overview of the movie
+                ps.setDouble(key++, tmdbPopulatiry)         // The popularity of movie, TMDB, scale unknown
+                ps.setObject(key++, productionCompanies)    // Production companies list
+                ps.setObject(key++, productionCountries)    // Production countries list
+                ps.setLong(key++, releaseDate)              // Date of release, stored in unix time
+                ps.setInt(key++, revenue)                   // Generated revenue
+                ps.setInt(key++, runtime)                   // Runtime in minutes
+                ps.setObject(key++, spokenLanguages)        // Languages spoken in the movie
+                ps.setInt(key++, released)                  // 1 if released, else 0
+                ps.setString(key++, tagline)                // Tagline, if it exists
+                ps.setString(key++, tmdbTitle)              // Title, as per TMDB
+                ps.setString(key++, movielensTitle)         // Title, as per movielens
+                ps.setDouble(key++, tmdbVoteAverage)        // Average TMDB movie score
+                ps.setInt(key++, tmdbVoteCount)             // Total votes from TMDB
+                ps.setDouble(key++, mlVoteAverage)          // Average score of the movielens votes
+                ps.setInt(key++, mlVoteCount)               // The total number of ML votes for this movie
+                ps.setObject(key++, cast)                   // The JSON cast from TMDB
+                ps.setObject(key, crew)                     // The JSON crew from TMDB
 
                 ps.addBatch()
             }
@@ -141,8 +141,8 @@ class TMDBMoviesPusher: CSVPusher {
     }
 
     private fun convertDateToUnix(date: String): Long {
-        // Note: The 00:00:00 gets appended because there is no time value, just a day date associated with
-        // this data. The time value keeps consistency with the rest of the DB data
+        // Note: The 00:00:00 gets appended because there is no time value, just a day date
+        // associated with this data. The time value keeps consistency with the rest of the DB data
         return TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime("$date 00:00:00"))
     }
 
@@ -154,7 +154,8 @@ class TMDBMoviesPusher: CSVPusher {
         val totalRatings = mappers.size
 
         var cumulativeRating = 0.0
-        // Remember that the ratings need to be multiplied by 2. TMDB ratings are out of 10, ML are out of 5
+        // Remember that the ratings need to be multiplied by 2. TMDB ratings are out of 10,
+        // ML are out of 5
         for(mapper in mappers) {
             var theRating = mapper.getDouble("rating")
             theRating *= 2

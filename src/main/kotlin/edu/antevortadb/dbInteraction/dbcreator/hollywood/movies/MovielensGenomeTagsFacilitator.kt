@@ -16,11 +16,11 @@ class MovielensGenomeTagsFacilitator: AbstractMoviesFacilitator {
     constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
     private val tagsIDX = "genome_tags_tag_idx"
 
-    override fun getDataFileAbsolutePaths()     = listOf(RawDataLocator.movielensGenomeTagsAbsolutePath())
-    override fun getDataKeysOfInterest()        = MovielensGenomeTags.csvKeys()
-    override fun getColumnNames()               = MovielensGenomeTags.columnNames()
-    override fun getDataTypes()                 = MovielensGenomeTags.dataTypes()
-    override fun getTableName()                 = Finals.ML_GENOME_TAGS_TABLE
+    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensGenomeTagsAbsolutePath())
+    override fun getDataKeysOfInterest()    = MovielensGenomeTags.csvKeys()
+    override fun getColumnNames()           = MovielensGenomeTags.columnNames()
+    override fun getDataTypes()             = MovielensGenomeTags.dataTypes()
+    override fun getTableName()             = Finals.ML_GENOME_TAGS_TABLE
 
     override fun populateCSVWorkers(): List<CSVPusher> {
         val workers = ArrayList<CSVPusher>()

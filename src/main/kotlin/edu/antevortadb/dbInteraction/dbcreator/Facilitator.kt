@@ -16,16 +16,16 @@ import java.text.NumberFormat
 
 @Suppress("LeakingThis", "ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate", "ConstantConditionIf")
 abstract class Facilitator {
-    protected var dbAbsolutePaths: List<String>        // Path to the DBs once they exist
-    protected val dbDirectoryPaths: List<String>       // Path to the directories that hold the DB shards
-    protected val dbColumnNames: List<String>          // Names of the columns in the DB
-    protected val columnDataTypes: List<String>        // Type of data stored in the DB columns
-    protected val dbPaths: List<String>                // Paths to the DBs when they don't yet exist
-    protected var dataAbsolutePaths: List<String>      // Paths to the data files
-    protected val dbTableName: String                  // The name of the table in the DB
-    protected val logger: TSL = TSL.get()              // Instance of the logger
-    protected val numberFormat: NumberFormat           // Format number output for easier viewing
-    protected val dataNamesOfInterest: List<String>    // Name of csv column of json key we need
+    protected var dbAbsolutePaths: List<String>     // Path to the DBs once they exist
+    protected val dbDirectoryPaths: List<String>    // Path to the directories that hold the DB shards
+    protected val dbColumnNames: List<String>       // Names of the columns in the DB
+    protected val columnDataTypes: List<String>     // Type of data stored in the DB columns
+    protected val dbPaths: List<String>             // Paths to the DBs when they don't yet exist
+    protected var dataAbsolutePaths: List<String>   // Paths to the data files
+    protected val dbTableName: String               // The name of the table in the DB
+    protected val logger: TSL = TSL.get()           // Instance of the logger
+    protected val numberFormat: NumberFormat        // Format number output for easier viewing
+    protected val dataNamesOfInterest: List<String> // Name of csv column of json key we need
 
     constructor(){
         this.dbAbsolutePaths               = getDBAbsolutePaths()
@@ -55,10 +55,11 @@ abstract class Facilitator {
     abstract fun pushDataIntoDBs()
 
     // Used by pushDataIntoDBs(), regardless of data type, to check if the function should continue.
-    // It will shortcirtuit pushData if the data already exists or START_FRESH is false and ADD_NEW_DATA
-    // is false
-    // NOTE: The idea really is the stuff going on in this function needs to be enforced across all sub
-    // Facilitators so this fucntion moves these important checks into the base Facilitator class
+    // It will shortcirtuit pushData if the data already exists or START_FRESH is false and
+    // ADD_NEW_DATA is false
+    // NOTE: The idea really is the stuff going on in this function needs to be enforced across all
+    // sub Facilitators so this fucntion moves these important checks into the base Facilitator
+    // class
     protected fun shouldFunctionReturnEarly(): Boolean {
         // Early exit if we're not pushing data into the DBs
         if(!Finals.START_FRESH && !Finals.ADD_NEW_DATA) return true
@@ -187,10 +188,12 @@ abstract class Facilitator {
 
     // Push new data into the DB shards
     fun pushNewData(){
-        // Batch inserting large data on tables with a lot of indices is slow. Drop them and re-create at the end
+        // Batch inserting large data on tables with a lot of indices is slow. Drop them and
+        // re-create at the end
         dropIndices()
 
-        // Clear the existing list. Note: clear can't be called on a "List" so just replace it with a new one
+        // Clear the existing list. Note: clear can't be called on a "List" so just replace it
+        // with a new one
         this.dataAbsolutePaths = ArrayList()
 
         // Get the path(s) to the new json file(s)
@@ -220,8 +223,8 @@ abstract class Facilitator {
         logger.info("${this.dbTableName} has been created")
     }
 
-    // Note this returns total lines as a double as the value is used to print % remaining of file, this
-    // means that calculation doesn't need to do a cast every time it's made
+    // Note this returns total lines as a double as the value is used to print % remaining of file,
+    // this means that calculation doesn't need to do a cast every time it's made
     protected fun printFileInformationReturnTotalLinesInFile(filename: String): Double {
         val f = File(filename)
         logger.info("Counting number of lines in ${f.name}")

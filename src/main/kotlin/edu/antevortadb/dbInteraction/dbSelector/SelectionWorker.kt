@@ -10,9 +10,10 @@ import edu.antevortadb.dbInteraction.DBCommon
 import java.util.concurrent.Callable
 
 /**
- * SelectionWorker is designed to work for any DB objects. In order to do this is needs to know the path to
- * the DB, the query to run on the DB, and which time os RSMapper object it will be populating. Each mapper
- * object handles the specifics of pulling data out of a ResultSet for a given DB connection
+ * SelectionWorker is designed to work for any DB objects. In order to do this is needs to know the
+ * path to the DB, the query to run on the DB, and which type of RSMapper object it will be
+ * populating. Each mapper object handles the specifics of pulling data out of a ResultSet for a
+ * given DB connection
  */
 class SelectionWorker
 /**
