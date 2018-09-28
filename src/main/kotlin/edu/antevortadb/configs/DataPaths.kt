@@ -18,10 +18,10 @@ object DataPaths{
     val SEP: String                 = File.separator
 
     /* ---------- The path to the local data folders -------------------------------------------- */
-    val LOCAL_DATA_ROOT_PATH        = "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
+    val LOCAL_DATA_ROOT             = "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
 
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) - */
-    val LOCAL_PATH                  = "${LOCAL_DATA_ROOT_PATH}LocalData${SEP}raw${SEP}"
+    val LOCAL_PATH                  = "${LOCAL_DATA_ROOT}LocalData${SEP}raw${SEP}"
     val LOCAL_REDDIT_SUB_DATA       = "${LOCAL_PATH}submissions${SEP}"
     val LOCAL_REDDIT_COM_DATA       = "${LOCAL_PATH}comments${SEP}"
     val LOCAL_TMDB_CREDITS          = "${LOCAL_PATH}tmdb${SEP}credits.csv"
@@ -38,17 +38,18 @@ object DataPaths{
     val LOCAL_NEW_REDDIT_COM_DATA   = "${LOCAL_PATH}new${SEP}comments${SEP}"
 
     /* ---------- File paths when running on the research machine ------------------------------- */
-    val RESEARCH_PATH               = "A:${SEP}Data${SEP}Uncompressed${SEP}"
+    val RESEARCH_ARRAY_DATA_ROOT    = "A:${SEP}Data${SEP}"
+    val RESEARCH_RAW_DATA_ROOT      = "${RESEARCH_ARRAY_DATA_ROOT}Uncompressed${SEP}"
 
-    val REDDIT_DATA_ROOT            = "${RESEARCH_PATH}Reddit${SEP}"
+    val REDDIT_DATA_ROOT            = "${RESEARCH_RAW_DATA_ROOT}Reddit${SEP}"
     val REDDIT_SUB_DATA_PATH        = "${REDDIT_DATA_ROOT}Submissions${SEP}"
     val REDDIT_COM_DATA_PATH        = "${REDDIT_DATA_ROOT}Comments${SEP}"
 
-    val TMDB_DATA_ROOT              = "${RESEARCH_PATH}tmdb${SEP}"
+    val TMDB_DATA_ROOT              = "${RESEARCH_RAW_DATA_ROOT}tmdb${SEP}"
     val TMDB_CREDITS                = "${TMDB_DATA_ROOT}credits.csv"
     val TMDB_MOVIES                 = "${TMDB_DATA_ROOT}movies.csv"
 
-    val MOVIELENS_DATA_ROOT         = "${RESEARCH_PATH}movielens${SEP}"
+    val MOVIELENS_DATA_ROOT         = "${RESEARCH_RAW_DATA_ROOT}movielens${SEP}"
     val MOVIELENS_GENOME_SCORES     = "${MOVIELENS_DATA_ROOT}genome_scores.csv"
     val MOVIELENS_GENOME_TAGS       = "${MOVIELENS_DATA_ROOT}genome_tags.csv"
     val MOVIELENS_LINK              = "${MOVIELENS_DATA_ROOT}link.csv"
@@ -61,7 +62,7 @@ object DataPaths{
     val NEW_REDDIT_COM_DATA_PATH    = "${REDDIT_DATA_ROOT}New${SEP}Comments${SEP}"
 
     /* ---------- Path to TESTING_MODE db files ------------------------------------------------- */
-    val LOCAL_DB_PATH               = "${LOCAL_DATA_ROOT_PATH}LocalDB${SEP}"
+    val LOCAL_DB_PATH               = "${LOCAL_DATA_ROOT}LocalDB${SEP}"
     val LOCAL_REDDIT_SUB_DB_PATH    = "${LOCAL_DB_PATH}RedditSubs${SEP}"
     val LOCAL_REDDIT_COM_DB_PATH    = "${LOCAL_DB_PATH}RedditComs${SEP}"
     val LOCAL_HOLLYWOOD_DB_PATH     = "${LOCAL_DB_PATH}Hollywood${SEP}"
@@ -75,12 +76,16 @@ object DataPaths{
     const val DBEXT                 = Finals.DB_TYPE_EXT
 
     /* ---------- Path to the location of the server configuration file ------------------------- */
-    val LOCAL_SERVER_CONFIG_FILE    = "${LOCAL_DATA_ROOT_PATH}serverConfig${SEP}config.json"
-    val LOCAL_CLIENT_CONFIG_FILE    = "${LOCAL_DATA_ROOT_PATH}clientConfig${SEP}config.json"
-    val LOCAL_SERVER_CONFIG_PATH    = "${LOCAL_DATA_ROOT_PATH}clientConfig${SEP}"
+    val LOCAL_SERVER_CONFIG_FILE    = "${LOCAL_DATA_ROOT}serverConfig${SEP}config.json"
+    val LOCAL_CLIENT_CONFIG_FILE    = "${LOCAL_DATA_ROOT}clientConfig${SEP}config.json"
+    val LOCAL_SERVER_CONFIG_PATH    = "${LOCAL_DATA_ROOT}clientConfig${SEP}"
 
     val DOLIUS_CONFIG_PATH          = "A:${SEP}DoliusConfigs${SEP}"
     val SERVER_CONFIG_FILE          = "${DOLIUS_CONFIG_PATH}serverConfig${SEP}config.json"
     val CLIENT_CONFIG_FILE          = "${DOLIUS_CONFIG_PATH}clientConfig${SEP}config.json"
     val SERVER_CONFIG_PATH          = "${DOLIUS_CONFIG_PATH}serverConfig${SEP}"
+
+    /* ---------- Paths to the DeepLearning4Java example data ----------------------------------- */
+    val LOCAL_DL4J_ROOT             = "${LOCAL_DATA_ROOT}DL4J${SEP}"
+    val RESEARCH_DL4J_ROOT          = "${RESEARCH_ARRAY_DATA_ROOT}DL4J${SEP}"
 }

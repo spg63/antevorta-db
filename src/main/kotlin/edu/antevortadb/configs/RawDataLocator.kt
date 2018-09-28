@@ -153,6 +153,16 @@ object RawDataLocator{
         }
     }
 
+    /**
+     * @return Root to the DL4J example data
+     */
+    fun dl4jDataRoot(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.LOCAL_DL4J_ROOT
+            false -> DataPaths.RESEARCH_DL4J_ROOT
+        }
+    }
+
     /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs ------------- */
     /**
      * Some data is added once without update, however the function to gather new data still
