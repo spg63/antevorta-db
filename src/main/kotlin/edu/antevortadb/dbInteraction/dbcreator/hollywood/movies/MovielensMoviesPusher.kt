@@ -40,7 +40,8 @@ class MovielensMoviesPusher: CSVPusher {
                 val tmdbImdbIds = linksSelector.getIMDBandTMDBFromMovielensMovieID(movieid)
                 val tmdbMovieID = tmdbImdbIds.first
                 val imdbMovieID = tmdbImdbIds.second
-                val title = this.csvRecords[i][1]
+                val titleWithQuote = this.csvRecords[i][1]
+                val title = titleWithQuote.replace("\"", "") // Movie title has quotes, remove them
 
                 val genresString = this.csvRecords[i][2]
                 val genresJson = splitGenresIntoJsonObject(genresString)

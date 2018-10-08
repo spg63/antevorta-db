@@ -23,10 +23,12 @@ import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFac
 import edu.antevortadb.utils.Out
 import edu.antevortadb.utils.TSL
 import java.io.File
+import java.text.DecimalFormat
 
 val logger = TSL.get()
 
 fun main(args : Array<String>){
+
     val out = Out.get()
     TSL.LOG_TO_CONSOLE = true
 
@@ -38,10 +40,10 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    PullFromServer.doServerComs()
+    //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    //createHollywoodDB()
+    createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
@@ -70,18 +72,18 @@ fun createHollywoodDB(){
     // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
 
     // Create the DB, and the first table in the DB (links_table)
-    buildDBShards(MovielensLinkFacilitator())
+    buildDBShards(MovielensLinkFacilitator())                   // Okay
 
     /* ---------- Now start adding tables to the DB shards ------------------------------------------------ */
 
     // 2nd table should be the genome_tags table
-    addTableToShards(MovielensGenomeTagsFacilitator())
-    addTableToShards(MovielensMoviesFacilitator())
-    addTableToShards(TMDBCreditsFacilitator())
-    addTableToShards(MovielensGenomeScoresFacilitator())
-    addTableToShards(MovielensIndividualTagsFacilitator())
-    addTableToShards(MovielensIndividualRatingsFacilitator())
-    addTableToShards(TMDBMoviesFacilitator())
+    addTableToShards(MovielensGenomeTagsFacilitator())          // Okay
+    addTableToShards(MovielensMoviesFacilitator())              // Okay
+    addTableToShards(TMDBCreditsFacilitator())                  // Okay
+    addTableToShards(MovielensGenomeScoresFacilitator())        // Okay
+    addTableToShards(MovielensIndividualTagsFacilitator())      // Okay
+    addTableToShards(MovielensIndividualRatingsFacilitator())   // Not checked
+    addTableToShards(TMDBMoviesFacilitator())                   // Not checked
 }
 
 

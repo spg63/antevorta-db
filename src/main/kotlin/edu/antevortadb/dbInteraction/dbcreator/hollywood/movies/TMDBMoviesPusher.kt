@@ -13,6 +13,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.sql.PreparedStatement
 import java.sql.SQLException
+import java.text.DecimalFormat
 
 
 @Suppress("unused")
@@ -21,6 +22,8 @@ class TMDBMoviesPusher: CSVPusher {
     private val mlMoviesSelector = MLMoviesSelector()
     private val mlratingSelector = MLIndividualRatingsSelector()
     private val tmdbCreditsSelector = TMDBCreditsSelector()
+    // Used to format the ML vote average to be consistent with single decimal for TMDB
+    private val decimalFormatter = DecimalFormat("#.#")
 
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
@@ -92,7 +95,8 @@ class TMDBMoviesPusher: CSVPusher {
 
                 val mlVotePair = getMLVoteCountAndAverage(tmdbMovieID)
                 val mlVoteCount = mlVotePair.first
-                val mlVoteAverage = mlVotePair.second
+                val mlVoteAverageManyPoints = mlVotePair.second
+                val mlVoteAverage = decimalFormatter.format(mlVoteAverageManyPoints).toDouble()
 
                 val castAndCrew = this.tmdbCreditsSelector.getCastAndCrewListFromTMDBID(tmdbMovieID)
                 val cast = castAndCrew.first

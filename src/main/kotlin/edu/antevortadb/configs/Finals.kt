@@ -19,9 +19,10 @@ object Finals{
     // True when working locally on MBP, false when working on full dataset, changes data & db paths
     val TESTING_MODE = !isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
-    const val START_FRESH = false
+    const val START_FRESH = true
     // Simple check to make sure we really want to add new data to the DBs
     const val ADD_NEW_DATA = false
+
 
     /* ---------- Database control -------------------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"
@@ -98,8 +99,8 @@ object Finals{
     // User ID column (not user name! A numeric ID!)
     const val USER_ID = "userid"
 
-    /* ---------- Helper functions -------------------------------------------------------------- */
 
+    /* ---------- Helper functions -------------------------------------------------------------- */
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry.

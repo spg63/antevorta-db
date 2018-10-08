@@ -51,8 +51,8 @@ object TMDBMovies{
             "TMDB_title",
             "movielens_title",
             "tmdb_vote_average",
-            "movielens_vote_average",
             "tmdb_vote_count",
+            "movielens_vote_average",
             "movielens_vote_count",
             "cast",
             "crew"
