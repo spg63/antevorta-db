@@ -1,4 +1,4 @@
-package edu.antevortadb.dbInteraction.dbcreator.hollywood.movies
+package edu.antevortadb.dbInteraction.dbcreator.hollywood
 
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.configs.RawDataLocator

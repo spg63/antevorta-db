@@ -3,7 +3,7 @@
  * License: MIT
  */
 
-package edu.antevortadb.dbInteraction.dbcreator.hollywood.movies
+package edu.antevortadb.dbInteraction.dbcreator.hollywood
 
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.configs.RawDataLocator
@@ -11,7 +11,7 @@ import edu.antevortadb.dbInteraction.columnsAndKeys.MovielensLink
 import edu.antevortadb.dbInteraction.dbcreator.CSVPusher
 
 @Suppress("ConvertSecondaryConstructorToPrimary")
-class MovielensLinkFacilitator: AbstractMoviesFacilitator{
+class MovielensLinkFacilitator: AbstractMoviesFacilitator {
     constructor(): super()
 
     override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensLinkAbsolutePath())

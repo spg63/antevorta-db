@@ -17,6 +17,7 @@ import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.MLGenomeTagsSel
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevortadb.dbInteraction.dbcreator.Facilitator
+import edu.antevortadb.dbInteraction.dbcreator.hollywood.TMDBMoviesFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.hollywood.movies.*
 import edu.antevortadb.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
