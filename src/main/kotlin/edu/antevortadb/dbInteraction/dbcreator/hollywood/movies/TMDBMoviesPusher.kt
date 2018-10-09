@@ -24,6 +24,7 @@ class TMDBMoviesPusher: CSVPusher {
     private val tmdbCreditsSelector = TMDBCreditsSelector()
     // Used to format the ML vote average to be consistent with single decimal for TMDB
     private val decimalFormatter = DecimalFormat("#.#")
+    private val numberOfPerformanceClasses = 5
 
     constructor(): super()
     constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
@@ -113,7 +114,8 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setString(key++, origLanguage)           // Original language
                 ps.setString(key++, origTitle)              // Pre-production title
                 ps.setString(key++, overview)               // Text overview of the movie
-                ps.setDouble(key++, tmdbPopulatiry)         // The popularity of movie, TMDB, scale unknown
+                ps.setDouble(key++, tmdbPopulatiry)         // The popularity of movie, TMDB,
+                                                            // scale unknown
                 ps.setObject(key++, productionCompanies)    // Production companies list
                 ps.setObject(key++, productionCountries)    // Production countries list
                 ps.setLong(key++, releaseDate)              // Date of release, stored in unix time
@@ -127,9 +129,24 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setDouble(key++, tmdbVoteAverage)        // Average TMDB movie score
                 ps.setInt(key++, tmdbVoteCount)             // Total votes from TMDB
                 ps.setDouble(key++, mlVoteAverage)          // Average score of the movielens votes
-                ps.setInt(key++, mlVoteCount)               // The total number of ML votes for this movie
+                ps.setInt(key++, mlVoteCount)               // The total number of ML votes for
+                                                            // this movie
                 ps.setObject(key++, cast)                   // The JSON cast from TMDB
-                ps.setObject(key, crew)                     // The JSON crew from TMDB
+                ps.setObject(key++, crew)                   // The JSON crew from TMDB
+
+                // Added columns for the initial classification tests. See
+                // initialClassification.txt for more details about this test.
+                val performanceData = determinePerformanceClass(budget, revenue)
+                val failure = if(performanceData == 0) 1 else 0
+                val mildSuccess = if(performanceData == 1) 1 else 0
+                val success = if(performanceData == 2) 1 else 0
+                val greatSuccess = if(performanceData == 3) 1 else 0
+
+                ps.setInt(key++, failure)                   // 1 if true, 0 if false
+                ps.setInt(key++, mildSuccess)              // 1 if true, 0 if false
+                ps.setInt(key++, success)                   // 1 if true, 0 if false
+                ps.setInt(key++, greatSuccess)             // 1 if true, 0 if false
+                ps.setInt(key, performanceData)             // 0, 1, 2, 3 depending on class
 
                 ps.addBatch()
             }
@@ -142,6 +159,20 @@ class TMDBMoviesPusher: CSVPusher {
         finally{
             pusherFinallyBlock(conn, ps)
         }
+    }
+
+    private fun determinePerformanceClass(budget: Int, revenue: Int): Int {
+        if(budget < revenue)
+            return 0
+        else if(budget > revenue && budget <= (revenue * 1.25))
+            return 1
+        else if(budget > (revenue * 1.25) && budget <= (revenue * 1.75))
+            return 2
+        else if(budget > (revenue * 1.75))
+            return 3
+        else
+            logger.err("TMDBMoviePusher.determinePerformanceClass is returning -1")
+        return -1
     }
 
     private fun convertDateToUnix(date: String): Long {

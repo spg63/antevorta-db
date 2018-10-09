@@ -55,7 +55,12 @@ object TMDBMovies{
             "movielens_vote_average",
             "movielens_vote_count",
             "cast",
-            "crew"
+            "crew",
+            "failure",
+            "mild_success",
+            "success",
+            "great_success",
+            "performance_class"
     )
 
     fun columnsForPrinting() = columnNames()
@@ -85,11 +90,16 @@ object TMDBMovies{
             " TEXT,",
             " TEXT,",
             " REAL,",
+            " INTEGER,",
             " REAL,",
             " INTEGER,",
-            " INTEGER,",
             " JSON,",
-            " JSON"
+            " JSON,",
+            " INTEGER,",
+            " INTEGER,",
+            " INTEGER,",
+            " INTEGER,",
+            " INTEGER"
     )
 
     fun dataTypesForPrinting() = listOf(
@@ -117,10 +127,15 @@ object TMDBMovies{
             "TEXT",
             "TEXT",
             "REAL",
+            "INT",
             "REAL",
             "INT",
-            "INT",
             "JSON",
-            "JSON"
+            "JSON",
+            "INT",
+            "INT",
+            "INT",
+            "INT",
+            "INT"
     )
 }
