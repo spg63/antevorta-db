@@ -162,13 +162,18 @@ class TMDBMoviesPusher: CSVPusher {
     }
 
     private fun determinePerformanceClass(budget: Int, revenue: Int): Int {
-        if(budget < revenue)
+        if(budget == 0)
+            logger.info(("TMDBMoviesPusher.determinePerformanceClass: budget = 0"))
+        if(revenue == 0)
+            logger.info(("TMDBMoviesPusher.determinePerformanceClass: revenue = 0"))
+
+        if(budget > revenue)
             return 0
-        else if(budget > revenue && budget <= (revenue * 1.25))
+        else if(revenue > budget && revenue <= (revenue * 1.25))
             return 1
-        else if(budget > (revenue * 1.25) && budget <= (revenue * 1.75))
+        else if(revenue > (revenue * 1.25) && revenue <= (revenue * 1.75))
             return 2
-        else if(budget > (revenue * 1.75))
+        else if(revenue > (revenue * 1.75))
             return 3
         else
             logger.err("TMDBMoviePusher.determinePerformanceClass is returning -1")
