@@ -143,9 +143,9 @@ class TMDBMoviesPusher: CSVPusher {
                 val greatSuccess = if(performanceData == 3) 1 else 0
 
                 ps.setInt(key++, failure)                   // 1 if true, 0 if false
-                ps.setInt(key++, mildSuccess)              // 1 if true, 0 if false
+                ps.setInt(key++, mildSuccess)               // 1 if true, 0 if false
                 ps.setInt(key++, success)                   // 1 if true, 0 if false
-                ps.setInt(key++, greatSuccess)             // 1 if true, 0 if false
+                ps.setInt(key++, greatSuccess)              // 1 if true, 0 if false
                 ps.setInt(key, performanceData)             // 0, 1, 2, 3 depending on class
 
                 ps.addBatch()
