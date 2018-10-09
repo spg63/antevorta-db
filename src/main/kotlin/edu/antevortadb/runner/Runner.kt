@@ -43,11 +43,11 @@ fun main(args : Array<String>){
     //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    //createHollywoodDB()
+    createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
-    hollywoodSelect()
+    //hollywoodSelect()
 
     sw.stop()
 
@@ -72,18 +72,18 @@ fun createHollywoodDB(){
     // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
 
     // Create the DB, and the first table in the DB (links_table)
-    buildDBShards(MovielensLinkFacilitator())                   // Okay
+    // buildDBShards(MovielensLinkFacilitator())
 
-    /* ---------- Now start adding tables to the DB shards ------------------------------------------------ */
+    /* ---------- Now start adding tables to the DB shards ------------------------------------ */
 
     // 2nd table should be the genome_tags table
-    addTableToShards(MovielensGenomeTagsFacilitator())          // Okay
-    addTableToShards(MovielensMoviesFacilitator())              // Okay
-    addTableToShards(TMDBCreditsFacilitator())                  // Okay
-    addTableToShards(MovielensGenomeScoresFacilitator())        // Okay
-    addTableToShards(MovielensIndividualTagsFacilitator())      // Okay
-    addTableToShards(MovielensIndividualRatingsFacilitator())   // Not checked
-    addTableToShards(TMDBMoviesFacilitator())                   // Not checked
+    //addTableToShards(MovielensGenomeTagsFacilitator())
+    //addTableToShards(MovielensMoviesFacilitator())
+    //addTableToShards(TMDBCreditsFacilitator())
+    //addTableToShards(MovielensGenomeScoresFacilitator())
+    //addTableToShards(MovielensIndividualTagsFacilitator())
+    //addTableToShards(MovielensIndividualRatingsFacilitator())
+    addTableToShards(TMDBMoviesFacilitator())
 }
 
 
