@@ -7,7 +7,7 @@ package edu.antevortadb.dbInteraction.dbSelector
 
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.TimeUtils
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.*
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.*
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevortadb.utils.TSL
@@ -191,8 +191,14 @@ abstract class Selector{
         // If the query doesn't contain "orderby" and it doesn't contain "order by", or the
         // query returned no results return the results without further processing
         if(results.isEmpty()) return results
-        if(!query.toLowerCase().contains("orderby") && !query.toLowerCase().contains("order by"))
+        if(!query.toLowerCase().contains("order by"))
             return results
+
+        // Die if the ordering clause doesn't exist...don't feel like implementing auto ordering
+        if(!query.contains("asc") && !query.contains("desc")){
+            logger.logAndKill("order by query currently requires query string to contain an " +
+                    "order clause, either 'desc', or 'asc'")
+        }
 
         // Tell the class that we're going through with the sorting
         this.hasBeenSorted = true
@@ -205,7 +211,7 @@ abstract class Selector{
     }
 
     /*
-        Determine which column should be used in the sorting when an orderby clause is added to
+        Determine which column should be used in the sorting when an order by clause is added to
         the SQL query It takes in the query string and returns a map of column names and a
         boolean. The boolean is true when the sorting should be done in ascending order
         (the default) and false when it should be done in descending order.
@@ -235,7 +241,7 @@ abstract class Selector{
             // Get the "asc" or "desc" from the second part of the string
             val order = columnNameAndOrder[1]
             var orderBool = true
-            if(order == "desc" || order == "descending")
+            if(order == "desc")
                 orderBool = false
 
             theOrdering.addColumn(col, orderBool)

@@ -12,6 +12,7 @@ import edu.antevortadb.dbInteraction.TimeUtils
 import edu.antevortadb.utils.FileUtils
 import edu.antevortadb.utils.Out
 import org.json.JSONObject
+import java.util.*
 import kotlin.text.StringBuilder
 
 object RSMapperOutput{
@@ -42,7 +43,8 @@ object RSMapperOutput{
     }
 
     @Suppress("SENSELESS_COMPARISON")
-    fun rsMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String) {
+    fun rsMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String,
+                       shuffleSeedOrNegOne: Long) {
         if(mappers == null || mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
             return
@@ -57,11 +59,18 @@ object RSMapperOutput{
         sb.append(columnNames[columnNames.size - 1])
         sb.append("\n")
 
-        for(mapper in mappers){
+        val printableMappers = mappers.toMutableList()
+
+        if(shuffleSeedOrNegOne != -1L)
+            printableMappers.shuffle(Random(shuffleSeedOrNegOne))
+
+        for(mapper in printableMappers){
             for(i in 0 until columnNames.size - 1){
                 var result = mapper.getString(columnNames[i])
-                if(result != null)
-                    result = result.replace(',', '\'')
+                if(result != null) {
+                    result = result.replace(",", "")
+                    result = result.replace("\n", "")
+                }
                 sb.append(result)
                 sb.append(",")
             }

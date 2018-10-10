@@ -48,7 +48,7 @@ object TMDBMovies{
             "spoken_languages",
             "released",
             "tagline",
-            "TMDB_title",
+            "tmdb_title",
             "movielens_title",
             "tmdb_vote_average",
             "tmdb_vote_count",
@@ -60,6 +60,7 @@ object TMDBMovies{
             "mild_success",
             "success",
             "great_success",
+            "missing_data",
             "performance_class"
     )
 
@@ -99,6 +100,7 @@ object TMDBMovies{
             " INTEGER,",
             " INTEGER,",
             " INTEGER,",
+            " INTEGER,",
             " INTEGER"
     )
 
@@ -132,6 +134,7 @@ object TMDBMovies{
             "INT",
             "JSON",
             "JSON",
+            "INT",
             "INT",
             "INT",
             "INT",

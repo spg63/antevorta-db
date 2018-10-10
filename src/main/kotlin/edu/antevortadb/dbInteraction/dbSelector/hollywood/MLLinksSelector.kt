@@ -3,7 +3,7 @@
  * License: MIT
  */
 
-package edu.antevortadb.dbInteraction.dbSelector.hollywood.movies
+package edu.antevortadb.dbInteraction.dbSelector.hollywood
 
 import edu.antevortadb.configs.DBLocator
 import edu.antevortadb.configs.Finals

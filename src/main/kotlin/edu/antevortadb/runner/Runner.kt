@@ -11,9 +11,11 @@ import com.google.common.base.Stopwatch
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.columnsAndKeys.RedditComs
 import edu.antevortadb.dbInteraction.columnsAndKeys.RedditSubs
+import edu.antevortadb.dbInteraction.columnsAndKeys.TMDBMovies
 import edu.antevortadb.dbInteraction.dbSelector.RSMapperOutput
 import edu.antevortadb.dbInteraction.dbSelector.DBSelector
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.MLGenomeTagsSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.MLGenomeTagsSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.MovieSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
 import edu.antevortadb.dbInteraction.dbcreator.Facilitator
@@ -60,9 +62,16 @@ fun main(args : Array<String>){
 }
 
 fun hollywoodSelect(){
-    val text = "boat"
-    val res = MLGenomeTagsSelector().getTagIDFromTagText(text)
-    logger.info("$text: $res")
+    val randomShuffleSeed = 55L
+    val selectStatement = "select budget, revenue, tmdb_vote_average, tmdb_vote_count, " +
+            "movielens_vote_average, movielens_vote_count, revenue, failure, mild_success, " +
+            "success, great_success, performance_class" +
+            " from movies limit 5"
+    val results = MovieSelector().generalSelection(selectStatement)
+    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "csvOutput/randomData.csv",
+            randomShuffleSeed)
+    //RSMapperOutput.printAllColumnsFromRSMappers(results, TMDBMovies.columnsForPrinting(),
+    //        TMDBMovies.dataTypesForPrinting())
 
 }
 

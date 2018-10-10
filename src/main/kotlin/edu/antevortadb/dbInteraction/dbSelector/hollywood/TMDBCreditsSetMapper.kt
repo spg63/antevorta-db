@@ -1,21 +1,16 @@
-/*
- * Copyright (c) 2018 Sean Grimes. All Rights Reserved.
- * License: MIT
- */
+package edu.antevortadb.dbInteraction.dbSelector.hollywood
 
-package edu.antevortadb.dbInteraction.dbSelector.hollywood.movies
-
-import edu.antevortadb.dbInteraction.columnsAndKeys.MovielensLink
+import edu.antevortadb.dbInteraction.columnsAndKeys.TMDBCredits
 import edu.antevortadb.dbInteraction.dbSelector.RSMapper
 import org.json.JSONObject
 import java.sql.ResultSet
 
 @Suppress("unused")
-class MLLinksSetMapper: RSMapper {
+class TMDBCreditsSetMapper: RSMapper {
     constructor(map: Map<String, String>): super(map)
     constructor(jsonObject: JSONObject): super(jsonObject)
     constructor(): super()
     override fun buildMappers(rs: ResultSet): MutableList<RSMapper> {
-        return buildMappersImpl(rs, MovielensLink.columnNames())
+        return buildMappersImpl(rs, TMDBCredits.columnNames())
     }
 }

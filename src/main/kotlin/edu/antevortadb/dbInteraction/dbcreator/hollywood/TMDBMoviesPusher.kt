@@ -3,10 +3,10 @@ package edu.antevortadb.dbInteraction.dbcreator.hollywood
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.DBCommon
 import edu.antevortadb.dbInteraction.TimeUtils
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.MLIndividualRatingsSelector
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.MLMoviesSelector
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.TMDBCreditsSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.MLIndividualRatingsSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.MLLinksSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.MLMoviesSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.TMDBCreditsSelector
 import edu.antevortadb.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVRecord
 import org.json.JSONArray
@@ -141,12 +141,14 @@ class TMDBMoviesPusher: CSVPusher {
                 val mildSuccess = if(performanceData == 1) 1 else 0
                 val success = if(performanceData == 2) 1 else 0
                 val greatSuccess = if(performanceData == 3) 1 else 0
+                val missingData = if(performanceData == -1) 1 else 0
 
                 ps.setInt(key++, failure)                   // 1 if true, 0 if false
                 ps.setInt(key++, mildSuccess)               // 1 if true, 0 if false
                 ps.setInt(key++, success)                   // 1 if true, 0 if false
                 ps.setInt(key++, greatSuccess)              // 1 if true, 0 if false
-                ps.setInt(key, performanceData)             // 0, 1, 2, 3 depending on class
+                ps.setInt(key++, missingData)               // 1 if true, 0 if false
+                ps.setInt(key, performanceData)             // 0, 1, 2, 3, -1 depending on class
 
                 ps.addBatch()
             }
@@ -162,6 +164,9 @@ class TMDBMoviesPusher: CSVPusher {
     }
 
     private fun determinePerformanceClass(budget: Int, revenue: Int): Int {
+        // Not entirely sure what the deal is here, so we're going to exclude these movies for now
+        if(budget == 0 && revenue == 0)
+            return -1
         if(revenue <= budget)
             return 0
         else if(revenue <= (budget * 1.25))
@@ -171,7 +176,8 @@ class TMDBMoviesPusher: CSVPusher {
         else if(revenue > (budget * 1.75))
             return 3
         else
-            logger.err("TMDBMoviePusher.determinePerformanceClass is returning -1")
+            logger.err("TMDBMoviePusher.determinePerformanceClass is returning -1\n" +
+                        "budget: $budget | revenue: $revenue")
         return -1
     }
 

@@ -6,7 +6,7 @@
 package edu.antevortadb.dbInteraction.dbcreator.hollywood
 
 import edu.antevortadb.dbInteraction.DBCommon
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.movies.MLLinksSelector
+import edu.antevortadb.dbInteraction.dbSelector.hollywood.MLLinksSelector
 import edu.antevortadb.dbInteraction.dbcreator.CSVPusher
 import org.apache.commons.csv.CSVRecord
 import java.sql.PreparedStatement
