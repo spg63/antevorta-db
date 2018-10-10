@@ -66,7 +66,7 @@ fun hollywoodSelect(){
     val selectStatement = "select budget, revenue, tmdb_vote_average, tmdb_vote_count, " +
             "movielens_vote_average, movielens_vote_count, revenue, failure, mild_success, " +
             "success, great_success, missing_data, performance_class" +
-            " from movies limit 500"
+            " from movies limit 2000"
     val results = MovieSelector().generalSelection(selectStatement)
     RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "csvOutput/randomData.csv",
             randomShuffleSeed)
@@ -76,7 +76,7 @@ fun hollywoodSelect(){
 }
 
 fun createHollywoodDB(){
-    if(!Finals.START_FRESH) 
+    if(!Finals.START_FRESH)
         return
 
     // Skip the info logs when creating the hollywood DBs, there are a lot of select statements

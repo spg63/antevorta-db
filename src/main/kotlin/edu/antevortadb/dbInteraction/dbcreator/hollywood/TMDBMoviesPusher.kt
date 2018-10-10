@@ -141,6 +141,7 @@ class TMDBMoviesPusher: CSVPusher {
                 val mildSuccess = if(performanceData == 1) 1 else 0
                 val success = if(performanceData == 2) 1 else 0
                 val greatSuccess = if(performanceData == 3) 1 else 0
+                val madeBackBudget = if(performanceData != 0 && performanceData != -1) 1 else 0
                 val missingData = if(performanceData == -1) 1 else 0
 
                 ps.setInt(key++, failure)                   // 1 if true, 0 if false
@@ -148,6 +149,7 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setInt(key++, success)                   // 1 if true, 0 if false
                 ps.setInt(key++, greatSuccess)              // 1 if true, 0 if false
                 ps.setInt(key++, missingData)               // 1 if true, 0 if false
+                ps.setInt(key++, madeBackBudget)            // 1 if true, 0 if false
                 ps.setInt(key, performanceData)             // 0, 1, 2, 3, -1 depending on class
 
                 ps.addBatch()
@@ -169,11 +171,11 @@ class TMDBMoviesPusher: CSVPusher {
             return -1
         if(revenue <= budget)
             return 0
-        else if(revenue <= (budget * 1.25))
+        else if(revenue <= (budget * 2))
             return 1
-        else if(revenue > (budget * 1.25) && revenue <= (budget * 1.75))
+        else if(revenue > (budget * 2) && revenue <= (budget * 3))
             return 2
-        else if(revenue > (budget * 1.75))
+        else if(revenue > (budget * 3))
             return 3
         else
             logger.err("TMDBMoviePusher.determinePerformanceClass is returning -1\n" +

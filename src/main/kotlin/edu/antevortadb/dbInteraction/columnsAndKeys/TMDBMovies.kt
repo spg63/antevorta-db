@@ -61,6 +61,7 @@ object TMDBMovies{
             "success",
             "great_success",
             "missing_data",
+            "made_more_than_budget",
             "performance_class"
     )
 
@@ -101,6 +102,7 @@ object TMDBMovies{
             " INTEGER,",
             " INTEGER,",
             " INTEGER,",
+            " INTEGER,",
             " INTEGER"
     )
 
@@ -134,6 +136,7 @@ object TMDBMovies{
             "INT",
             "JSON",
             "JSON",
+            "INT",
             "INT",
             "INT",
             "INT",
