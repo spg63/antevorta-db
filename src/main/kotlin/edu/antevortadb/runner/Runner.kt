@@ -9,6 +9,7 @@ package edu.antevortadb.runner
 
 import com.google.common.base.Stopwatch
 import edu.antevortadb.configs.Finals
+import edu.antevortadb.configs.RawDataLocator
 import edu.antevortadb.dbInteraction.columnsAndKeys.RedditComs
 import edu.antevortadb.dbInteraction.columnsAndKeys.RedditSubs
 import edu.antevortadb.dbInteraction.columnsAndKeys.TMDBMovies
@@ -63,12 +64,18 @@ fun main(args : Array<String>){
 
 fun hollywoodSelect(){
     val randomShuffleSeed = 55L
-    val selectStatement = "select budget, revenue, tmdb_vote_average, tmdb_vote_count, " +
+    val dataDir = "${RawDataLocator.dl4jDataRoot()}hollywoodTesting/"
+    /*
+    val selectStatement = "select budget, tmdb_popularity, tmdb_title, revenue, " +
+            "tmdb_vote_average, tmdb_vote_count, " +
             "movielens_vote_average, movielens_vote_count, revenue, failure, mild_success, " +
-            "success, great_success, missing_data, performance_class" +
-            " from movies limit 2000"
+            "success, great_success, missing_data, made_more_than_budget, performance_class" +
+            " from movies"
+            */
+    //val selectStatement = "select budget, revenue, made_more_than_budget from movies limit 2500"
+    val selectStatement = "select * from movies"
     val results = MovieSelector().generalSelection(selectStatement)
-    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "csvOutput/randomData.csv",
+    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "$dataDir/addData.csv",
             randomShuffleSeed)
     //RSMapperOutput.printAllColumnsFromRSMappers(results, TMDBMovies.columnsForPrinting(),
     //        TMDBMovies.dataTypesForPrinting())
