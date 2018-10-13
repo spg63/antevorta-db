@@ -64,7 +64,7 @@ fun main(args : Array<String>){
 
 fun hollywoodSelect(){
     val randomShuffleSeed = 55L
-    val dataDir = "${RawDataLocator.dl4jDataRoot()}hollywoodTesting/"
+    val dataDir = "${RawDataLocator.dl4jDataRoot()}hollywoodTesting/binaryIs2X/"
     /*
     val selectStatement = "select budget, tmdb_popularity, tmdb_title, revenue, " +
             "tmdb_vote_average, tmdb_vote_count, " +
@@ -73,9 +73,9 @@ fun hollywoodSelect(){
             " from movies"
             */
     //val selectStatement = "select budget, revenue, made_more_than_budget from movies limit 2500"
-    val selectStatement = "select * from movies"
+    val selectStatement = "select * from movies where budget > 9 and runtime > 0 and ID > 0"
     val results = MovieSelector().generalSelection(selectStatement)
-    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "$dataDir/addData.csv",
+    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "${dataDir}allData.csv",
             randomShuffleSeed)
     //RSMapperOutput.printAllColumnsFromRSMappers(results, TMDBMovies.columnsForPrinting(),
     //        TMDBMovies.dataTypesForPrinting())
@@ -89,17 +89,17 @@ fun createHollywoodDB(){
     // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
 
     // Create the DB, and the first table in the DB (links_table)
-    buildDBShards(MovielensLinkFacilitator())
+    //buildDBShards(MovielensLinkFacilitator())
 
     /* ---------- Now start adding tables to the DB shards ------------------------------------ */
 
     // 2nd table should be the genome_tags table
-    addTableToShards(MovielensGenomeTagsFacilitator())
-    addTableToShards(MovielensMoviesFacilitator())
-    addTableToShards(TMDBCreditsFacilitator())
-    addTableToShards(MovielensGenomeScoresFacilitator())
-    addTableToShards(MovielensIndividualTagsFacilitator())
-    addTableToShards(MovielensIndividualRatingsFacilitator())
+    //addTableToShards(MovielensGenomeTagsFacilitator())
+    //addTableToShards(MovielensMoviesFacilitator())
+    //addTableToShards(TMDBCreditsFacilitator())
+    //addTableToShards(MovielensGenomeScoresFacilitator())
+    //addTableToShards(MovielensIndividualTagsFacilitator())
+    //addTableToShards(MovielensIndividualRatingsFacilitator())
     addTableToShards(TMDBMoviesFacilitator())
 }
 

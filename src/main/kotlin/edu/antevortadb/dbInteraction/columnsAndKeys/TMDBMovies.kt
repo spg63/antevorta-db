@@ -61,7 +61,7 @@ object TMDBMovies{
             "success",
             "great_success",
             "missing_data",
-            "made_more_than_budget",
+            "made_more_than_2x_budget",
             "performance_class"
     )
 
