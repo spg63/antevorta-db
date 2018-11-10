@@ -43,6 +43,7 @@ dependencies {
 
     // SQlite JDBC
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'         // Old version, known working
+
     //compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.23.1'
 
 
