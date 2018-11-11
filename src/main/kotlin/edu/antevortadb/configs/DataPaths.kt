@@ -24,7 +24,6 @@ object DataPaths{
                 "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
             else
                 "${SEP}Users${SEP}anubis${SEP}Git${SEP}_DATA_${SEP}"
-    //val LOCAL_DATA_ROOT             = "${SEP}Users${SEP}hades${SEP}Git${SEP}_DATA_${SEP}"
 
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) - */
     val LOCAL_PATH                  = "${LOCAL_DATA_ROOT}LocalData${SEP}raw${SEP}"
@@ -93,5 +92,8 @@ object DataPaths{
 
     /* ---------- Paths to the DeepLearning4Java example data ----------------------------------- */
     val LOCAL_DL4J_ROOT             = "${LOCAL_DATA_ROOT}DL4J${SEP}"
-    val RESEARCH_DL4J_ROOT          = "${RESEARCH_ARRAY_DATA_ROOT}DL4J${SEP}"
+
+    // NOTE: Changed 11.10.18 to test SSD vs RAID array for training speed
+    //val RESEARCH_DL4J_ROOT          = "${RESEARCH_ARRAY_DATA_ROOT}DL4J${SEP}"
+    val RESEARCH_DL4J_ROOT          = "C:${SEP}_DATA_${SEP}DL4J${SEP}"
 }
