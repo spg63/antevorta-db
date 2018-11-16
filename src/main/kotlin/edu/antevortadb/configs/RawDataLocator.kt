@@ -157,6 +157,9 @@ object RawDataLocator{
      * @return Root to the DL4J example data
      */
     fun dl4jDataRoot(): String {
+        if(DataPaths.CPUTESTINGMODE){
+            return DataPaths.DL4J_CPU_ISSUE_ROOT
+        }
         return when(Finals.TESTING_MODE) {
             true -> DataPaths.LOCAL_DL4J_ROOT
             false -> DataPaths.RESEARCH_DL4J_ROOT

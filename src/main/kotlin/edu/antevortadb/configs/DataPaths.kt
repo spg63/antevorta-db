@@ -16,6 +16,7 @@ import java.io.File
  */
 object DataPaths{
     val SEP: String                 = File.separator
+    var CPUTESTINGMODE              = false
 
     /* ---------- The path to the local data folders -------------------------------------------- */
     // This is a very quick, bs function, to check if I'm on the Mac mini with 6 cores vs my laptop
@@ -96,4 +97,5 @@ object DataPaths{
     // NOTE: Changed 11.10.18 to test SSD vs RAID array for training speed
     //val RESEARCH_DL4J_ROOT          = "${RESEARCH_ARRAY_DATA_ROOT}DL4J${SEP}"
     val RESEARCH_DL4J_ROOT          = "C:${SEP}_DATA_${SEP}DL4J${SEP}"
+    val DL4J_CPU_ISSUE_ROOT         =  "data${SEP}DL4J${SEP}"
 }
