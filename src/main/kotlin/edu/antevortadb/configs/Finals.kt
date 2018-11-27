@@ -104,7 +104,7 @@ object Finals{
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't have a
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
-    fun isResearchMachine(): Boolean  {
+    fun isResearchMachine(): Boolean {
         // Check if this is a windows machine
         if(System.getProperty("os.name").toLowerCase().contains("win")){
             // Now need to check if it's the research machine or the SB2 laptop
@@ -116,11 +116,11 @@ object Finals{
                 return true
         }
 
-        // Either a non-windows machine, or it has less than 17 logical cores.
+        // Either a non-windows machine, or it has less than 16 logical cores.
         // Not the research machine
         return false
     }
 
-    /* ---------- Random constants --------------------------------------------------=------------*/
+    /* ---------- Random constants ---------------------------------------------------------------*/
     const val NOTAGLINE = "NO TAGLINE"
 }
