@@ -106,7 +106,9 @@ object Finals{
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
     fun isResearchMachine(): Boolean {
         // Check if this is a windows machine
-        if(System.getProperty("os.name").toLowerCase().contains("win")){
+        //if(System.getProperty("os.name").toLowerCase().contains("win")){
+        if(System.getProperty("os.name").toLowerCase().contains("linux")){
+            //if()
 
             // Now need to check if it's the research machine or the SB2 laptop
             val numCores = Runtime.getRuntime().availableProcessors()
