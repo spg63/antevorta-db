@@ -7,7 +7,9 @@
 
 package edu.antevortadb.configs
 
+import edu.antevortadb.utils.TSL
 import java.io.File
+import java.lang.RuntimeException
 
 /**
  * Finals is a class to hold variables related to program state. Items like the database
@@ -106,21 +108,28 @@ object Finals{
     // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
     fun isResearchMachine(): Boolean {
         // Check if this is a windows machine
-        //if(System.getProperty("os.name").toLowerCase().contains("win")){
+        if(System.getProperty("os.name").toLowerCase().contains("win")){
+            TSL.get().logAndKill("Antevorta's data paths are not currently configured for " +
+                    "windows. Please contact spg63@drexel.edu for instruction.")
+        }
+        // See if we're on linux
         if(System.getProperty("os.name").toLowerCase().contains("linux")){
-            //if()
-
-            // Now need to check if it's the research machine or the SB2 laptop
-            val numCores = Runtime.getRuntime().availableProcessors()
-            // Research machine has 16 cores, 32 logical cores. However, there are
-            // some instances where the number of logical cores reported could be
-            // less than the real amount, so take that into account
-            if(numCores > 15)
-                return true
+            // See if we're on ripper, as expected
+            if(System.getProperty("user.name").toLowerCase() != "ripper") {
+                TSL.get().logAndKill("Running on linux, but not on ripper, data configurations " +
+                        "will not be correct. Please contact spg63@drexel.edu for instruction")
+            }
+            // We're on linux, and we're on ripper, so it's the research machine
+            return true
         }
 
-        // Either a non-windows machine, or it has less than 16 logical cores.
-        // Not the research machine
+        // We're on my laptop,
+        if(System.getProperty("user.name").toLowerCase() != "hades"){
+            TSL.get().logAndKill("We're not on linux, not on windows, and apparently not on my " +
+                    "laptop. Not sure where we are, so we're going to run away and die.")
+        }
+
+        // Seems we're on my laptop. This is fine.
         return false
     }
 
