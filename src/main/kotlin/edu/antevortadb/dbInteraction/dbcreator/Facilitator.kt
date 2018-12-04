@@ -88,7 +88,14 @@ abstract class Facilitator {
         // Check if the DBs exist.
         if(this.dbAbsolutePaths.isEmpty())
             this.dbAbsolutePaths = ArrayList()
-        val doDBsExist = this.dbAbsolutePaths.size == Finals.DB_SHARD_NUM
+        var doDBsExist = this.dbAbsolutePaths.size == Finals.DB_SHARD_NUM
+
+        // Add an extra check to make sure they really exist on disk
+        if(doDBsExist) {
+            val f = File(this.dbAbsolutePaths[0])
+            if (!f.exists())
+                doDBsExist = false
+        }
 
         // The DBs exist but we want to start fresh, get rid of them
         if(doDBsExist){
