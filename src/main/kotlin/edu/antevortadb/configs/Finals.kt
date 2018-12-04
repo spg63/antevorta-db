@@ -107,6 +107,7 @@ object Finals{
     fun isResearchMachine(): Boolean {
         // Check if this is a windows machine
         if(System.getProperty("os.name").toLowerCase().contains("win")){
+
             // Now need to check if it's the research machine or the SB2 laptop
             val numCores = Runtime.getRuntime().availableProcessors()
             // Research machine has 16 cores, 32 logical cores. However, there are
