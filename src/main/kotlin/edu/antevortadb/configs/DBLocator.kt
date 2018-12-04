@@ -24,12 +24,14 @@ object DBLocator {
     val futils      = FileUtils.get()
     val SEP: String = File.separator
     /* ----- List of drive letters on the research machine that stores the db shards ------------ */
-    val DRIVES = arrayOf("F", "G", "H", "I", "J", "K")
+    val DRIVES = arrayOf("/mnt/DBA/", "/mnt/DBB/",
+                         "/mnt/DBC/", "/mnt/DBD/",
+                         "/mnt/DBE/", "/mnt/DBF/")
 
     /* ----- Paths to the directories that hold the DB shards without the drive letter prefix --- */
-    val REDDIT_SUB_DB_DIR_PATH    = ":${SEP}DBs${SEP}Reddit${SEP}Submissions${SEP}"
-    val REDDIT_COM_DB_DIR_PATH    = ":${SEP}DBs${SEP}Reddit${SEP}Comments${SEP}"
-    val HOLLYWOOD_DB_DIR_PATH     = ":${SEP}DBs${SEP}Hollywood${SEP}"
+    val REDDIT_SUB_DB_DIR_PATH    = "DBs${SEP}Reddit${SEP}Submissions${SEP}"
+    val REDDIT_COM_DB_DIR_PATH    = "DBs${SEP}Reddit${SEP}Comments${SEP}"
+    val HOLLYWOOD_DB_DIR_PATH     = "DBs${SEP}Hollywood${SEP}"
 
     /* ----- Paths to the DB shards without the drive letter prefix ----------------------------- */
     val REDDIT_SUB_SHARD = "$REDDIT_SUB_DB_DIR_PATH${DataPaths.REDDIT_SUB_DB}${DataPaths.DBEXT}"
