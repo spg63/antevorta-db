@@ -44,14 +44,14 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    //PullFromServer.doServerComs()
+    PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
     //createHollywoodDB()
     //doComs()
     //pushNewSubs()
     //pushNewComs()
-    hollywoodSelect()
+    //hollywoodSelect()
 
     sw.stop()
 

@@ -26,9 +26,10 @@ object PullFromServer{
         val dbsql = DBSelector()
                 .from(Finals.REDDIT_COM_TABLE)
                 .where("author = '$author'")
+                //.where("controversial_score > 0")
                 .orderBy(Finals.CREATED_DT, true)
                 .orderBy("subreddit_name")
-                .limit(10)
+                .limit(1000)
 
         logger.info(dbsql.sql())
 
@@ -50,7 +51,7 @@ object PullFromServer{
 
     fun doServerSubs(){
         val client = AntevortaClient(RawDataLocator.clientConfigFile())
-        val author = "SciTroll"
+        val author = "a4k04"
 
         val dbsql = DBSelector()
                 .from(Finals.REDDIT_SUB_TABLE)
