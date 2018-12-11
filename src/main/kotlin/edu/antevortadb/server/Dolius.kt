@@ -16,6 +16,7 @@ import java.io.*
 import java.lang.reflect.InvocationTargetException
 import java.net.ServerSocket
 import java.net.Socket
+import java.nio.charset.StandardCharsets
 
 /**
  * Note: This server is intentionally capped at 5 threads. Access to the DB (and data processing)
@@ -213,9 +214,15 @@ class Dolius(private val socket: Socket): Runnable {
     private fun writeMessageToClient(message: String){
         try {
             logger.err("MESSAGE:\n $message")
+            val clientWriter = OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)
+            clientWriter.write(message)
+            clientWriter.close()
+            /*
             val clientWriter = DataOutputStream(socket.getOutputStream())
             clientWriter.writeUTF(message)
+            //clientWriter.writeBytes(message)
             clientWriter.close()
+            */
         }
         catch(e: InvocationTargetException){
             logger.exception(e)

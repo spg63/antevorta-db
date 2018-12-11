@@ -11,6 +11,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.net.Socket
+import java.nio.charset.StandardCharsets
 
 // Kotlin version of public static vars. Not accessible from Java but no java needs these vars in
 // this system. They're used in the companion object to create the config file as well as when the
@@ -83,7 +84,8 @@ class AntevortaClient(configFilePath: String) {
             // Open the socket to the server
             val sock = Socket(this.hostname, this.hostport)
             val serverWriter = DataOutputStream(sock.getOutputStream())
-            val serverReader = BufferedReader(InputStreamReader(sock.getInputStream(), "UTF8"))
+            val serverReader = BufferedReader(InputStreamReader(sock.getInputStream(),
+                    StandardCharsets.UTF_8))
 
             // Build JSONObject, consisting of user, pass, and query string
             val queryObject = buildJSONObject(SQLQuery)
