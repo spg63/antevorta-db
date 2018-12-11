@@ -116,8 +116,6 @@ class AntevortaClient(configFilePath: String) {
 
             // NOTE: A query returning no results will return [], a valid (but empty) JSONArray.
             // RSMapperOutput knows how to handle empty results
-            //jsonArrayString += "\"}]"
-            println(jsonArrayString)
             results = JSONArray(jsonArrayString)
         }
         catch(e: IOException){

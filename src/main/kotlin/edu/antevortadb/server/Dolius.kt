@@ -213,16 +213,9 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun writeMessageToClient(message: String){
         try {
-            logger.err("MESSAGE:\n $message")
             val clientWriter = OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)
             clientWriter.write(message)
             clientWriter.close()
-            /*
-            val clientWriter = DataOutputStream(socket.getOutputStream())
-            clientWriter.writeUTF(message)
-            //clientWriter.writeBytes(message)
-            clientWriter.close()
-            */
         }
         catch(e: InvocationTargetException){
             logger.exception(e)
