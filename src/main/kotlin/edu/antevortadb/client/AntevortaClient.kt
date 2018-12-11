@@ -83,7 +83,7 @@ class AntevortaClient(configFilePath: String) {
             // Open the socket to the server
             val sock = Socket(this.hostname, this.hostport)
             val serverWriter = DataOutputStream(sock.getOutputStream())
-            val serverReader = BufferedReader(InputStreamReader(sock.getInputStream()))
+            val serverReader = BufferedReader(InputStreamReader(sock.getInputStream(), "UTF8"))
 
             // Build JSONObject, consisting of user, pass, and query string
             val queryObject = buildJSONObject(SQLQuery)
@@ -114,6 +114,8 @@ class AntevortaClient(configFilePath: String) {
 
             // NOTE: A query returning no results will return [], a valid (but empty) JSONArray.
             // RSMapperOutput knows how to handle empty results
+            //jsonArrayString += "\"}]"
+            println(jsonArrayString)
             results = JSONArray(jsonArrayString)
         }
         catch(e: IOException){

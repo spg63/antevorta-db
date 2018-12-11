@@ -12,10 +12,7 @@ import edu.antevortadb.utils.TSL
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.DataOutputStream
-import java.io.IOException
-import java.io.InputStreamReader
+import java.io.*
 import java.lang.reflect.InvocationTargetException
 import java.net.ServerSocket
 import java.net.Socket
@@ -215,8 +212,9 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun writeMessageToClient(message: String){
         try {
+            logger.err("MESSAGE:\n $message")
             val clientWriter = DataOutputStream(socket.getOutputStream())
-            clientWriter.writeBytes(message)
+            clientWriter.writeUTF(message)
             clientWriter.close()
         }
         catch(e: InvocationTargetException){

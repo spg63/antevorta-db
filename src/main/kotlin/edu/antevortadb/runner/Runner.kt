@@ -139,7 +139,7 @@ fun doComs(){
         buildDBShards(CommentsFacilitator())
         return
     }
-    val author = "a4k04"
+    val author = "mariowned"
     val rcs = RedditComSelector()
 
     //val res = rcs.selectAllFromAuthor("a4k04")
