@@ -118,11 +118,12 @@ object Finals{
     fun isResearchMachine(): Boolean {
         val linuxUser = "ripper"
         val windowsUser = "Osiris"
-        val macUser = "hades"
+        val mbpUser = "hades"
+        val minUser = "anubis"
 
         if(SYSTEM_USER == linuxUser)
             return true
-        if(SYSTEM_USER == windowsUser || SYSTEM_USER == macUser)
+        if(SYSTEM_USER == windowsUser || SYSTEM_USER == mbpUser || SYSTEM_USER == minUser)
             return false
 
         TSL.get().err("USER: $SYSTEM_USER")
