@@ -285,7 +285,11 @@ fun runServerInTryCatch(){
             Dolius(sock.accept()).run()
         }
         catch(e: Exception){
+            // Simple variable to track how many times we've died
             ++restartCount
+            // The server crashed but the currentThreads variable wasn't decremented,
+            // decrement it now
+            --currentThreads
             TSL.get().err("Dolius was hit in the face by an uncaught exception. Dolius has now " +
                     "been restarted $restartCount times.")
             if(!sock.isClosed) sock.close()

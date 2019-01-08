@@ -20,6 +20,8 @@ object Finals{
     /* ---------- Program control --------------------------------------------------------------- */
     // True when working locally on MBP, false when working on full dataset, changes data & db paths
     val TESTING_MODE = !isResearchMachine()
+    // Returns 0 for research machine, 1 for MBP, 2 for SB2
+    val MACHINE_CODE = isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
     const val START_FRESH = false
     // Simple check to make sure we really want to add new data to the DBs
@@ -102,16 +104,21 @@ object Finals{
     const val USER_ID = "userid"
 
 
-    /* ---------- Helper functions -------------------------------------------------------------- */
+    /* ---------- Helper functions ---------------------------------------------------- */
     // Very basic, needs to be more robust but works now on my known machines. Will almost
-    // certainly fail at some point in the future with unexpected hardware and I won't have a
-    // damn clue why and it'll take me a few hours to find this again. Future me: sorry.
+    // certainly fail at some point in the future with unexpected hardware and I won't
+    // have a damn clue why and it'll take me a few hours to find this again. Future
+    // me: sorry.
     fun isResearchMachine(): Boolean {
-        // Check if this is a windows machine
+        // Check if this is a windows machine, and if it's my SB2
         if(System.getProperty("os.name").toLowerCase().contains("win")){
-            TSL.get().logAndKill("Antevorta's data paths are not currently configured for " +
-                    "windows. Please contact spg63@drexel.edu for instruction.")
+            if(System.getProperty("user.name") != "Osiris")
+                TSL.get().logAndKill("We're on Windows but not on my machine, where are" +
+                        " we? I don't know, but the data paths won't be correct.")
+
+            return false
         }
+
         // See if we're on linux
         if(System.getProperty("os.name").toLowerCase().contains("linux")){
             // See if we're on ripper, as expected
