@@ -19,23 +19,12 @@ object DataPaths{
     var CPUTESTINGMODE              = false
 
     /* ---------- The path to the local data folders -------------------------------------------- */
-    val LOCAL_DATA_ROOT =
-            if(Finals.IS_WINDOWS)
-                // The SB2 running windows
-                "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
-            else
-                // This should cover the MBP & the Mac Mini
-                "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
-    /*
-            else if(Runtime.getRuntime().availableProcessors() < 9) {
-
-                "${SEP}Users${SEP}hades${SEP}git${SEP}_DATA_${SEP}"
-            }
-            else{
-                // Anubis...the Mac Mini
-                "${SEP}Users${SEP}anubis${SEP}git${SEP}_DATA_${SEP}"
-            }
-    */
+    val LOCAL_DATA_ROOT = when(Finals.IS_WINDOWS) {
+        // The SB2 running windows
+        true -> "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+        // MBP & Mac Mini, only difference is the SYSTEM_USER name
+        false -> "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+    }
 
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) - */
     val LOCAL_PATH                  = "${LOCAL_DATA_ROOT}LocalData${SEP}raw${SEP}"

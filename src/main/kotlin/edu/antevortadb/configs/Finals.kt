@@ -132,36 +132,6 @@ object Finals{
 
         // We'll never get here, but the compiler doesn't know that
         return false
-        /*
-        // Check if this is a windows machine, and if it's my SB2
-        if(System.getProperty("os.name").toLowerCase().contains("win")){
-            if(System.getProperty("user.name") != "Osiris")
-                TSL.get().logAndKill("We're on Windows but not on my machine, where are" +
-                        " we? I don't know, but the data paths won't be correct.")
-
-            return false
-        }
-
-        // See if we're on linux
-        if(System.getProperty("os.name").toLowerCase().contains("linux")){
-            // See if we're on ripper, as expected
-            if(System.getProperty("user.name").toLowerCase() != "ripper") {
-                TSL.get().logAndKill("Running on linux, but not on ripper, data configurations " +
-                        "will not be correct. Please contact spg63@drexel.edu for instruction")
-            }
-            // We're on linux, and we're on ripper, so it's the research machine
-            return true
-        }
-
-        // We're on my laptop,
-        if(System.getProperty("user.name").toLowerCase() != "hades"){
-            TSL.get().logAndKill("We're not on linux, not on windows, and apparently not on my " +
-                    "laptop. Not sure where we are, so we're going to run away and die.")
-        }
-
-        // Seems we're on my laptop. This is fine.
-        return false
-        */
     }
 
     /* ---------- Random constants ---------------------------------------------------------------*/
