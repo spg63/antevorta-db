@@ -18,10 +18,13 @@ import java.lang.RuntimeException
  */
 object Finals{
     /* ---------- Program control --------------------------------------------------------------- */
+    // user.name of the current user running this software
+    val SYSTEM_USER = initUser()
+    // True if windows, else false
+    val IS_WINDOWS = System.getProperty("os.name").contains("win")
+                     || System.getProperty("os.name").contains("Win")
     // True when working locally on MBP, false when working on full dataset, changes data & db paths
     val TESTING_MODE = !isResearchMachine()
-    // Returns 0 for research machine, 1 for MBP, 2 for SB2
-    val MACHINE_CODE = isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
     const val START_FRESH = false
     // Simple check to make sure we really want to add new data to the DBs
@@ -105,11 +108,30 @@ object Finals{
 
 
     /* ---------- Helper functions ---------------------------------------------------- */
+    // Function to force-init the SYSTEM_USER variable
+    fun initUser(): String = System.getProperty("user.name")
+
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't
     // have a damn clue why and it'll take me a few hours to find this again. Future
     // me: sorry.
     fun isResearchMachine(): Boolean {
+        val linuxUser = "ripper"
+        val windowsUser = "Osiris"
+        val macUser = "hades"
+
+        if(SYSTEM_USER == linuxUser)
+            return true
+        if(SYSTEM_USER == windowsUser || SYSTEM_USER == macUser)
+            return false
+
+        TSL.get().err("USER: $SYSTEM_USER")
+        TSL.get().logAndKill("Unknown hardware / user. Datapaths will likely be " +
+                "incorrect. Contact spg63@drexel.edu. Quitting.")
+
+        // We'll never get here, but the compiler doesn't know that
+        return false
+        /*
         // Check if this is a windows machine, and if it's my SB2
         if(System.getProperty("os.name").toLowerCase().contains("win")){
             if(System.getProperty("user.name") != "Osiris")
@@ -138,6 +160,7 @@ object Finals{
 
         // Seems we're on my laptop. This is fine.
         return false
+        */
     }
 
     /* ---------- Random constants ---------------------------------------------------------------*/
