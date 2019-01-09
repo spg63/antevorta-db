@@ -13,8 +13,9 @@ import java.util.List;
 
 /**
  * Database utility functions. Nonspecific to this project.
- * NOTE: All failures in this class will throw an unchecked runtime exception. For my uses a DB failure means
- * the program can't continue, this certainly isn't true for other systems
+ * NOTE: All failures in this class will throw an unchecked runtime exception. For my uses
+ * a DB failure means the program can't continue, this certainly isn't true for other
+ * systems
  */
 @SuppressWarnings("ThrowFromFinallyBlock")
 public class DBUtils {
@@ -34,23 +35,25 @@ public class DBUtils {
     }
 
     /**
-     * Return a connection to the database string, if valid, using the DB driver and DB url
-     * prefix set in Finals
+     * Return a connection to the database string, if valid, using the DB driver and DB
+     * url prefix set in Finals
      * @param db Path to your DB
      * @param dbURL The URL for the DB (e.g. jdbc:sqlite:)
      * @param dbDriverClassName The name of your DB driver (e.g. org.sqlite.JDBC)
-     * @param enforceForeignKeys Should be true if you want foreign keys enforced on your table(s), false
-     *                           otherwise to increase DB performance
+     * @param enforceForeignKeys Should be true if you want foreign keys enforced on your
+     *                           table(s), false otherwise to increase DB performance
      * @return The connection
      */
     @SuppressWarnings("ConstantConditions")
-    public Connection connect(String db, String dbURL, String dbDriverClassName, boolean enforceForeignKeys){
+    public Connection connect(String db, String dbURL, String dbDriverClassName,
+                              boolean enforceForeignKeys){
         String connString = dbURL + db;
         Connection conn = null;
         try{
             Class.forName(dbDriverClassName);
             SQLiteConfig config = new SQLiteConfig();
-            // This is necessary to enforce foreign keys, has to happen on *every* connection
+            // This is necessary to enforce foreign keys, has to happen on *every*
+            // connection
             if(enforceForeignKeys)
                 config.enforceForeignKeys(true);
             conn = DriverManager.getConnection(connString, config.toProperties());
@@ -112,7 +115,8 @@ public class DBUtils {
      */
     public void insert(String db, String dbURL, String dbDriverClassName,
                        String SQLStatement, boolean enforceForeignKeys) {
-        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement, enforceForeignKeys);
+        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement,
+                enforceForeignKeys);
     }
 
     /**
@@ -135,12 +139,13 @@ public class DBUtils {
      */
     public void delete(String db, String dbURL, String dbDriverClassName,
                        String SQLStatement, boolean enforceForeignKeys) {
-        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement, enforceForeignKeys);
+        executeGenericUpdate(db, dbURL, dbDriverClassName, SQLStatement,
+                enforceForeignKeys);
     }
 
     /**
-     * Executes a batch insertion. There is no batch size limit. This function assumes the user
-     * has properly split the insertion into manageable chunks.
+     * Executes a batch insertion. There is no batch size limit. This function assumes the
+     * user has properly split the insertion into manageable chunks.
      * NOTE: The connection will not be closed for you
      * @param conn The DB Connection
      * @param SQLStatements A list of SQL statements
@@ -150,8 +155,8 @@ public class DBUtils {
     }
 
     /**
-     * Executes a batch insertion. There is no batch size limit. This function assumes the user
-     * has properly split the insertion into manageable chunks.
+     * Executes a batch insertion. There is no batch size limit. This function assumes the
+     * user has properly split the insertion into manageable chunks.
      * NOTE: There is no connection to close
      * @param db The path to the DB
      * @param SQLStatements A list of SQL statements
@@ -160,12 +165,13 @@ public class DBUtils {
      */
     public void insertAll(String db, String dbURL, String dbDriverClassName,
                           List<String> SQLStatements, boolean enforceForeignKeys){
-        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements, enforceForeignKeys);
+        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements,
+                enforceForeignKeys);
     }
 
     /**
-     * Executs a batch deletion. There is no batch size limit. This function assumes the user has
-     * properly split the deletion into manageable chunks.
+     * Executs a batch deletion. There is no batch size limit. This function assumes the
+     * user has properly split the deletion into manageable chunks.
      * NOTE: The connection will not be closed for you
      * @param conn The DB connection
      * @param SQLStatements A list of SQL statements
@@ -175,8 +181,8 @@ public class DBUtils {
     }
 
     /**
-     * Executs a batch deletion. There is no batch size limit. This function assumes the user has
-     * properly split the deletion into manageable chunks.
+     * Executs a batch deletion. There is no batch size limit. This function assumes the
+     * user has properly split the deletion into manageable chunks.
      * @param db The path to the DB
      * @param SQLStatements A list of SQL statements
      * @param dbURL The URL for the db
@@ -184,7 +190,8 @@ public class DBUtils {
      */
     public void deleteAll(String db, String dbURL, String dbDriverClassName,
                           List<String> SQLStatements, boolean enforceForeignKeys){
-        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements, enforceForeignKeys);
+        executeBatchUpdate(db, dbURL, dbDriverClassName, SQLStatements,
+                enforceForeignKeys);
     }
 
     /**
@@ -243,10 +250,12 @@ public class DBUtils {
 
     /*
         ** NO JAVADOC **
-        * Executes a batch update for insert / delete. Manages the Connection object itself
+        * Executes a batch update for insert / delete. Manages the Connection object
+        * itself
      */
     private void executeBatchUpdate(String db, String dbURL, String dbDriverClassName,
-                                    List<String> SQLStatements, boolean enforceForeignKeys){
+                                    List<String> SQLStatements,
+                                    boolean enforceForeignKeys){
         Connection conn = connect(db, dbURL, dbDriverClassName, enforceForeignKeys);
         executeBatchUpdate(conn, SQLStatements);
         try{
@@ -261,7 +270,8 @@ public class DBUtils {
 
     /*
         ** NO JAVADOC **
-        * Excutes a batch update for insert / delete. Does not close the connection object.
+        * Excutes a batch update for insert / delete. Does not close the connection
+        * object.
      */
     private void executeBatchUpdate(Connection conn, List<String> SQLStatements){
         Statement stmt = null;

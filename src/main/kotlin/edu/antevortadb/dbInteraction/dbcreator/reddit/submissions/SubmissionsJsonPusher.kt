@@ -16,7 +16,8 @@ class SubmissionsJsonPusher : JsonPusher {
     // This class doesn't store anything, the below variables will be split between JsonPusher
     // and DataPusher
     constructor(): super()
-    constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
+    constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>,
+                tableName: String)
             : super(dbPath, jsonLines, columnNames, tableName)
 
     override fun parseAndPushDataToDB() {
@@ -33,7 +34,8 @@ class SubmissionsJsonPusher : JsonPusher {
                 var key = 1
 
                 // column = archived
-                val archived = if (this.jsonObjects[i].optBoolean("archived", false)) 1 else 0
+                val archived = if (this.jsonObjects[i]
+                                .optBoolean("archived", false)) 1 else 0
                 ps.setInt(key, archived); ++key
 
                 // column = author
@@ -41,11 +43,13 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setString(key, author); ++key
 
                 // column = brand_safe
-                val brandSafe = if (this.jsonObjects[i].optBoolean("brand_safe", false)) 1 else 0
+                val brandSafe = if (this.jsonObjects[i]
+                                .optBoolean("brand_safe", false)) 1 else 0
                 ps.setInt(key, brandSafe); ++key
 
                 // column = contest_mode
-                val contestMode = if (this.jsonObjects[i].optBoolean("contest_mode", false)) 1 else 0
+                val contestMode = if (this.jsonObjects[i]
+                                .optBoolean("contest_mode", false)) 1 else 0
                 ps.setInt(key, contestMode); ++key
 
                 // column = created_dt
@@ -77,11 +81,13 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setString(key, pid); ++key
 
                 // column = is_self_post
-                val isSelfPost = if (this.jsonObjects[i].optBoolean("is_self", false)) 1 else 0
+                val isSelfPost = if (this.jsonObjects[i]
+                                .optBoolean("is_self", false)) 1 else 0
                 ps.setInt(key, isSelfPost); ++key
 
                 // column = is_video_post
-                val isVideoPost = if (this.jsonObjects[i].optBoolean("is_video", false)) 1 else 0
+                val isVideoPost = if (this.jsonObjects[i]
+                                .optBoolean("is_video", false)) 1 else 0
                 ps.setInt(key, isVideoPost); ++key
 
                 // column = link_flair_text
@@ -89,7 +95,8 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setString(key, linkFlair); ++key
 
                 // column = is_locked
-                val isLocked = if (this.jsonObjects[i].optBoolean("locked", false)) 1 else 0
+                val isLocked = if (this.jsonObjects[i]
+                                .optBoolean("locked", false)) 1 else 0
                 ps.setInt(key, isLocked); ++key
 
                 // column = num_comments
@@ -133,7 +140,8 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setInt(key, numCrossposts); ++key
 
                 // column = over_18
-                val over18 = if (this.jsonObjects[i].optBoolean("over_18", false)) 1 else 0
+                val over18 = if (this.jsonObjects[i]
+                                .optBoolean("over_18", false)) 1 else 0
                 ps.setInt(key, over18); ++key
 
                 // column = permalink
@@ -141,7 +149,8 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setString(key, permalink); ++key
 
                 // column = is_pinned
-                val isPinned = if (this.jsonObjects[i].optBoolean("pinned", false)) 1 else 0
+                val isPinned = if (this.jsonObjects[i]
+                                .optBoolean("pinned", false)) 1 else 0
                 ps.setInt(key, isPinned); ++key
 
                 // column = scraped_on
@@ -157,7 +166,8 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setString(key, selftext); ++key
 
                 // column = is_stickied
-                val isStickied = if (this.jsonObjects[i].optBoolean("stickied", false)) 1 else 0
+                val isStickied = if (this.jsonObjects[i]
+                                .optBoolean("stickied", false)) 1 else 0
                 ps.setInt(key, isStickied); ++key
 
                 // column = subreddit_name
@@ -169,7 +179,8 @@ class SubmissionsJsonPusher : JsonPusher {
                 ps.setString(key, subredditID); ++key
 
                 // column = subreddit_type
-                val subredditType = this.jsonObjects[i].optString("subreddit_type", "null")
+                val subredditType = this.jsonObjects[i]
+                        .optString("subreddit_type", "null")
                 ps.setString(key, subredditType); ++key
 
                 // column = post_title

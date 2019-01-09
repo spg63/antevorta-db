@@ -20,7 +20,8 @@ class MovielensMoviesPusher: CSVPusher {
     private val GENREKEY = "genre"
 
     constructor(): super()
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
     : super(dbPath, columnNames, tableName, records)
 
     override fun parseAndPushDataToDB() {
@@ -34,14 +35,16 @@ class MovielensMoviesPusher: CSVPusher {
 
             for(i in 0 until this.numRecords){
                 var key = 1
-                // If the movieid returns something unparsable to int then we have the header,
-                // just continue
+                // If the movieid returns something unparsable to int then we have the
+                // header, just continue
                 val movieid = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val tmdbImdbIds = linksSelector.getIMDBandTMDBFromMovielensMovieID(movieid)
+                val tmdbImdbIds =
+                        linksSelector.getIMDBandTMDBFromMovielensMovieID(movieid)
                 val tmdbMovieID = tmdbImdbIds.first
                 val imdbMovieID = tmdbImdbIds.second
                 val titleWithQuote = this.csvRecords[i][1]
-                val title = titleWithQuote.replace("\"", "") // Movie title has quotes, remove them
+                // Movie title has quotes, remove them
+                val title = titleWithQuote.replace("\"", "")
 
                 val genresString = this.csvRecords[i][2]
                 val genresJson = splitGenresIntoJsonObject(genresString)
@@ -71,7 +74,8 @@ class MovielensMoviesPusher: CSVPusher {
         val jsonArray = JSONArray()
         for(genre in allGenres) {
             val jsonObject = JSONObject()
-            // 7.14.18: Attempting to remove the leading / trailing quotes in the ml_genres data
+            // 7.14.18: Attempting to remove the leading / trailing quotes in the
+            // ml_genres data
             jsonObject.put(GENREKEY, genre.replace("\"", ""))
             jsonArray.put(jsonObject)
         }

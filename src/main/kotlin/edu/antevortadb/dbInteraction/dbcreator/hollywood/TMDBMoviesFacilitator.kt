@@ -21,7 +21,8 @@ class TMDBMoviesFacilitator: AbstractMoviesFacilitator {
 
     constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
 
-    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.tmdbMoviesCSVAbsolutePath())
+    override fun getDataFileAbsolutePaths() =
+            listOf(RawDataLocator.tmdbMoviesCSVAbsolutePath())
     override fun getDataKeysOfInterest()    = TMDBMovies.csvKeys()
     override fun getColumnNames()           = TMDBMovies.columnNames()
     override fun getDataTypes()             = TMDBMovies.dataTypes()

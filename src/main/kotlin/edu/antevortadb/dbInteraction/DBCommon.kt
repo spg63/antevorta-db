@@ -16,10 +16,10 @@ import java.sql.SQLException
 
 
 /**
- * Class to hold functionality shared among DB classes and wrapping the generalized functions from
- * DBUtils to handle things like data paths, db locations, db type, and whether or not to enforce
- * foreign keys. Basically just wraps up DBUtils with default values for this specific project to
- * simplify function calls in higher level code
+ * Class to hold functionality shared among DB classes and wrapping the generalized
+ * functions from DBUtils to handle things like data paths, db locations, db type, and
+ * whether or not to enforce foreign keys. Basically just wraps up DBUtils with default
+ * values for this specific project to simplify function calls in higher level code
  */
 
 object DBCommon{
@@ -30,8 +30,8 @@ object DBCommon{
     private val logger = TSL.get()
 
     /**
-     * Gets a DB Connection object based on db name, the URL to the DB and the type of DB driver in
-     * use. The URL prefix and DB Driver class are both found in Finals
+     * Gets a DB Connection object based on db name, the URL to the DB and the type of DB
+     * driver in use. The URL prefix and DB Driver class are both found in Finals
      * @param db Name of the database
      * @return The connection to the db
      */
@@ -100,8 +100,8 @@ object DBCommon{
     }
 
     /**
-     * Executes a batch insertion. There is no batch size limit. This function assumes the user
-     * has properly split the insertion into managable chunks.
+     * Executes a batch insertion. There is no batch size limit. This function assumes
+     * the user has properly split the insertion into managable chunks.
      * NOTE: The connection will not be closed for you
      * @param conn The DB Connection
      * @param SQLStatements A list of SQL statements
@@ -111,8 +111,8 @@ object DBCommon{
     }
 
     /**
-     * Executes a batch insertion. There is no batch size limit. This function assumes the user
-     * has properly split the insertion into manageable chunks.
+     * Executes a batch insertion. There is no batch size limit. This function assumes
+     * the user has properly split the insertion into manageable chunks.
      * NOTE: There is no connection to close
      * @param db The path to the DB
      * @param SQLStatements A list of SQL statements
@@ -122,8 +122,8 @@ object DBCommon{
     }
 
     /**
-     * Executs a batch deletion. There is no batch size limit. This function assumes the user has
-     * properly split the deletion into manageable chunks.
+     * Executs a batch deletion. There is no batch size limit. This function assumes the
+     * user has properly split the deletion into manageable chunks.
      * NOTE: The connection will not be closed for you
      * @param conn The DB connection
      * @param SQLStatements A list of SQL statements
@@ -133,8 +133,8 @@ object DBCommon{
     }
 
     /**
-     * Executs a batch deletion. There is no batch size limit. This function assumes the user has
-     * properly split the deletion into manageable chunks.
+     * Executs a batch deletion. There is no batch size limit. This function assumes the
+     * user has properly split the deletion into manageable chunks.
      * @param db The path ot the DB
      * @param SQLStatements A list of SQL statements
      */
@@ -180,7 +180,8 @@ object DBCommon{
      * @param indexName What to call the index
      * @return The SQL string
      */
-    fun getDBIndexSQLStatement(table: String, columnToIndex: String, indexName: String): String {
+    fun getDBIndexSQLStatement(table: String, columnToIndex: String, indexName: String):
+            String {
         return "create index $indexName on $table ($columnToIndex);"
     }
 

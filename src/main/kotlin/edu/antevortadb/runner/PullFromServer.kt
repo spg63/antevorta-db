@@ -46,8 +46,8 @@ object PullFromServer{
         for(jsonobj in objects)
             mappers.add(BaseMapper(jsonobj))
 
-        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditComs.columnsForPrinting(),
-                RedditComs.dataTypesForPrinting())
+        RSMapperOutput.printAllColumnsFromRSMappers(mappers,
+                RedditComs.columnsForPrinting(), RedditComs.dataTypesForPrinting())
     }
 
     fun doServerSubs(){
@@ -69,7 +69,7 @@ object PullFromServer{
         for(jsonobj in objects)
             mappers.add(BaseMapper(jsonobj))
 
-        RSMapperOutput.printAllColumnsFromRSMappers(mappers, RedditSubs.columnsForPrinting(),
-                RedditSubs.dataTypesForPrinting())
+        RSMapperOutput.printAllColumnsFromRSMappers(mappers,
+                RedditSubs.columnsForPrinting(), RedditSubs.dataTypesForPrinting())
     }
 }

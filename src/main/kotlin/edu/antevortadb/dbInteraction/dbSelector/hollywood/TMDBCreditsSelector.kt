@@ -34,6 +34,7 @@ class TMDBCreditsSelector: Selector() {
         if(res.isEmpty())
             return Pair(JSONObject(), JSONObject())
 
-        return Pair(JSONObject(res[0].getString("cast")), JSONObject(res[0].getString("crew")))
+        return Pair(JSONObject(res[0].getString("cast")),
+                JSONObject(res[0].getString("crew")))
     }
 }

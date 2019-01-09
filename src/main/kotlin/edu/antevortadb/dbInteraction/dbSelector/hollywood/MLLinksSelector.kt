@@ -42,20 +42,27 @@ class MLLinksSelector: Selector() {
 
     /**
      * Get the tmdb_movieid and imdb_movieid values from a movielens_movieid value
-     * @return Pair(TMDB_ID, IMDB_ID) or Pair(-1, -1) if values couldn't be located or otherwise
-     * errored
+     * @return Pair(TMDB_ID, IMDB_ID) or Pair(-1, -1) if values couldn't be located or
+     * otherwise errored
      */
-    fun getIMDBandTMDBFromMovielensMovieID(mlID: Int) = selectBothIDs(tmdbcol, imdbcol, mlcol, mlID)
-    fun getIMDBandMLIDFromTMDBMovieID(tmdbID: Int) = selectBothIDs(imdbcol, mlcol, tmdbcol, tmdbID)
-    fun getTMDBandMLIDFromIMDBMovieID(imdbID: Int) = selectBothIDs(tmdbcol, mlcol, imdbcol, imdbID)
+    fun getIMDBandTMDBFromMovielensMovieID(mlID: Int) =
+            selectBothIDs(tmdbcol, imdbcol, mlcol, mlID)
+    fun getIMDBandMLIDFromTMDBMovieID(tmdbID: Int) =
+            selectBothIDs(imdbcol, mlcol, tmdbcol, tmdbID)
+    fun getTMDBandMLIDFromIMDBMovieID(imdbID: Int) =
+            selectBothIDs(tmdbcol, mlcol, imdbcol, imdbID)
 
     /**
      * Get individual IDs
      */
-    fun getIMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, imdbcol)
-    fun getTMDBMovieIDFromMovielensMovieID(mlID: Int) = selectValFromSpecificCol(mlcol, mlID, tmdbcol)
-    fun getMLMovieIDFromIMDBMovieID(imdbID: Int) = selectValFromSpecificCol(imdbcol, imdbID, mlcol)
-    fun getMLMovieIDFromTMDBMovieID(tmdbID: Int) = selectValFromSpecificCol(tmdbcol, tmdbID, mlcol)
+    fun getIMDBMovieIDFromMovielensMovieID(mlID: Int) =
+            selectValFromSpecificCol(mlcol, mlID, imdbcol)
+    fun getTMDBMovieIDFromMovielensMovieID(mlID: Int) =
+            selectValFromSpecificCol(mlcol, mlID, tmdbcol)
+    fun getMLMovieIDFromIMDBMovieID(imdbID: Int) =
+            selectValFromSpecificCol(imdbcol, imdbID, mlcol)
+    fun getMLMovieIDFromTMDBMovieID(tmdbID: Int) =
+            selectValFromSpecificCol(tmdbcol, tmdbID, mlcol)
 
     private fun selectBothIDs(firstCol: String, secondCol: String,
                               fromCol: String, fromColID: Int): Pair<Int, Int> {
@@ -93,26 +100,36 @@ class MLLinksSelector: Selector() {
     }
 
     // Adds IDs to all maps based on a single selection
-    private fun addToMemoMaps(fromCol: String, fromColID: Int, firstVal: Int, secondVal: Int){
+    private fun addToMemoMaps(fromCol: String, fromColID: Int, firstVal: Int,
+                              secondVal: Int){
         when(fromCol){
             mlcol -> {
-                if(!mlMemoMap.contains(fromColID))      mlMemoMap[fromColID]    = Pair(firstVal, secondVal)
-                if(!imdbMemoMap.contains(firstVal))     imdbMemoMap[firstVal]   = Pair(secondVal, fromColID)
-                if(!tmdbMemoMap.contains(secondVal))    tmdbMemoMap[secondVal]  = Pair(firstVal, fromColID)
+                if(!mlMemoMap.contains(fromColID))   mlMemoMap[fromColID]    =
+                        Pair(firstVal, secondVal)
+                if(!imdbMemoMap.contains(firstVal))  imdbMemoMap[firstVal]   =
+                        Pair(secondVal, fromColID)
+                if(!tmdbMemoMap.contains(secondVal)) tmdbMemoMap[secondVal]  =
+                        Pair(firstVal, fromColID)
             }
 
             tmdbcol -> {
                 // tmdb, imdb, ml
-                if(!tmdbMemoMap.contains(fromColID))    tmdbMemoMap[fromColID]  = Pair(firstVal, secondVal)
-                if(!imdbMemoMap.contains(firstVal))     imdbMemoMap[firstVal]   = Pair(fromColID, secondVal)
-                if(!mlMemoMap.contains(secondVal))      mlMemoMap[secondVal]    = Pair(firstVal, fromColID)
+                if(!tmdbMemoMap.contains(fromColID)) tmdbMemoMap[fromColID]  =
+                        Pair(firstVal, secondVal)
+                if(!imdbMemoMap.contains(firstVal))  imdbMemoMap[firstVal]   =
+                        Pair(fromColID, secondVal)
+                if(!mlMemoMap.contains(secondVal))   mlMemoMap[secondVal]    =
+                        Pair(firstVal, fromColID)
             }
 
             imdbcol -> {
                 // imdb, tmdb, ml
-                if(!imdbMemoMap.contains(fromColID))    imdbMemoMap[fromColID]  = Pair(firstVal, secondVal)
-                if(!tmdbMemoMap.contains(firstVal))     tmdbMemoMap[firstVal]   = Pair(fromColID, secondVal)
-                if(!mlMemoMap.contains(secondVal))      mlMemoMap[secondVal]    = Pair(fromColID, firstVal)
+                if(!imdbMemoMap.contains(fromColID)) imdbMemoMap[fromColID]  =
+                        Pair(firstVal, secondVal)
+                if(!tmdbMemoMap.contains(firstVal))  tmdbMemoMap[firstVal]   =
+                        Pair(fromColID, secondVal)
+                if(!mlMemoMap.contains(secondVal))   mlMemoMap[secondVal]    =
+                        Pair(fromColID, firstVal)
             }
         }
     }
@@ -123,18 +140,21 @@ class MLLinksSelector: Selector() {
             tmdbcol -> tmdbMemoMap
             imdbcol -> imdbMemoMap
             else -> {
-                logger.logAndKill("MLLinksSelector.whichMemoMap: no matching getFromColumn")
+                logger.logAndKill("MLLinksSelector.whichMemoMap: " +
+                        "no matching getFromColumn")
                 HashMap()   // NOTE: This isn't ever returned, logger kills the program
             }
         }
     }
 
-    private fun selectValFromSpecificCol(selectCol: String, selectVal: Int, from: String): Int {
+    private fun selectValFromSpecificCol(selectCol: String, selectVal: Int,
+                                         from: String): Int {
         val dbsql = DBSelector()
                 .column(from)
                 .from(Finals.ML_LINK_TABLE)
                 .where("$selectCol = $selectVal")
-        val res = this.generalSelection(dbsql.sql())    // This should produce a single result, ONLY!
+        // This should produce a single result, ONLY!
+        val res = this.generalSelection(dbsql.sql())
 
         if(res.isEmpty()) {
             logger.warn("Unable to locate $from for $selectCol value of $selectVal")

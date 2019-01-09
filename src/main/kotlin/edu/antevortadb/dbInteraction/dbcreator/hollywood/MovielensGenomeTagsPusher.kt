@@ -14,7 +14,8 @@ import java.sql.SQLException
 @Suppress("unused")
 class MovielensGenomeTagsPusher: CSVPusher {
     constructor(): super()
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
     : super(dbPath, columnNames, tableName, records)
 
     override fun parseAndPushDataToDB(){
@@ -31,7 +32,8 @@ class MovielensGenomeTagsPusher: CSVPusher {
 
                 // If tagID returns null it's a broken record or header, just skip it
                 val tagID = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val tagName = this.csvRecords[i][1].trim().replace("'", ".").replace("\"", ".")
+                val tagName =
+                        this.csvRecords[i][1].trim().replace("'", ".").replace("\"", ".")
 
                 ps.setInt(key++, tagID)
                 ps.setString(key, tagName)

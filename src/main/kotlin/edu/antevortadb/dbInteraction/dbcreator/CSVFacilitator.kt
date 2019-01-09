@@ -12,7 +12,8 @@ import org.apache.commons.csv.CSVRecord
 import java.io.File
 import java.io.FileReader
 
-@Suppress("ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate", "HasPlatformType")
+@Suppress("ConvertSecondaryConstructorToPrimary", "MemberVisibilityCanBePrivate",
+        "HasPlatformType")
 abstract class CSVFacilitator: Facilitator {
     protected var parseFormat = CSVFormat.DEFAULT!!.withQuote(null)
     protected var parser: CSVParser? = null
@@ -25,8 +26,9 @@ abstract class CSVFacilitator: Facilitator {
     override fun pushDataIntoDBs() {
         if(shouldFunctionReturnEarly()) return
 
-        // For each CSV file, need to read each line of the file, turn it into a record, and give
-        // the records to the CSV pushers to parse them and push them into the DBs
+        // For each CSV file, need to read each line of the file, turn it into a record,
+        // and give the records to the CSV pushers to parse them and push them into
+        // the DBs
         for(csv in this.dataAbsolutePaths){
             val totalLinesInFile = printFileInformationReturnTotalLinesInFile(csv)
             // NOTE: The below code is replaced by the function call above, remove the
@@ -71,20 +73,21 @@ abstract class CSVFacilitator: Facilitator {
                             recordsList.add(ArrayList())
                     }
                 }
-                // There could be leftover csv records that don't get pushed due to not meeting the
-                // dbDumpLimit amount of lines. Start up the workers again and push the remaining
-                // lines
+                // There could be leftover csv records that don't get pushed due to not
+                // meeting the dbDumpLimit amount of lines. Start up the workers again and
+                // push the remaining lines
                 logger.info("Launching final CSV push for ${f.name}")
                 totalLinesRead += lineReadCounter
-                logger.info("Total lines read ${numberFormat.format(totalLinesRead)} for ${f.name}")
+                logger.info("Total lines read " +
+                        "${numberFormat.format(totalLinesRead)} for ${f.name}")
                 letWorkersFly(recordsList)
             }
             catch(e: Exception){
                 logger.logAndKill(e)
             }
         }
-        // Create the indices on all shards. This happens on table creation and after batch inserts
-        // for new data
+        // Create the indices on all shards. This happens on table creation and after
+        // batch inserts for new data
         createIndices()
     }
 

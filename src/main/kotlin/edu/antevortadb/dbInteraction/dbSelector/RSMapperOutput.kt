@@ -30,21 +30,24 @@ object RSMapperOutput{
                 var outmap = when {
                     dataTypes[i] == "BOOL" -> mapper.getBoolean(columnNames[i]).toString()
                     dataTypes[i] == "INT" -> mapper.getLong(columnNames[i]).toString()
-                    dataTypes[i] == "JSON" -> JSONObject(mapper.getString(columnNames[i])).toString()
+                    dataTypes[i] == "JSON" -> JSONObject(
+                            mapper.getString(columnNames[i])
+                    ).toString()
                     dataTypes[i] == "REAL" -> mapper.getDouble(columnNames[i]).toString()
                     else -> mapper.getString(columnNames[i])
                 }
-                if(Finals.CREATED_DT == columnNames[i] || Finals.SCRAPED_DT == columnNames[i])
+                if(Finals.CREATED_DT == columnNames[i] ||
+                        Finals.SCRAPED_DT == columnNames[i])
                     outmap = TimeUtils.utcSecondsToZDT(outmap)
                 out.writef("%-20s: %s\n", columnNames[i], outmap)
             }
-            println("\n-----------------------------------------------------------------------------------\n")
+            println("\n---------------------------------------------------------------\n")
         }
     }
 
     @Suppress("SENSELESS_COMPARISON")
-    fun rsMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>, csvFilePath: String,
-                       shuffleSeedOrNegOne: Long) {
+    fun rsMappersToCSV(mappers: List<RSMapper>?, columnNames: List<String>,
+                       csvFilePath: String, shuffleSeedOrNegOne: Long) {
         if(mappers == null || mappers.isEmpty()){
             println("**----- NO RESULTS -----**")
             return
@@ -74,7 +77,9 @@ object RSMapperOutput{
                 sb.append(result)
                 sb.append(",")
             }
-            sb.append(mapper.getString(columnNames[columnNames.size - 1]).replace(',','\''))
+            sb.append(mapper.getString(
+                    columnNames[columnNames.size - 1]).replace(',','\'')
+            )
             sb.append("\n")
         }
         FileUtils.get().writeNewFile(csvFilePath, sb.toString())

@@ -9,7 +9,8 @@ import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
 
 /**
- * This class implements CSV specific code for parsing and pushing the data into a newly created DB
+ * This class implements CSV specific code for parsing and pushing the data into a newly
+ * created DB
  */
 @Suppress("unused", "HasPlatformType")
 abstract class CSVPusher: DataPusher {
@@ -28,7 +29,8 @@ abstract class CSVPusher: DataPusher {
         this.csvRecords = ArrayList()
     }
 
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
             :super(dbPath, columnNames, tableName)
     {
         this.csvRecords = records

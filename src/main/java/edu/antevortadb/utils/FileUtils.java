@@ -155,8 +155,8 @@ public class FileUtils{
     }
 
     /**
-     * Returns a list of absolute file paths to files in a directory that start with the supplied
-     * prefix
+     * Returns a list of absolute file paths to files in a directory that start with the
+     * supplied prefix
      * @param prefix The prefix string that a file should match with
      * @param path The path to the directory containing the files
      * @return The list of absolute paths, null if nothing matching in the directory
@@ -285,7 +285,8 @@ public class FileUtils{
         try{
             FileInputStream fin = new FileInputStream(filePath);
             BufferedInputStream bis = new BufferedInputStream(fin);
-            CompressorInputStream cis = new CompressorStreamFactory().createCompressorInputStream(bis);
+            CompressorInputStream cis = new CompressorStreamFactory()
+                    .createCompressorInputStream(bis);
             br = new BufferedReader(new InputStreamReader(cis));
 
         }
@@ -297,6 +298,7 @@ public class FileUtils{
     }
 
     public BufferedReader getBufferedReaderForZipFile(String filePath){
-        throw new RuntimeException("Currently no support for archiving formats, only compressors");
+        throw new RuntimeException("Currently no support for archiving formats, " +
+                "only compressors");
     }
 }

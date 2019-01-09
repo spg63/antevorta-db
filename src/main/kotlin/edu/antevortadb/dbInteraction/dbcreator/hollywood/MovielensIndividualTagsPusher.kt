@@ -21,7 +21,8 @@ class MovielensIndividualTagsPusher: CSVPusher {
     private val tagIDSelector = MLGenomeTagsSelector()
 
     constructor(): super()
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
     :super(dbPath, columnNames, tableName, records)
 
     override fun parseAndPushDataToDB() {
@@ -41,16 +42,19 @@ class MovielensIndividualTagsPusher: CSVPusher {
                 val imdbTmdbIds = linksSelector.getIMDBandTMDBFromMovielensMovieID(mlmid)
                 val imdbid = imdbTmdbIds.first
                 val tmdbid = imdbTmdbIds.second
-                val tagtext = this.csvRecords[i][2].trim().replace("'", "").replace("\"", "")
+                val tagtext =
+                        this.csvRecords[i][2].trim().replace("'", "").replace("\"", "")
 
                 // Get the tagid from the genome_tags table
                 val tagid = tagIDSelector.getTagIDFromTagText(tagtext)
 
                 val sqltime = this.csvRecords[i][3]
-                // Convert the sql time-string to LDT object, then convert LDT to UTC seconds.
-                // Could be more efficient but the code already exists to do it this way so this is
-                // how it's done
-                val time = TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime(sqltime))
+                // Convert the sql time-string to LDT object, then convert LDT to UTC
+                // seconds. Could be more efficient but the code already exists to do it
+                // this way so this is how it's done
+                val time = TimeUtils.LDTtoUTCSeconds(
+                        TimeUtils.SQLDateTimeToJavaDateTime(sqltime)
+                )
 
                 ps.setInt(key++, tmdbid)
                 ps.setInt(key++, imdbid)

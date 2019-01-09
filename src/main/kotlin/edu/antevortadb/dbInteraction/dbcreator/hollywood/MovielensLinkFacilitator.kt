@@ -14,7 +14,8 @@ import edu.antevortadb.dbInteraction.dbcreator.CSVPusher
 class MovielensLinkFacilitator: AbstractMoviesFacilitator {
     constructor(): super()
 
-    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensLinkAbsolutePath())
+    override fun getDataFileAbsolutePaths() =
+            listOf(RawDataLocator.movielensLinkAbsolutePath())
     override fun getDataKeysOfInterest()    = MovielensLink.csvKeys()
     override fun getColumnNames()           = MovielensLink.columnNames()
     override fun getDataTypes()             = MovielensLink.dataTypes()

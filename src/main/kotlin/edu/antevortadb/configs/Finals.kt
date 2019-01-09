@@ -13,17 +13,18 @@ import java.lang.RuntimeException
 
 /**
  * Finals is a class to hold variables related to program state. Items like the database
- * driver being used, if testing mode is enabled, database batch size limits, number of database
- * shards, etc...
+ * driver being used, if testing mode is enabled, database batch size limits, number of
+ * database shards, etc...
  */
 object Finals{
-    /* ---------- Program control --------------------------------------------------------------- */
+    /* ---------- Program control ----------------------------------------------------- */
     // user.name of the current user running this software
     val SYSTEM_USER = initUser()
     // True if windows, else false
     val IS_WINDOWS = System.getProperty("os.name").contains("win")
                      || System.getProperty("os.name").contains("Win")
-    // True when working locally on MBP, false when working on full dataset, changes data & db paths
+    // True when working locally on MBP, false when working on full dataset, changes data
+    // & db paths
     val TESTING_MODE = !isResearchMachine()
     // Drops the DBs if they exist and reads in the data again
     const val START_FRESH = false
@@ -31,16 +32,20 @@ object Finals{
     const val ADD_NEW_DATA = false
 
 
-    /* ---------- Database control -------------------------------------------------------------- */
+    /* ---------- Database control ---------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"
     const val DB_URL_PREFIX = "jdbc:sqlite:"
     const val DB_TYPE_EXT = ".sqlite3"
     var enableForeignKeys = false
-    // Larger batch size performs better on research machine with individual HDDs for each DB shard
+    // Larger batch size performs better on research machine with individual HDDs for each
+    // DB shard
     private const val RESEARCH_BATCH_SIZE = 10000
     // Performs better on single laptop SSD
     private const val LAPTOP_BATCH_SIZE = 1000
-    val DB_BATCH_LIMIT = if(isResearchMachine()) RESEARCH_BATCH_SIZE else LAPTOP_BATCH_SIZE
+    val DB_BATCH_LIMIT = if(isResearchMachine())
+                            RESEARCH_BATCH_SIZE
+                         else
+                            LAPTOP_BATCH_SIZE
     // Turns off sqlite synchronous mode, faster batch insertions
     const val SYNC_MODE_OFF = true
     // There are 6 available HDDs for data storage on research machine, use all of them
@@ -58,7 +63,7 @@ object Finals{
     const val TMDB_MOVIES_TABLE             = "movies"
 
 
-    /* ---------- Server control ---------------------------------------------------------------- */
+    /* ---------- Server control ------------------------------------------------------ */
     const val SERVER_SOCKET = 3383
     // NOTE: These columns are common to most DB types and are named here for
     // consistency across insertions
@@ -134,6 +139,6 @@ object Finals{
         return false
     }
 
-    /* ---------- Random constants ---------------------------------------------------------------*/
+    /* ---------- Random constants -----------------------------------------------------*/
     const val NOTAGLINE = "NO TAGLINE"
 }

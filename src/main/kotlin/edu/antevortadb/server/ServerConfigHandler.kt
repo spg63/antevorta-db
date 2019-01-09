@@ -42,8 +42,8 @@ class ServerConfigHandler {
     }
 
     /**
-     * Users are stored in the config file with a preceeding USR* so look for USR* + "username" in
-     * the configFileMap
+     * Users are stored in the config file with a preceeding USR* so look for USR* +
+     * "username" in the configFileMap
      */
     fun isUserAuthorized(username: String, userpass: String): Boolean{
         val usersArray = this.jsonObject.getJSONArray(USER_ARR)
@@ -134,8 +134,8 @@ class ServerConfigHandler {
         // If it doesn't exist yet we can't remove a user
         if(!configExists()) return false
 
-        // No great way to do this, loop through the users, add to new array, skipping the one
-        // we want to remove
+        // No great way to do this, loop through the users, add to new array, skipping
+        // the one we want to remove
         val usersArray = this.jsonObject.getJSONArray(USER_ARR)
         for(i in 0 until usersArray.length()){
             val user = usersArray.getJSONObject(i)

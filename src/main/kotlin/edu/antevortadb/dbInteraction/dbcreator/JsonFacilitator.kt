@@ -20,13 +20,13 @@ abstract class JsonFacilitator: Facilitator {
     protected abstract fun populateJsonWorkers(): List<JsonPusher>
 
     override fun pushDataIntoDBs() {
-        // Check if START_FRESH or ADD_NEW_DATA is set to true, if so continue, else return. Also
-        // check if the proper data paths have been set, if not, set them.
+        // Check if START_FRESH or ADD_NEW_DATA is set to true, if so continue, else
+        // return. Also check if the proper data paths have been set, if not, set them.
         if(shouldFunctionReturnEarly()) return
 
-        // For each json file, read it line by line, while reading start processing the data
-        // Each iteration of the below while loop adds a line to a new worker thread to evenly share
-        // the data across all DB shards
+        // For each json file, read it line by line, while reading start processing the
+        // data Each iteration of the below while loop adds a line to a new worker thread
+        // to evenly share the data across all DB shards
         for(json in this.dataAbsolutePaths){
             val totalLinesInFile = printFileInformationReturnTotalLinesInFile(json)
 
@@ -48,12 +48,14 @@ abstract class JsonFacilitator: Facilitator {
                     ++lineReadCounter
                     linesList[whichWorker].add(line)
 
-                    // Increment the worker number so we're evenly distributing lines to the workers
+                    // Increment the worker number so we're evenly distributing lines to
+                    // the workers
                     ++whichWorker
                     if(whichWorker >= Finals.DB_SHARD_NUM)
                         whichWorker = 0
 
-                    // Limit before dumping data to the DB, start the threads and perform the dump
+                    // Limit before dumping data to the DB, start the threads and perform
+                    // the dump
                     if(lineReadCounter >= dbDumpLimit){
                         letWorkersFly(linesList)
 
@@ -76,12 +78,13 @@ abstract class JsonFacilitator: Facilitator {
                     line = br.readLine()
                 }
 
-                // There could be leftover json lines that don't get pushed due to not meeting the
-                // dbDumpLimit amount of lines. Start up the workers again and push the remaining
-                // lines
+                // There could be leftover json lines that don't get pushed due to not
+                // meeting the dbDumpLimit amount of lines. Start up the workers again and
+                // push the remaining lines
                 logger.info("Launching final JSON push for ${f.name}")
                 totalLinesRead += lineReadCounter
-                logger.info("Total lines read ${numberFormat.format(totalLinesRead)} for ${f.name}")
+                logger.info("Total lines read " +
+                        "${numberFormat.format(totalLinesRead)} for ${f.name}")
                 letWorkersFly(linesList)
             }
             catch(e: IOException){
@@ -99,8 +102,8 @@ abstract class JsonFacilitator: Facilitator {
             }
         }
 
-        // Create the indices on all shards. This happens on table creation and after batch inserts
-        // for new data
+        // Create the indices on all shards. This happens on table creation and after
+        // batch inserts for new data
         createIndices()
     }
 

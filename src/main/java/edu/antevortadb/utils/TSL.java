@@ -17,8 +17,9 @@ import java.util.concurrent.BlockingQueue;
  */
 @SuppressWarnings({"unused", "WeakerAccess", "SpellCheckingInspection"})
 public class TSL extends Thread{
-    // NOTE: Using an enum here would be ideal, but enums in java don't appear to correspond to int values
-    // which means they can't be added to strings. So, without wasting an hour figuring out the "right" way to
+    // NOTE: Using an enum here would be ideal, but enums in java don't appear to
+    // correspond to int values which means they can't be added to strings. So, without
+    // wasting an hour figuring out the "right" way to
     // do this, I'm just going to define some ints.
     private static final Integer INFO       = 0;
     private static final Integer WARN       = 1;
@@ -138,7 +139,7 @@ public class TSL extends Thread{
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException("ThreadSafeLogger.info() -- Unexpected interruption");
+            throw new RuntimeException("ThreadSafeLogger.info, Unexpected interruption");
         }
     }
 
@@ -154,7 +155,7 @@ public class TSL extends Thread{
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException("ThreadSafeLogger.warn() -- Unexpected interruption");
+            throw new RuntimeException("ThreadSafeLogger.warn, Unexpected interruption");
         }
     }
 
@@ -170,7 +171,7 @@ public class TSL extends Thread{
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException("ThreadSafeLogger.err() -- Unexpected interruption");
+            throw new RuntimeException("ThreadSafeLogger.err, Unexpected interruption");
         }
     }
 
@@ -182,7 +183,7 @@ public class TSL extends Thread{
         }
         catch(InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException(("ThreadSafeLogger.exception() -- Unexpected interruption"));
+            throw new RuntimeException("TSL.exception Unexpected interruption");
         }
     }
 
@@ -205,19 +206,18 @@ public class TSL extends Thread{
         shuttingDown = true;
         try {
             itemsToLog.put(SHUTDOWN_REQ);
-            // Force a pause of the main thread to give the logger thread a change to write all data to the
-            // file system
+            // Force a pause of the main thread to give the logger thread a change to
+            // write all data to the file system
             Thread.sleep(1000);
         }
         catch(InterruptedException e){
-            throw new RuntimeException("ThreadSafeLogger.shutDown() -- Unexpected interruption");
+            throw new RuntimeException("TSL.shutDown Unexpected interruption");
         }
     }
 
     /**
-     * Shutdown the logger, sleep for half a second to allow the logger to finish flushing to disk then kill
-     * the program
-     * with exit code 6
+     * Shutdown the logger, sleep for half a second to allow the logger to finish flushing
+     * to disk then kill the program with exit code 6
      */
     public void logAndKill(){
         shuttingDown = true;
@@ -232,7 +232,8 @@ public class TSL extends Thread{
     }
 
     /**
-     * Shutdown the logger, adding a final log message onto the queue before killing the program
+     * Shutdown the logger, adding a final log message onto the queue before killing the
+     *  program
      * @param log_message The message ot be logged before shutdown
      */
     public void logAndKill(String log_message){

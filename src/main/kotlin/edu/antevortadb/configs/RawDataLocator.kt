@@ -8,11 +8,11 @@ package edu.antevortadb.configs
 import edu.antevortadb.utils.FileUtils
 
 /**
- * Intended to locate the json files for database builds. The location of these files can and
- * will be different depending on which machine this code is running on. The idea here is to
- * abstract that away from the end user and library classes. Function calls here will return the
- * proper path based on which machine the code is running on and whether or not testing mode has
- * been enabled.
+ * Intended to locate the json files for database builds. The location of these files can
+ * and will be different depending on which machine this code is running on. The idea here
+ * is to abstract that away from the end user and library classes. Function calls here
+ * will return the proper path based on which machine the code is running on and whether
+ * or not testing mode has been enabled.
  */
 object RawDataLocator{
     private val futils = FileUtils.get()
@@ -48,8 +48,8 @@ object RawDataLocator{
     }
 
     /**
-     * Get a list of all raw json files for reddit submission data. This path changes depending
-     * on which machine the code is running on.
+     * Get a list of all raw json files for reddit submission data. This path changes
+     * depending on which machine the code is running on.
      * @return List of all reddit submission files if available, otherwise null
      */
     fun redditJsonSubmissionAbsolutePaths(): List<String> {
@@ -61,8 +61,8 @@ object RawDataLocator{
     }
 
     /**
-     * Get a list of all raw json files for reddit comment data. This path changes depending on
-     * which machine the code is running on.
+     * Get a list of all raw json files for reddit comment data. This path changes
+     * depending on which machine the code is running on.
      * @return List of all reddit comment files if available, otherwise null
      */
     fun redditJsonCommentAbsolutePaths(): List<String> {
@@ -166,17 +166,18 @@ object RawDataLocator{
         }
     }
 
-    /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs ------------- */
+    /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs --- */
     /**
-     * Some data is added once without update, however the function to gather new data still
-     * needs to be implemented. The below function exists as a fake-out for that limitation
-     * in class structure
+     * Some data is added once without update, however the function to gather new data
+     * still needs to be implemented. The below function exists as a fake-out for that
+     * limitation in class structure
      */
     fun getEmptyArrayList() = ArrayList<String>()
 
     /**
-     * Get a list of all raw json files for reddit submission data that needs to be added to
-     * an existing database. This path changes depending on while machine the code is running on.
+     * Get a list of all raw json files for reddit submission data that needs to be added
+     * to an existing database. This path changes depending on while machine the code is
+     * running on.
      * @return List of all reddit submission files for NEW json data, otherwise null
      */
     fun redditJsonSubmissionAbsolutePathsNewData(): List<String> {
@@ -186,8 +187,9 @@ object RawDataLocator{
     }
 
     /**
-     * Get a list of all raw json files for reddit comment data that needs to be added to an
-     * existing database. This path changes depending on while machine the code is running on.
+     * Get a list of all raw json files for reddit comment data that needs to be added to
+     * an existing database. This path changes depending on while machine the code is
+     * running on.
      * @return List of all reddit comment files for NEW json data, otherwise null
      */
     fun redditJsonCommentAbsolutePathsNewData(): List<String> {

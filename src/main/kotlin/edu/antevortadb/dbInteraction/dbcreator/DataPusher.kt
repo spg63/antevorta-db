@@ -52,15 +52,15 @@ abstract class DataPusher: Runnable {
         return sb.toString()
     }
 
-    // DB specific parsing and pushing of data. This will be implemented in the most derived classes
-    // and will be specific to json or csv or other type of data. The function is specific to the
-    // data being read and the data being written to the DB
+    // DB specific parsing and pushing of data. This will be implemented in the most
+    // derived classes and will be specific to json or csv or other type of data. The
+    // function is specific to the data being read and the data being written to the DB
     protected abstract fun parseAndPushDataToDB()
 
     /*
-     *  The below two functions centralize error handling when pushing data into the DB. These
-     *  error blocks can be long and theres no reason to repeat them over all of the different
-     *  derived classes. Do it here.
+     *  The below two functions centralize error handling when pushing data into the DB.
+     *  These error blocks can be long and theres no reason to repeat them over all of the
+     *  different derived classes. Do it here.
      */
     protected fun pusherCatchBlock(e: SQLException?, conn: Connection?){
         logger.exception(e)

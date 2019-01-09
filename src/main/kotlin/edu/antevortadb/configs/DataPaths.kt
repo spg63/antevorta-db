@@ -11,14 +11,14 @@ import java.io.File
 
 @Suppress("RemoveCurlyBracesFromTemplate")
 /**
- * The different paths to the DB, Json, and CSV data depending on which machine is running the
- * code and whether or not testing_mode has been enabled
+ * The different paths to the DB, Json, and CSV data depending on which machine is running
+ * the code and whether or not testing_mode has been enabled
  */
 object DataPaths{
     val SEP: String                 = File.separator
     var CPUTESTINGMODE              = false
 
-    /* ---------- The path to the local data folders -------------------------------------------- */
+    /* ---------- The path to the local data folders ---------------------------------- */
     val LOCAL_DATA_ROOT = when(Finals.IS_WINDOWS) {
         // The SB2 running windows
         true -> "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
@@ -26,7 +26,8 @@ object DataPaths{
         false -> "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
     }
 
-    /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with limited data are LOCAL) - */
+    /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with
+    limited data are LOCAL) ----------------------------------------------------------- */
     val LOCAL_PATH                  = "${LOCAL_DATA_ROOT}LocalData${SEP}raw${SEP}"
     val LOCAL_REDDIT_SUB_DATA       = "${LOCAL_PATH}submissions${SEP}"
     val LOCAL_REDDIT_COM_DATA       = "${LOCAL_PATH}comments${SEP}"
@@ -43,7 +44,7 @@ object DataPaths{
     val LOCAL_NEW_REDDIT_SUB_DATA   = "${LOCAL_PATH}new${SEP}submissions${SEP}"
     val LOCAL_NEW_REDDIT_COM_DATA   = "${LOCAL_PATH}new${SEP}comments${SEP}"
 
-    /* ---------- File paths when running on the research machine ------------------------------- */
+    /* ---------- File paths when running on the research machine --------------------- */
     val RESEARCH_ARRAY_DATA_ROOT    = "${SEP}mnt${SEP}vault${SEP}Data${SEP}"
     val RESEARCH_RAW_DATA_ROOT      = "${RESEARCH_ARRAY_DATA_ROOT}Uncompressed${SEP}"
 
@@ -67,13 +68,13 @@ object DataPaths{
     val NEW_REDDIT_SUB_DATA_PATH    = "${REDDIT_DATA_ROOT}New${SEP}Submissions${SEP}"
     val NEW_REDDIT_COM_DATA_PATH    = "${REDDIT_DATA_ROOT}New${SEP}Comments${SEP}"
 
-    /* ---------- Path to TESTING_MODE db files ------------------------------------------------- */
+    /* ---------- Path to TESTING_MODE db files --------------------------------------- */
     val LOCAL_DB_PATH               = "${LOCAL_DATA_ROOT}LocalDB${SEP}"
     val LOCAL_REDDIT_SUB_DB_PATH    = "${LOCAL_DB_PATH}RedditSubs${SEP}"
     val LOCAL_REDDIT_COM_DB_PATH    = "${LOCAL_DB_PATH}RedditComs${SEP}"
     val LOCAL_HOLLYWOOD_DB_PATH     = "${LOCAL_DB_PATH}Hollywood${SEP}"
 
-    /* ---------- Pieces of information to build DB paths on research machine ------------------- */
+    /* ---------- Pieces of information to build DB paths on research machine --------- */
     const val REDDIT_SUB_DB         = "RS_DB"
     const val REDDIT_COM_DB         = "RC_DB"
     const val HOLLYWOOD_DB          = "HOLLYWOOD"
@@ -81,7 +82,7 @@ object DataPaths{
     // The DB file extension for sqlite3 files
     const val DBEXT                 = Finals.DB_TYPE_EXT
 
-    /* ---------- Path to the location of the server configuration file ------------------------- */
+    /* ---------- Path to the location of the server configuration file --------------- */
     val LOCAL_SERVER_CONFIG_FILE    = "${LOCAL_DATA_ROOT}serverConfig${SEP}config.json"
     val LOCAL_CLIENT_CONFIG_FILE    = "${LOCAL_DATA_ROOT}clientConfig${SEP}config.json"
     val LOCAL_SERVER_CONFIG_PATH    = "${LOCAL_DATA_ROOT}clientConfig${SEP}"
@@ -91,7 +92,7 @@ object DataPaths{
     val CLIENT_CONFIG_FILE          = "${DOLIUS_CONFIG_PATH}clientConfig${SEP}config.json"
     val SERVER_CONFIG_PATH          = "${DOLIUS_CONFIG_PATH}serverConfig${SEP}"
 
-    /* ---------- Paths to the DeepLearning4Java example data ----------------------------------- */
+    /* ---------- Paths to the DeepLearning4Java example data ------------------------- */
     val LOCAL_DL4J_ROOT             = "${LOCAL_DATA_ROOT}DL4J${SEP}"
     val RESEARCH_DL4J_ROOT          = "${SEP}mnt${SEP}vault${SEP}Data${SEP}DL4J${SEP}"
     val DL4J_CPU_ISSUE_ROOT         =  "data${SEP}DL4J${SEP}"

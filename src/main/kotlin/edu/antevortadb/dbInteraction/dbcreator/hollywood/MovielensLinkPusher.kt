@@ -16,7 +16,8 @@ import java.util.*
 class MovielensLinkPusher: CSVPusher {
     private val rand = Random()
     constructor(): super()
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
     : super(dbPath, columnNames, tableName, records)
 
     override fun parseAndPushDataToDB() {
@@ -33,7 +34,8 @@ class MovielensLinkPusher: CSVPusher {
                 // If any return null it's a broken record or header, just skip it
                 val movieID = this.csvRecords[i][0].trim().toIntOrNull() ?: continue
                 val imdbID = this.csvRecords[i][1].trim().toIntOrNull() ?: continue
-                val tmdbID = this.csvRecords[i][2].trim().toIntOrNull() ?: rand.nextInt() * -1
+                val tmdbID =
+                        this.csvRecords[i][2].trim().toIntOrNull() ?: rand.nextInt() * -1
 
                 // The "?:" operator says, "if this value is null, insert -1 instead"
                 ps.setInt(key++, tmdbID)

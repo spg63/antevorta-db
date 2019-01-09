@@ -16,7 +16,8 @@ class TMDBCreditsFacilitator: AbstractMoviesFacilitator {
     // Reset the format for this dataset due to commas within the json data
     constructor(): super() { this.parseFormat = CSVFormat.DEFAULT }
 
-    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.tmdbCreditsCSVAbsolutePath())
+    override fun getDataFileAbsolutePaths() =
+            listOf(RawDataLocator.tmdbCreditsCSVAbsolutePath())
     override fun getDataKeysOfInterest()    = TMDBCredits.csvKeys()
     override fun getColumnNames()           = TMDBCredits.columnNames()
     override fun getDataTypes()             = TMDBCredits.dataTypes()

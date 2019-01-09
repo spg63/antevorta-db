@@ -20,7 +20,9 @@ class MLIndividualRatingsSelector: Selector() {
 
         val workers = ArrayList<SelectionWorker>()
         for(i in 0 until dbs.size)
-            workers.add(SelectionWorker(dbs[i], SQLStatement, MLIndividualRatingsSetMapper()))
+            workers.add(SelectionWorker(
+                    dbs[i], SQLStatement, MLIndividualRatingsSetMapper())
+            )
         return genericSelect(workers, SQLStatement)
     }
 

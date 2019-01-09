@@ -36,7 +36,8 @@ class MLMoviesSelector: Selector() {
         if(res.isEmpty())
             return Pair(JSONObject(), String())
 
-        return Pair(JSONObject(res[0].getString("genres")), res[0].getString("movielens_title"))
+        return Pair(JSONObject(res[0].getString("genres")),
+                res[0].getString("movielens_title"))
     }
 
     fun getGenresFromTMDBMovieID(tmdbID: Int): JSONObject {
@@ -49,8 +50,8 @@ class MLMoviesSelector: Selector() {
         if(res.isEmpty())
             return JSONObject()
 
-        // NOTE: If the rsmapper somehow has multiple results for the tmdbID, just return the
-        // first one
+        // NOTE: If the rsmapper somehow has multiple results for the tmdbID, just return
+        // the first one
 
         return JSONObject(res[0].getString("genres"))
     }

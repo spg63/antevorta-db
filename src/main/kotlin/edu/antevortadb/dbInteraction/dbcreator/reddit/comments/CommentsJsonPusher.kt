@@ -13,7 +13,8 @@ import java.sql.SQLException
 @Suppress("unused")
 class CommentsJsonPusher : JsonPusher {
     constructor(): super()
-    constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>, tableName: String)
+    constructor(dbPath: String, jsonLines: List<String>, columnNames: List<String>,
+                tableName: String)
     : super(dbPath, jsonLines, columnNames, tableName)
 
     override fun parseAndPushDataToDB() {
@@ -32,7 +33,8 @@ class CommentsJsonPusher : JsonPusher {
                 ps.setString(key, author); ++key
 
                 // column = author_flair_text
-                val authorFlairText = this.jsonObjects[i].optString("author_flair_text", "null")
+                val authorFlairText = this.jsonObjects[i]
+                        .optString("author_flair_text", "null")
                 ps.setString(key, authorFlairText); ++key
 
                 // column = body
@@ -40,7 +42,8 @@ class CommentsJsonPusher : JsonPusher {
                 ps.setString(key, body); ++key
 
                 // column = can_gild
-                val canGild = if (this.jsonObjects[i].optBoolean("can_gild", false)) 1 else 0
+                val canGild = if (this.jsonObjects[i]
+                                .optBoolean("can_gild", false)) 1 else 0
                 ps.setInt(key, canGild); ++key
 
                 // column = controversial_score
@@ -68,7 +71,8 @@ class CommentsJsonPusher : JsonPusher {
                 ps.setString(key, pid); ++key
 
                 // column = is_submitter
-                val submitter = if (this.jsonObjects[i].optBoolean("is_submitter", false)) 1 else 0
+                val submitter = if (this.jsonObjects[i]
+                                .optBoolean("is_submitter", false)) 1 else 0
                 ps.setInt(key, submitter); ++key
 
                 // column = link_id
@@ -92,7 +96,8 @@ class CommentsJsonPusher : JsonPusher {
                 ps.setInt(key, score); ++key
 
                 // column = is_stickied
-                val sticked = if (this.jsonObjects[i].optBoolean("stickied", false)) 1 else 0
+                val sticked = if (this.jsonObjects[i]
+                                .optBoolean("stickied", false)) 1 else 0
                 ps.setInt(key, sticked); ++key
 
                 // column = subreddit_name
@@ -104,7 +109,8 @@ class CommentsJsonPusher : JsonPusher {
                 ps.setString(key, subredditID); ++key
 
                 // column = subreddit_type
-                val subredditType = this.jsonObjects[i].optString("subreddit_type", "null")
+                val subredditType = this.jsonObjects[i]
+                        .optString("subreddit_type", "null")
                 ps.setString(key, subredditType)
 
                 ps.addBatch()

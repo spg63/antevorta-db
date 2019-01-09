@@ -18,7 +18,8 @@ class MovielensIndividualRatingsFacilitator: AbstractMoviesFacilitator {
 
     constructor(): super()
 
-    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensRatingAbsolutePath())
+    override fun getDataFileAbsolutePaths() =
+            listOf(RawDataLocator.movielensRatingAbsolutePath())
     override fun getDataKeysOfInterest()    = MovielensIndividualRatings.csvKeys()
     override fun getColumnNames()           = MovielensIndividualRatings.columnNames()
     override fun getDataTypes()             = MovielensIndividualRatings.dataTypes()

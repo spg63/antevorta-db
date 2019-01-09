@@ -19,15 +19,15 @@ import java.net.Socket
 import java.nio.charset.StandardCharsets
 
 /**
- * Note: This server is intentionally capped at 5 threads. Access to the DB (and data processing)
- * is already threaded as much as it reasonably should be. Any threading here will introduce
- * additional latency however the convenience to make multiple requests at the same time out-weighs
- * the downsides. This also allows for a minimal number of users access to the resources
- * concurrently.
+ * Note: This server is intentionally capped at 5 threads. Access to the DB (and data
+ * processing) is already threaded as much as it reasonably should be. Any threading here
+ * will introduce additional latency however the convenience to make multiple requests at
+ * the same time out-weighs the downsides. This also allows for a minimal number of
+ * users access to the resources concurrently.
  */
 
-// NOTE: These two vars are the kotlin version of static class vars, available to all instances
-// of the class
+// NOTE: These two vars are the kotlin version of static class vars, available to all
+// instances of the class
 var currentThreads = 0
 const val MAX_THREADS = 5
 
@@ -40,9 +40,11 @@ class Dolius(private val socket: Socket): Runnable {
     private var sanitizeFail = false
     private var authFail = false
     private val noopFlag = "=*="
-    private val busyStr = "${noopFlag}Server was busy, unable to process request. Please try again later."
+    private val busyStr =
+        "${noopFlag}Server was busy, unable to process request. Please try again later."
     private val rejectionStr = "${noopFlag}Server will not perform that kind of work."
-    private val authStr = "${noopFlag}Server could not authenticate user, please check credentials."
+    private val authStr =
+            "${noopFlag}Server could not authenticate user, please check credentials."
     private val sleepTimeMS: Long = 2000
     private val USER = "USER"
     private val PASS = "PASS"
@@ -66,9 +68,9 @@ class Dolius(private val socket: Socket): Runnable {
     }
 
     /**
-     * Read the data from the socket, process the data to determine function call, call the
-     * function, parse the RSMapper into a list of JSON objects, push the JSON objects back to the
-     * client and close the connection
+     * Read the data from the socket, process the data to determine function call, call
+     * the function, parse the RSMapper into a list of JSON objects, push the JSON
+     * objects back to the client and close the connection
      */
     override fun run() {
         // Get the data from the socket
@@ -103,7 +105,8 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        // Get username and userpass from the json object, try authentication if user and pass exist
+        // Get username and userpass from the json object, try authentication if user and
+        // pass exist
         val user: String
         val pass: String
         if(jsonObject.has(USER) && jsonObject.has(PASS)) {
@@ -165,7 +168,7 @@ class Dolius(private val socket: Socket): Runnable {
 
 
 
-// -------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------
 
 
     /**
@@ -198,8 +201,9 @@ class Dolius(private val socket: Socket): Runnable {
 
     /**
      * Authenticate a user
-     * NOTE: This is not designed to be some super secure system, it's just a basic attempt to
-     * prevent DOS attacks from people who may have found host / port in github commits
+     * NOTE: This is not designed to be some super secure system, it's just a basic
+     * attempt to prevent DOS attacks from people who may have found host / port in
+     * github commits
      */
     private fun authenticateUser(username: String, userpass: String){
         authFail = !this.configHandler.isUserAuthorized(username, userpass)
@@ -213,7 +217,8 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun writeMessageToClient(message: String){
         try {
-            val clientWriter = OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)
+            val clientWriter = OutputStreamWriter(socket.getOutputStream(),
+                    StandardCharsets.UTF_8)
             clientWriter.write(message)
             clientWriter.close()
         }
@@ -246,7 +251,8 @@ class Dolius(private val socket: Socket): Runnable {
     }
 
     /**
-     * Tells the client the server didn't want to perform work, for any reason other than being busy
+     * Tells the client the server didn't want to perform work, for any reason other
+     * than being busy
      */
     private fun handleRejection(inpurString: String){
         logger.warn("Dolius: handleRejection -- $inpurString")
@@ -290,18 +296,19 @@ fun runServerInTryCatch(){
             // The server crashed but the currentThreads variable wasn't decremented,
             // decrement it now
             --currentThreads
-            TSL.get().err("Dolius was hit in the face by an uncaught exception. Dolius has now " +
-                    "been restarted $restartCount times.")
+            TSL.get().err("Dolius was hit in the face by an uncaught exception. " +
+                    "Dolius has now been restarted $restartCount times.")
             if(!sock.isClosed) sock.close()
-            // Just re-call this function to restart the server if some un-caught exception is throw
+            // Just re-call this function to restart the server if some un-caught
+            // exception is throw
             runServerInTryCatch()
         }
     }
 }
 
 fun main(args: Array<String>){
-    // This function just runs the server in a while(true) continuous loop. If an exception is
-    // thrown the function is simply re-called to restart the server. Not a long term solution but
-    // it'll do for now.
+    // This function just runs the server in a while(true) continuous loop. If an
+    // exception is thrown the function is simply re-called to restart the server. Not
+    // a long term solution but it'll do for now.
     runServerInTryCatch()
 }

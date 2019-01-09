@@ -18,7 +18,8 @@ class MovielensIndividualRatingsPusher: CSVPusher {
     private val linksSelector = MLLinksSelector()
 
     constructor(): super()
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
     : super(dbPath, columnNames, tableName, records)
 
     override fun parseAndPushDataToDB() {

@@ -27,7 +27,8 @@ class TMDBMoviesPusher: CSVPusher {
     private val numberOfPerformanceClasses = 5
 
     constructor(): super()
-    constructor(dbPath: String, columnNames: List<String>, tableName: String, records: List<CSVRecord>)
+    constructor(dbPath: String, columnNames: List<String>, tableName: String,
+                records: List<CSVRecord>)
     :super(dbPath, columnNames, tableName, records)
 
     override fun parseAndPushDataToDB() {
@@ -43,10 +44,11 @@ class TMDBMoviesPusher: CSVPusher {
                 var key = 1
 
                 val budget = this.csvRecords[i][0].toIntOrNull() ?: continue
-                val tmdbGenres = JSONObject().put("genres", JSONArray(this.csvRecords[i][1].trim()))
+                val tmdbGenres = JSONObject().put(
+                        "genres", JSONArray(this.csvRecords[i][1].trim())
+                )
                 val website = this.csvRecords[i][2].trim()
                 val tmdbMovieID = this.csvRecords[i][3].toIntOrNull() ?: continue
-                //val ml_genres = this.mlMoviesSelector.getGenresFromTMDBMovieID(tmdb_movieid)
 
                 val genresAndMovielensTitle = this.mlMoviesSelector
                         .getGenresAndTitleFromTMDBMovieID(tmdbMovieID)
@@ -58,11 +60,14 @@ class TMDBMoviesPusher: CSVPusher {
                 val imdbMovieid = imdbMlidIds.first
                 val mlMovieid = imdbMlidIds.second
 
-                val tmdbKeywords = JSONObject().put("keywords", JSONArray(this.csvRecords[i][4].trim()))
+                val tmdbKeywords = JSONObject().put(
+                        "keywords", JSONArray(this.csvRecords[i][4].trim())
+                )
                 val origLanguage = this.csvRecords[i][5].trim()
                 val origTitle = this.csvRecords[i][6].trim()
                 val overview = this.csvRecords[i][7].trim()
-                val tmdbPopulatiry = this.csvRecords[i][8].trim().toDoubleOrNull() ?: continue
+                val tmdbPopulatiry =
+                        this.csvRecords[i][8].trim().toDoubleOrNull() ?: continue
 
                 val productionCompanies = JSONObject().put("production_companies",
                         JSONArray(this.csvRecords[i][9].trim()))
@@ -88,18 +93,22 @@ class TMDBMoviesPusher: CSVPusher {
 
                 val tmdbTitle = this.csvRecords[i][17].trim()
 
-                // Selected above (genres_and_movielens_title) to hit the DB once instead of twice
-                //val movielens_title = this.mlMoviesSelector.getTitleFromTMDBMovieID(tmdb_movieid)
+                // Selected above (genres_and_movielens_title) to hit the DB once instead
+                // of twice
 
-                val tmdbVoteAverage = this.csvRecords[i][18].trim().toDoubleOrNull() ?: continue
-                val tmdbVoteCount = this.csvRecords[i][19].trim().toIntOrNull() ?: continue
+                val tmdbVoteAverage =
+                        this.csvRecords[i][18].trim().toDoubleOrNull() ?: continue
+                val tmdbVoteCount =
+                        this.csvRecords[i][19].trim().toIntOrNull() ?: continue
 
                 val mlVotePair = getMLVoteCountAndAverage(tmdbMovieID)
                 val mlVoteCount = mlVotePair.first
                 val mlVoteAverageManyPoints = mlVotePair.second
-                val mlVoteAverage = decimalFormatter.format(mlVoteAverageManyPoints).toDouble()
+                val mlVoteAverage =
+                        decimalFormatter.format(mlVoteAverageManyPoints).toDouble()
 
-                val castAndCrew = this.tmdbCreditsSelector.getCastAndCrewListFromTMDBID(tmdbMovieID)
+                val castAndCrew =
+                        this.tmdbCreditsSelector.getCastAndCrewListFromTMDBID(tmdbMovieID)
                 val cast = castAndCrew.first
                 val crew = castAndCrew.second
 
@@ -109,27 +118,27 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setInt(key++, budget)                    // TMDB Movie budget
                 ps.setObject(key++, tmdbGenres)             // TMDB Genres list
                 ps.setObject(key++, mlGenres)               // Movielens genres list
-                ps.setString(key++, website)                // Website homepage, as per TMDB
+                ps.setString(key++, website)                // Website homepage, per TMDB
                 ps.setObject(key++, tmdbKeywords)           // Keywords, according to TMDB
                 ps.setString(key++, origLanguage)           // Original language
                 ps.setString(key++, origTitle)              // Pre-production title
                 ps.setString(key++, overview)               // Text overview of the movie
-                ps.setDouble(key++, tmdbPopulatiry)         // The popularity of movie, TMDB,
+                ps.setDouble(key++, tmdbPopulatiry)         // The pop. of movie, TMDB,
                                                             // scale unknown
                 ps.setObject(key++, productionCompanies)    // Production companies list
                 ps.setObject(key++, productionCountries)    // Production countries list
-                ps.setLong(key++, releaseDate)              // Date of release, stored in unix time
+                ps.setLong(key++, releaseDate)              // Date of release,  unix time
                 ps.setInt(key++, revenue)                   // Generated revenue
                 ps.setInt(key++, runtime)                   // Runtime in minutes
-                ps.setObject(key++, spokenLanguages)        // Languages spoken in the movie
+                ps.setObject(key++, spokenLanguages)        // Languages spoken in movie
                 ps.setInt(key++, released)                  // 1 if released, else 0
                 ps.setString(key++, tagline)                // Tagline, if it exists
                 ps.setString(key++, tmdbTitle)              // Title, as per TMDB
                 ps.setString(key++, movielensTitle)         // Title, as per movielens
                 ps.setDouble(key++, tmdbVoteAverage)        // Average TMDB movie score
                 ps.setInt(key++, tmdbVoteCount)             // Total votes from TMDB
-                ps.setDouble(key++, mlVoteAverage)          // Average score of the movielens votes
-                ps.setInt(key++, mlVoteCount)               // The total number of ML votes for
+                ps.setDouble(key++, mlVoteAverage)          // Avg. score of lens votes
+                ps.setInt(key++, mlVoteCount)               // Total number ML votes for
                                                             // this movie
                 ps.setObject(key++, cast)                   // The JSON cast from TMDB
                 ps.setObject(key++, crew)                   // The JSON crew from TMDB
@@ -153,7 +162,7 @@ class TMDBMoviesPusher: CSVPusher {
                 ps.setInt(key++, greatSuccess)              // 1 if true, 0 if false
                 ps.setInt(key++, missingData)               // 1 if true, 0 if false
                 ps.setInt(key++, madeBackBudget)            // 1 if true, 0 if false
-                ps.setInt(key, performanceData)             // 0, 1, 2, 3, -1 depending on class
+                ps.setInt(key, performanceData)             // 0, 1, 2, 3, -1
 
                 ps.addBatch()
             }
@@ -169,7 +178,8 @@ class TMDBMoviesPusher: CSVPusher {
     }
 
     private fun determinePerformanceClass(budget: Int, revenue: Int): Int {
-        // Not entirely sure what the deal is here, so we're going to exclude these movies for now
+        // Not entirely sure what the deal is here, so we're going to exclude these movies
+        // for now
         if(budget == 0 && revenue == 0)
             return -1
         /*
@@ -195,21 +205,25 @@ class TMDBMoviesPusher: CSVPusher {
     }
 
     private fun convertDateToUnix(date: String): Long {
-        // Note: The 00:00:00 gets appended because there is no time value, just a day date
-        // associated with this data. The time value keeps consistency with the rest of the DB data
-        return TimeUtils.LDTtoUTCSeconds(TimeUtils.SQLDateTimeToJavaDateTime("$date 00:00:00"))
+        // Note: The 00:00:00 gets appended because there is no time value, just a d
+        // ay date associated with this data. The time value keeps consistency with the
+        // rest of the DB data
+        return TimeUtils.LDTtoUTCSeconds(
+                TimeUtils.SQLDateTimeToJavaDateTime("$date 00:00:00")
+        )
     }
 
     private fun getMLVoteCountAndAverage(tmdb_movieid: Int): Pair<Int, Double> {
-        val mappers = this.mlratingSelector.getMovielensRatingsForTMDBIDAsRSMappers(tmdb_movieid)
+        val mappers = this.mlratingSelector
+                .getMovielensRatingsForTMDBIDAsRSMappers(tmdb_movieid)
         if(mappers.isEmpty())
             return Pair(-1, -1.0)
 
         val totalRatings = mappers.size
 
         var cumulativeRating = 0.0
-        // Remember that the ratings need to be multiplied by 2. TMDB ratings are out of 10,
-        // ML are out of 5
+        // Remember that the ratings need to be multiplied by 2. TMDB ratings are out of
+        // 10, ML are out of 5
         for(mapper in mappers) {
             var theRating = mapper.getDouble("rating")
             theRating *= 2

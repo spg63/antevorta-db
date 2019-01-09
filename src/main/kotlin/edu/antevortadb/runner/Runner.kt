@@ -65,20 +65,13 @@ fun main(args : Array<String>){
 fun hollywoodSelect(){
     val randomShuffleSeed = 55L
     val dataDir = "${RawDataLocator.dl4jDataRoot()}hollywoodTesting/threeClasses/"
-    /*
-    val selectStatement = "select budget, tmdb_popularity, tmdb_title, revenue, " +
-            "tmdb_vote_average, tmdb_vote_count, " +
-            "movielens_vote_average, movielens_vote_count, revenue, failure, mild_success, " +
-            "success, great_success, missing_data, made_more_than_budget, performance_class" +
-            " from movies"
-            */
-    //val selectStatement = "select budget, revenue, made_more_than_budget from movies limit 2500"
-    val selectStatement = "select * from movies where budget > 9 and runtime > 0 and ID > 0"
+    val selectStatement = "select * from movies where budget > 9 and " +
+            "runtime > 0 and ID > 0"
     val results = MovieSelector().generalSelection(selectStatement)
-    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(), "${dataDir}allData.csv",
-            randomShuffleSeed)
-    //RSMapperOutput.printAllColumnsFromRSMappers(results, TMDBMovies.columnsForPrinting(),
-    //        TMDBMovies.dataTypesForPrinting())
+    RSMapperOutput.rsMappersToCSV(results, TMDBMovies.columnNames(),
+            "${dataDir}allData.csv", randomShuffleSeed)
+    //RSMapperOutput.printAllColumnsFromRSMappers(results,
+    //        TMDBMovies.columnsForPrinting(), TMDBMovies.dataTypesForPrinting())
 
 }
 
@@ -86,12 +79,13 @@ fun createHollywoodDB(){
     if(!Finals.START_FRESH)
         return
 
-    // Skip the info logs when creating the hollywood DBs, there are a lot of select statements
+    // Skip the info logs when creating the hollywood DBs, there are a lot of
+    // select statements
 
     // Create the DB, and the first table in the DB (links_table)
     buildDBShards(MovielensLinkFacilitator())
 
-    /* ---------- Now start adding tables to the DB shards ------------------------------------ */
+    /* ---------- Now start adding tables to the DB shards ---------------------------- */
 
     // 2nd table should be the genome_tags table
     addTableToShards(MovielensGenomeTagsFacilitator())
@@ -117,8 +111,8 @@ fun doSubs(){
     //val comGetter = RedditComOrganizer(res[1])
 
     //val coms = comGetter.getAllCommentsFromSubmission()
-    //RSMapperOutput.printAllColumnsFromRSMappers(coms, RedditComs.columnsForPrinting(), RedditComs
-    //        .dataTypesForPrinting())
+    //RSMapperOutput.printAllColumnsFromRSMappers(coms, RedditComs.columnsForPrinting(),
+    //        RedditComs.dataTypesForPrinting())
 
     //return
     //val res = rss.selectAllAfterDate(2018, 2, 28, 23, 59, 58)
@@ -126,7 +120,6 @@ fun doSubs(){
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rss.selectAllBetweenDates(startDate, endDate)
     //val results = rss.selectAllWhereColumnEquals("subreddit_name", "4chan")
-    //val results = rss.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
 
 
     RSMapperOutput.printAllColumnsFromRSMappers(res, RedditSubs.columnsForPrinting(),
@@ -147,7 +140,8 @@ fun doComs(){
     //val startDate = LocalDateTime.of(2017, 11, 30, 23, 59, 58)
     //val endDate = LocalDateTime.of(2017, 12, 1, 0, 0, 0)
     //val results = rcs.selectAllBetweenDates(startDate, endDate)
-    //val results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04", "score", "10")
+    //val results = rcs.selectAllWhereColumnEqualsAndColumnAboveValue("author", "a4k04",
+    // "score", "10")
 
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)

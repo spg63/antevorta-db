@@ -17,14 +17,16 @@ class CommentsFacilitator: JsonFacilitator {
     constructor(): super()
 
     override fun buildDBPaths()                     = DBLocator.buildComDBPaths()
-    override fun getDataFileAbsolutePaths()         = RawDataLocator.redditJsonCommentAbsolutePaths()
+    override fun getDataFileAbsolutePaths()         =
+            RawDataLocator.redditJsonCommentAbsolutePaths()
     override fun getDBAbsolutePaths()               = DBLocator.redditComsAbsolutePaths()
     override fun getDBDirectoryPaths()              = DBLocator.getComDBDirectoryPath()
     override fun getDataKeysOfInterest()            = RedditComs.jsonKeys()
     override fun getColumnNames()                   = RedditComs.columnNames()
     override fun getDataTypes()                     = RedditComs.dataTypes()
     override fun getTableName()                     = Finals.REDDIT_COM_TABLE
-    override fun getDataAbsolutePathsForNewData()   = RawDataLocator.redditJsonCommentAbsolutePathsNewData()
+    override fun getDataAbsolutePathsForNewData()   =
+            RawDataLocator.redditJsonCommentAbsolutePathsNewData()
 
     override fun populateJsonWorkers(): List<JsonPusher> {
         val workers = ArrayList<JsonPusher>()

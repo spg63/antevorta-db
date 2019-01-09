@@ -19,7 +19,8 @@ class MovielensIndividualTagsFacilitator: AbstractMoviesFacilitator {
     private val tagIDX = "individual_tags_tag_idx"
     private val timeIDX = "individual_tags_time_idx"
 
-    override fun getDataFileAbsolutePaths() = listOf(RawDataLocator.movielensTagsAbsolutePath())
+    override fun getDataFileAbsolutePaths() =
+            listOf(RawDataLocator.movielensTagsAbsolutePath())
     override fun getDataKeysOfInterest()    = MovielensIndividualTags.csvKeys()
     override fun getColumnNames()           = MovielensIndividualTags.columnNames()
     override fun getDataTypes()             = MovielensIndividualTags.dataTypes()
