@@ -24,10 +24,13 @@ import edu.antevortadb.dbInteraction.dbcreator.hollywood.TMDBMoviesFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.hollywood.*
 import edu.antevortadb.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
-import edu.antevortadb.utils.Out
-import edu.antevortadb.utils.TSL
+//import edu.antevortadb.utils.Out
+//import edu.antevortadb.utils.TSL
 import java.io.File
 import java.text.DecimalFormat
+import javalibs.DBUtils
+import javalibs.Out
+import javalibs.TSL
 
 val logger = TSL.get()
 
@@ -35,6 +38,8 @@ fun main(args : Array<String>){
 
     val out = Out.get()
     TSL.LOG_TO_CONSOLE = true
+    println("hello")
+    System.exit(0)
 
     if(Finals.isResearchMachine() && Finals.START_FRESH)
         logger.logAndKill("isResearchMachine() was true while trying to start fresh")
