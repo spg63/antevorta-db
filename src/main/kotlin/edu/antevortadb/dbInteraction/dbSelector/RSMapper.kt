@@ -6,7 +6,7 @@
 package edu.antevortadb.dbInteraction.dbSelector
 
 import edu.antevortadb.dbInteraction.TimeUtils
-import edu.antevortadb.utils.TSL
+import javalibs.TSL
 import org.json.JSONObject
 import java.sql.ResultSet
 import java.sql.SQLException

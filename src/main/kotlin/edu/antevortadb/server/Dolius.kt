@@ -8,7 +8,7 @@ package edu.antevortadb.server
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.dbSelector.RSMapper
 import edu.antevortadb.dbInteraction.dbSelector.Selector
-import edu.antevortadb.utils.TSL
+import javalibs.TSL
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

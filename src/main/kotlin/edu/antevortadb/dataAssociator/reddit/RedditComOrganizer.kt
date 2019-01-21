@@ -7,7 +7,7 @@ package edu.antevortadb.dataAssociator.reddit
 
 import edu.antevortadb.dbInteraction.dbSelector.RSMapper
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
-import edu.antevortadb.utils.TSL
+import javalibs.TSL
 
 @Suppress("ConvertSecondaryConstructorToPrimary", "unused")
 class RedditComOrganizer {

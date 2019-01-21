@@ -5,7 +5,7 @@
 
 package edu.antevortadb.configs
 
-import edu.antevortadb.utils.FileUtils
+import javalibs.FileUtils
 
 /**
  * Intended to locate the json files for database builds. The location of these files can

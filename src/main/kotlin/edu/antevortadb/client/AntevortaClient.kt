@@ -5,7 +5,7 @@
 
 package edu.antevortadb.client
 
-import edu.antevortadb.utils.TSL
+import javalibs.TSL
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

@@ -10,7 +10,7 @@ import edu.antevortadb.dbInteraction.TimeUtils
 import edu.antevortadb.dbInteraction.dbSelector.hollywood.*
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
-import edu.antevortadb.utils.TSL
+import javalibs.TSL
 import java.time.LocalDateTime
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors

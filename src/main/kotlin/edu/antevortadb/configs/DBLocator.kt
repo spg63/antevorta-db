@@ -7,7 +7,7 @@
 
 package edu.antevortadb.configs
 
-import edu.antevortadb.utils.FileUtils
+import javalibs.FileUtils
 import java.io.File
 
 /**

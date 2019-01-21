@@ -8,8 +8,8 @@
 package edu.antevortadb.dbInteraction
 
 import edu.antevortadb.configs.Finals
-import edu.antevortadb.utils.DBUtils
-import edu.antevortadb.utils.TSL
+import javalibs.DBUtils
+import javalibs.TSL
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException

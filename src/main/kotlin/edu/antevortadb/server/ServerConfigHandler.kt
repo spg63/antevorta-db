@@ -6,7 +6,7 @@
 package edu.antevortadb.server
 
 import edu.antevortadb.configs.RawDataLocator
-import edu.antevortadb.utils.FileUtils
+import javalibs.FileUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File

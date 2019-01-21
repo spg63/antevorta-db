@@ -24,8 +24,6 @@ import edu.antevortadb.dbInteraction.dbcreator.hollywood.TMDBMoviesFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.hollywood.*
 import edu.antevortadb.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
-//import edu.antevortadb.utils.Out
-//import edu.antevortadb.utils.TSL
 import java.io.File
 import java.text.DecimalFormat
 import javalibs.DBUtils

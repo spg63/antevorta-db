@@ -7,9 +7,7 @@
 
 package edu.antevortadb.configs
 
-import edu.antevortadb.utils.TSL
-import java.io.File
-import java.lang.RuntimeException
+import javalibs.TSL
 
 /**
  * Finals is a class to hold variables related to program state. Items like the database

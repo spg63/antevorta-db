@@ -5,7 +5,7 @@
 
 package edu.antevortadb.dbInteraction.dbSelector
 
-import edu.antevortadb.utils.TSL
+import javalibs.TSL
 
 object RSMapperComparator: Comparator<RSMapper> {
 
