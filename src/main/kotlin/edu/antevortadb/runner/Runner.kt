@@ -36,8 +36,6 @@ fun main(args : Array<String>){
 
     val out = Out.get()
     TSL.LOG_TO_CONSOLE = true
-    println("hello")
-    System.exit(0)
 
     if(Finals.isResearchMachine() && Finals.START_FRESH)
         logger.logAndKill("isResearchMachine() was true while trying to start fresh")

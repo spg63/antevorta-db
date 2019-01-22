@@ -166,6 +166,16 @@ object RawDataLocator{
         }
     }
 
+    /**
+     * @return Root of the disk area agents can make / modify files
+     */
+    fun agentSpace(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.LOCAL_AGENT_SPACE_ROOT
+            false -> DataPaths.RESEARCH_AGENT_SPACE_ROOT
+        }
+    }
+
     /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs --- */
     /**
      * Some data is added once without update, however the function to gather new data
