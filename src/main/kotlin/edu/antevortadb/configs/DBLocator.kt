@@ -22,7 +22,7 @@ import java.io.File
  */
 object DBLocator {
     val futils = FileUtils.get()
-    val SEP: String = File.separator
+    val SEP: String = futils.sep()
     /* ----- List of drive letters on the research machine that stores the db shards -- */
     val DRIVES = arrayOf("/mnt/DBA/", "/mnt/DBB/",
             "/mnt/DBC/", "/mnt/DBD/",

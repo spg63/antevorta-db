@@ -7,6 +7,7 @@
 
 package edu.antevortadb.configs
 
+import javalibs.FileUtils
 import java.io.File
 
 @Suppress("RemoveCurlyBracesFromTemplate")
@@ -15,7 +16,7 @@ import java.io.File
  * the code and whether or not testing_mode has been enabled
  */
 object DataPaths{
-    val SEP: String                 = File.separator
+    val SEP: String                 = FileUtils.get().sep()
     var CPUTESTINGMODE              = false
 
     /* ---------- The path to the local data folders ---------------------------------- */
