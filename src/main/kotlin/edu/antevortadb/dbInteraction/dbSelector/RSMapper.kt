@@ -85,7 +85,7 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger.exception(e)
-            logger.err("RSMapper.getLong conversion failed")
+            logger.err("RSMapper.getLongFromStr conversion failed")
             throw e
         }
         return value
@@ -122,7 +122,7 @@ abstract class RSMapper {
         }
         catch(e: NumberFormatException){
             logger.exception(e)
-            logger.err("RSMapper.getDouble conversion failed")
+            logger.err("RSMapper.getDoubleFromStr conversion failed")
             throw e
         }
         return value
