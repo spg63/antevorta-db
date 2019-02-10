@@ -20,7 +20,7 @@ class BaseMapper: RSMapper {
     constructor(map: Map<String, String>): super(map)
     constructor(jsonObject: JSONObject): super(jsonObject)
     override fun buildMappers(rs: ResultSet): MutableList<RSMapper> {
-        logger.logAndKill("BaseMapper.buildMappers was called, this is not allowed!")
+        logger.die("BaseMapper.buildMappers was called, this is not allowed!")
         return ArrayList()
     }
 }

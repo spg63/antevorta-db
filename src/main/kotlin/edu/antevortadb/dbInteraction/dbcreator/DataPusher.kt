@@ -68,7 +68,7 @@ abstract class DataPusher: Runnable {
             conn!!.rollback()
         }
         catch(exp: SQLException){
-            logger.logAndKill(exp)
+            logger.die(exp)
         }
     }
 
@@ -78,7 +78,7 @@ abstract class DataPusher: Runnable {
                 conn.autoCommit = true
         }
         catch(exp: SQLException){
-            logger.logAndKill(exp)
+            logger.die(exp)
         }
         if(ps != null){
             try{

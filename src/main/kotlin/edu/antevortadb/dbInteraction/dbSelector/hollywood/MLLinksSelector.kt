@@ -140,7 +140,7 @@ class MLLinksSelector: Selector() {
             tmdbcol -> tmdbMemoMap
             imdbcol -> imdbMemoMap
             else -> {
-                logger.logAndKill("MLLinksSelector.whichMemoMap: " +
+                logger.die("MLLinksSelector.whichMemoMap: " +
                         "no matching getFromColumn")
                 HashMap()   // NOTE: This isn't ever returned, logger kills the program
             }

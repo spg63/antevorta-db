@@ -130,7 +130,7 @@ object Finals{
             return false
 
         TSL.get().err("USER: $SYSTEM_USER")
-        TSL.get().logAndKill("Unknown hardware / user. Datapaths will likely be " +
+        TSL.get().die("Unknown hardware / user. Datapaths will likely be " +
                 "incorrect. Contact spg63@drexel.edu. Quitting.")
 
         // We'll never get here, but the compiler doesn't know that

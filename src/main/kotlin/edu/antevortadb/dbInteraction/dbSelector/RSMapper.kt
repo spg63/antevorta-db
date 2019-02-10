@@ -226,7 +226,7 @@ abstract class RSMapper {
                 for(col in colIDs.keys) {
                     val theID = colIDs[col] ?: -55
                     if(theID == -55)
-                        logger.logAndKill("colIDs map returned null for " +
+                        logger.die("colIDs map returned null for " +
                                 "column name: $col")
                     map.put(col, rs.getString(theID))
                 }

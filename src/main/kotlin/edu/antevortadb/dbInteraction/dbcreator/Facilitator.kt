@@ -72,7 +72,7 @@ abstract class Facilitator {
                 Finals.START_FRESH -> this.dataAbsolutePaths = getDataFileAbsolutePaths()
                 Finals.ADD_NEW_DATA -> this.dataAbsolutePaths =
                         getDataAbsolutePathsForNewData()
-                else -> logger.logAndKill("Facilitator.shouldFunctionReturnEarly " +
+                else -> logger.die("Facilitator.shouldFunctionReturnEarly " +
                         "!START_FRESH, !ADD_NEW_DATA")
             }
         }
@@ -86,7 +86,7 @@ abstract class Facilitator {
 
     fun createDBs() {
         if(!Finals.START_FRESH)
-            logger.logAndKill("Called createDBs when Finals.START_FRESH was false. " +
+            logger.die("Called createDBs when Finals.START_FRESH was false. " +
                     "Check your logic.")
 
         // Check if the DBs exist.
@@ -124,7 +124,7 @@ abstract class Facilitator {
             this.dbAbsolutePaths = getDBAbsolutePaths()
         }
         else
-            logger.logAndKill("createDBs; somehow the DBs exist and don't exist. " +
+            logger.die("createDBs; somehow the DBs exist and don't exist. " +
                     "What's that cat joke?")
 
         createNewTable()
@@ -132,12 +132,12 @@ abstract class Facilitator {
 
     fun createNewTableInExistingDBs(){
         if(!Finals.START_FRESH)
-            logger.logAndKill("Called createNewTableInExistingDBs when " +
+            logger.die("Called createNewTableInExistingDBs when " +
                     "Finals.START_FRESH was false")
 
         val doDBsExist = this.dbAbsolutePaths.size == Finals.DB_SHARD_NUM
         if(!doDBsExist)
-            logger.logAndKill("createNewTableInExistingDBs -- can't find existing DBs")
+            logger.die("createNewTableInExistingDBs -- can't find existing DBs")
 
         createNewTable()
     }

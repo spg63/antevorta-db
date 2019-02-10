@@ -15,7 +15,6 @@ import edu.antevortadb.dbInteraction.columnsAndKeys.RedditSubs
 import edu.antevortadb.dbInteraction.columnsAndKeys.TMDBMovies
 import edu.antevortadb.dbInteraction.dbSelector.RSMapperOutput
 import edu.antevortadb.dbInteraction.dbSelector.DBSelector
-import edu.antevortadb.dbInteraction.dbSelector.hollywood.MLGenomeTagsSelector
 import edu.antevortadb.dbInteraction.dbSelector.hollywood.MovieSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.comments.RedditComSelector
 import edu.antevortadb.dbInteraction.dbSelector.reddit.submissions.RedditSubSelector
@@ -24,9 +23,6 @@ import edu.antevortadb.dbInteraction.dbcreator.hollywood.TMDBMoviesFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.hollywood.*
 import edu.antevortadb.dbInteraction.dbcreator.reddit.comments.CommentsFacilitator
 import edu.antevortadb.dbInteraction.dbcreator.reddit.submissions.SubmissionsFacilitator
-import java.io.File
-import java.text.DecimalFormat
-import javalibs.DBUtils
 import javalibs.Out
 import javalibs.TSL
 
@@ -38,10 +34,10 @@ fun main(args : Array<String>){
     TSL.LOG_TO_CONSOLE = true
 
     if(Finals.isResearchMachine() && Finals.START_FRESH)
-        logger.logAndKill("isResearchMachine() was true while trying to start fresh")
+        logger.die("isResearchMachine() was true while trying to start fresh")
 
     if(Finals.isResearchMachine() && Finals.ADD_NEW_DATA)
-        logger.logAndKill("isResearchMachine() was true while trying to add new data")
+        logger.die("isResearchMachine() was true while trying to add new data")
 
     val sw = Stopwatch.createStarted()
 

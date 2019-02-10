@@ -214,7 +214,7 @@ abstract class Selector{
         // Die if the ordering clause doesn't exist...don't feel like implementing auto
         // ordering
         if(!query.contains("asc") && !query.contains("desc")){
-            logger.logAndKill("order by query currently requires query string " +
+            logger.die("order by query currently requires query string " +
                     "to contain an order clause, either 'desc', or 'asc'")
         }
 
@@ -370,11 +370,11 @@ abstract class Selector{
      */
     protected fun verifyDBsExist(DBs: List<String>) {
         if(DBs.isEmpty())
-            logger.logAndKill("Selector.verifyDBsExist DBs was empty")
+            logger.die("Selector.verifyDBsExist DBs was empty")
         if(DBs.size != Finals.DB_SHARD_NUM) {
             logger.err("Selector.verifyDBsExist DBs.size = ${DBs.size} | " +
                     "Finals.DB_SHARD_NUM = ${Finals.DB_SHARD_NUM}")
-            logger.logAndKill("Selector.verifyDBsExist DBs.size != Finals.DB_SHARD_NUM")
+            logger.die("Selector.verifyDBsExist DBs.size != Finals.DB_SHARD_NUM")
 
         }
     }

@@ -83,7 +83,7 @@ abstract class CSVFacilitator: Facilitator {
                 letWorkersFly(recordsList)
             }
             catch(e: Exception){
-                logger.logAndKill(e)
+                logger.die(e)
             }
         }
         // Create the indices on all shards. This happens on table creation and after

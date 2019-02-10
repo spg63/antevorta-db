@@ -146,14 +146,14 @@ class AntevortaClient(configFilePath: String) {
         }
 
         if(fullString.isEmpty()){
-            logger.logAndKill("Unable to parse config file")
+            logger.die("Unable to parse config file")
         }
 
         val json: JSONObject = try {
             JSONObject(fullString)
         }
         catch(e: JSONException) {
-            logger.logAndKill(e)
+            logger.die(e)
             JSONObject()
         }
 

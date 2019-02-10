@@ -45,7 +45,7 @@ object DBCommon{
                 st.close()
             }
             catch(e: SQLException){
-                logger.logAndKill(e)
+                logger.die(e)
             }
         }
         return conn

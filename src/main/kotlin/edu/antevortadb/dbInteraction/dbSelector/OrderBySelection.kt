@@ -40,7 +40,7 @@ class OrderBySelection() {
     fun nextColumn(): Pair<String, Boolean> {
         ++currentColumn
         if(currentColumn >= columnList.size)
-            TSL.get().logAndKill("OrderBySelection.nextColumn exceeded " +
+            TSL.get().die("OrderBySelection.nextColumn exceeded " +
                     "bounds of columnList")
         return this.columnList[currentColumn]
     }
