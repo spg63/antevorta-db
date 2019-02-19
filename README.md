@@ -1,7 +1,6 @@
-![Imgur](https://i.imgur.com/3hmmXTF.jpg=250x250)
-
-
 # antevorta-db
+<img src="https://i.imgur.com/3hmmXTF.jpg" width="500">
+
 ## The database module for Antevorta
 
 * This module handles the storage of the data, access to the data, and storing temporary data as networks are being created and trained. Anything that goes into any of the DBs will go through this module. 
