@@ -1,4 +1,4 @@
-![Hello](https://imgur.com/3hmmXTF)
+[Imgur](https://i.imgur.com/3hmmXTF.jpg)
 
 
 # antevorta-db
