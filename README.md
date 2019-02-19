@@ -1,4 +1,4 @@
-![Imgur](https://i.imgur.com/3hmmXTF.jpg)
+![Imgur](https://i.imgur.com/3hmmXTF.jpg =250x250)
 
 
 # antevorta-db
