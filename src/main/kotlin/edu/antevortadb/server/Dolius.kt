@@ -54,15 +54,15 @@ class Dolius(private val socket: Socket): Runnable {
     // Log separately connections so I can easily track them
     init{
         while(currentThreads >= MAX_THREADS) {
-            logger.info("Dolius: Sleeping for $sleepTimeMS")
+            logger.dolius("Dolius: Sleeping for $sleepTimeMS")
             Thread.sleep(sleepTimeMS)
             sleepCounter++
             if(sleepCounter >= maxSleep) {
-                logger.warn("Dolius: Reached maxSleep")
+                logger.dolius("Dolius: Reached maxSleep")
                 serverBusy = true
                 break
             }
-            logger.warn("Dolius: currentThreads >= MAX_THREADS")
+            logger.dolius("Dolius: currentThreads >= MAX_THREADS")
         }
         ++currentThreads
     }
@@ -115,7 +115,7 @@ class Dolius(private val socket: Socket): Runnable {
             authenticateUser(user, pass)
         }
         else{
-            logger.err("jsonObject missing USER or PASS key")
+            logger.dolius("jsonObject missing USER or PASS key")
             handleRejection("JSON from client missing authentication information")
             destroy()
             return
@@ -133,7 +133,7 @@ class Dolius(private val socket: Socket): Runnable {
         if(jsonObject.has(QUERY))
             query = jsonObject.getString(QUERY)
         else{
-            logger.err("jsonObject missing QUERY key")
+            logger.dolius("jsonObject missing QUERY key")
             handleRejection("JSON from client missing query information")
             destroy()
             return
@@ -149,7 +149,7 @@ class Dolius(private val socket: Socket): Runnable {
             return
         }
 
-        logger.info("Dolius processing \"$query\" from $user")
+        logger.dolius("Dolius processing \"$query\" from $user")
 
         // Query the DB and get the RSMappers in return
         val mappers = process(query)
@@ -192,7 +192,7 @@ class Dolius(private val socket: Socket): Runnable {
             obj = JSONObject(jsonString)
         }
         catch(e: JSONException){
-            logger.err("Failed JSON Input: $jsonString")
+            logger.dolius("Failed JSON Input: $jsonString")
             logger.exception(e)
             return null
         }
@@ -208,7 +208,7 @@ class Dolius(private val socket: Socket): Runnable {
     private fun authenticateUser(username: String, userpass: String){
         authFail = !this.configHandler.isUserAuthorized(username, userpass)
         if(authFail)
-            logger.warn("Dolius: authFail for $username | $userpass")
+            logger.dolius("Dolius: authFail for $username | $userpass")
     }
 
 
@@ -246,7 +246,7 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun handleBusy(){
         --currentThreads
-        logger.warn("Dolius: handleBusy")
+        logger.dolius("Dolius: handleBusy")
         writeMessageToClient(busyStr)
     }
 
@@ -255,7 +255,7 @@ class Dolius(private val socket: Socket): Runnable {
      * than being busy
      */
     private fun handleRejection(inpurString: String){
-        logger.warn("Dolius: handleRejection -- $inpurString")
+        logger.dolius("Dolius: handleRejection -- $inpurString")
         writeMessageToClient(rejectionStr)
     }
 
