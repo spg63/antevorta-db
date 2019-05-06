@@ -48,6 +48,7 @@ object DataPaths{
     /* ---------- File paths when running on the research machine --------------------- */
     val RESEARCH_ARRAY_DATA_ROOT    = "${SEP}mnt${SEP}vault${SEP}Data${SEP}"
     val RESEARCH_RAW_DATA_ROOT      = "${RESEARCH_ARRAY_DATA_ROOT}Uncompressed${SEP}"
+    val RIPPER_MODELS_DIR           = "TrainedModels${SEP}"
 
     val REDDIT_DATA_ROOT            = "${RESEARCH_RAW_DATA_ROOT}Reddit${SEP}"
     val REDDIT_SUB_DATA_PATH        = "${REDDIT_DATA_ROOT}Submissions${SEP}"
@@ -74,11 +75,13 @@ object DataPaths{
     val LOCAL_REDDIT_SUB_DB_PATH    = "${LOCAL_DB_PATH}RedditSubs${SEP}"
     val LOCAL_REDDIT_COM_DB_PATH    = "${LOCAL_DB_PATH}RedditComs${SEP}"
     val LOCAL_HOLLYWOOD_DB_PATH     = "${LOCAL_DB_PATH}Hollywood${SEP}"
+    val LOCAL_TRAINED_MODELS_DB     = "${LOCAL_DB_PATH}TrainedModels${SEP}"
 
     /* ---------- Pieces of information to build DB paths on research machine --------- */
     const val REDDIT_SUB_DB         = "RS_DB"
     const val REDDIT_COM_DB         = "RC_DB"
     const val HOLLYWOOD_DB          = "HOLLYWOOD"
+    const val TRAINED_MODELS_DB     = "TRAINED_MODELS"
 
     // The DB file extension for sqlite3 files
     const val DBEXT                 = Finals.DB_TYPE_EXT

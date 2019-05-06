@@ -59,6 +59,7 @@ object Finals{
     const val ML_INDIVIUDAL_TAGS_TABLE      = "individual_tags"
     const val ML_INDIVIDUAL_RATING_TABLE    = "individual_ratings"
     const val TMDB_MOVIES_TABLE             = "movies"
+    const val TRAINED_MODELS_TABLE          = "classifier_models"
 
 
     /* ---------- Server control ------------------------------------------------------ */

@@ -8,7 +8,6 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
-import java.io.File
 
 /**
  * Similar concept to RawDataLocator. The location of the databases will be different depending
@@ -24,15 +23,15 @@ object DBLocator {
     val futils = FileUtils.get()
     val SEP: String = futils.sep()
     /* ----- List of drive letters on the research machine that stores the db shards -- */
-    val DRIVES = arrayOf("/mnt/DBA/", "/mnt/DBB/",
-            "/mnt/DBC/", "/mnt/DBD/",
-            "/mnt/DBE/", "/mnt/DBF/")
+    val DRIVES = arrayOf(   "/mnt/DBA/", "/mnt/DBB/",
+                            "/mnt/DBC/", "/mnt/DBD/",
+                            "/mnt/DBE/", "/mnt/DBF/"
+    )
 
-    /* ----- Paths to the directories that hold the DB shards without the drive letter
-    prefix ---------------------------------------------------------------------------- */
-    val REDDIT_SUB_DB_DIR_PATH = "DBs${SEP}Reddit${SEP}Submissions${SEP}"
-    val REDDIT_COM_DB_DIR_PATH = "DBs${SEP}Reddit${SEP}Comments${SEP}"
-    val HOLLYWOOD_DB_DIR_PATH = "DBs${SEP}Hollywood${SEP}"
+    /* ----- Paths to directories that hold the DB shards without the letter prefix --- */
+    val REDDIT_SUB_DB_DIR_PATH  = "DBs${SEP}Reddit${SEP}Submissions${SEP}"
+    val REDDIT_COM_DB_DIR_PATH  = "DBs${SEP}Reddit${SEP}Comments${SEP}"
+    val HOLLYWOOD_DB_DIR_PATH   = "DBs${SEP}Hollywood${SEP}"
 
     /* ----- Paths to the DB shards without the drive letter prefix ------------------- */
     val REDDIT_SUB_SHARD =
@@ -43,6 +42,39 @@ object DBLocator {
             "$HOLLYWOOD_DB_DIR_PATH${DataPaths.HOLLYWOOD_DB}${DataPaths.DBEXT}"
 
     // -----------------------------------------------------------------------------------
+
+    /**
+     * Return the path to the DB that stores the pre-trained classifier models for the
+     * agents. This path will be system dependant
+     * @return Path to the DB on the file system
+     */
+    fun preTrainedClassifierDB(): String {
+        return when (Finals.TESTING_MODE){
+            true -> {
+                DataPaths.LOCAL_TRAINED_MODELS_DB +     // LocalDB + TrainedModels dir
+                        DataPaths.TRAINED_MODELS_DB +   // Name of DB file
+                            DataPaths.DBEXT             // Extension for DB file
+            }
+            false -> {
+                DataPaths.RESEARCH_ARRAY_DATA_ROOT +    // /mnt/vault/Data
+                    DataPaths.RIPPER_MODELS_DIR +       // The dir in Data for the DB
+                        DataPaths.TRAINED_MODELS_DB +   // Name of DB file
+                            DataPaths.DBEXT             // Extension for the DB file
+
+            }
+        }
+    }
+
+    fun preTrainedClassifierDirPath(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> {
+                DataPaths.LOCAL_TRAINED_MODELS_DB
+            }
+            false -> {
+                DataPaths.RESEARCH_ARRAY_DATA_ROOT + DataPaths.RIPPER_MODELS_DIR
+            }
+        }
+    }
 
     /**
      * Get a list of absolute file paths to all reddit submission DBs
