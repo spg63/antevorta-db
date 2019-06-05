@@ -104,7 +104,13 @@ object AgentTrainedClassifierStorage {
         stmt.close()
         DBCommon.disconnect(conn)
 
-        return istream!!
+        if(istream == null) log_.dieFrom("classifier was null for $agentName")
+
+        return istream!!    // The above check guarantees we'll never return null
+    }
+
+    fun getMostRecentClassifier(agentName: String): InputStream {
+
     }
 
 }

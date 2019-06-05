@@ -217,6 +217,7 @@ abstract class RSMapper {
             }
 
             // Loop through all results that were found
+            val colIsNull = -55
             while(rs.next()){
                 val map = HashMap<String, String>()
 
@@ -224,8 +225,8 @@ abstract class RSMapper {
                 // the map NOTE: using the keyset instead of colNames because columns
                 //  are missing from non-* queries
                 for(col in colIDs.keys) {
-                    val theID = colIDs[col] ?: -55
-                    if(theID == -55)
+                    val theID = colIDs[col] ?: colIsNull
+                    if(theID == colIsNull)
                         logger.die("colIDs map returned null for " +
                                 "column name: $col")
                     map.put(col, rs.getString(theID))

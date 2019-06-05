@@ -52,8 +52,8 @@ object DBLocator {
         return when (Finals.TESTING_MODE){
             true -> {
                 DataPaths.LOCAL_TRAINED_MODELS_DB +     // LocalDB + TrainedModels dir
-                        DataPaths.TRAINED_MODELS_DB +   // Name of DB file
-                            DataPaths.DBEXT             // Extension for DB file
+                    DataPaths.TRAINED_MODELS_DB +       // Name of DB file
+                        DataPaths.DBEXT                 // Extension for DB file
             }
             false -> {
                 DataPaths.RESEARCH_ARRAY_DATA_ROOT +    // /mnt/vault/Data
