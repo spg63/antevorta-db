@@ -104,8 +104,7 @@ object AgentTrainedClassifierStorage {
         stmt.close()
         DBCommon.disconnect(conn)
 
-        if(istream == null) log_.dieFrom("classifier was null for $agentName")
-
+        log_.require(istream != null, "classifier was null from Db for $agentName")
         return istream!!    // The above check guarantees we'll never return null
     }
 
