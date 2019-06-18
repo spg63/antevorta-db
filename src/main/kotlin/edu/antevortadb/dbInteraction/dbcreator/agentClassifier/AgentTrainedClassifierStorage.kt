@@ -108,8 +108,9 @@ object AgentTrainedClassifierStorage {
         return istream!!    // The above check guarantees we'll never return null
     }
 
-    fun getMostRecentClassifier(agentName: String): InputStream {
-
+    fun getMostRecentClassifier(agentName: String): InputStream? {
+        TSL.get().dieFrom("These function needs some implementing")
+        return null
     }
 
 }
