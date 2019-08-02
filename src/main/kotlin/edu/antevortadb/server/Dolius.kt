@@ -278,7 +278,7 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun destroy(){
         socket.close()
-        currentThreads--
+        --currentThreads
     }
 }
 

@@ -38,6 +38,16 @@ object RawDataLocator{
     }
 
     /**
+     * Get the path to the Word2Vec data storage location
+     */
+    fun word2VecPath(): String {
+        return when(Finals.TESTING_MODE){
+            true -> DataPaths.LOCAL_W2VEC_PATH
+            false -> DataPaths.W2VEC_PATH
+        }
+    }
+
+    /**
      * Returns the path to the server config directory
      */
     fun serverConfigPath(): String {

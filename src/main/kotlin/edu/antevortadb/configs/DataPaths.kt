@@ -8,6 +8,7 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
+import sun.awt.Win32ColorModel24
 import java.io.File
 
 @Suppress("RemoveCurlyBracesFromTemplate")
@@ -34,6 +35,7 @@ object DataPaths{
     val LOCAL_REDDIT_COM_DATA       = "${LOCAL_PATH}comments${SEP}"
     val LOCAL_TMDB_CREDITS          = "${LOCAL_PATH}tmdb${SEP}credits.csv"
     val LOCAL_TMDB_MOVIES           = "${LOCAL_PATH}tmdb${SEP}movies.csv"
+    val LOCAL_W2VEC_PATH            = "${LOCAL_PATH}word2vec${SEP}"
     val LOCAL_LENS_GENOME_SCORES    = "${LOCAL_PATH}movielens${SEP}genome_scores.csv"
     val LOCAL_LENS_GENOME_TAGS      = "${LOCAL_PATH}movielens${SEP}genome_tags.csv"
     val LOCAL_LENS_LINK             = "${LOCAL_PATH}movielens${SEP}link.csv"
@@ -53,6 +55,8 @@ object DataPaths{
     val REDDIT_DATA_ROOT            = "${RESEARCH_RAW_DATA_ROOT}Reddit${SEP}"
     val REDDIT_SUB_DATA_PATH        = "${REDDIT_DATA_ROOT}Submissions${SEP}"
     val REDDIT_COM_DATA_PATH        = "${REDDIT_DATA_ROOT}Comments${SEP}"
+
+    val W2VEC_PATH                  = "${RESEARCH_RAW_DATA_ROOT}word2vec${SEP}"
 
     val TMDB_DATA_ROOT              = "${RESEARCH_RAW_DATA_ROOT}tmdb${SEP}"
     val TMDB_CREDITS                = "${TMDB_DATA_ROOT}credits.csv"
