@@ -24,7 +24,7 @@ object DataPaths{
     val LOCAL_DATA_ROOT = when(Finals.IS_WINDOWS) {
         // The SB2 running windows
         true -> "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
-        // MBP & Mac Mini, only difference is the SYSTEM_USER name
+        // MBP & Mac Mini, only difference is the SYSTEM_USER name & drive prefix
         false -> "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
     }
 
@@ -43,7 +43,7 @@ object DataPaths{
     val LOCAL_LENS_RATING           = "${LOCAL_PATH}movielens${SEP}rating.csv"
     val LOCAL_LENS_TAG              = "${LOCAL_PATH}movielens${SEP}tag.csv"
 
-    // Directory paths where new JSON data will be stored in 'TESTING_MODE'
+    // Directory paths where new Reddit JSON data will be stored in 'TESTING_MODE'
     val LOCAL_NEW_REDDIT_SUB_DATA   = "${LOCAL_PATH}new${SEP}submissions${SEP}"
     val LOCAL_NEW_REDDIT_COM_DATA   = "${LOCAL_PATH}new${SEP}comments${SEP}"
 

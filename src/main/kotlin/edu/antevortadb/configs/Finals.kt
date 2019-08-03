@@ -48,9 +48,12 @@ object Finals{
     const val SYNC_MODE_OFF = true
     // There are 6 available HDDs for data storage on research machine, use all of them
     const val DB_SHARD_NUM = 6
+    // Configuration table
+    const val CONFIG_TABLE                  = "configs"
     // Reddit table names
     const val REDDIT_SUB_TABLE              = "submission_attrs"
     const val REDDIT_COM_TABLE              = "comment_attrs"
+    // Movielens / TMDB table names
     const val ML_LINK_TABLE                 = "links_table"
     const val ML_MOVIES_TABLE               = "movielens_movies"
     const val TMDB_CREDITS_TABLE            = "tmdb_credits"
@@ -59,6 +62,7 @@ object Finals{
     const val ML_INDIVIUDAL_TAGS_TABLE      = "individual_tags"
     const val ML_INDIVIDUAL_RATING_TABLE    = "individual_ratings"
     const val TMDB_MOVIES_TABLE             = "movies"
+    // Model storage
     const val TRAINED_MODELS_TABLE          = "classifier_models"
 
 
