@@ -20,5 +20,4 @@ class DataPathsDB {
             return instance
         }
     }
-
 }

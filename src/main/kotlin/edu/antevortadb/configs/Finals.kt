@@ -29,7 +29,6 @@ object Finals{
     // Simple check to make sure we really want to add new data to the DBs
     const val ADD_NEW_DATA = false
 
-
     /* ---------- Database control ---------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"
     const val DB_URL_PREFIX = "jdbc:sqlite:"
@@ -124,21 +123,18 @@ object Finals{
     // have a damn clue why and it'll take me a few hours to find this again. Future
     // me: sorry.
     fun isResearchMachine(): Boolean {
-        val linuxUser = "ripper"
-        val bookUser = "Osiris"
+        val ripperUser = "ripper"
         val bladeUser = "seang"
-        val mbpUser = "hades"
         val minUser = "anubis"
 
-        if(SYSTEM_USER == linuxUser)
+        if(SYSTEM_USER == ripperUser)
             return true
-        if(SYSTEM_USER == bookUser || SYSTEM_USER == mbpUser
-                || SYSTEM_USER == minUser || SYSTEM_USER == bladeUser)
+        if(SYSTEM_USER == minUser || SYSTEM_USER == bladeUser)
             return false
 
-        TSL.get().err("USER: $SYSTEM_USER")
-        TSL.get().die("Unknown hardware / user. Datapaths will likely be " +
-                "incorrect. Contact spg63@drexel.edu. Quitting.")
+        TSL.get().require(SYSTEM_USER == ripperUser || SYSTEM_USER == bladeUser
+                || SYSTEM_USER == minUser, "Unknown hardware / user. Data paths will " +
+                "likely be incorrect. Contact sean@seanpgrimes.com.")
 
         // We'll never get here, but the compiler doesn't know that
         return false
