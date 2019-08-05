@@ -8,7 +8,6 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
-import sun.awt.Win32ColorModel24
 import java.io.File
 
 @Suppress("RemoveCurlyBracesFromTemplate")
