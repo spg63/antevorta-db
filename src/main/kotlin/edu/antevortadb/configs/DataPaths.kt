@@ -21,8 +21,9 @@ object DataPaths{
 
     /* ---------- The path to the local data folders ---------------------------------- */
     val LOCAL_DATA_ROOT = when(Finals.IS_WINDOWS) {
-        // The SB2 running windows
-        true -> "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+        // The Blade running windows
+        //true -> "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+        true -> "D:${SEP}"
         // MBP & Mac Mini, only difference is the SYSTEM_USER name & drive prefix
         false -> "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
     }
