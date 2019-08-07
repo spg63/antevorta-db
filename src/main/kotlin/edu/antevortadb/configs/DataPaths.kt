@@ -8,6 +8,7 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
+import javalibs.TSL
 import java.io.File
 
 @Suppress("RemoveCurlyBracesFromTemplate")
@@ -20,12 +21,18 @@ object DataPaths{
     var CPUTESTINGMODE              = false
 
     /* ---------- The path to the local data folders ---------------------------------- */
-    val LOCAL_DATA_ROOT = when(Finals.IS_WINDOWS) {
+    val LOCAL_DATA_ROOT: String = when(Finals.SYSTEM_USER) {
         // The Blade running windows
-        //true -> "C:${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
-        true -> "D:${SEP}"
-        // MBP & Mac Mini, only difference is the SYSTEM_USER name & drive prefix
-        false -> "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+        Finals.BLADE_USER -> "D:${SEP}"
+        // The Blade running linux
+        Finals.BLADE_LINUX_USER -> "${SEP}mnt${SEP}data${SEP}"
+        // Mac Mini
+        Finals.MINI_USER ->
+            "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+        else -> {
+            TSL.get().dieFrom("Unknown user")
+            ""
+        }
     }
 
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with
