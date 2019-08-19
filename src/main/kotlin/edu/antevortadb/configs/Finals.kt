@@ -16,10 +16,12 @@ import javalibs.TSL
  */
 object Finals{
     /* ---------- Program control ----------------------------------------------------- */
-    val RIPPER_USER = "ripper"
     val BLADE_USER = "seang"
     val BLADE_LINUX_USER = "grimes"
     val MINI_USER = "anubis"
+    val RIPPER_USER = "ripper"
+    val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER)
+
     // user.name of the current user running this software
     val SYSTEM_USER = initUser()
     // True if windows, else false
@@ -129,15 +131,12 @@ object Finals{
     fun isResearchMachine(): Boolean {
         if(SYSTEM_USER == RIPPER_USER)
             return true
-        if(SYSTEM_USER == MINI_USER || SYSTEM_USER == BLADE_USER
-                || SYSTEM_USER == BLADE_LINUX_USER) {
+        if(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER))
             return false
-        }
 
-        TSL.get().require(SYSTEM_USER == RIPPER_USER || SYSTEM_USER == BLADE_USER
-                || SYSTEM_USER == MINI_USER || SYSTEM_USER == BLADE_LINUX_USER,
-                "Unknown hardware / user. Data paths will " +
-                "likely be incorrect. Contact sean@seanpgrimes.com.")
+        TSL.get().require(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER),
+                "Unknown hardware / user. Data paths will likely be incorrect. " +
+                        "Contact sean@seanpgrimes.com")
 
         // We'll never get here, but the compiler doesn't know that
         return false

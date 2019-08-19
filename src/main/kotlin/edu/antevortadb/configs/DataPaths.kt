@@ -26,6 +26,8 @@ object DataPaths{
         Finals.BLADE_USER -> "D:${SEP}"
         // The Blade running linux
         Finals.BLADE_LINUX_USER -> "${SEP}mnt${SEP}data${SEP}"
+        // Ripper
+        Finals.RIPPER_USER -> "" // Ripper doesn't use the LOCAL_DATA_ROOT path at all
         // Mac Mini
         Finals.MINI_USER ->
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
