@@ -60,7 +60,6 @@ object DBLocator {
                     DataPaths.RIPPER_MODELS_DIR +       // The dir in Data for the DB
                         DataPaths.TRAINED_MODELS_DB +   // Name of DB file
                             DataPaths.DBEXT             // Extension for the DB file
-
             }
         }
     }
