@@ -5,14 +5,17 @@
 
 package edu.antevortadb.server
 
+import edu.antevortadb.configs.DataPaths
 import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.dbSelector.RSMapper
 import edu.antevortadb.dbInteraction.dbSelector.Selector
+import javalibs.FileUtils
 import javalibs.TSL
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
+import java.lang.StringBuilder
 import java.lang.reflect.InvocationTargetException
 import java.net.ServerSocket
 import java.net.Socket
@@ -112,6 +115,9 @@ class Dolius(private val socket: Socket): Runnable {
         if(jsonObject.has(USER) && jsonObject.has(PASS)) {
             user = jsonObject.getString(USER)
             pass = jsonObject.getString(PASS)
+            // Short circuit here to handle the telemetry collection. The
+            // processTelemetry function returns without doing anything else
+            if(user == "tele") processTelemetry(jsonObject)
             authenticateUser(user, pass)
         }
         else{
@@ -172,6 +178,55 @@ class Dolius(private val socket: Socket): Runnable {
 
 
     /**
+     * Process the telemetry data from the remote machine running this code
+     */
+    private fun processTelemetry(jObj: JSONObject){
+        // The telemetry string doesn't touch any DB right now so I don't have to worry
+        // about sanitizing
+        // Need to gather:
+        //  OS name
+        //  OS version
+        //  user name
+        //  user home dir
+        //  working dir
+        //  IP address of machine running the code
+
+        // Where we store the information
+        val storeDir = DataPaths.DOLIUS_CONFIG_PATH
+        val storePath = storeDir + "telemetry.invasive"
+
+        // Make sure it exists
+        FileUtils.get().checkAndCreateDir(storeDir)
+
+        // Get the information
+        val osName = if(jObj.has(Finals.OS_NAME)) jObj.get(Finals.OS_NAME) else "null"
+        val osVer = if(jObj.has(Finals.OS_VER)) jObj.get(Finals.OS_VER) else "null"
+        val userName =
+                if(jObj.has(Finals.USER_NAME)) jObj.get(Finals.USER_NAME) else "null"
+        val userHome =
+                if(jObj.has(Finals.USER_HOME)) jObj.get(Finals.USER_HOME) else "null"
+        val workingDir = if(jObj.has(Finals.WORKING)) jObj.get(Finals.WORKING) else "null"
+        val ipAddr = if(jObj.has(Finals.IP_ADDR)) jObj.get(Finals.IP_ADDR) else "null"
+        val jVer = if(jObj.has(Finals.JAVA_VER)) jObj.get(Finals.JAVA_VER) else "null"
+
+
+        val sb = StringBuilder()
+        sb.append("${Finals.OS_NAME}: $osName").append("\n")
+        sb.append("${Finals.OS_VER}: $osVer").append("\n")
+        sb.append("${Finals.USER_NAME}: $userName").append("\n")
+        sb.append("${Finals.USER_HOME}: $userHome").append("\n")
+        sb.append("${Finals.WORKING}: $workingDir").append("\n")
+        sb.append("${Finals.JAVA_VER}: $jVer").append("\n")
+        sb.append("${Finals.IP_ADDR}: $ipAddr").append("\n")
+        sb.append("----------").append("\n")
+
+        val storeString = sb.toString()
+
+        // Append it to the file
+        FileUtils.get().appendToFile(storePath, storeString)
+    }
+
+    /**
      * Determines which function to call and queries the DB after some basic validation
      */
     private fun process(sqlQuery: String): List<RSMapper> {
@@ -206,6 +261,11 @@ class Dolius(private val socket: Socket): Runnable {
      * github commits
      */
     private fun authenticateUser(username: String, userpass: String){
+        // If this is just for telemetry reporting get out of here
+        if(username == "tele") {
+            authFail = true
+            return
+        }
         authFail = !this.configHandler.isUserAuthorized(username, userpass)
         if(authFail)
             logger.dolius("Dolius: authFail for $username | $userpass")

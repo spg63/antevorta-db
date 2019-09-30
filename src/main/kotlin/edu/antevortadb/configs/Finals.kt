@@ -21,9 +21,11 @@ object Finals{
     val MINI_USER = "anubis"
     val RIPPER_USER = "ripper"
     val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER)
+    var IGNORE_DB_DATA_AND_USER_CHECKS = false
+    lateinit var otherUserDataPath: String
 
     // user.name of the current user running this software
-    val SYSTEM_USER = initUser()
+    var SYSTEM_USER = initUser()
     // True if windows, else false
     val IS_WINDOWS = System.getProperty("os.name").contains("win")
                      || System.getProperty("os.name").contains("Win")
@@ -119,16 +121,32 @@ object Finals{
     // User ID column (not user name! A numeric ID!)
     const val USER_ID = "userid"
 
+    /* ---------- Telemetry keys ------------------------------------------------------ */
+    const val OS_NAME   = "os.name"
+    const val OS_VER    = "os.version"
+    const val USER_NAME = "user.name"
+    const val USER_HOME = "user.home"
+    const val WORKING   = "user.dir"
+    const val IP_ADDR   = "ip.addr"
+    const val JAVA_VER  = "java.version"
+
 
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
-    fun initUser(): String = System.getProperty("user.name")
+    fun initUser(): String {
+        if(IGNORE_DB_DATA_AND_USER_CHECKS)
+            return ""
+        else
+            return System.getProperty("user.name")
+    }
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't
     // have a damn clue why and it'll take me a few hours to find this again. Future
     // me: sorry.
     fun isResearchMachine(): Boolean {
+        if(IGNORE_DB_DATA_AND_USER_CHECKS) return false
+
         if(SYSTEM_USER == RIPPER_USER)
             return true
         if(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER))

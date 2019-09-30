@@ -21,7 +21,7 @@ object DataPaths{
     var CPUTESTINGMODE              = false
 
     /* ---------- The path to the local data folders ---------------------------------- */
-    val LOCAL_DATA_ROOT: String = when(Finals.SYSTEM_USER) {
+    var LOCAL_DATA_ROOT: String = when(Finals.SYSTEM_USER) {
         // The Blade running windows
         Finals.BLADE_USER -> "D:${SEP}"
         // The Blade running linux
@@ -32,8 +32,18 @@ object DataPaths{
         Finals.MINI_USER ->
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
         else -> {
-            TSL.get().dieFrom("Unknown user")
-            ""
+            if(Finals.IGNORE_DB_DATA_AND_USER_CHECKS) {
+                if(Finals.otherUserDataPath != null)
+                    Finals.otherUserDataPath
+                else {
+                    TSL.get().dieFrom("Finals.otherUserDataPath null")
+                    ""
+                }
+            }
+            else {
+                TSL.get().dieFrom("Unknown user")
+                ""
+            }
         }
     }
 
