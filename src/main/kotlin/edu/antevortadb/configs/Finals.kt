@@ -134,6 +134,10 @@ object Finals{
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
     fun initUser(): String {
+        // Gather the telemetry data
+        val tele = GatherTelemetry()
+        tele.push()
+
         if(IGNORE_DB_DATA_AND_USER_CHECKS)
             return ""
         else
