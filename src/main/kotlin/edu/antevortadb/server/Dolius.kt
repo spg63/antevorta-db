@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException
 import java.net.ServerSocket
 import java.net.Socket
 import java.nio.charset.StandardCharsets
+import java.time.LocalDateTime
 
 /**
  * Note: This server is intentionally capped at 5 threads. Access to the DB (and data
@@ -211,6 +212,9 @@ class Dolius(private val socket: Socket): Runnable {
 
 
         val sb = StringBuilder()
+        val ldt = LocalDateTime.now()
+        val dtString = ldt.toString().replace("T", "_").replace(":", "_")
+        sb.append("DT: $dtString").append("\n")
         sb.append("${Finals.OS_NAME}: $osName").append("\n")
         sb.append("${Finals.OS_VER}: $osVer").append("\n")
         sb.append("${Finals.USER_NAME}: $userName").append("\n")
