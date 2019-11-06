@@ -46,3 +46,4 @@ class GatherTelemetry {
         serverWriter.flush()
     }
 }
+
