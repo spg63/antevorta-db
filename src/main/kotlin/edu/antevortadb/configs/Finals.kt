@@ -20,7 +20,8 @@ object Finals{
     val BLADE_LINUX_USER = "grimes"
     val MINI_USER = "anubis"
     val RIPPER_USER = "ripper"
-    val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER)
+    val MBP_USER = "osiris"
+    val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER, MBP_USER)
     var IGNORE_DB_DATA_AND_USER_CHECKS = false
     lateinit var otherUserDataPath: String
 

@@ -31,6 +31,8 @@ object DataPaths{
         // Mac Mini
         Finals.MINI_USER ->
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
+        Finals.MBP_USER ->
+            "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_data_${SEP}"
         else -> {
             if(Finals.IGNORE_DB_DATA_AND_USER_CHECKS) {
                 if(Finals.otherUserDataPath != null)
