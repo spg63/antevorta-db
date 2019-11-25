@@ -21,7 +21,7 @@ import org.json.JSONObject
 object PullFromServer{
     fun doServerComs(){
         val client = AntevortaClient(RawDataLocator.clientConfigFile())
-        val author = "mariowned"
+        val author = "a4k04"
         //val author = "Bireus"
 
         val dbsql = DBSelector()
