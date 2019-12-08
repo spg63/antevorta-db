@@ -1,5 +1,6 @@
 package edu.antevortadb.dbInteraction.dbSelector
 
+import javalibs.Logic
 import org.json.JSONObject
 import java.sql.ResultSet
 
@@ -7,7 +8,7 @@ class ConfigMapper: RSMapper {
     private var cols: List<String> = ArrayList()
 
     constructor(columns: List<String>): super() {
-        logger.require(columns.isNotEmpty())
+        Logic.get().require(columns.isNotEmpty())
         this.cols = columns
     }
     constructor(map: Map<String, String>): super(map)

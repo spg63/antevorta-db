@@ -5,6 +5,7 @@ import edu.antevortadb.configs.Finals
 import edu.antevortadb.dbInteraction.DBCommon
 import edu.antevortadb.dbInteraction.columnsAndKeys.PreTrainedClassifiers
 import javalibs.FileUtils
+import javalibs.Logic
 import javalibs.TSL
 import java.io.File
 import java.io.FileInputStream
@@ -97,19 +98,19 @@ object AgentTrainedClassifierStorage {
             istream = rs.getBinaryStream("BlobData")
         }
         else{
-            log_.dieFrom("rs.next() was not true!")
+            Logic.get().dieFrom("rs.next() was not true!")
         }
 
         rs.close()
         stmt.close()
         DBCommon.disconnect(conn)
 
-        log_.require(istream != null, "classifier was null from Db for $agentName")
+        Logic.get().require(istream != null, "classifier was null from DB for $agentName")
         return istream!!    // The above check guarantees we'll never return null
     }
 
     fun getMostRecentClassifier(agentName: String): InputStream? {
-        TSL.get().dieFrom("These function needs some implementing")
+        Logic.get().dieFrom("These function needs some implementing")
         return null
     }
 

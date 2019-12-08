@@ -8,6 +8,7 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
+import javalibs.Logic
 import javalibs.TSL
 import java.io.File
 
@@ -38,12 +39,12 @@ object DataPaths{
                 if(Finals.otherUserDataPath != null)
                     Finals.otherUserDataPath
                 else {
-                    TSL.get().dieFrom("Finals.otherUserDataPath null")
+                    Logic.get().dieFrom("Finals.otherUserDataPath null")
                     ""
                 }
             }
             else {
-                TSL.get().dieFrom("Unknown user")
+                Logic.get().dieFrom("Unknown user")
                 ""
             }
         }

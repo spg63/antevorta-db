@@ -7,6 +7,7 @@
 
 package edu.antevortadb.configs
 
+import javalibs.Logic
 import javalibs.TSL
 
 /**
@@ -157,7 +158,7 @@ object Finals{
         if(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER))
             return false
 
-        TSL.get().require(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER),
+        Logic.get().require(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER),
                 "Unknown hardware / user. Data paths will likely be incorrect. " +
                         "Contact sean@seanpgrimes.com")
 
