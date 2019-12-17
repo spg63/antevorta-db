@@ -202,6 +202,8 @@ class Dolius(private val socket: Socket): Runnable {
         // Get the information
         val osName = if(jObj.has(Finals.OS_NAME)) jObj.get(Finals.OS_NAME) else "null"
         val osVer = if(jObj.has(Finals.OS_VER)) jObj.get(Finals.OS_VER) else "null"
+        val numCores =
+                if(jObj.has(Finals.NUM_CORES)) jObj.get(Finals.NUM_CORES) else "null"
         val userName =
                 if(jObj.has(Finals.USER_NAME)) jObj.get(Finals.USER_NAME) else "null"
         val userHome =
@@ -217,6 +219,7 @@ class Dolius(private val socket: Socket): Runnable {
         sb.append("DT: $dtString").append("\n")
         sb.append("${Finals.OS_NAME}: $osName").append("\n")
         sb.append("${Finals.OS_VER}: $osVer").append("\n")
+        sb.append("${Finals.NUM_CORES}: $numCores").append("\n")
         sb.append("${Finals.USER_NAME}: $userName").append("\n")
         sb.append("${Finals.USER_HOME}: $userHome").append("\n")
         sb.append("${Finals.WORKING}: $workingDir").append("\n")

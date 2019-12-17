@@ -131,6 +131,7 @@ object Finals{
     const val WORKING   = "user.dir"
     const val IP_ADDR   = "ip.addr"
     const val JAVA_VER  = "java.version"
+    const val NUM_CORES = "availableProcessors"
 
 
     /* ---------- Helper functions ---------------------------------------------------- */

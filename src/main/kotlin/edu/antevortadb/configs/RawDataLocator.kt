@@ -6,6 +6,7 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
+import javax.xml.crypto.Data
 
 /**
  * Intended to locate the json files for database builds. The location of these files can
@@ -44,6 +45,16 @@ object RawDataLocator{
         return when(Finals.TESTING_MODE){
             true -> DataPaths.LOCAL_W2VEC_PATH
             false -> DataPaths.W2VEC_PATH
+        }
+    }
+
+    /**
+     * Get the path to the EESI data storage location
+     */
+    fun EESIPath(): String {
+        return when(Finals.TESTING_MODE){
+            true -> DataPaths.LOCAL_EESI_PATH
+            false -> DataPaths.EESI_PATH
         }
     }
 
