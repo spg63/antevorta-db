@@ -7,6 +7,7 @@ package edu.antevortadb.server
 
 import edu.antevortadb.configs.DataPaths
 import edu.antevortadb.configs.Finals
+import edu.antevortadb.configs.Telemetry
 import edu.antevortadb.dbInteraction.dbSelector.RSMapper
 import edu.antevortadb.dbInteraction.dbSelector.Selector
 import javalibs.FileUtils
@@ -182,16 +183,6 @@ class Dolius(private val socket: Socket): Runnable {
      * Process the telemetry data from the remote machine running this code
      */
     private fun processTelemetry(jObj: JSONObject){
-        // The telemetry string doesn't touch any DB right now so I don't have to worry
-        // about sanitizing
-        // Need to gather:
-        //  OS name
-        //  OS version
-        //  user name
-        //  user home dir
-        //  working dir
-        //  IP address of machine running the code
-
         // Where we store the information
         val storeDir = DataPaths.DOLIUS_CONFIG_PATH
         val storePath = storeDir + "telemetry.invasive"
@@ -200,31 +191,63 @@ class Dolius(private val socket: Socket): Runnable {
         FileUtils.get().checkAndCreateDir(storeDir)
 
         // Get the information
-        val osName = if(jObj.has(Finals.OS_NAME)) jObj.get(Finals.OS_NAME) else "null"
-        val osVer = if(jObj.has(Finals.OS_VER)) jObj.get(Finals.OS_VER) else "null"
+        val osName =
+                if(jObj.has(Telemetry.OS_NAME)) jObj.get(Telemetry.OS_NAME)
+                else "null"
+        val osVer =
+                if(jObj.has(Telemetry.OS_VER)) jObj.get(Telemetry.OS_VER)
+                else "null"
         val numCores =
-                if(jObj.has(Finals.NUM_CORES)) jObj.get(Finals.NUM_CORES) else "null"
+                if(jObj.has(Telemetry.NUM_CORES)) jObj.get(Telemetry.NUM_CORES)
+                else "null"
         val userName =
-                if(jObj.has(Finals.USER_NAME)) jObj.get(Finals.USER_NAME) else "null"
+                if(jObj.has(Telemetry.USER_NAME)) jObj.get(Telemetry.USER_NAME)
+                else "null"
         val userHome =
-                if(jObj.has(Finals.USER_HOME)) jObj.get(Finals.USER_HOME) else "null"
-        val workingDir = if(jObj.has(Finals.WORKING)) jObj.get(Finals.WORKING) else "null"
-        val ipAddr = if(jObj.has(Finals.IP_ADDR)) jObj.get(Finals.IP_ADDR) else "null"
-        val jVer = if(jObj.has(Finals.JAVA_VER)) jObj.get(Finals.JAVA_VER) else "null"
-
+                if(jObj.has(Telemetry.USER_HOME)) jObj.get(Telemetry.USER_HOME)
+                else "null"
+        val workingDir =
+                if(jObj.has(Telemetry.WORKING)) jObj.get(Telemetry.WORKING)
+                else "null"
+        val jVer =
+                if(jObj.has(Telemetry.JAVA_VER)) jObj.get(Telemetry.JAVA_VER)
+                else "null"
+        val ipAddr =
+                if(jObj.has(Telemetry.IP_ADDR)) jObj.get(Telemetry.IP_ADDR)
+                else "null"
+        val maxMem =
+                if(jObj.has(Telemetry.MAX_MEM)) jObj.get(Telemetry.MAX_MEM)
+                else "null"
+        val availMem =
+                if(jObj.has(Telemetry.AVAIL_MEM)) jObj.get(Telemetry.AVAIL_MEM)
+                else "null"
+        val freeMem =
+                if(jObj.has(Telemetry.FREE_MEM)) jObj.get(Telemetry.FREE_MEM)
+                else "null"
+        val totalHDD =
+                if(jObj.has(Telemetry.MAX_HDD)) jObj.get(Telemetry.MAX_HDD)
+                else "null"
+        val freeHDD =
+                if(jObj.has(Telemetry.FREE_HDD)) jObj.get(Telemetry.FREE_HDD)
+                else "null"
 
         val sb = StringBuilder()
         val ldt = LocalDateTime.now()
         val dtString = ldt.toString().replace("T", "_").replace(":", "_")
         sb.append("DT: $dtString").append("\n")
-        sb.append("${Finals.OS_NAME}: $osName").append("\n")
-        sb.append("${Finals.OS_VER}: $osVer").append("\n")
-        sb.append("${Finals.NUM_CORES}: $numCores").append("\n")
-        sb.append("${Finals.USER_NAME}: $userName").append("\n")
-        sb.append("${Finals.USER_HOME}: $userHome").append("\n")
-        sb.append("${Finals.WORKING}: $workingDir").append("\n")
-        sb.append("${Finals.JAVA_VER}: $jVer").append("\n")
-        sb.append("${Finals.IP_ADDR}: $ipAddr").append("\n")
+        sb.append("${Telemetry.OS_NAME}: $osName").append("\n")
+        sb.append("${Telemetry.OS_VER}: $osVer").append("\n")
+        sb.append("${Telemetry.NUM_CORES}: $numCores").append("\n")
+        sb.append("${Telemetry.USER_NAME}: $userName").append("\n")
+        sb.append("${Telemetry.USER_HOME}: $userHome").append("\n")
+        sb.append("${Telemetry.WORKING}: $workingDir").append("\n")
+        sb.append("${Telemetry.JAVA_VER}: $jVer").append("\n")
+        sb.append("${Telemetry.IP_ADDR}: $ipAddr").append("\n")
+        sb.append("${Telemetry.MAX_MEM}: $maxMem").append("\n")
+        sb.append("${Telemetry.AVAIL_MEM}: $availMem").append("\n")
+        sb.append("${Telemetry.FREE_MEM}: $freeMem").append("\n")
+        sb.append("${Telemetry.MAX_HDD}: $totalHDD").append("\n")
+        sb.append("${Telemetry.FREE_HDD}: $freeHDD").append("\n")
         sb.append("----------").append("\n")
 
         val storeString = sb.toString()

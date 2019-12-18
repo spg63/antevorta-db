@@ -8,7 +8,6 @@
 package edu.antevortadb.configs
 
 import javalibs.Logic
-import javalibs.TSL
 
 /**
  * Finals is a class to hold variables related to program state. Items like the database
@@ -124,21 +123,21 @@ object Finals{
     const val USER_ID = "userid"
 
     /* ---------- Telemetry keys ------------------------------------------------------ */
-    const val OS_NAME   = "os.name"
-    const val OS_VER    = "os.version"
-    const val USER_NAME = "user.name"
-    const val USER_HOME = "user.home"
-    const val WORKING   = "user.dir"
-    const val IP_ADDR   = "ip.addr"
-    const val JAVA_VER  = "java.version"
-    const val NUM_CORES = "availableProcessors"
+    //const val OS_NAME   = "os.name"
+    //const val OS_VER    = "os.version"
+    //const val USER_NAME = "user.name"
+    //const val USER_HOME = "user.home"
+    //const val WORKING   = "user.dir"
+    //const val IP_ADDR   = "ip.addr"
+    //const val JAVA_VER  = "java.version"
+    //const val NUM_CORES = "availableProcessors"
 
 
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
     fun initUser(): String {
         // Gather the telemetry data
-        val tele = GatherTelemetry()
+        val tele = Telemetry()
         tele.push()
 
         if(IGNORE_DB_DATA_AND_USER_CHECKS)
