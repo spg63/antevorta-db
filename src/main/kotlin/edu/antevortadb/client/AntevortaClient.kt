@@ -13,9 +13,9 @@ import java.io.*
 import java.net.Socket
 import java.nio.charset.StandardCharsets
 
-// Kotlin version of public static vars. Not accessible from Java but no java needs these vars in
-// this system. They're used in the companion object to create the config file as well as when the
-// server is queried
+// Kotlin version of public static vars. Not accessible from Java but no java needs these
+// vars in this system. They're used in the companion object to create the config file as
+// well as when the server is queried
 const val USER        = "USER"
 const val PASS        = "PASS"
 const val QUERY       = "QUERY"
@@ -33,8 +33,8 @@ class AntevortaClient(configFilePath: String) {
     private var user        = String()
     private var pass        = String()
 
-    // Default c'tor is in the class declaration. The config file needs to be parsed regardless of
-    // what c'tor may be called so do it in the init block
+    // Default c'tor is in the class declaration. The config file needs to be parsed
+    // regardless of what c'tor may be called so do it in the init block
     init{
         parseConfigFile()
     }
@@ -42,12 +42,13 @@ class AntevortaClient(configFilePath: String) {
     companion object {
         /**
          * Write a config file with the required information
-         * @param configFile Path where you want to write the config file, and the config file name
+         * @param configFile Path where you want to write the config file, and the config
+         * file name
          * @param hostname The host
          * @param hostport The port
          * @param user Your username
-         * @param pass Your password -- NOTE: THIS IS NOT SECURE, DON'T USE A PASSWORD YOU CURRENTLY
-         * OR WILL USE ELSEWHERE!!
+         * @param pass Your password -- NOTE: THIS IS NOT SECURE, DON'T USE A PASSWORD
+         * YOU CURRENTLY OR WILL USE ELSEWHERE!!
          */
         fun writeConfigFile(configFile: String, hostname: String, hostport: Int,
                             user: String, pass: String) {
@@ -72,8 +73,8 @@ class AntevortaClient(configFilePath: String) {
     }
 
     /**
-     * Query the server with your sql string. The server will determine which DB to query based on
-     * table name in the sql string.
+     * Query the server with your sql string. The server will determine which DB to
+     * query based on table name in the sql string.
      * @param SQLQuery, the sql compatible query string to use to query the DB
      * @return The JSONArray
      */
@@ -90,32 +91,33 @@ class AntevortaClient(configFilePath: String) {
             // Build JSONObject, consisting of user, pass, and query string
             val queryObject = buildJSONObject(SQLQuery)
 
-            // Server reads line by line, need to ensure the string ends with a newline char or the
-            // server will hang
+            // Server reads line by line, need to ensure the string ends with a newline
+            // char or the server will hang
             serverWriter.writeBytes(queryObject.toString() + "\n")
             serverWriter.flush()
 
-            // Sit here and wait for the server to respond. JSONArray will be returned in one line
-            // for easy parsing by the client. This seems to work fine for large results running
-            // over TCP, if problems arise this can be revised to transfer raw bytes with better
-            // error handling
+            // Sit here and wait for the server to respond. JSONArray will be returned in
+            // one line for easy parsing by the client. This seems to work fine for
+            // large results running over TCP, if problems arise this can be revised to
+            // transfer raw bytes with better error handling
             var jsonArrayString = serverReader.readLine()
 
-            // String could perhaps be null if a failure occurs, however in practice it should just
-            // hang on the readLine() call -- Might be smart to add a timeout for that call that is
-            // reasonable to accommodate large results
+            // String could perhaps be null if a failure occurs, however in practice it
+            // should just hang on the readLine() call -- Might be smart to add a timeout
+            // for that call that is reasonable to accommodate large results
             if(jsonArrayString == null)
                 jsonArrayString = emptyArray
 
-            // Response starts with NOOP_FLAG if the server didn't perform the request, a reason for
-            // the failure will come after the flag
+            // Response starts with NOOP_FLAG if the server didn't perform the request, a
+            // reason for the failure will come after the flag
             if(jsonArrayString.startsWith(NOOP_FLAG)){
-                logger.err("Server failed to return results: ${jsonArrayString.substring(NOOP_FLAG.length)}")
+                logger.err("Server failed to return results: " +
+                        "${jsonArrayString.substring(NOOP_FLAG.length)}")
                 return JSONArray(emptyArray)
             }
 
-            // NOTE: A query returning no results will return [], a valid (but empty) JSONArray.
-            // RSMapperOutput knows how to handle empty results
+            // NOTE: A query returning no results will return [], a valid (but empty)
+            // JSONArray. RSMapperOutput knows how to handle empty results
             results = JSONArray(jsonArrayString)
         }
         catch(e: IOException){
@@ -126,7 +128,7 @@ class AntevortaClient(configFilePath: String) {
         return results
     }
 
-//----- Internal methods ---------------------------------------------------------------------------
+//----- Internal methods -----------------------------------------------------------------
 
     private fun parseConfigFile(){
         var fullString = String()

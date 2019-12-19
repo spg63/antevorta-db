@@ -36,6 +36,7 @@ class Telemetry {
     val sysHelper = SysHelper.get()
 
     fun push(){
+        return
         // Gather the IP address. Want to get this first, if there's a timeout this
         // function just skips gathering telemetry since I don't want to try another
         // network connection at this point and waste more time
@@ -52,7 +53,8 @@ class Telemetry {
         // Put the system information into the object
         json.put(Telemetry.OS_NAME, this.sysHelper.osName())
         json.put(Telemetry.OS_VER, this.sysHelper.osVer())
-        json.put(Telemetry.NUM_CORES, this.sysHelper.availableProcs())
+        // TODO: Fix the core counting
+        //json.put(Telemetry.NUM_CORES, this.sysHelper.availableProcs())
         json.put(Telemetry.USER_NAME, this.sysHelper.userName())
         json.put(Telemetry.USER_HOME, this.sysHelper.userHome())
         json.put(Telemetry.WORKING, this.sysHelper.userWorking())

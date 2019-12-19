@@ -122,17 +122,6 @@ object Finals{
     // User ID column (not user name! A numeric ID!)
     const val USER_ID = "userid"
 
-    /* ---------- Telemetry keys ------------------------------------------------------ */
-    //const val OS_NAME   = "os.name"
-    //const val OS_VER    = "os.version"
-    //const val USER_NAME = "user.name"
-    //const val USER_HOME = "user.home"
-    //const val WORKING   = "user.dir"
-    //const val IP_ADDR   = "ip.addr"
-    //const val JAVA_VER  = "java.version"
-    //const val NUM_CORES = "availableProcessors"
-
-
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
     fun initUser(): String {
