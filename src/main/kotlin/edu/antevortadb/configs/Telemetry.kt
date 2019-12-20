@@ -5,8 +5,10 @@ import javalibs.TSL
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.IOException
 import java.io.InputStreamReader
 import java.lang.Exception
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.URL
 import javax.swing.text.html.parser.TagElement
@@ -31,17 +33,20 @@ class Telemetry {
         const val user      = "tele"
         const val port      = 3383
         const val host      = "corticus.us"
+        const val timeout   = 2000
     }
 
     val sysHelper = SysHelper.get()
 
     fun push(){
+        TSL.get().die("Ripper status: ${isRipperAvailable()}")
         return
         // Gather the IP address. Want to get this first, if there's a timeout this
         // function just skips gathering telemetry since I don't want to try another
-        // network connection at this point and waste more time
-        val ipAddr = this.sysHelper.ipAddr
-        if(ipAddr == this.sysHelper.BAD_NETWORK_ATEMPT)
+        // network connection at this point and waste more time. Also check for
+        // ripper's status and skip if ripper isn't reachable
+        val ipAddr = this.sysHelper.externalIPAddr()
+        if(this.sysHelper.BAD_NETWORK_ATEMPT == ipAddr || !isRipperAvailable())
             return
 
         val json = JSONObject()
@@ -77,6 +82,18 @@ class Telemetry {
         catch(e: Exception){
             // Log it and move on, this is far from necessary to run the program
             TSL.get().exception(e)
+        }
+    }
+
+    // Checks if a host is available on a specific port. If not return false
+    fun isRipperAvailable(): Boolean {
+        return try{
+            val sock = Socket()
+            sock.connect(InetSocketAddress(host, port), timeout)
+            true
+        }
+        catch(isDown: IOException){
+            false
         }
     }
 }
