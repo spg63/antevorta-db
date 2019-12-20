@@ -191,15 +191,27 @@ class Dolius(private val socket: Socket): Runnable {
         FileUtils.get().checkAndCreateDir(storeDir)
 
         // Get the information
+        // OS related information
+        val osFull =
+                if(jObj.has(Telemetry.OS_FULL)) jObj.get(Telemetry.OS_FULL)
+                else "null"
+        val osBuild =
+                if(jObj.has(Telemetry.OS_BUILD)) jObj.get(Telemetry.OS_BUILD)
+                else "null"
+        val osCode =
+                if(jObj.has(Telemetry.OS_CODE)) jObj.get(Telemetry.OS_CODE)
+                else "null"
+        val osManufacturer =
+                if(jObj.has(Telemetry.OS_MANU)) jObj.get(Telemetry.OS_MANU)
+                else "null"
         val osName =
                 if(jObj.has(Telemetry.OS_NAME)) jObj.get(Telemetry.OS_NAME)
                 else "null"
         val osVer =
                 if(jObj.has(Telemetry.OS_VER)) jObj.get(Telemetry.OS_VER)
                 else "null"
-        val numCores =
-                if(jObj.has(Telemetry.NUM_CORES)) jObj.get(Telemetry.NUM_CORES)
-                else "null"
+
+        // Gather user information
         val userName =
                 if(jObj.has(Telemetry.USER_NAME)) jObj.get(Telemetry.USER_NAME)
                 else "null"
@@ -209,11 +221,52 @@ class Dolius(private val socket: Socket): Runnable {
         val workingDir =
                 if(jObj.has(Telemetry.WORKING)) jObj.get(Telemetry.WORKING)
                 else "null"
+        val ipAddr =
+                if(jObj.has(Telemetry.IP_ADDR)) jObj.get(Telemetry.IP_ADDR)
+                else "null"
+        val hostName =
+                if(jObj.has(Telemetry.HOST_NAME)) jObj.get(Telemetry.HOST_NAME)
+                else "null"
         val jVer =
                 if(jObj.has(Telemetry.JAVA_VER)) jObj.get(Telemetry.JAVA_VER)
                 else "null"
-        val ipAddr =
-                if(jObj.has(Telemetry.IP_ADDR)) jObj.get(Telemetry.IP_ADDR)
+
+        // Gather hardware information
+        val hdManufacturer =
+                if(jObj.has(Telemetry.HD_MANU)) jObj.get(Telemetry.HD_MANU)
+                else "null"
+        val hdModel =
+                if(jObj.has(Telemetry.HD_MODEL)) jObj.get(Telemetry.HD_MODEL)
+                else "null"
+        val hdSerial =
+                if(jObj.has(Telemetry.HD_SERI)) jObj.get(Telemetry.HD_SERI)
+                else "null"
+        val uptime =
+                if(jObj.has(Telemetry.UPTIME)) jObj.get(Telemetry.UPTIME)
+                else "null"
+        val onAC =
+                if(jObj.has(Telemetry.ON_AC)) jObj.get(Telemetry.ON_AC)
+                else "null"
+        val batteryRemaining =
+                if(jObj.has(Telemetry.BAT_REM)) jObj.get(Telemetry.BAT_REM)
+                else "null"
+        val batteryCycles =
+                if(jObj.has(Telemetry.BAT_CYCL)) jObj.get(Telemetry.BAT_CYCL)
+                else "null"
+        val physicalCores =
+                if(jObj.has(Telemetry.PHYS_CORE)) jObj.get(Telemetry.PHYS_CORE)
+                else "null"
+        val logicalCores =
+                if(jObj.has(Telemetry.LOGI_CORE)) jObj.get(Telemetry.LOGI_CORE)
+                else "null"
+        val hyperThreadingEnabled =
+                if(jObj.has(Telemetry.HT_ENABLE)) jObj.get(Telemetry.HT_ENABLE)
+                else "null"
+        val cpuBaseFreq =
+                if(jObj.has(Telemetry.CPU_BASE)) jObj.get(Telemetry.CPU_BASE)
+                else "null"
+        val cpuTemperature =
+                if(jObj.has(Telemetry.CPU_TMP)) jObj.get(Telemetry.CPU_TMP)
                 else "null"
         val maxMem =
                 if(jObj.has(Telemetry.MAX_MEM)) jObj.get(Telemetry.MAX_MEM)
@@ -235,14 +288,35 @@ class Dolius(private val socket: Socket): Runnable {
         val ldt = LocalDateTime.now()
         val dtString = ldt.toString().replace("T", "_").replace(":", "_")
         sb.append("DT: $dtString").append("\n")
+        sb.append("OS Information:").append("\n")
+        sb.append("${Telemetry.OS_FULL}: $osFull").append("\n")
+        sb.append("${Telemetry.OS_BUILD}: $osBuild").append("\n")
+        sb.append("${Telemetry.OS_CODE}: $osCode").append("\n")
+        sb.append("${Telemetry.OS_MANU}: $osManufacturer").append("\n")
         sb.append("${Telemetry.OS_NAME}: $osName").append("\n")
         sb.append("${Telemetry.OS_VER}: $osVer").append("\n")
-        sb.append("${Telemetry.NUM_CORES}: $numCores").append("\n")
+
+        sb.append("User Information:").append("\n")
         sb.append("${Telemetry.USER_NAME}: $userName").append("\n")
         sb.append("${Telemetry.USER_HOME}: $userHome").append("\n")
         sb.append("${Telemetry.WORKING}: $workingDir").append("\n")
-        sb.append("${Telemetry.JAVA_VER}: $jVer").append("\n")
         sb.append("${Telemetry.IP_ADDR}: $ipAddr").append("\n")
+        sb.append("${Telemetry.HOST_NAME}: $hostName").append("\n")
+        sb.append("${Telemetry.JAVA_VER}: $jVer").append("\n")
+
+        sb.append("Hardware Information:").append("\n")
+        sb.append("${Telemetry.HD_MANU}: $hdManufacturer").append("\n")
+        sb.append("${Telemetry.HD_MODEL}: $hdModel").append("\n")
+        sb.append("${Telemetry.HD_SERI}: $hdSerial").append("\n")
+        sb.append("${Telemetry.UPTIME}: $uptime").append("\n")
+        sb.append("${Telemetry.ON_AC}: $onAC").append("\n")
+        sb.append("${Telemetry.BAT_REM}: $batteryRemaining").append("\n")
+        sb.append("${Telemetry.BAT_CYCL}: $batteryCycles").append("\n")
+        sb.append("${Telemetry.PHYS_CORE}: $physicalCores").append("\n")
+        sb.append("${Telemetry.LOGI_CORE}: $logicalCores").append("\n")
+        sb.append("${Telemetry.HT_ENABLE}: $hyperThreadingEnabled").append("\n")
+        sb.append("${Telemetry.CPU_BASE}: $cpuBaseFreq").append("\n")
+        sb.append("${Telemetry.CPU_TMP}: $cpuTemperature").append("\n")
         sb.append("${Telemetry.MAX_MEM}: $maxMem").append("\n")
         sb.append("${Telemetry.AVAIL_MEM}: $availMem").append("\n")
         sb.append("${Telemetry.FREE_MEM}: $freeMem").append("\n")
