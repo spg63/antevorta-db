@@ -89,7 +89,7 @@ class Dolius(private val socket: Socket): Runnable {
 
         // Read client JSON request. Should contain user, pass, query
         val inputReader: BufferedReader
-        val input: String
+        val input: String?
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
             if(inputReader == null){
@@ -118,7 +118,7 @@ class Dolius(private val socket: Socket): Runnable {
         }
 
         // Create the jsonObject from the client data
-        val jsonObject = getJsonObject(input)
+        val jsonObject = getJsonObject(input!!)
 
         if(jsonObject == null){
             handleRejection("Invalid JSON passed to server")
