@@ -12,6 +12,7 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.URL
 import javax.swing.text.html.parser.TagElement
+import kotlin.math.log
 
 class Telemetry {
     companion object {
@@ -124,9 +125,9 @@ class Telemetry {
     // Checks if a host is available on a specific port. If not return false
     fun isRipperAvailable(): Boolean {
         return try{
-            val sock = Socket()
-            sock.connect(InetSocketAddress(host, port), timeout)
-
+            //val sock = Socket()
+            //sock.connect(InetSocketAddress(host, port), timeout)
+            TSL.get().err("New way to check for ripper availability")
             true
         }
         catch(isDown: IOException){
