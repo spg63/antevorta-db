@@ -94,7 +94,13 @@ class Telemetry {
         json.put(Telemetry.HD_SERI, this.sysHelper.hardwareSerial())
         json.put(Telemetry.UPTIME, this.sysHelper.prettyUptime())
         json.put(Telemetry.ON_AC, this.sysHelper.runningOnAC())
-        json.put(Telemetry.BAT_REM, this.sysHelper.batteryTimeRemainingSeconds())
+        // Double.MAX_VALUE can be ambigious on the receiving end
+        val batTimeRemaining = this.sysHelper.batteryTimeRemainingSeconds()
+        val batTime =   if(batTimeRemaining.compareTo(Double.MAX_VALUE) == 0)
+                            "Unlimited -- Running on AC (probably)"
+                        else
+                            batTimeRemaining
+        json.put(Telemetry.BAT_REM, batTime)
         json.put(Telemetry.BAT_CYCL, this.sysHelper.batteryCycleCount())
         json.put(Telemetry.PHYS_CORE, this.sysHelper.physicalCPUCoreCount())
         json.put(Telemetry.LOGI_CORE, this.sysHelper.reportedCPUCoreCount())
