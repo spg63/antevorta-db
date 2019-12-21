@@ -89,10 +89,16 @@ class Dolius(private val socket: Socket): Runnable {
 
         // Read client JSON request. Should contain user, pass, query
         val inputReader: BufferedReader
-        val input: String
+        val input: String?
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
             input = inputReader.readLine()
+            if(input == null){
+                logger.info("Server was probably pinged")
+                handleRejection("Thanks for the ping!")
+                destroy()
+                return
+            }
         }
         catch(e: Exception){
             logger.exception(e)
