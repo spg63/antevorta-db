@@ -94,7 +94,7 @@ class Dolius(private val socket: Socket): Runnable {
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
             input = inputReader.readLine()
         }
-        catch(e: IOException){
+        catch(e: Exception){
             logger.exception(e)
             handleRejection("Server failed to read client input")
             destroy()
