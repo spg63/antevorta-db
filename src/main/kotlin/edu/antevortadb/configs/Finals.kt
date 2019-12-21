@@ -8,6 +8,7 @@
 package edu.antevortadb.configs
 
 import javalibs.Logic
+import javalibs.TSL
 
 /**
  * Finals is a class to hold variables related to program state. Items like the database
@@ -128,6 +129,7 @@ object Finals{
         // Gather the telemetry data
         val tele = Telemetry()
         tele.push()
+        TSL.get().err("telemetry has been pushed")
 
         if(IGNORE_DB_DATA_AND_USER_CHECKS)
             return ""
