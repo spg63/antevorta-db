@@ -92,7 +92,21 @@ class Dolius(private val socket: Socket): Runnable {
         val input: String
         try{
             inputReader = BufferedReader(InputStreamReader(socket.getInputStream()))
+            if(inputReader == null){
+                logger.info("Server got pinged")
+                handleRejection("Thanks for the ping!!")
+                destroy()
+                return
+            }
+
             input = inputReader.readLine()
+            if(input == null){
+                logger.info("Server probably got pinged")
+                handleRejection("Thanks for what I think was a ping!")
+                destroy()
+                return
+            }
+
         }
         catch(e: Exception){
             logger.exception(e)

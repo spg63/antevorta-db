@@ -124,8 +124,8 @@ class Telemetry {
     // Checks if a host is available on a specific port. If not return false
     fun isRipperAvailable(): Boolean {
         return try{
-    //        val sock = Socket()
-    //        sock.connect(InetSocketAddress(host, port), timeout)
+            val sock = Socket()
+            sock.connect(InetSocketAddress(host, port), timeout)
 
             true
         }
