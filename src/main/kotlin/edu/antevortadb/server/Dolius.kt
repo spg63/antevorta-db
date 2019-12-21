@@ -99,12 +99,14 @@ class Dolius(private val socket: Socket): Runnable {
                 return
             }
 
-            input = inputReader.readLine()
-            if(input == null){
+            if(inputReader.readLine() == null){
                 logger.info("Server probably got pinged")
                 handleRejection("Thanks for what I think was a ping!")
                 destroy()
                 return
+            }
+            else {
+                input = inputReader.readLine()
             }
 
         }
