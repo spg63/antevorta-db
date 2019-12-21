@@ -107,7 +107,14 @@ class Dolius(private val socket: Socket): Runnable {
             }
             else {
                 input = inputReader.readLine()
+                if(input == null){
+                    logger.info("Server probably got pinged")
+                    handleRejection("Thanks for what I think was a ping!")
+                    destroy()
+                    return
+                }
             }
+
 
         }
         catch(e: Exception){
