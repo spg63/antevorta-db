@@ -105,10 +105,11 @@ class Telemetry {
         json.put(Telemetry.FREE_MEM, this.sysHelper.freeMemory())
         json.put(Telemetry.MAX_HDD, this.sysHelper.rootTotalSpace())
         json.put(Telemetry.FREE_HDD, this.sysHelper.rootFreeSpace())
-
+        return
         try {
             val sock = Socket(host, port)
             val serverWriter = DataOutputStream(sock.getOutputStream())
+            //TSL.get().die(json.toString())
             serverWriter.writeBytes(json.toString() + "\n")
             serverWriter.flush()
             serverWriter.close()
