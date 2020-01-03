@@ -8,6 +8,7 @@
 package edu.antevortadb.configs
 
 import javalibs.Logic
+import javalibs.SysHelper
 import javalibs.TSL
 
 /**
@@ -16,6 +17,12 @@ import javalibs.TSL
  * database shards, etc...
  */
 object Finals{
+    /* ---------- Variables that need to be set dynamically in a function ------------- */
+    val sysUtils: SysHelper = SysHelper.get()
+    val SYSTEM_USER: String
+    val TESTING_MODE: Boolean
+    val IS_WINDOWS: Boolean
+
     /* ---------- Program control ----------------------------------------------------- */
     val BLADE_USER = "seang"
     val BLADE_LINUX_USER = "grimes"
@@ -26,33 +33,64 @@ object Finals{
     var IGNORE_DB_DATA_AND_USER_CHECKS = false
     lateinit var otherUserDataPath: String
 
+    // Larger batch size performs better on research machine with individual HDDs for each
+    // DB shard
+    private const val RESEARCH_BATCH_SIZE = 12000
+    // Performs better on single laptop SSD
+    private const val LAPTOP_BATCH_SIZE = 1000
+
+    val DB_BATCH_LIMIT: Int
+
+    init{
+        SYSTEM_USER = initUser()
+        TESTING_MODE = !isResearchMachine()
+        IS_WINDOWS = isWindowsMachine()
+        DB_BATCH_LIMIT = batchLimit()
+        telemetry()
+    }
+
+    /**
+    /* ---------- Program control ----------------------------------------------------- */
+    val BLADE_USER = "seang"
+    val BLADE_LINUX_USER = "grimes"
+    val MINI_USER = "anubis"
+    val RIPPER_USER = "ripper"
+    val MBP_USER = "osiris"
+    val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER, MBP_USER)
+    var IGNORE_DB_DATA_AND_USER_CHECKS = false
+    lateinit var otherUserDataPath: String
+    **/
     // user.name of the current user running this software
-    var SYSTEM_USER = initUser()
+    // /**/ var SYSTEM_USER = initUser()
     // True if windows, else false
+    /**
     val IS_WINDOWS = System.getProperty("os.name").contains("win")
                      || System.getProperty("os.name").contains("Win")
+    **/
     // True when working locally on MBP, false when working on full dataset, changes data
     // & db paths
-    val TESTING_MODE = !isResearchMachine()
+    // /**/ val TESTING_MODE = !isResearchMachine()
+
+    /* ---------- Database control ---------------------------------------------------- */
     // Drops the DBs if they exist and reads in the data again
     const val START_FRESH = false
     // Simple check to make sure we really want to add new data to the DBs
     const val ADD_NEW_DATA = false
-
-    /* ---------- Database control ---------------------------------------------------- */
     const val DB_DRIVER = "org.sqlite.JDBC"
     const val DB_URL_PREFIX = "jdbc:sqlite:"
     const val DB_TYPE_EXT = ".sqlite3"
     var enableForeignKeys = false
+    /**
     // Larger batch size performs better on research machine with individual HDDs for each
     // DB shard
-    private const val RESEARCH_BATCH_SIZE = 10000
+    private const val RESEARCH_BATCH_SIZE = 12000
     // Performs better on single laptop SSD
     private const val LAPTOP_BATCH_SIZE = 1000
     val DB_BATCH_LIMIT = if(isResearchMachine())
                             RESEARCH_BATCH_SIZE
                          else
                             LAPTOP_BATCH_SIZE
+    **/
     // Turns off sqlite synchronous mode, faster batch insertions
     const val SYNC_MODE_OFF = true
     // There are 6 available HDDs for data storage on research machine, use all of them
@@ -76,7 +114,8 @@ object Finals{
 
 
     /* ---------- Server control ------------------------------------------------------ */
-    const val SERVER_SOCKET = 3383
+    const val SERVER_SOCKET_PORT = 3383
+    const val SERVER_SOCKET_HOST = "corticus.us"
     // NOTE: These columns are common to most DB types and are named here for
     // consistency across insertions
     // and selection from various data sources. It will allow for further generalization
@@ -126,14 +165,16 @@ object Finals{
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
     fun initUser(): String {
-        // Gather the telemetry data
-        val tele = Telemetry()
-        tele.push()
-
         if(IGNORE_DB_DATA_AND_USER_CHECKS)
             return ""
         else
-            return System.getProperty("user.name")
+            return sysUtils.userName()
+    }
+
+    fun telemetry() {
+        val telemetry = Telemetry()
+        TSL.get().trace("Finals initialization complete, gathering telemetry")
+        telemetry.push()
     }
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost
@@ -141,19 +182,37 @@ object Finals{
     // have a damn clue why and it'll take me a few hours to find this again. Future
     // me: sorry.
     fun isResearchMachine(): Boolean {
+        // Special mode enabled for people to run without complete data-path setup
         if(IGNORE_DB_DATA_AND_USER_CHECKS) return false
 
+        // Running on ripper, the research machine
         if(SYSTEM_USER == RIPPER_USER)
             return true
-        if(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER))
-            return false
 
+        // Not ripper, and not special mode, user must exist in the users list to continue
+        // If the user doesn't exist this check will kill the program
         Logic.get().require(NONRESEARCH_USERS_LIST.contains(SYSTEM_USER),
-                "Unknown hardware / user. Data paths will likely be incorrect. " +
-                        "Contact sean@seanpgrimes.com")
+                "Unknown hardware / user. Data paths wil be incorrect. Contact " +
+                        "sean@seanpgrimes.com or properly enable special access mode " +
+                        "following the instructions you were given.")
 
-        // We'll never get here, but the compiler doesn't know that
+        // The user exists in the NONRESEARCH_USERS_LIST, return false
         return false
+    }
+
+    // Function only necessary to dynamically set this at runtime while retaining val
+    // instead of var properties
+    fun isWindowsMachine(): Boolean {
+        val osName = sysUtils.osName()
+        return osName.toLowerCase().contains("win")
+    }
+
+    // Function only necessary to dynamically set this at runtime while retaining al
+    // instead of var properties
+    fun batchLimit(): Int {
+        if(isResearchMachine())
+            return RESEARCH_BATCH_SIZE
+        return LAPTOP_BATCH_SIZE
     }
 
     /* ---------- Random constants -----------------------------------------------------*/

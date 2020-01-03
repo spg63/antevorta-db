@@ -36,10 +36,10 @@ object DataPaths{
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_data_${SEP}"
         else -> {
             if(Finals.IGNORE_DB_DATA_AND_USER_CHECKS) {
-                if(Finals.otherUserDataPath != null)
+                if(Finals.otherUserDataPath.isNotEmpty())
                     Finals.otherUserDataPath
                 else {
-                    Logic.get().dieFrom("Finals.otherUserDataPath null")
+                    Logic.get().dieFrom("Finals.otherUserDataPath empty")
                     ""
                 }
             }

@@ -5,6 +5,7 @@
 
 package edu.antevortadb.client
 
+import javalibs.FileUtils
 import javalibs.TSL
 import org.json.JSONArray
 import org.json.JSONException
@@ -131,28 +132,15 @@ class AntevortaClient(configFilePath: String) {
 //----- Internal methods -----------------------------------------------------------------
 
     private fun parseConfigFile(){
-        var fullString = String()
-        try{
-            val br = BufferedReader(FileReader(this.configPath))
-            val sb = StringBuilder()
-            var line = br.readLine()
-            while(line != null){
-                sb.append(line)
-                sb.append(System.lineSeparator())
-                line = br.readLine()
-            }
-            fullString = sb.toString()
-        }
-        catch(e: IOException){
-            logger.exception((e))
-        }
+        // Read in the config file as a regular string to be passed to JSONObject c'tor
+        val configAsString = FileUtils.get().readFullFile(this.configPath)
 
-        if(fullString.isEmpty()){
+        if(configAsString == null || configAsString.isEmpty()){
             logger.die("Unable to parse config file")
         }
 
         val json: JSONObject = try {
-            JSONObject(fullString)
+            JSONObject(configAsString)
         }
         catch(e: JSONException) {
             logger.die(e)

@@ -2,6 +2,7 @@ package edu.antevortadb.configs
 
 import javalibs.NetworkUtils
 import javalibs.SysHelper
+import javalibs.TSL
 import org.json.JSONObject
 
 class Telemetry {
@@ -13,7 +14,7 @@ class Telemetry {
     init {
         this.sysHelper = SysHelper.get()
         this.networkUtils = NetworkUtils.get()
-        this.ipAddr = this.sysHelper.externalIPAddr()
+        this.ipAddr = this.networkUtils.externalIPAddr()
     }
 
     companion object {
@@ -33,6 +34,7 @@ class Telemetry {
         const val IP_ADDR   = "ip.addr"
         const val HOST_NAME = "user.hostName"
         const val JAVA_VER  = "java.version"
+        const val JAVA_VEN  = "java.vendor"
 
         // Hardware Keys
         const val HD_MANU   = "hd.manufacturer"
@@ -55,8 +57,8 @@ class Telemetry {
 
         /* ---------- Socket Keys ------------------------------------------------------*/
         const val user      = "tele"
-        const val port      = 3383
-        const val host      = "corticus.us"
+        const val port      = Finals.SERVER_SOCKET_PORT
+        const val host      = Finals.SERVER_SOCKET_HOST
         const val timeout   = 2000
     }
 
@@ -68,13 +70,17 @@ class Telemetry {
         // function just skips gathering telemetry since I don't want to try another
         // network connection at this point and waste more time. Also check for
         // ripper's status and skip if ripper isn't reachable
-        if(this.sysHelper.BAD_NETWORK_ATEMPT == this.ipAddr || !isRipperAvailable())
+        if(this.networkUtils.BAD_NETWORK_ATEMPT == this.ipAddr || !isRipperAvailable()) {
+            TSL.get().warn("Telemetry push aborted due to network problems")
             return
+        }
 
         val json = buildTelemetryObject()
+        TSL.get().trace("Telemetry object built successfully")
 
         // Push the json object to ripper, no response necessary
         networkUtils.writeWithoutResponse(host, port, json.toString())
+        TSL.get().trace("Pushed telemetry object to $host")
     }
 
     /**
@@ -96,45 +102,46 @@ class Telemetry {
         json.put("PASS", "OPEN")
 
         // Gather the OS related information
-        json.put(Telemetry.OS_FULL, this.sysHelper.osVersionFullInfo())
-        json.put(Telemetry.OS_BUILD, this.sysHelper.osBuildNumber())
-        json.put(Telemetry.OS_CODE, this.sysHelper.osCodeName())
-        json.put(Telemetry.OS_MANU, this.sysHelper.osManufacturer())
-        json.put(Telemetry.OS_NAME, this.sysHelper.osName())
-        json.put(Telemetry.OS_VER, this.sysHelper.osVer())
+        json.put(Telemetry.OS_FULL,     this.sysHelper.osVersionFullInfo())
+        json.put(Telemetry.OS_BUILD,    this.sysHelper.osBuildNumber())
+        json.put(Telemetry.OS_CODE,     this.sysHelper.osCodeName())
+        json.put(Telemetry.OS_MANU,     this.sysHelper.osManufacturer())
+        json.put(Telemetry.OS_NAME,     this.sysHelper.osName())
+        json.put(Telemetry.OS_VER,      this.sysHelper.osVer())
 
         // Gather the User information
-        json.put(Telemetry.USER_NAME, this.sysHelper.userName())
-        json.put(Telemetry.USER_HOME, this.sysHelper.userHome())
-        json.put(Telemetry.WORKING, this.sysHelper.userWorking())
-        json.put(Telemetry.IP_ADDR, this.ipAddr)
-        json.put(Telemetry.HOST_NAME, this.sysHelper.hostName())
-        json.put(Telemetry.JAVA_VER, this.sysHelper.javaVer())
+        json.put(Telemetry.USER_NAME,   this.sysHelper.userName())
+        json.put(Telemetry.USER_HOME,   this.sysHelper.userHome())
+        json.put(Telemetry.WORKING,     this.sysHelper.userWorking())
+        json.put(Telemetry.IP_ADDR,     this.ipAddr)
+        json.put(Telemetry.HOST_NAME,   this.sysHelper.hostName())
+        json.put(Telemetry.JAVA_VER,    this.sysHelper.javaVer())
+        json.put(Telemetry.JAVA_VEN,    this.sysHelper.JVMVendor())
 
         // Gather and aggregate the hardware information
-        json.put(Telemetry.HD_MANU, this.sysHelper.hardwareManufacturer())
-        json.put(Telemetry.HD_MODEL, this.sysHelper.hardwareModel())
-        json.put(Telemetry.HD_SERI, this.sysHelper.hardwareSerial())
-        json.put(Telemetry.UPTIME, this.sysHelper.prettyUptime())
-        json.put(Telemetry.ON_AC, this.sysHelper.runningOnAC())
+        json.put(Telemetry.HD_MANU,     this.sysHelper.hardwareManufacturer())
+        json.put(Telemetry.HD_MODEL,    this.sysHelper.hardwareModel())
+        json.put(Telemetry.HD_SERI,     this.sysHelper.hardwareSerial())
+        json.put(Telemetry.UPTIME,      this.sysHelper.prettyUptime())
+        json.put(Telemetry.ON_AC,       this.sysHelper.runningOnAC())
         // Double.MAX_VALUE can be ambigious on the receiving end
         val batTimeRemaining = this.sysHelper.batteryTimeRemainingSeconds()
         val batTime =   if(batTimeRemaining.compareTo(Double.MAX_VALUE) == 0)
             "Unlimited -- Running on AC (probably)"
         else
             batTimeRemaining.toString()
-        json.put(Telemetry.BAT_REM, batTime)
-        json.put(Telemetry.BAT_CYCL, this.sysHelper.batteryCycleCount())
-        json.put(Telemetry.PHYS_CORE, this.sysHelper.physicalCPUCoreCount())
-        json.put(Telemetry.LOGI_CORE, this.sysHelper.reportedCPUCoreCount())
-        json.put(Telemetry.HT_ENABLE, this.sysHelper.hasHyperThreading())
-        json.put(Telemetry.CPU_BASE, this.sysHelper.cpuMaxBaseFreq())
-        json.put(Telemetry.CPU_TMP, this.sysHelper.cpuTemp())
-        json.put(Telemetry.MAX_MEM, this.sysHelper.maxMem())
-        json.put(Telemetry.AVAIL_MEM, this.sysHelper.totalMem())
-        json.put(Telemetry.FREE_MEM, this.sysHelper.freeMemory())
-        json.put(Telemetry.MAX_HDD, this.sysHelper.rootTotalSpace())
-        json.put(Telemetry.FREE_HDD, this.sysHelper.rootFreeSpace())
+        json.put(Telemetry.BAT_REM,     batTime)
+        json.put(Telemetry.BAT_CYCL,    this.sysHelper.batteryCycleCount())
+        json.put(Telemetry.PHYS_CORE,   this.sysHelper.physicalCPUCoreCount())
+        json.put(Telemetry.LOGI_CORE,   this.sysHelper.reportedCPUCoreCount())
+        json.put(Telemetry.HT_ENABLE,   this.sysHelper.hasHyperThreading())
+        json.put(Telemetry.CPU_BASE,    this.sysHelper.cpuMaxBaseFreq())
+        json.put(Telemetry.CPU_TMP,     this.sysHelper.cpuTemp())
+        json.put(Telemetry.MAX_MEM,     this.sysHelper.maxMem())
+        json.put(Telemetry.AVAIL_MEM,   this.sysHelper.totalMem())
+        json.put(Telemetry.FREE_MEM,    this.sysHelper.freeMemory())
+        json.put(Telemetry.MAX_HDD,     this.sysHelper.rootTotalSpace())
+        json.put(Telemetry.FREE_HDD,    this.sysHelper.rootFreeSpace())
 
         return json
     }

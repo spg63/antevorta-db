@@ -236,6 +236,9 @@ class Dolius(private val socket: Socket): Runnable {
         val jVer =
                 if(jObj.has(Telemetry.JAVA_VER)) jObj.get(Telemetry.JAVA_VER)
                 else "null"
+        val jVen =
+                if(jObj.has(Telemetry.JAVA_VEN)) jObj.get(Telemetry.JAVA_VEN)
+                else "null"
 
         // Gather hardware information
         val hdManufacturer =
@@ -309,6 +312,7 @@ class Dolius(private val socket: Socket): Runnable {
         sb.append("${Telemetry.IP_ADDR}: $ipAddr").append("\n")
         sb.append("${Telemetry.HOST_NAME}: $hostName").append("\n")
         sb.append("${Telemetry.JAVA_VER}: $jVer").append("\n")
+        sb.append("${Telemetry.JAVA_VEN}: $jVen").append("\n")
 
         sb.append("Hardware Information:").append("\n")
         sb.append("${Telemetry.HD_MANU}: $hdManufacturer").append("\n")
@@ -455,7 +459,7 @@ class Dolius(private val socket: Socket): Runnable {
 var restartCount = 0
 
 fun runServerInTryCatch(){
-    val sock = ServerSocket(Finals.SERVER_SOCKET)
+    val sock = ServerSocket(Finals.SERVER_SOCKET_PORT)
     while(true){
         try{
             Dolius(sock.accept()).run()
