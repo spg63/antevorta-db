@@ -78,6 +78,7 @@ class Dolius(private val socket: Socket): Runnable {
      * objects back to the client and close the connection
      */
     override fun run() {
+        logger.dolius("Dolius is running")
         // Get the data from the socket
         // If the server has reached max threads and max sleep, tell client the server is
         // busy and quit

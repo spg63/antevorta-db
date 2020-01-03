@@ -6,14 +6,12 @@ import javalibs.TSL
 import org.json.JSONObject
 
 class Telemetry {
-    val sysHelper: SysHelper
-    val networkUtils: NetworkUtils
+    val sysHelper: SysHelper = SysHelper.get()
+    val networkUtils: NetworkUtils = NetworkUtils.get()
     val ipAddr: String
 
 
     init {
-        this.sysHelper = SysHelper.get()
-        this.networkUtils = NetworkUtils.get()
         this.ipAddr = this.networkUtils.externalIPAddr()
     }
 
