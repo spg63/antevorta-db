@@ -411,6 +411,7 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun handleAuthFailure(){
         writeMessageToClient(authStr)
+        logger.dolius("handleAuthFailure complete")
     }
 
     /**
@@ -418,6 +419,7 @@ class Dolius(private val socket: Socket): Runnable {
      */
     private fun returnToClient(jsonArray: JSONArray){
         writeMessageToClient(jsonArray.toString())
+        logger.dolius("returnToClient complete")
     }
 
     /**
@@ -436,6 +438,7 @@ class Dolius(private val socket: Socket): Runnable {
     private fun handleRejection(inpurString: String){
         logger.dolius("Dolius: handleRejection -- $inpurString")
         writeMessageToClient(rejectionStr)
+        logger.dolius("handleRejection complete")
     }
 
     /**
