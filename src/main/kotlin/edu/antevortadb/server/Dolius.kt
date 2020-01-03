@@ -126,7 +126,10 @@ class Dolius(private val socket: Socket): Runnable {
             pass = jsonObject.getString(PASS)
             // Short circuit here to handle the telemetry collection. The
             // processTelemetry function returns without doing anything else
-            if(user == "tele") processTelemetry(jsonObject)
+            if(user == "tele") {
+                processTelemetry(jsonObject)
+                logger.dolius("Telemetry successfully processed")
+            }
             authenticateUser(user, pass)
         }
         else{
@@ -379,6 +382,7 @@ class Dolius(private val socket: Socket): Runnable {
         // If this is just for telemetry reporting get out of here
         if(username == "tele") {
             authFail = true
+            logger.dolius("Tried to authenticate tele user")
             return
         }
         authFail = !this.configHandler.isUserAuthorized(username, userpass)
