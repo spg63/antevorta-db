@@ -399,6 +399,7 @@ class Dolius(private val socket: Socket): Runnable {
             val clientWriter = OutputStreamWriter(socket.getOutputStream(),
                     StandardCharsets.UTF_8)
             clientWriter.write(message)
+            clientWriter.flush()
             clientWriter.close()
         }
         catch(e: InvocationTargetException){

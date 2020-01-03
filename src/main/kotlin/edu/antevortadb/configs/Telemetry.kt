@@ -64,7 +64,6 @@ class Telemetry {
      * Gather the telemetry data and push it to ripper for collection
      */
     fun push() {
-        return
         // Gather the IP address. Want to get this first, if there's a timeout this
         // function just skips gathering telemetry since I don't want to try another
         // network connection at this point and waste more time. Also check for
