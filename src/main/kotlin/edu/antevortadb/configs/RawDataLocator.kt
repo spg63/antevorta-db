@@ -59,6 +59,16 @@ object RawDataLocator{
     }
 
     /**
+     * Get the path to the stats data storage location
+     */
+    fun STATSPath(): String {
+        return when(Finals.TESTING_MODE){
+            true -> DataPaths.LOCAL_STATS_PATH
+            false -> DataPaths.STATS_PATH
+        }
+    }
+
+    /**
      * Returns the path to the server config directory
      */
     fun serverConfigPath(): String {

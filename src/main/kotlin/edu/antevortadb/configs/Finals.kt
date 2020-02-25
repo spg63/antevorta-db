@@ -49,28 +49,6 @@ object Finals{
         telemetry()
     }
 
-    /**
-    /* ---------- Program control ----------------------------------------------------- */
-    val BLADE_USER = "seang"
-    val BLADE_LINUX_USER = "grimes"
-    val MINI_USER = "anubis"
-    val RIPPER_USER = "ripper"
-    val MBP_USER = "osiris"
-    val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER, MBP_USER)
-    var IGNORE_DB_DATA_AND_USER_CHECKS = false
-    lateinit var otherUserDataPath: String
-    **/
-    // user.name of the current user running this software
-    // /**/ var SYSTEM_USER = initUser()
-    // True if windows, else false
-    /**
-    val IS_WINDOWS = System.getProperty("os.name").contains("win")
-                     || System.getProperty("os.name").contains("Win")
-    **/
-    // True when working locally on MBP, false when working on full dataset, changes data
-    // & db paths
-    // /**/ val TESTING_MODE = !isResearchMachine()
-
     /* ---------- Database control ---------------------------------------------------- */
     // Drops the DBs if they exist and reads in the data again
     const val START_FRESH = false
@@ -80,17 +58,6 @@ object Finals{
     const val DB_URL_PREFIX = "jdbc:sqlite:"
     const val DB_TYPE_EXT = ".sqlite3"
     var enableForeignKeys = false
-    /**
-    // Larger batch size performs better on research machine with individual HDDs for each
-    // DB shard
-    private const val RESEARCH_BATCH_SIZE = 12000
-    // Performs better on single laptop SSD
-    private const val LAPTOP_BATCH_SIZE = 1000
-    val DB_BATCH_LIMIT = if(isResearchMachine())
-                            RESEARCH_BATCH_SIZE
-                         else
-                            LAPTOP_BATCH_SIZE
-    **/
     // Turns off sqlite synchronous mode, faster batch insertions
     const val SYNC_MODE_OFF = true
     // There are 6 available HDDs for data storage on research machine, use all of them
@@ -117,9 +84,8 @@ object Finals{
     const val SERVER_SOCKET_PORT = 3383
     const val SERVER_SOCKET_HOST = "corticus.us"
     // NOTE: These columns are common to most DB types and are named here for
-    // consistency across insertions
-    // and selection from various data sources. It will allow for further generalization
-    // in higher levels of code
+    // consistency across insertions and selection from various data sources. It will
+    // allow for further generalization in higher levels of code
 
     // Used to identify the name or username of a poster
     const val AUTHOR = "author"
@@ -165,10 +131,10 @@ object Finals{
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
     fun initUser(): String {
-        if(IGNORE_DB_DATA_AND_USER_CHECKS)
-            return ""
+        return if(IGNORE_DB_DATA_AND_USER_CHECKS)
+            ""
         else
-            return sysUtils.userName()
+            sysUtils.userName()
     }
 
     fun telemetry() {
@@ -179,15 +145,14 @@ object Finals{
 
     // Very basic, needs to be more robust but works now on my known machines. Will almost
     // certainly fail at some point in the future with unexpected hardware and I won't
-    // have a damn clue why and it'll take me a few hours to find this again. Future
-    // me: sorry.
+    // have a fucking clue why and it'll take me a few hours to find this again.
+    // Future me: sorry.
     fun isResearchMachine(): Boolean {
         // Special mode enabled for people to run without complete data-path setup
         if(IGNORE_DB_DATA_AND_USER_CHECKS) return false
 
         // Running on ripper, the research machine
-        if(SYSTEM_USER == RIPPER_USER)
-            return true
+        if(SYSTEM_USER == RIPPER_USER) return true
 
         // Not ripper, and not special mode, user must exist in the users list to continue
         // If the user doesn't exist this check will kill the program
@@ -207,7 +172,7 @@ object Finals{
         return osName.toLowerCase().contains("win")
     }
 
-    // Function only necessary to dynamically set this at runtime while retaining al
+    // Function only necessary to dynamically set this at runtime while retaining val
     // instead of var properties
     fun batchLimit(): Int {
         if(isResearchMachine())

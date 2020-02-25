@@ -148,4 +148,3 @@ class Telemetry {
     private fun isRipperAvailable(): Boolean = networkUtils.pingHost(host, port, timeout)
 
 }
-
