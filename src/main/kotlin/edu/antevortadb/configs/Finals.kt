@@ -41,6 +41,8 @@ object Finals{
 
     val DB_BATCH_LIMIT: Int
 
+    var overrideTelemetry: Boolean = true
+
     init{
         SYSTEM_USER = initUser()
         TESTING_MODE = !isResearchMachine()
@@ -138,6 +140,14 @@ object Finals{
     }
 
     fun telemetry() {
+        // Allow telemetry collection to be overriden when using a known user account
+        // and flag is set to skip
+        if((overrideTelemetry && !TESTING_MODE) ||
+                (overrideTelemetry && NONRESEARCH_USERS_LIST.contains(SYSTEM_USER)))
+            return
+        println("override: ${overrideTelemetry}")
+        println("contains: ${NONRESEARCH_USERS_LIST.contains(SYSTEM_USER)}")
+        println("not skipped")
         val telemetry = Telemetry()
         TSL.get().trace("Finals initialization complete, gathering telemetry")
         telemetry.push()
