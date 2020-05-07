@@ -69,7 +69,7 @@ class Telemetry {
         // network connection at this point and waste more time. Also check for
         // ripper's status and skip if ripper isn't reachable
         if(this.networkUtils.BAD_NETWORK_ATEMPT == this.ipAddr || !isRipperAvailable()) {
-            TSL.get().warn("Telemetry push aborted due to network problems")
+            TSL.get().warn("Telemetry -- Aborted due to network problem")
             return
         }
 

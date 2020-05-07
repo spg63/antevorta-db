@@ -18,30 +18,30 @@ import javalibs.TSL
  */
 object Finals{
     /* ---------- Variables that need to be set dynamically in a function ------------- */
-    val sysUtils: SysHelper = SysHelper.get()
+    val sysUtils: SysHelper                 = SysHelper.get()
     val SYSTEM_USER: String
     val TESTING_MODE: Boolean
     val IS_WINDOWS: Boolean
 
     /* ---------- Program control ----------------------------------------------------- */
-    val BLADE_USER = "seang"
-    val BLADE_LINUX_USER = "grimes"
-    val MINI_USER = "anubis"
-    val RIPPER_USER = "ripper"
-    val MBP_USER = "osiris"
+    val BLADE_USER                          = "seang"
+    val BLADE_LINUX_USER                    = "grimes"
+    val MINI_USER                           = "anubis"
+    val RIPPER_USER                         = "ripper"
+    val MBP_USER                            = "osiris"
     val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER, MBP_USER)
     var IGNORE_DB_DATA_AND_USER_CHECKS = false
     lateinit var otherUserDataPath: String
 
     // Larger batch size performs better on research machine with individual HDDs for each
     // DB shard
-    private const val RESEARCH_BATCH_SIZE = 12000
+    private const val RESEARCH_BATCH_SIZE   = 12000
     // Performs better on single laptop SSD
-    private const val LAPTOP_BATCH_SIZE = 1000
+    private const val LAPTOP_BATCH_SIZE     = 1000
 
     val DB_BATCH_LIMIT: Int
 
-    var overrideTelemetry: Boolean = true
+    var overrideTelemetry: Boolean          = true
 
     init{
         SYSTEM_USER = initUser()
@@ -53,17 +53,17 @@ object Finals{
 
     /* ---------- Database control ---------------------------------------------------- */
     // Drops the DBs if they exist and reads in the data again
-    const val START_FRESH = false
+    const val START_FRESH                   = false
     // Simple check to make sure we really want to add new data to the DBs
-    const val ADD_NEW_DATA = false
-    const val DB_DRIVER = "org.sqlite.JDBC"
-    const val DB_URL_PREFIX = "jdbc:sqlite:"
-    const val DB_TYPE_EXT = ".sqlite3"
-    var enableForeignKeys = false
+    const val ADD_NEW_DATA                  = false
+    const val DB_DRIVER                     = "org.sqlite.JDBC"
+    const val DB_URL_PREFIX                 = "jdbc:sqlite:"
+    const val DB_TYPE_EXT                   = ".sqlite3"
+    var enableForeignKeys                   = false
     // Turns off sqlite synchronous mode, faster batch insertions
-    const val SYNC_MODE_OFF = true
+    const val SYNC_MODE_OFF                 = true
     // There are 6 available HDDs for data storage on research machine, use all of them
-    const val DB_SHARD_NUM = 6
+    const val DB_SHARD_NUM                  = 6
     // Configuration table
     const val CONFIG_TABLE                  = "configs"
     // Reddit table names
@@ -83,52 +83,52 @@ object Finals{
 
 
     /* ---------- Server control ------------------------------------------------------ */
-    const val SERVER_SOCKET_PORT = 3383
-    const val SERVER_SOCKET_HOST = "corticus.us"
+    const val SERVER_SOCKET_PORT            = 3383
+    const val SERVER_SOCKET_HOST            = "corticus.us"
     // NOTE: These columns are common to most DB types and are named here for
     // consistency across insertions and selection from various data sources. It will
     // allow for further generalization in higher levels of code
 
     // Used to identify the name or username of a poster
-    const val AUTHOR = "author"
+    const val AUTHOR                        = "author"
 
     // Used to identify the content of a post or comment, if it exists
-    const val BODY = "body"
+    const val BODY                          = "body"
 
     // Used to identify the SQLite compatible datetime string associated with post
     // creation date / time
-    const val CREATED_DT = "created_dt"
+    const val CREATED_DT                    = "created_dt"
 
     // Used to identify the ID of a post, if it exists
-    const val POST_ID = "pid"
+    const val POST_ID                       = "pid"
 
     // Used to identify a link to the post, if it exists
-    const val PERMALINK = "permalink"
+    const val PERMALINK                     = "permalink"
 
     // Used to identify the SQLite compatible date-time string associated with
     // post scraped on date / time
-    const val SCRAPED_DT = "scraped_on"
+    const val SCRAPED_DT                    = "scraped_on"
 
     // Used to identify a score associated with a post, if it exists
-    const val SCORE = "score"
+    const val SCORE                         = "score"
 
     // Used to identify a title of a post, if it exists
-    const val TITLE = "post_title"
+    const val TITLE                         = "post_title"
 
     // Used for the autoincrement key
-    const val ID = "ID"
+    const val ID                            = "ID"
 
     // Hollywood movie id for TMDB
-    const val TMDB_ID = "tmdb_movieid"
+    const val TMDB_ID                       = "tmdb_movieid"
 
     // Hollywood movie id for IMDB
-    const val IMDB_ID = "imdb_movieid"
+    const val IMDB_ID                       = "imdb_movieid"
 
     // Hollywood movie id for Movielens
-    const val ML_ID = "movielens_movieid"
+    const val ML_ID                         = "movielens_movieid"
 
     // User ID column (not user name! A numeric ID!)
-    const val USER_ID = "userid"
+    const val USER_ID                       = "userid"
 
     /* ---------- Helper functions ---------------------------------------------------- */
     // Function to force-init the SYSTEM_USER variable
