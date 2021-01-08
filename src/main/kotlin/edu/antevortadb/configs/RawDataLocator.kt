@@ -207,6 +207,39 @@ object RawDataLocator{
         }
     }
 
+    /**
+     * @return Path to the data directory for the breast cancer files
+     */
+    fun bcDirPath(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.LOCAL_BREAST_CANCER_PATH
+            false -> DataPaths.BREAST_CANCER_PATH
+        }
+    }
+
+    /**
+     * @return Mark Zarella's original CSV
+     * NOTE: This call is generally just used for cleaning up the CSV to get it into
+     * working order
+     */
+    fun bcOriginalCSVAbsolutePath(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.LOCAL_BC_ORIG_FILE
+            false -> DataPaths.BC_ORIG_FILE
+        }
+    }
+
+    /**
+     * @return The cleaned breast cancer CSV, after organizing the stains and dealing
+     * with the mitotic score / count issue
+     */
+    fun bcCSVAbsolutePath(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.LOCAL_BC_CLEANED_FILE
+            false -> DataPaths.BC_CLEANED_FILE
+        }
+    }
+
     /* ----- The below deal with getting paths to new data to add to *EXISTING* DBs --- */
     /**
      * Some data is added once without update, however the function to gather new data

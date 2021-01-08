@@ -16,6 +16,7 @@ class BreastCancerPatient: CancerPatient {
     // Various stains, which may not be specific to breast cancer but are, non-the-less,
     // being stored in the breast cancer class to reduce confusion with other stains
 
+    constructor(): super() { }
 
     override fun parsePatientData(cols: List<String>): Boolean {
         TODO("Not yet implemented")

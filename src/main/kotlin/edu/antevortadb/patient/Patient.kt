@@ -16,7 +16,7 @@ abstract class Patient {
 
     protected var ID: String = ""
     protected var age: Int = 0
-    protected var bioGen: Gender = Gender.UNKNOWN
+    protected var reportedGender: Gender = Gender.UNKNOWN
 
     abstract fun parse(cols: List<String>): Boolean
 }

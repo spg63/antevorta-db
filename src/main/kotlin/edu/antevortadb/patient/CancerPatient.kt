@@ -54,6 +54,7 @@ abstract class CancerPatient: Patient {
     protected var axillaryNodesTested: Int = -1
     protected var axillaryNodesPositive: Int = -1
 
+    constructor(): super() { }
 }
 
 
