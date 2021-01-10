@@ -1,6 +1,6 @@
 package edu.antevortadb.patient.stain
 
-class StandardStain: BaseStain {
+open class StandardStain: BaseStain {
     protected var percentPosNuclei: Double = 0.0
     protected var intensityScore: Int = 0
     protected var percent3PlusNuclei: Double = 0.0

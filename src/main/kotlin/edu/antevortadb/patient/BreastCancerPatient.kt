@@ -18,7 +18,7 @@ class BreastCancerPatient: CancerPatient {
 
     constructor(): super() { }
 
-    override fun parsePatientData(cols: List<String>): Boolean {
+    override fun parse(cols: List<String>): Boolean {
         TODO("Not yet implemented")
     }
 }

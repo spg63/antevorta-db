@@ -80,7 +80,9 @@ object Finals{
     const val TMDB_MOVIES_TABLE             = "movies"
     // Model storage
     const val TRAINED_MODELS_TABLE          = "classifier_models"
-
+    // Breast Cancer constants
+    const val BC_WORKING_CSV                = "BC_working.csv"
+    const val BC_ORIG_CSV                   = "BC03_17.csv"
 
     /* ---------- Server control ------------------------------------------------------ */
     const val SERVER_SOCKET_PORT            = 3383

@@ -67,8 +67,8 @@ object DataPaths{
 
     // Local paths for Mark Zarella's breast cancer data
     val LOCAL_BREAST_CANCER_PATH    = "${LOCAL_PATH}breastCancer${SEP}"
-    val LOCAL_BC_ORIG_FILE          = "${LOCAL_BREAST_CANCER_PATH}BC03_17.csv"
-    val LOCAL_BC_CLEANED_FILE       = "${LOCAL_BREAST_CANCER_PATH}BC_working.csv"
+    val LOCAL_BC_ORIG_FILE          = "${LOCAL_BREAST_CANCER_PATH}${Finals.BC_ORIG_CSV}"
+    val LOCAL_BC_CLEANED_FILE       = "${LOCAL_BREAST_CANCER_PATH}${Finals.BC_WORKING_CSV}"
 
     // Directory paths where new Reddit JSON data will be stored in 'TESTING_MODE'
     val LOCAL_NEW_REDDIT_SUB_DATA   = "${LOCAL_PATH}new${SEP}submissions${SEP}"
@@ -101,8 +101,8 @@ object DataPaths{
 
     // Paths for Mark Zarella's breast cancer data
     val BREAST_CANCER_PATH          = "${RESEARCH_RAW_DATA_ROOT}breastCancer${SEP}"
-    val BC_ORIG_FILE                = "${BREAST_CANCER_PATH}BC03_17.csv"
-    val BC_CLEANED_FILE             = "${BREAST_CANCER_PATH}BC_working.csv"
+    val BC_ORIG_FILE                = "${BREAST_CANCER_PATH}${Finals.BC_ORIG_CSV}"
+    val BC_CLEANED_FILE             = "${BREAST_CANCER_PATH}${Finals.BC_WORKING_CSV}"
 
     // Directory paths when running on the research machine for new JSON data
     val NEW_REDDIT_SUB_DATA_PATH    = "${REDDIT_DATA_ROOT}New${SEP}Submissions${SEP}"
