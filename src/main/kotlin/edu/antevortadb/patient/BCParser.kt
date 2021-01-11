@@ -2,9 +2,9 @@ package edu.antevortadb.patient
 
 import edu.antevortadb.configs.RawDataLocator
 import javalibs.CSVExtractor
+import javalibs.FileUtils
 import javalibs.Logic
 import javalibs.TSL
-import javalibs.Timer
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
@@ -94,6 +94,45 @@ class BCParser {
         "BJ"    // [Double] Value for the above
     )
 
+    // Columns to be create for:
+    //  ER, PR, KI67, P53
+    val colsForStandardStain = mutableListOf<String>(
+        "percentPosNuclei",
+        "intensityScore",
+        "3+percentNuclei",
+        "2+percentNuclei",
+        "1+percentNuclei",
+        "0+percentNuclei",
+        "avgPosIntensity",
+        "avgNegIntensity",
+        "3+nuclei",
+        "2+nuclei",
+        "1+nuclei",
+        "0+nuclei",
+        "totalNuclei",
+        "avgNuclearRGBIntensity",
+        "avgNuclearSizePixels",
+        "avgNuclearSizeMicroM",
+        "areaOfAnalysisPixels",
+        "areaOfAnalysisMilliM"
+    )
+
+    val colsForHER2Stain = mutableListOf<String>(
+        "her2Score",
+        "3+percentCells",
+        "2+percentCells",
+        "1+percentCells",
+        "0+percentCells",
+        "percentComplete",
+        "membraneIntensityAvg",
+        "3+cells",
+        "2+cells",
+        "1+cells",
+        "0+cells",
+        "totalCells",
+        "completeCells"
+    )
+
     fun parseData() {
 
         // Add all of the features together, standard and stain
@@ -139,7 +178,6 @@ class BCParser {
                 patientRecordMap[refID]!!.add(record)
         }
 
-
         /*
             All data for each patient is now associated with the patient. Time to go
             through and organize the stain information into columns.
@@ -151,22 +189,77 @@ class BCParser {
             a possible issue for the time being, looking for each stain exactly once
             and on a first come, first serve basis.
         */
-        log_.info("patientRecordMap size: ${patientRecordMap.size}")
-        val pat1 = patientRecordMap["IG14-23"]
-        val row1 = pat1!![1]
-        for(col in 0 until row1.size())
-            log_.info(row1[col])
 
+        // List of Reference ID that are stored (i.e. the list of patients) [unordered]
+        val listOfPatients = patientRecordMap.keys
+        logic_.require(listOfPatients.size == patientRecordMap.size)
 
+        /*
+         Now run through the patients and start organizing the stains. The first step
+         in this is creating the new column headers for the stain information. This
+         will only take the first patient, maybe first few, plus some later ones for
+         HER2 and BCL-2 to fully finish. Once they're created, as new patients role
+         through the data should just get filled in
+        */
 
-
-
+        val outputWriter = Files.newBufferedWriter(Paths.get(this.outputCSV))
+        val setOfCreatedColumnHeaders = HashSet<String>()
+        var cnt = 0
+        for(patient in listOfPatients){
+            val rowsForPatient = patientRecordMap[patient]!!
+            for(row in rowsForPatient){
+                var stain = row.get("Stain")
+                log_.info("Stain before regex: $stain")
+                // Remove all content inside parenthesis
+                stain = stain.replace("\\s*\\([^\\)]*\\)\\s*".toRegex(), "")
+                // Remove all dashes
+                stain = stain.replace("-", "")
+                // Remove all extra white space
+                stain = stain.trim()
+                // Convert to lowercase for all remaining characters
+                stain = stain.toUpperCase()
+            }
+        }
 
         /*****
          *
          * FIXME: Staining should be thesholded instead of linear, need to calculate
          * FIXME: H-scores for the stains, probably ignore BCL-2 or now
          */
+
+
+
+
+
+
+
+
+/*          code to build some BS standard csv that has a lot of missing data
+        val fu = FileUtils.get()
+        var builder = StringBuilder()
+        for(header in this.headersInOrder)
+            builder.append(header).append(",")
+        var headers = builder.toString()
+        headers = headers.substring(0, headers.length - 1)
+        fu.writeNewFile(RawDataLocator.bcDirPath() + "standard.csv", headers)
+
+        for(patient in listOfPatients) {
+            val patientData = patientRecordMap[patient]!!.get(0)
+            val patientList = ArrayList<String>()
+            for (i in 0 until patientData.size())
+                patientList.add(patientData.get(i))
+            val builder2 = StringBuilder()
+            builder2.append("\n")
+            for (ele in patientList) {
+                val element = "\"" + ele + "\""
+                builder2.append(element).append(",")
+            }
+            var strPatient = builder2.toString()
+            strPatient = strPatient.substring(0, strPatient.length - 1)
+            fu.appendToFile(RawDataLocator.bcDirPath() + "standard.csv", strPatient)
+        }
+        log_.die()
+*/
     }
 
     private fun orderCSVHeaders(oooHeaders: Map<String, Int>): List<String> {

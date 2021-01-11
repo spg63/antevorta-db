@@ -7,6 +7,7 @@ fun main(args: Array<String>) {
 
     val parsing = BCParser()
     parsing.parseData()
+   // parsing.quickTest()
 
     log_.shutDown()
 }
