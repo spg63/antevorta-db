@@ -2,10 +2,12 @@ package edu.antevortadb.patient
 
 import edu.antevortadb.configs.RawDataLocator
 import javalibs.CSVExtractor
+import javalibs.Logic
 import javalibs.TSL
 import javalibs.Timer
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
+import org.apache.commons.csv.CSVPrinter
 import org.apache.commons.csv.CSVRecord
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -14,11 +16,20 @@ class BCParser {
     val inputCSV = RawDataLocator.bcOriginalCSVAbsolutePath()
     val outputCSV = RawDataLocator.bcCSVAbsolutePath()
     val log_ = TSL.get()
+    val logic_ = Logic.get()
+    val refID = "Reference ID"
+
+    // All of the headers from the CSV file in the order they appear in the file
+    lateinit var headersInOrder: List<String>
+    // Intermediate step, holds a map of all records where the patient ID points to all
+    // records for that patient. This step only lasts until the stain data can be
+    // turned into the proper column format I need
+    lateinit var fullRecordMap: Map<String, List<CSVRecord>>
 
     val standardFeatures = mutableListOf<String>(
         "Age",
         "Gender",
-        "Reference ID",
+        refID,
         "Body Site Writein",
         "Specimen Type",
         "Diagnosis",
@@ -83,43 +94,29 @@ class BCParser {
         "BJ"    // [Double] Value for the above
     )
 
-
-    fun readingTest() {
-        val csvParser = CSVParser(
-            Files.newBufferedReader(Paths.get(inputCSV)),
-            CSVFormat.DEFAULT
-                .withHeader()
-                .withIgnoreHeaderCase()
-                .withTrim()
-        );
-
-        log_.info("Parsing started")
-        val timer = Timer()
-        timer.startTimer()
-        val rawHeaders: Map<String, Int> = csvParser.headerMap
-        val records = csvParser.records
-        csvParser.close()
-        timer.stopTimer()
-        log_.info("Parsing complete")
-        log_.info("Reading took ${timer.milliseconds()} ms.")
-
-        log_.info("Num records: ${records.size}")
-        log_.info("1st record: ")
-        log_.info(records.get(0))
-        log_.info("2nd record: ")
-        log_.info(records.get(1).get(8))
-
-    }
-
     fun parseData() {
 
         // Add all of the features together, standard and stain
         val allFeatures = this.standardFeatures
         allFeatures.addAll(this.stainFeatures)
 
-        // Read the full records from the above generated file
-        val records = getCSVRecords(this.inputCSV)
-        log_.info("Total num records: ${records.size}")
+        // Create the parser, read the file into memory
+        val parser = CSVParser(
+            Files.newBufferedReader(Paths.get(this.inputCSV)),
+            CSVFormat.DEFAULT
+                .withHeader()
+                .withIgnoreHeaderCase()
+                .withTrim()
+        )
+
+        // Get a reference to all of the CSV records
+        val allRecords = parser.records
+        logic_.require(allRecords != null && allRecords.size > 0, "Failed to get records")
+        log_.info("Total number of records: ${allRecords.size}")
+
+        // Order the headers from the CSV file, as they appear in the file
+        this.headersInOrder = orderCSVHeaders(parser.headerMap)
+        logic_.require(this.headersInOrder.isNotEmpty(), "Failed to order headers")
 
         /*
            Now build a map which is HashMap<String, List<CSVRecord>>
@@ -127,61 +124,52 @@ class BCParser {
                - The String is the Reference ID for a patient
                - List<CSVRecord> is all records associated with that Reference ID
         */
-    records
-        CSVExtractor.writeCSVRecord(this.outputCSV, records[0], null)
-
-
-
-
-        // Generate a CSV file with just the standard, non-stain columns
-//        val extractor = CSVExtractor(this.inputCSV, this.outputCSV, allFeatures)
-//        val path = extractor.writeCSV()
-//        log_.info("Output csv at $path")
-
+        val patientRecordMap = HashMap<String, MutableList<CSVRecord>>()
+        for(record in allRecords){
+            val refID = record.get(refID)
+            // If the key does not already exist, create the list for this reference ID
+            // and add the record to the list
+            if(!patientRecordMap.containsKey(refID)){
+                patientRecordMap[refID] = ArrayList<CSVRecord>()
+                patientRecordMap[refID]!!.add(record)
+            }
+            // The reference ID exists in the map, add the record to the list
+            // associated with that reference ID
+            else
+                patientRecordMap[refID]!!.add(record)
+        }
 
 
         /*
-        // Put the records in a map based on Reference ID to get a single record per
-        // Reference ID which should mean a single record per patient
-        val patientMap = HashMap<String, CSVRecord>()
-        for(rec in records)
-            patientMap[rec.get("Reference ID")] = rec
+            All data for each patient is now associated with the patient. Time to go
+            through and organize the stain information into columns.
 
-        log_.info("Num elements in patientMap: ${patientMap.size}")
-
-        var i = 0
-        for((key, value) in patientMap){
-            log_.info("Key: $key")
-            log_.info("Value: $value")
-            ++i
-            if(i >= 5) break
-        }
+            NOTE: Not all patients have rows for all stains, so each stain needs to be
+            checked for without assuming that information (or even the name of the
+            stain) exist for the patient. Futher, there are some patients with two
+            entries for a stain, at least for HER2, we're just going to ignore this as
+            a possible issue for the time being, looking for each stain exactly once
+            and on a first come, first serve basis.
         */
+        log_.info("patientRecordMap size: ${patientRecordMap.size}")
+        val pat1 = patientRecordMap["IG14-23"]
+        val row1 = pat1!![1]
+        for(col in 0 until row1.size())
+            log_.info(row1[col])
+
+
+
+
+
+
         /*****
-         * MAP OF LIST OF RECORDS WHERE THE LIST IS ALL THE SAME PAITENT AND THE MAP
-         * ENTRY IS THE REFERENCE ID WHICH RETURNS THE LIST OF RECORDS FOR THE PATIENT.
-         * ..FROM THIS POINT I SHOULD THEN BE ABLE TO PARSE THROUGH THE STAIN SHIT AND
-         * DEAL WITH THAT BULLSHIT.
          *
          * FIXME: Staining should be thesholded instead of linear, need to calculate
          * FIXME: H-scores for the stains, probably ignore BCL-2 or now
          */
     }
 
-    private fun getCSVRecords(path: String): List<CSVRecord> {
-        val parser = CSVParser(
-            Files.newBufferedReader(Paths.get(path)),
-            CSVFormat.DEFAULT
-                .withHeader()
-                .withIgnoreHeaderCase()
-                .withTrim()
-        )
-
-        return parser.records
-    }
-
-    private fun orderCSVHeaders(oooHeaders: Map<String, Int>,
-                                headersInOrder: List<String>) {
+    private fun orderCSVHeaders(oooHeaders: Map<String, Int>): List<String> {
         val orderedHeadersMap = HashMap<Int?, String>()
         var numInputCols = 0
         for(col in oooHeaders.keys){
@@ -190,16 +178,11 @@ class BCParser {
         }
 
         // Put all the headers in order
-        val headersInOrder = ArrayList<String?>()
+        val headersInOrder: MutableList<String> = ArrayList<String>()
         for(i in 0 until numInputCols)
-            headersInOrder[i] = orderedHeadersMap[i]
+            headersInOrder.add(orderedHeadersMap[i]!!)
 
-        // Order them as they appear in the CSV
-        var cnt = 0
-        for(col in headersInOrder) {
-            if()
-        }
-
+        return headersInOrder
     }
 }
 
