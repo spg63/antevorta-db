@@ -279,13 +279,16 @@ class BCParser {
         // This will be the new list of headers, in the correct order, and starting
         // with the list of standard features (i.e. non-stain features)
         var masterHeaderRecord: MutableList<String> = standardFeatures.toMutableList()
+        val allCompletedRecords = ArrayList<MutableList<String>>()
         for(patient in listOfPatients) {
             // The list of rows for this specific patient
             val rowsForPatient: MutableList<CSVRecord> = patientRecordMap[patient]!!
 
             // The complete record, standard and stain features
-            val completeRecord = allHeaders.toMutableList() // Start with the header list for proper
-            // len
+            // Start with the header list for proper length
+            //val completeRecord = allHeaders.toMutableList()
+            val completeRecord: MutableList<String> = ArrayList()
+            for(i in 0 until allHeaders.size) completeRecord.add("-1")
             // Gather the standard features first, so only go to standardFeature.size
             for(i in 0 until BCParser.standardFeatures.size) {
                 // NOTE: Just using the first row, standard features are repeated
@@ -323,15 +326,19 @@ class BCParser {
                     completeRecord[eleNum] = recordVal
                 }
             }
-            val path = RawDataLocator.bcDirPath() + "testOUTOUT.csv"
-            val bw = Files.newBufferedWriter(Paths.get(path))
-            val printer = CSVPrinter(bw, CSVFormat.DEFAULT)
-            printer.printRecord(this.allHeaders)
-            printer.printRecord(completeRecord)
-            printer.close()
-            log_.die()
+            allCompletedRecords.add(completeRecord)
 
         }
+
+        val path = RawDataLocator.bcDirPath() + "testOUTOUT.csv"
+        val bw = Files.newBufferedWriter(Paths.get(path))
+        val printer = CSVPrinter(bw, CSVFormat.DEFAULT)
+        printer.printRecord(this.allHeaders)
+        for(patient in allCompletedRecords)
+            printer.printRecord(patient)
+        printer.flush()
+        printer.close()
+        log_.die()
 
         /*****
          *
