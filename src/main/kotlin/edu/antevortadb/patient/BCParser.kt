@@ -1,6 +1,5 @@
 package edu.antevortadb.patient
 
-import com.sun.jna.platform.win32.WinNT
 import edu.antevortadb.configs.RawDataLocator
 import javalibs.FileUtils
 import javalibs.Logic
@@ -41,8 +40,6 @@ class BCParser {
             "Breast: Axillary nodes positive",
             "File Location"
         )
-
-
 
         val stainFeatures = listOf<String>(
             "Stain",// The stain name, sometimes a full name but mostly the short name
@@ -145,16 +142,87 @@ class BCParser {
             "completeCells"
         )
 
-        val usedStains = listOf<String>(
+        // NOTE: Access must be in parallel with the above colsForHER2Stain
+        val her2StainCols = listOf<String>(
+            "AB",
+            "AD",
+            "AF",
+            "AH",
+            "AJ",
+            "AL",
+            "AN",
+            "AP",
+            "AR",
+            "AT",
+            "AV",
+            "AX",
+            "AZ"
+        )
+
+        val colsForBCL2Stain = listOf<String>(
+            "hScore_1",
+            "avgPosIntensity_1",
+            "percentPosCells_1",
+            "hScore_2",
+            "avgPosIntensity_2",
+            "percentPosCells_2",
+            "percent0+",
+            "percent1+_1",
+            "percent2+_1",
+            "percent3+_1",
+            "percent0+_1",
+            "percent1+_2",
+            "percent2+_2",
+            "percent3+_2",
+            "numCells",
+            "percentColocalized",
+            "areaOfAnalysis_mm",
+            "cytoplasmArea_mm",
+            "nuclearArea_mm"
+        )
+
+        val bcl2StainCols = listOf<String>(
+            "AB",
+            "AD",
+            "AF",
+            "AH",
+            "AJ",
+            "AL",
+            "AN",
+            "AP",
+            "AR",
+            "AT",
+            "AV",
+            "AX",
+            "AZ",
+            "BB",
+            "BD",
+            "BF",
+            "BH",
+            "BJ",
+            "BL"
+        )
+
+        val standardStainName = listOf<String>(
             "ER",
             "PR",
             "P53",
             "KI67"
         )
 
-        val ignoredStains = listOf<String>(
+        val her2StainName = "HER2"
+        val bcl2StainName = "BCL2"
+
+        val usedStains = listOf<String>(
+            "ER",
+            "PR",
+            "P53",
+            "KI67",
             "HER2",         // FIXME: TEMP SKIPPING
-            "BCL2",         // FIXME: TEMP SKIPPING
+            "BCL2"         // FIXME: TEMP SKIPPING
+        )
+
+        val ignoredStains = listOf<String>(
             "AR",           // Not sure what this is...
             "NEGCTRL",      // Don't care about the control
             "",             // Empty stains
@@ -273,12 +341,12 @@ class BCParser {
         logic_.require(listOfPatients.size == patientRecordMap.size)
 
 
-        val outputWriter = Files.newBufferedWriter(Paths.get(this.outputCSV))
-        val setOfCreatedColumnHeaders = HashSet<String>()
+        //FIXME val outputWriter = Files.newBufferedWriter(Paths.get(this.outputCSV))
+        //FIXME val setOfCreatedColumnHeaders = HashSet<String>()
 
         // This will be the new list of headers, in the correct order, and starting
         // with the list of standard features (i.e. non-stain features)
-        var masterHeaderRecord: MutableList<String> = standardFeatures.toMutableList()
+        // FIXME var masterHeaderRecord: MutableList<String> = standardFeatures.toMutableList()
         val allCompletedRecords = ArrayList<MutableList<String>>()
         for(patient in listOfPatients) {
             // The list of rows for this specific patient
@@ -313,24 +381,54 @@ class BCParser {
                 // Forced check to make sure the stain exists in the usedStains list
                 logic_.require(usedStains.contains(stain), "Unknown stain: $stain")
 
-                // Loop through the possible stain columns
-                // FIXME: Additional logic here for BCL2 and HER2, probably just an if()
-                for(col in BCParser.colsForStandardStain){
-                    val stainHeader = "${stain}_$col"
-                    // Find the element number based on the master headers
-                    val eleNum = this.allHeaders.indexOf(stainHeader)
-                    // Get the existing value for that stain
-                    val recordCol = standardStainNamesToAccessHeadersMap[col]
-                    val recordVal = row.get(recordCol)
-                    // Now that we have a vaule, add it to the complete record
-                    completeRecord[eleNum] = recordVal
+
+                // Deal with the BCL2 stain information
+                when {
+                    stain.equals("BCL2") -> {
+                        log_.info("BCL2")
+                        for(col in BCParser.colsForBCL2Stain){
+                            val stainHeader = "${stain}_$col"
+                            // Find the element number based on the master headers
+                            val eleNum = this.allHeaders.indexOf(stainHeader)
+                            // Get the existing value for that stain
+                            val recordCol = standardStainNamesToAccessHeadersMap[col]
+                            val recordVal = row.get(recordCol)
+                            // Now that we have a value, add it to the complete record
+                            completeRecord[eleNum] = recordVal
+                        }
+                    }
+                    // Now the HER2 information
+                    stain.equals("HER2") -> {
+                        log_.info("HER2")
+                        for(col in BCParser.colsForHER2Stain){
+                            val stainHeader = "${stain}_$col"
+                            val eleNum = this.allHeaders.indexOf(stainHeader)
+                            val recordCol = standardStainNamesToAccessHeadersMap[col]
+                            val recordVal = row.get(recordCol)
+                            completeRecord[eleNum] = recordVal
+                        }
+                    }
+                    // Else the stain is a regular stain, use standard stain headers
+                    else -> {
+                        // Loop through the possible stain columns
+                        for(col in BCParser.colsForStandardStain){
+                            val stainHeader = "${stain}_$col"
+                            // Find the element number based on the master headers
+                            val eleNum = this.allHeaders.indexOf(stainHeader)
+                            // Get the existing value for that stain
+                            val recordCol = standardStainNamesToAccessHeadersMap[col]
+                            val recordVal = row.get(recordCol)
+                            // Now that we have a vaule, add it to the complete record
+                            completeRecord[eleNum] = recordVal
+                        }
+                    }
                 }
             }
             allCompletedRecords.add(completeRecord)
 
         }
 
-        val path = RawDataLocator.bcDirPath() + "testOUTOUT.csv"
+        val path = RawDataLocator.bcCSVAbsolutePath()
         val bw = Files.newBufferedWriter(Paths.get(path))
         val printer = CSVPrinter(bw, CSVFormat.DEFAULT)
         printer.printRecord(this.allHeaders)
@@ -347,67 +445,49 @@ class BCParser {
          * FIXME: Should go back and remove the broken stain shit after the parsing is
          * FIXME: done
          */
-
-
-
-
-
-
-
-
-/*          code to build some BS standard csv that has a lot of missing data
-        val fu = FileUtils.get()
-        var builder = StringBuilder()
-        for(header in this.headersInOrder)
-            builder.append(header).append(",")
-        var headers = builder.toString()
-        headers = headers.substring(0, headers.length - 1)
-        fu.writeNewFile(RawDataLocator.bcDirPath() + "standard.csv", headers)
-
-        for(patient in listOfPatients) {
-            val patientData = patientRecordMap[patient]!!.get(0)
-            val patientList = ArrayList<String>()
-            for (i in 0 until patientData.size())
-                patientList.add(patientData.get(i))
-            val builder2 = StringBuilder()
-            builder2.append("\n")
-            for (ele in patientList) {
-                val element = "\"" + ele + "\""
-                builder2.append(element).append(",")
-            }
-            var strPatient = builder2.toString()
-            strPatient = strPatient.substring(0, strPatient.length - 1)
-            fu.appendToFile(RawDataLocator.bcDirPath() + "standard.csv", strPatient)
-        }
-        log_.die()
-*/
     }
 
     private fun buildMasterHeader(): MutableList<String> {
         // Starting with the non-stain features
-        val standards = BCParser.standardFeatures.toMutableList()
+        val stainColNames = BCParser.standardFeatures.toMutableList()
 
         // Run through the stains, and columns for the stains, and add them
-        for(stain in BCParser.usedStains) {
+        for(stain in BCParser.standardStainName) {
             for(feature in BCParser.colsForStandardStain) {
                 val newColName = "${stain}_$feature"
-                standards.add(newColName)
+                stainColNames.add(newColName)
             }
         }
 
+        // Run through the features for HER2
+        for(feature in BCParser.colsForHER2Stain) {
+            val newColName = "${BCParser.her2StainName}_$feature"
+            stainColNames.add(newColName)
+        }
+
+        // Run through BCL2
+        for(feature in BCParser.colsForBCL2Stain) {
+            val newColName = "${BCParser.bcl2StainName}_$feature"
+            stainColNames.add(newColName)
+        }
+
         val b = StringBuilder()
-        for(jawn in standards)
+        for(jawn in stainColNames)
             b.append(jawn).append(",")
         val s = b.toString()
-        FileUtils.get().writeNewFile(RawDataLocator.bcDirPath() + "test.csv", s)
+        FileUtils.get().writeNewFile(RawDataLocator.bcDirPath() + "allHeaders.csv", s)
 
-        return standards
+        return stainColNames
     }
 
     private fun buildStandardStainToAccessHeaderMap():MutableMap<String, String> {
         val map = HashMap<String, String>()
         for(i in 0 until BCParser.colsForStandardStain.size)
             map[BCParser.colsForStandardStain[i]] = BCParser.standardStainCols[i]
+        for(i in 0 until BCParser.colsForBCL2Stain.size)
+            map[BCParser.colsForBCL2Stain[i]] = BCParser.bcl2StainCols[i]
+        for(i in 0 until BCParser.colsForHER2Stain.size)
+            map[BCParser.colsForHER2Stain[i]] = BCParser.her2StainCols[i]
         return map
     }
 

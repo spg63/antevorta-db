@@ -6,7 +6,6 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
-import javax.xml.crypto.Data
 
 /**
  * Intended to locate the json files for database builds. The location of these files can
@@ -213,7 +212,7 @@ object RawDataLocator{
     fun bcDirPath(): String {
         return when(Finals.TESTING_MODE) {
             true -> DataPaths.LOCAL_BREAST_CANCER_PATH
-            false -> DataPaths.BREAST_CANCER_PATH
+            false -> DataPaths.BCancerPath
         }
     }
 

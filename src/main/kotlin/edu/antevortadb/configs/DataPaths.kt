@@ -66,7 +66,7 @@ object DataPaths{
     val LOCAL_LENS_TAG              = "${LOCAL_PATH}movielens${SEP}tag.csv"
 
     // Local paths for Mark Zarella's breast cancer data
-    val LOCAL_BREAST_CANCER_PATH    = "${LOCAL_PATH}breastCancer${SEP}"
+    val LOCAL_BREAST_CANCER_PATH    = "${LOCAL_PATH}breastCancer${SEP}active${SEP}"
     val LOCAL_BC_ORIG_FILE          = "${LOCAL_BREAST_CANCER_PATH}${Finals.BC_ORIG_CSV}"
     val LOCAL_BC_CLEANED_FILE       = "${LOCAL_BREAST_CANCER_PATH}${Finals.BC_WORKING_CSV}"
 
@@ -100,9 +100,9 @@ object DataPaths{
     val MOVIELENS_TAG               = "${MOVIELENS_DATA_ROOT}tag.csv"
 
     // Paths for Mark Zarella's breast cancer data
-    val BREAST_CANCER_PATH          = "${RESEARCH_RAW_DATA_ROOT}breastCancer${SEP}"
-    val BC_ORIG_FILE                = "${BREAST_CANCER_PATH}${Finals.BC_ORIG_CSV}"
-    val BC_CLEANED_FILE             = "${BREAST_CANCER_PATH}${Finals.BC_WORKING_CSV}"
+    val BCancerPath                 = "${RESEARCH_RAW_DATA_ROOT}breastCancer${SEP}active${SEP}"
+    val BC_ORIG_FILE                = "${BCancerPath}${Finals.BC_ORIG_CSV}"
+    val BC_CLEANED_FILE             = "${BCancerPath}${Finals.BC_WORKING_CSV}"
 
     // Directory paths when running on the research machine for new JSON data
     val NEW_REDDIT_SUB_DATA_PATH    = "${REDDIT_DATA_ROOT}New${SEP}Submissions${SEP}"
