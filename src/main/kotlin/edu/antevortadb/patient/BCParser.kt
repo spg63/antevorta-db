@@ -262,8 +262,8 @@ class BCParser {
         this.log_ = TSL.get()
         this.logic_ = Logic.get()
         this.refID = "Reference ID"
-        this.allHeaders = buildMasterHeader()
-        this.standardStainNamesToAccessHeadersMap = buildStandardStainToAccessHeaderMap()
+        this.allHeaders = buildHeaderMapOutputCSV()
+        this.standardStainNamesToAccessHeadersMap = buildHeaderMapFromOrigCSV()
     }
 
     fun parseData() {
@@ -428,6 +428,8 @@ class BCParser {
 
         }
 
+        // SYRACUSe, oregon, nc state, lousianna tech, cleveland stat, WSU,
+
         val path = RawDataLocator.bcCSVAbsolutePath()
         val bw = Files.newBufferedWriter(Paths.get(path))
         val printer = CSVPrinter(bw, CSVFormat.DEFAULT)
@@ -447,11 +449,11 @@ class BCParser {
          */
     }
 
-    private fun buildMasterHeader(): MutableList<String> {
+    private fun buildHeaderMapOutputCSV(): MutableList<String> {
         // Starting with the non-stain features
         val stainColNames = BCParser.standardFeatures.toMutableList()
 
-        // Run through the stains, and columns for the stains, and add them
+        // Run through the standard stains, and columns for the stains, and add them
         for(stain in BCParser.standardStainName) {
             for(feature in BCParser.colsForStandardStain) {
                 val newColName = "${stain}_$feature"
@@ -480,7 +482,7 @@ class BCParser {
         return stainColNames
     }
 
-    private fun buildStandardStainToAccessHeaderMap():MutableMap<String, String> {
+    private fun buildHeaderMapFromOrigCSV():MutableMap<String, String> {
         val map = HashMap<String, String>()
         for(i in 0 until BCParser.colsForStandardStain.size)
             map[BCParser.colsForStandardStain[i]] = BCParser.standardStainCols[i]

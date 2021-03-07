@@ -6,6 +6,7 @@
 package edu.antevortadb.configs
 
 import javalibs.FileUtils
+import javalibs.Logic
 
 /**
  * Intended to locate the json files for database builds. The location of these files can
@@ -197,12 +198,21 @@ object RawDataLocator{
     }
 
     /**
-     * @return Root of the disk area agents can make / modify files
+     * @return Root of the disk area hollywood agents can make / modify files
      */
-    fun agentSpace(): String {
+    fun HWAgentSpace(): String {
+        Logic.get().require(Finals.TESTING_MODE, "Is agent space correct on array???")
         return when(Finals.TESTING_MODE) {
-            true -> DataPaths.LOCAL_AGENT_SPACE_ROOT
-            false -> DataPaths.RESEARCH_AGENT_SPACE_ROOT
+            true -> DataPaths.HW_LOCAL_AGENT_ROOT
+            false -> DataPaths.HW_RESEARCH_AGENT_ROOT
+        }
+    }
+
+    fun BCAgentSpace(): String {
+        Logic.get().require(Finals.TESTING_MODE, "Is agent space correct on array???")
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.BC_LOCAL_AGENT_ROOT
+            false -> DataPaths.BC_RESEARCH_AGENT_ROOT
         }
     }
 

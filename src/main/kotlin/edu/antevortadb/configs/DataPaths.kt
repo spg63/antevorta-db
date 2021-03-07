@@ -137,7 +137,10 @@ object DataPaths{
     /* ---------- Paths to the DeepLearning4Java example data ------------------------- */
     val LOCAL_DL4J_ROOT             = "${LOCAL_DATA_ROOT}DL4J${SEP}"
     val RESEARCH_DL4J_ROOT          = "${SEP}mnt${SEP}vault${SEP}Data${SEP}DL4J${SEP}"
+    val RESEARCH_AGENT_ROOT         = "${SEP}mnt${SEP}vault${SEP}Data${SEP}agent${SEP}"
     val DL4J_CPU_ISSUE_ROOT         = "data${SEP}DL4J${SEP}"
-    val LOCAL_AGENT_SPACE_ROOT      = "${LOCAL_DATA_ROOT}agent${SEP}"
-    val RESEARCH_AGENT_SPACE_ROOT   = "${SEP}mnt${SEP}vault${SEP}Data${SEP}agent${SEP}"
+    val HW_LOCAL_AGENT_ROOT         = "${LOCAL_DATA_ROOT}agent${SEP}hollywood${SEP}"
+    val BC_LOCAL_AGENT_ROOT         = "${LOCAL_DATA_ROOT}agent${SEP}breastCancer${SEP}"
+    val HW_RESEARCH_AGENT_ROOT      = "${RESEARCH_AGENT_ROOT}hollywood${SEP}"
+    val BC_RESEARCH_AGENT_ROOT      = "${RESEARCH_AGENT_ROOT}breastCancer${SEP}"
 }
