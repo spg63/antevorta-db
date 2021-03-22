@@ -1,4 +1,4 @@
-package edu.antevortadb.patient
+package edu.antevortadb.patient.parsing
 
 import edu.antevortadb.configs.RawDataLocator
 import javalibs.FileUtils
