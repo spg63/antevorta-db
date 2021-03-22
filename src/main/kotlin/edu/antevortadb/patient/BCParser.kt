@@ -11,6 +11,15 @@ import org.apache.commons.csv.CSVRecord
 import java.nio.file.Files
 import java.nio.file.Paths
 
+fun main(args: Array<String>) {
+    val log_ = TSL.get()
+
+    val parsing = BCParser()
+    parsing.parseData()
+
+    log_.shutDown()
+}
+
 class BCParser {
     companion object {
         val standardFeatures = listOf<String>(
@@ -510,27 +519,3 @@ class BCParser {
         return headersInOrder
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
