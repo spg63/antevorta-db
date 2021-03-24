@@ -22,6 +22,7 @@ object Finals{
     val SYSTEM_USER: String
     val TESTING_MODE: Boolean
     val IS_WINDOWS: Boolean
+    const val BAD_DATA: Int                 = -1337
 
     /* ---------- Program control ----------------------------------------------------- */
     val BLADE_USER                          = "seang"
