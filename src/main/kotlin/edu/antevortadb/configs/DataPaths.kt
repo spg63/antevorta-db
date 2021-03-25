@@ -75,7 +75,7 @@ object DataPaths{
     val LOCAL_NEW_REDDIT_COM_DATA   = "${LOCAL_PATH}new${SEP}comments${SEP}"
 
     /* ---------- File paths when running on the research machine --------------------- */
-    val RESEARCH_ARRAY_DATA_ROOT    = "${SEP}mnt${SEP}vault${SEP}Data${SEP}"
+    val RESEARCH_ARRAY_DATA_ROOT    = "${SEP}mnt${SEP}arrayVault${SEP}Data${SEP}"
     val RESEARCH_RAW_DATA_ROOT      = "${RESEARCH_ARRAY_DATA_ROOT}Uncompressed${SEP}"
     val RIPPER_MODELS_DIR           = "TrainedModels${SEP}"
 
@@ -129,15 +129,15 @@ object DataPaths{
     val LOCAL_CLIENT_CONFIG_FILE    = "${LOCAL_DATA_ROOT}clientConfig${SEP}config.json"
     val LOCAL_SERVER_CONFIG_PATH    = "${LOCAL_DATA_ROOT}clientConfig${SEP}"
 
-    val DOLIUS_CONFIG_PATH          = "${SEP}mnt${SEP}vault${SEP}DoliusConfigs${SEP}"
+    val DOLIUS_CONFIG_PATH          = "${SEP}mnt${SEP}arrayVault${SEP}DoliusConfigs${SEP}"
     val SERVER_CONFIG_FILE          = "${DOLIUS_CONFIG_PATH}serverConfig${SEP}config.json"
     val CLIENT_CONFIG_FILE          = "${DOLIUS_CONFIG_PATH}clientConfig${SEP}config.json"
     val SERVER_CONFIG_PATH          = "${DOLIUS_CONFIG_PATH}serverConfig${SEP}"
 
     /* ---------- Paths to the DeepLearning4Java example data ------------------------- */
     val LOCAL_DL4J_ROOT             = "${LOCAL_DATA_ROOT}DL4J${SEP}"
-    val RESEARCH_DL4J_ROOT          = "${SEP}mnt${SEP}vault${SEP}Data${SEP}DL4J${SEP}"
-    val RESEARCH_AGENT_ROOT         = "${SEP}mnt${SEP}vault${SEP}Data${SEP}agent${SEP}"
+    val RESEARCH_DL4J_ROOT          = "${SEP}mnt${SEP}arrayVault${SEP}Data${SEP}DL4J${SEP}"
+    val RESEARCH_AGENT_ROOT         = "${SEP}mnt${SEP}arrayVault${SEP}Data${SEP}agent${SEP}"
     val DL4J_CPU_ISSUE_ROOT         = "data${SEP}DL4J${SEP}"
     val HW_LOCAL_AGENT_ROOT         = "${LOCAL_DATA_ROOT}agent${SEP}hollywood${SEP}"
     val BC_LOCAL_AGENT_ROOT         = "${LOCAL_DATA_ROOT}agent${SEP}breastCancer${SEP}"
