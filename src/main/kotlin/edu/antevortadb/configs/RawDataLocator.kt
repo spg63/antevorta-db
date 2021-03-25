@@ -209,7 +209,6 @@ object RawDataLocator{
     }
 
     fun BCAgentSpace(): String {
-        Logic.get().require(Finals.TESTING_MODE, "Is agent space correct on array???")
         return when(Finals.TESTING_MODE) {
             true -> DataPaths.BC_LOCAL_AGENT_ROOT
             false -> DataPaths.BC_RESEARCH_AGENT_ROOT
