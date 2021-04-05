@@ -227,8 +227,8 @@ class BCParser {
             "PR",
             "P53",
             "KI67",
-            "HER2",         // FIXME: TEMP SKIPPING
-            "BCL2"         // FIXME: TEMP SKIPPING
+            "HER2",
+            "BCL2"
         )
 
         val ignoredStains = listOf<String>(
@@ -305,13 +305,6 @@ class BCParser {
         this.headersInOrder = orderCSVHeaders(this.csvHeaders)
         logic_.require(this.headersInOrder.isNotEmpty(), "Failed to order headers")
 
-        /////
-        //this.csvHeaders["test"] = ++this.currentMaxHeaderValue
-        //this.headersInOrder = orderCSVHeaders(this.csvHeaders)
-        //for(header in headersInOrder)
-        //    log_.info("New headers in order: $header")
-        //log_.die()
-
         /*
            Now build a map which is HashMap<String, List<CSVRecord>>
            Where
@@ -346,9 +339,11 @@ class BCParser {
         */
 
         // List of Reference ID that are stored (i.e. the list of patients) [unordered]
-        val listOfPatients = patientRecordMap.keys
-        logic_.require(listOfPatients.size == patientRecordMap.size)
-
+        val setOfPatients = patientRecordMap.keys
+        logic_.require(setOfPatients.size == patientRecordMap.size)
+        val listOfPatients: MutableList<String> = ArrayList()
+        for(p in setOfPatients) listOfPatients.add(p)
+        listOfPatients.sortBy{it}
 
         //FIXME val outputWriter = Files.newBufferedWriter(Paths.get(this.outputCSV))
         //FIXME val setOfCreatedColumnHeaders = HashSet<String>()
@@ -358,6 +353,7 @@ class BCParser {
         // FIXME var masterHeaderRecord: MutableList<String> = standardFeatures.toMutableList()
         val allCompletedRecords = ArrayList<MutableList<String>>()
         for(patient in listOfPatients) {
+            log_.info(patient)
             // The list of rows for this specific patient
             val rowsForPatient: MutableList<CSVRecord> = patientRecordMap[patient]!!
 
