@@ -21,10 +21,9 @@ object DataPaths{
 
     /* ---------- The path to the local data folders ---------------------------------- */
     var LOCAL_DATA_ROOT: String = when(Finals.SYSTEM_USER) {
-        // The Blade running windows
-        Finals.BLADE_USER -> "D:${SEP}"
-        // The Blade running linux
-        Finals.BLADE_LINUX_USER -> "${SEP}mnt${SEP}data${SEP}"
+        // The M1 user
+        Finals.M1_USER ->
+            "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_data_${SEP}"
         // Ripper
         Finals.RIPPER_USER -> "" // Ripper doesn't use the LOCAL_DATA_ROOT path at all
         // Mac Mini

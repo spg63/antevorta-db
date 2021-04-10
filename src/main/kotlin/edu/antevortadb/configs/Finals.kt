@@ -25,12 +25,11 @@ object Finals{
     const val BAD_DATA: Int                 = -1337
 
     /* ---------- Program control ----------------------------------------------------- */
-    val BLADE_USER                          = "seang"
-    val BLADE_LINUX_USER                    = "grimes"
+    val M1_USER                             = "amun-ra"
     val MINI_USER                           = "anubis"
     val RIPPER_USER                         = "ripper"
     val MBP_USER                            = "osiris"
-    val NONRESEARCH_USERS_LIST = listOf(BLADE_USER, BLADE_LINUX_USER, MINI_USER, MBP_USER)
+    val NONRESEARCH_USERS_LIST = listOf(M1_USER, MINI_USER, MBP_USER)
     var IGNORE_DB_DATA_AND_USER_CHECKS = false
     lateinit var otherUserDataPath: String
 
