@@ -211,7 +211,8 @@ object RawDataLocator{
     fun BCAgentSpace(): String {
         return when(Finals.TESTING_MODE) {
             true -> DataPaths.BC_LOCAL_AGENT_ROOT
-            false -> DataPaths.BC_RESEARCH_AGENT_ROOT
+            //false -> DataPaths.BC_RESEARCH_AGENT_ROOT
+            false -> "agentTMPDIR/"
         }
     }
 
