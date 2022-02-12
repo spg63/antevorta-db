@@ -29,7 +29,8 @@ object Finals{
     val MINI_USER                           = "anubis"
     val RIPPER_USER                         = "ripper"
     val MBP_USER                            = "osiris"
-    val NONRESEARCH_USERS_LIST = listOf(M1_USER, MINI_USER, MBP_USER)
+    val SP8_USER                            = "seang"
+    val NONRESEARCH_USERS_LIST = listOf(M1_USER, MINI_USER, MBP_USER, SP8_USER)
     var IGNORE_DB_DATA_AND_USER_CHECKS = false
     lateinit var otherUserDataPath: String
 
@@ -47,6 +48,9 @@ object Finals{
         SYSTEM_USER = initUser()
         TESTING_MODE = !isResearchMachine()
         IS_WINDOWS = isWindowsMachine()
+        if(NONRESEARCH_USERS_LIST.contains(SP8_USER) && IS_WINDOWS){
+            TSL.get().info("Running on Windows, probably the SP8")
+        }
         DB_BATCH_LIMIT = batchLimit()
         telemetry()
     }

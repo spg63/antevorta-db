@@ -9,6 +9,7 @@ package edu.antevortadb.configs
 
 import javalibs.FileUtils
 import javalibs.Logic
+import javalibs.TSL
 
 @Suppress("RemoveCurlyBracesFromTemplate")
 /**
@@ -31,6 +32,8 @@ object DataPaths{
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
         Finals.MBP_USER ->
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_data_${SEP}"
+        Finals.SP8_USER ->
+            "C:${SEP}Users${SEP}seang${SEP}wingit${SEP}_data_${SEP}"
         else -> {
             if(Finals.IGNORE_DB_DATA_AND_USER_CHECKS) {
                 if(Finals.otherUserDataPath.isNotEmpty())
