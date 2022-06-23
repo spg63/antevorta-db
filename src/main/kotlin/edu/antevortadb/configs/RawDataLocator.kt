@@ -216,6 +216,13 @@ object RawDataLocator{
         }
     }
 
+    fun ONCOAgentSpace(): String {
+        return when(Finals.TESTING_MODE) {
+            true -> DataPaths.ONCO_LOCAL_AGENT_ROOT
+            false -> DataPaths.ONCO_RESEARCH_AGENT_ROOT
+        }
+    }
+
     /**
      * @return Path to the data directory for the breast cancer files
      */
