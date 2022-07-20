@@ -146,4 +146,6 @@ object DataPaths{
     val HW_RESEARCH_AGENT_ROOT      = "${RESEARCH_AGENT_ROOT}hollywood${SEP}"
     val BC_RESEARCH_AGENT_ROOT      = "${RESEARCH_AGENT_ROOT}breastCancer${SEP}"
     val ONCO_RESEARCH_AGENT_ROOT    = "${RESEARCH_AGENT_ROOT}onco${SEP}"
+    val AIRLINE_LOCAL_AGENT_ROOT    = "${LOCAL_DATA_ROOT}agent${SEP}airline${SEP}"
+    val AIRLINE_RESEARCH_AGENT_ROOT = "${RESEARCH_AGENT_ROOT}airline${SEP}"
 }
