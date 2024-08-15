@@ -52,8 +52,8 @@ object DataPaths{
     /* - File paths when running in 'TESTING_MODE' (i.e. on my MBP with
     limited data are LOCAL) ----------------------------------------------------------- */
     val LOCAL_PATH                  = "${LOCAL_DATA_ROOT}LocalData${SEP}raw${SEP}"
-    val LOCAL_REDDIT_SUB_DATA       = "${LOCAL_PATH}submissions${SEP}"
-    val LOCAL_REDDIT_COM_DATA       = "${LOCAL_PATH}comments${SEP}"
+    val LOCAL_REDDIT_SUB_DATA       = "${LOCAL_PATH}reddit${SEP}submissions${SEP}"
+    val LOCAL_REDDIT_COM_DATA       = "${LOCAL_PATH}reddit${SEP}comments${SEP}"
     val LOCAL_TMDB_CREDITS          = "${LOCAL_PATH}tmdb${SEP}credits.csv"
     val LOCAL_TMDB_MOVIES           = "${LOCAL_PATH}tmdb${SEP}movies.csv"
     val LOCAL_W2VEC_PATH            = "${LOCAL_PATH}word2vec${SEP}"

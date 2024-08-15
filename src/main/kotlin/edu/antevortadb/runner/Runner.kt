@@ -41,14 +41,10 @@ fun main(args : Array<String>){
 
     val sw = Stopwatch.createStarted()
 
-    PullFromServer.doServerComs()
+    //PullFromServer.doServerComs()
     //PullFromServer.doServerSubs()
     //doSubs()
-    //createHollywoodDB()
-    //doComs()
-    //pushNewSubs()
-    //pushNewComs()
-    //hollywoodSelect()
+    doComs()
 
     sw.stop()
 
@@ -129,7 +125,7 @@ fun doComs(){
         buildDBShards(CommentsFacilitator())
         return
     }
-    val author = "mariowned"
+    val author = "a4k04"
     val rcs = RedditComSelector()
 
     //val res = rcs.selectAllFromAuthor("a4k04")
@@ -143,14 +139,16 @@ fun doComs(){
     val dbsql = DBSelector()
             .from(Finals.REDDIT_COM_TABLE)
             .where("author = '$author'")
-            .orderBy("subreddit_name")
-            .orderBy(Finals.CREATED_DT, true)
-            .limit(5)
+            //.orderBy("subreddit_name")
+            //.orderBy(Finals.CREATED_DT, true)
+            .orderBy(Finals.SCORE)
+            .limit(100)
 
     val res = rcs.generalSelection(dbsql.sql())
 
     RSMapperOutput.printAllColumnsFromRSMappers(res, RedditComs.columnsForPrinting(),
             RedditComs.dataTypesForPrinting())
+
 }
 
 fun buildDBShards(fac: Facilitator){
