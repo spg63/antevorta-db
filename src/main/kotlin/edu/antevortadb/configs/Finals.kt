@@ -10,6 +10,7 @@ package edu.antevortadb.configs
 import javalibs.Logic
 import javalibs.SysHelper
 import javalibs.TSL
+import kotlin.math.log
 
 /**
  * Finals is a class to hold variables related to program state. Items like the database
@@ -48,11 +49,21 @@ object Finals{
         SYSTEM_USER = initUser()
         TESTING_MODE = !isResearchMachine()
         IS_WINDOWS = isWindowsMachine()
-        if(NONRESEARCH_USERS_LIST.contains(WIN_USER) && IS_WINDOWS){
-            TSL.get().info("Running on Windows, probably the SP8")
-        }
         DB_BATCH_LIMIT = batchLimit()
+
+        logInitInfo()
         telemetry()
+    }
+
+    fun logInitInfo() {
+        val log = TSL.get()
+        log.info("SYSTEM_USER: $SYSTEM_USER")
+        log.info("TESTING_MODE: $TESTING_MODE")
+        if(IS_WINDOWS)
+            log.info("Running on Windows")
+        else
+            log.info("Not running on Windows")
+        log.info("DB_BATCH_LIMIT: $DB_BATCH_LIMIT")
     }
 
     /* ---------- Database control ---------------------------------------------------- */
