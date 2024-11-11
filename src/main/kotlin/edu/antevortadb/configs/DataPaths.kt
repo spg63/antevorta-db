@@ -31,6 +31,8 @@ object DataPaths{
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_DATA_${SEP}"
         Finals.MBP_USER ->
             "${SEP}Users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_data_${SEP}"
+        Finals.NOTCH_USER ->
+            "${SEP}users${SEP}${Finals.SYSTEM_USER}${SEP}git${SEP}_data_${SEP}"
         Finals.WIN_USER ->
             "C:${SEP}Users${SEP}seang${SEP}wingit${SEP}_data_${SEP}"
         else -> {

@@ -59,7 +59,7 @@ abstract class DataPusher: Runnable {
 
     /*
      *  The below two functions centralize error handling when pushing data into the DB.
-     *  These error blocks can be long and theres no reason to repeat them over all of the
+     *  These error blocks can be long and there's no reason to repeat them over all of the
      *  different derived classes. Do it here.
      */
     protected fun pusherCatchBlock(e: SQLException?, conn: Connection?){

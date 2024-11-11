@@ -30,7 +30,10 @@ object Finals{
     val RIPPER_USER                         = "ripper"
     val MBP_USER                            = "osiris"
     val WIN_USER                            = "seang"
-    val NONRESEARCH_USERS_LIST = listOf(M1_USER, MINI_USER, MBP_USER, WIN_USER)
+    val NOTCH_USER                          = "topnotch"
+    val NONRESEARCH_USERS_LIST = listOf(
+            M1_USER, MINI_USER, MBP_USER, WIN_USER, NOTCH_USER
+    )
     var IGNORE_DB_DATA_AND_USER_CHECKS = false
     lateinit var otherUserDataPath: String
 
