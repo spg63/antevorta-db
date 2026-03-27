@@ -42,7 +42,7 @@ object Finals{
     // DB shard
     private const val RESEARCH_BATCH_SIZE   = 12000
     // Performs better on single laptop SSD
-    private const val LAPTOP_BATCH_SIZE     = 1000
+    private const val LAPTOP_BATCH_SIZE     = 2000
 
     val DB_BATCH_LIMIT: Int
 
@@ -71,7 +71,7 @@ object Finals{
 
     /* ---------- Database control ---------------------------------------------------- */
     // Drops the DBs if they exist and reads in the data again
-    const val START_FRESH                   = false
+    const val START_FRESH                   = true
     // Simple check to make sure we really want to add new data to the DBs
     const val ADD_NEW_DATA                  = false
     const val DB_DRIVER                     = "org.sqlite.JDBC"
